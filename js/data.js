@@ -180,10 +180,10 @@ const DB = {
     // Setup EmailJS setting store
     if (!localStorage.getItem("emailjs_settings")) {
       localStorage.setItem("emailjs_settings", JSON.stringify({
-        publicKey: "",
-        serviceId: "",
-        templateId: "",
-        adminEmail: "admin@oamaster.co.kr"
+        publicKey: "aXXhO0m1M7H5nSE-P",
+        serviceId: "service_cfinlqm",
+        templateId: "template_kayxrhq",
+        adminEmail: "teacha99@gmail.com"
       }));
     }
   },

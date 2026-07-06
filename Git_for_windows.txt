@@ -11,7 +11,7 @@ git status
 git add .
 git commit -m "웹사이트 첫 업로드"
 git branch -M main
-git remote add origin https://github.com/9core1/oa_master.git
+git remote add origin https://github.com/9CORE1/oa_master.git
 git remote -v
 git push -u origin main
 
@@ -21,3 +21,8 @@ git status
 git add .
 git commit -m "수정 내용 설명"
 git push
+
+
+aXXhO0m1M7H5nSE-P
+service_cfinlqm
+template_kayxrhq

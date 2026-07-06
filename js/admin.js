@@ -26,19 +26,26 @@ function showAdminLoginModal() {
     <div class="modal-backdrop" id="loginModal">
       <div class="modal-content">
         <div class="modal-header">
-          <h3><i class="fas fa-lock"></i> 관리자 인증</h3>
+          <h3><i class="fas fa-lock"></i> 관리자 이메일 인증</h3>
           <button class="btn-close-modal" onclick="closeAdminModal('loginModal')">&times;</button>
         </div>
         <div class="modal-body">
-          <div class="form-group">
-            <label class="form-label" for="adminPassword">관리자 비밀번호</label>
-            <input type="password" id="adminPassword" class="form-input" placeholder="비밀번호를 입력하세요 (기본: admin1234)">
-            <p class="form-helper">웹페이지 관리를 위한 패스워드를 입력하세요.</p>
+          <div class="form-group" id="emailInputGroup">
+            <label class="form-label" for="loginEmail">관리자 이메일 주소</label>
+            <input type="email" id="loginEmail" class="form-input" placeholder="이메일 주소를 입력하세요">
+            <p class="form-helper">설정된 관리자 이메일 주소와 동일해야 인증번호가 발송됩니다.</p>
+          </div>
+          
+          <div class="form-group" id="codeVerificationGroup" style="display: none; margin-top: 15px;">
+            <label class="form-label" for="verificationCode">인증번호 (6자리)</label>
+            <input type="text" id="verificationCode" class="form-input" placeholder="인증번호 6자리를 입력하세요" maxlength="6">
+            <p class="form-helper" style="color: var(--success); font-weight: 500;">이메일로 발송된 6자리 인증번호를 입력하십시오.</p>
           </div>
         </div>
         <div class="modal-footer">
           <button class="btn btn-secondary" onclick="closeAdminModal('loginModal')">취소</button>
-          <button class="btn btn-primary" onclick="submitAdminLogin()">인증하기</button>
+          <button class="btn btn-primary" id="btnRequestCode" onclick="requestVerificationCode()">인증번호 전송</button>
+          <button class="btn btn-primary" id="btnVerifyCode" onclick="verifyAdminCode()" style="display: none;">인증 완료</button>
         </div>
       </div>
     </div>
@@ -52,10 +59,10 @@ function showAdminLoginModal() {
   // Open modal animation
   setTimeout(() => {
     document.getElementById('loginModal').classList.add('open');
-    document.getElementById('adminPassword').focus();
-    // Add enter key event
-    document.getElementById('adminPassword').addEventListener('keyup', (e) => {
-      if (e.key === 'Enter') submitAdminLogin();
+    document.getElementById('loginEmail').focus();
+    // Add enter key event to request code
+    document.getElementById('loginEmail').addEventListener('keyup', (e) => {
+      if (e.key === 'Enter') requestVerificationCode();
     });
   }, 50);
 }
@@ -68,14 +75,92 @@ function closeAdminModal(modalId) {
   setTimeout(() => modal.remove(), 300);
 }
 
-// Validate credentials
-function submitAdminLogin() {
-  const passwordInput = document.getElementById('adminPassword');
-  if (!passwordInput) return;
+// Request Email Verification Code using EmailJS
+function requestVerificationCode() {
+  const emailInput = document.getElementById('loginEmail');
+  if (!emailInput) return;
   
-  const password = passwordInput.value;
-  // Default master password
-  if (password === 'admin1234') {
+  const loginEmail = emailInput.value.trim();
+  if (!loginEmail) {
+    showToast('이메일 주소를 입력해주세요.', 'error');
+    return;
+  }
+  
+  const settings = window.DB.getEmailJSSettings();
+  const adminEmail = (settings.adminEmail || 'teacha99@gmail.com').trim();
+  
+  if (loginEmail.toLowerCase() !== adminEmail.toLowerCase()) {
+    showToast('등록된 관리자 이메일 주소가 아닙니다.', 'error');
+    return;
+  }
+  
+  // Generate 6-digit random authentication code
+  const auth_code = Math.floor(100000 + Math.random() * 900000).toString();
+  sessionStorage.setItem('admin_auth_code', auth_code);
+  
+  const switchToVerificationUI = () => {
+    document.getElementById('loginEmail').readOnly = true;
+    document.getElementById('codeVerificationGroup').style.display = 'block';
+    document.getElementById('btnRequestCode').style.display = 'none';
+    document.getElementById('btnVerifyCode').style.display = 'inline-flex';
+    document.getElementById('verificationCode').focus();
+    
+    // Add enter key event to verification input
+    document.getElementById('verificationCode').addEventListener('keyup', (e) => {
+      if (e.key === 'Enter') verifyAdminCode();
+    });
+  };
+  
+  if (!settings.publicKey || !settings.serviceId || !settings.templateId) {
+    showToast('EmailJS 설정이 누락되었습니다. F12 개발자 도구 콘솔창에서 임시 인증번호를 확인하세요.', 'warning');
+    console.log(`[OA MASTER Admin Auth Code] Temp Code: ${auth_code}`);
+    switchToVerificationUI();
+    return;
+  }
+  
+  if (typeof emailjs === 'undefined') {
+    showToast('EmailJS SDK가 로드되지 않았습니다. 콘솔창에서 임시 인증번호를 확인하세요.', 'error');
+    console.log(`[OA MASTER Admin Auth Code] Temp Code: ${auth_code}`);
+    switchToVerificationUI();
+    return;
+  }
+  
+  showToast('인증번호를 이메일로 발송 중입니다...', 'info');
+  
+  // Initialize emailjs
+  emailjs.init(settings.publicKey);
+  
+  const templateParams = {
+    action: '관리자 로그인 인증',
+    title: '관리자 로그인 인증번호 안내',
+    message: `관리자 로그인 인증번호는 [${auth_code}] 입니다. 인증 페이지에 이 번호를 입력해주세요.`,
+    auth_code: auth_code,
+    to_email: adminEmail,
+    date: new Date().toLocaleString()
+  };
+  
+  emailjs.send(settings.serviceId, settings.templateId, templateParams)
+    .then(response => {
+      showToast('인증번호가 관리자 이메일로 발송되었습니다.', 'success');
+      switchToVerificationUI();
+    }, error => {
+      console.error('Email Verification Send FAILED...', error);
+      showToast('인증 메일 발송에 실패했습니다. 콘솔창에서 임시 인증번호를 확인하세요.', 'error');
+      console.log(`[OA MASTER Admin Auth Code] Temp Code: ${auth_code}`);
+      switchToVerificationUI();
+    });
+}
+
+// Verify entered code
+function verifyAdminCode() {
+  const codeInput = document.getElementById('verificationCode');
+  if (!codeInput) return;
+  
+  const enteredCode = codeInput.value.trim();
+  const savedCode = sessionStorage.getItem('admin_auth_code');
+  
+  if (enteredCode === savedCode && savedCode) {
+    sessionStorage.removeItem('admin_auth_code');
     localStorage.setItem('isAdminActive', 'true');
     showToast('관리자 모드로 인증되었습니다!', 'success');
     closeAdminModal('loginModal');
@@ -83,8 +168,8 @@ function submitAdminLogin() {
     // Reload page to reflect UI changes
     setTimeout(() => window.location.reload(), 800);
   } else {
-    showToast('비밀번호가 올바르지 않습니다.', 'error');
-    passwordInput.select();
+    showToast('인증번호가 일치하지 않습니다. 다시 확인해 주세요.', 'error');
+    codeInput.select();
   }
 }
 
@@ -252,3 +337,5 @@ window.isAdmin = isAdmin;
 window.updateAdminUI = updateAdminUI;
 window.closeAdminModal = closeAdminModal;
 window.sendAdminEmailNotification = sendAdminEmailNotification;
+window.requestVerificationCode = requestVerificationCode;
+window.verifyAdminCode = verifyAdminCode;
