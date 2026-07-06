@@ -184,23 +184,38 @@ function updateAdminUI() {
     adminBtn.classList.add('active');
     adminBtn.innerHTML = '<i class="fas fa-lock-open"></i> 관리자 해제';
     
-    // Inject email settings gear icon into CTA area
-    if (!document.getElementById('emailSettingsBtn')) {
-      const emailBtn = document.createElement('button');
-      emailBtn.id = 'emailSettingsBtn';
-      emailBtn.className = 'btn-admin-mode';
-      emailBtn.style.background = 'rgba(var(--theme-primary-rgb), 0.1)';
-      emailBtn.style.color = 'var(--theme-primary)';
-      emailBtn.innerHTML = '<i class="fas fa-cog"></i> EmailJS 설정';
-      emailBtn.onclick = showEmailSettingsModal;
-      adminBtn.parentNode.insertBefore(emailBtn, adminBtn);
+    // Inject GitHub Settings button into CTA area
+    if (!document.getElementById('githubSettingsBtn')) {
+      const githubBtn = document.createElement('button');
+      githubBtn.id = 'githubSettingsBtn';
+      githubBtn.className = 'btn-admin-mode';
+      githubBtn.style.background = 'rgba(var(--theme-primary-rgb), 0.1)';
+      githubBtn.style.color = 'var(--theme-primary)';
+      githubBtn.innerHTML = '<i class="fab fa-github"></i> GitHub 설정';
+      githubBtn.onclick = showGithubSettingsModal;
+      adminBtn.parentNode.insertBefore(githubBtn, adminBtn);
+    }
+    
+    // Inject JSON Update button into CTA area
+    if (!document.getElementById('jsonUpdateBtn')) {
+      const jsonBtn = document.createElement('button');
+      jsonBtn.id = 'jsonUpdateBtn';
+      jsonBtn.className = 'btn-admin-mode';
+      jsonBtn.style.background = 'rgba(var(--theme-primary-rgb), 0.1)';
+      jsonBtn.style.color = 'var(--theme-primary)';
+      jsonBtn.innerHTML = '<i class="fas fa-file-export"></i> JSON 업데이트';
+      jsonBtn.onclick = updateJSONData;
+      adminBtn.parentNode.insertBefore(jsonBtn, adminBtn);
     }
   } else {
     adminBtn.classList.remove('active');
     adminBtn.innerHTML = '<i class="fas fa-lock"></i> 관리자 모드';
     
-    const emailBtn = document.getElementById('emailSettingsBtn');
-    if (emailBtn) emailBtn.remove();
+    const githubBtn = document.getElementById('githubSettingsBtn');
+    if (githubBtn) githubBtn.remove();
+    
+    const jsonBtn = document.getElementById('jsonUpdateBtn');
+    if (jsonBtn) jsonBtn.remove();
   }
   
   // Toggle visibility of admin-only content across the page
@@ -214,41 +229,38 @@ function updateAdminUI() {
   });
 }
 
-// Show EmailJS Settings Modal
-function showEmailSettingsModal() {
-  const settings = window.DB.getEmailJSSettings();
+// Show GitHub Settings Modal
+function showGithubSettingsModal() {
+  let settings = JSON.parse(localStorage.getItem("github_settings")) || { token: "", repo: "", path: "js/data.js", branch: "main" };
   const modalHTML = `
-    <div class="modal-backdrop" id="settingsModal">
+    <div class="modal-backdrop" id="githubSettingsModal">
       <div class="modal-content">
         <div class="modal-header">
-          <h3><i class="fas fa-envelope-open-text"></i> EmailJS 연동 설정</h3>
-          <button class="btn-close-modal" onclick="closeAdminModal('settingsModal')">&times;</button>
+          <h3><i class="fab fa-github"></i> GitHub 연동 설정</h3>
+          <button class="btn-close-modal" onclick="closeAdminModal('githubSettingsModal')">&times;</button>
         </div>
         <div class="modal-body">
           <div class="form-group">
-            <label class="form-label" for="publicKey">Public Key (User ID)</label>
-            <input type="text" id="publicKey" class="form-input" value="${settings.publicKey || ''}" placeholder="예: user_ABcdEFgh1234">
+            <label class="form-label" for="githubToken">Personal Access Token (PAT)</label>
+            <input type="password" id="githubToken" class="form-input" value="${settings.token || ''}" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+            <p class="form-helper">repo 권한이 허용된 클래식 토큰(PAT)을 입력해주세요.</p>
           </div>
           <div class="form-group">
-            <label class="form-label" for="serviceId">Service ID</label>
-            <input type="text" id="serviceId" class="form-input" value="${settings.serviceId || ''}" placeholder="예: service_gmail">
+            <label class="form-label" for="githubRepo">GitHub Repository (저장소 경로)</label>
+            <input type="text" id="githubRepo" class="form-input" value="${settings.repo || ''}" placeholder="예: username/repo-name">
           </div>
           <div class="form-group">
-            <label class="form-label" for="templateId">Template ID</label>
-            <input type="text" id="templateId" class="form-input" value="${settings.templateId || ''}" placeholder="예: template_notice">
+            <label class="form-label" for="githubPath">업데이트할 데이터 파일 경로</label>
+            <input type="text" id="githubPath" class="form-input" value="${settings.path || 'js/data.js'}" placeholder="예: js/data.js">
           </div>
           <div class="form-group">
-            <label class="form-label" for="adminEmail">알림 수신 이메일</label>
-            <input type="email" id="adminEmail" class="form-input" value="${settings.adminEmail || 'admin@oamaster.co.kr'}" placeholder="예: admin@example.com">
-            <p class="form-helper">게시글 작성/수정 알림 메일을 전송받을 목적지 이메일 주소입니다.</p>
-          </div>
-          <div class="form-helper" style="border-top: 1px solid var(--border-color); padding-top: 12px; margin-top: 15px;">
-            ※ EmailJS 계정이 없으신 경우, <a href="https://www.emailjs.com" target="_blank" style="color:var(--theme-primary); text-decoration:underline;">emailjs.com</a>에서 무료 회원가입 후 템플릿과 키를 생성하십시오. 템플릿 변수는 <strong>{{action}}</strong>, <strong>{{title}}</strong>, <strong>{{message}}</strong>, <strong>{{date}}</strong>를 포함하여 구성하면 알림 메일이 예쁘게 전송됩니다.
+            <label class="form-label" for="githubBranch">대상 브랜치 (Branch)</label>
+            <input type="text" id="githubBranch" class="form-input" value="${settings.branch || 'main'}" placeholder="예: main">
           </div>
         </div>
         <div class="modal-footer">
-          <button class="btn btn-secondary" onclick="closeAdminModal('settingsModal')">취소</button>
-          <button class="btn btn-primary" onclick="submitEmailSettings()">저장하기</button>
+          <button class="btn btn-secondary" onclick="closeAdminModal('githubSettingsModal')">취소</button>
+          <button class="btn btn-primary" onclick="submitGithubSettings()">저장하기</button>
         </div>
       </div>
     </div>
@@ -259,25 +271,185 @@ function showEmailSettingsModal() {
   document.body.appendChild(tempDiv.firstElementChild);
   
   setTimeout(() => {
-    document.getElementById('settingsModal').classList.add('open');
+    document.getElementById('githubSettingsModal').classList.add('open');
   }, 50);
 }
 
-function submitEmailSettings() {
-  const publicKey = document.getElementById('publicKey').value;
-  const serviceId = document.getElementById('serviceId').value;
-  const templateId = document.getElementById('templateId').value;
-  const adminEmail = document.getElementById('adminEmail').value;
+function submitGithubSettings() {
+  const token = document.getElementById('githubToken').value.trim();
+  const repo = document.getElementById('githubRepo').value.trim();
+  const path = document.getElementById('githubPath').value.trim();
+  const branch = document.getElementById('githubBranch').value.trim();
   
-  window.DB.saveEmailJSSettings({
-    publicKey,
-    serviceId,
-    templateId,
-    adminEmail
-  });
+  if (!token || !repo || !path || !branch) {
+    showToast('모든 항목을 입력해주세요.', 'error');
+    return;
+  }
   
-  showToast('EmailJS 설정이 안전하게 저장되었습니다.', 'success');
-  closeAdminModal('settingsModal');
+  localStorage.setItem("github_settings", JSON.stringify({
+    token,
+    repo,
+    path,
+    branch
+  }));
+  
+  showToast('GitHub 설정이 저장되었습니다.', 'success');
+  closeAdminModal('githubSettingsModal');
+}
+
+// Update data source file on GitHub
+async function updateJSONData() {
+  const settings = JSON.parse(localStorage.getItem("github_settings")) || {};
+  if (!settings.token || !settings.repo || !settings.path) {
+    showToast('GitHub 연동 설정을 먼저 완료해 주세요.', 'warning');
+    showGithubSettingsModal();
+    return;
+  }
+
+  showToast('GitHub 데이터 업데이트를 시작합니다...', 'info');
+
+  try {
+    const repo = settings.repo;
+    const path = settings.path;
+    const branch = settings.branch || "main";
+    const token = settings.token;
+
+    const url = `https://api.github.com/repos/${repo}/contents/${path}?ref=${branch}`;
+    const getRes = await fetch(url, {
+      headers: {
+        "Authorization": `token ${token}`,
+        "Accept": "application/vnd.github.v3+json"
+      }
+    });
+
+    let sha = null;
+    if (getRes.status === 200) {
+      const fileData = await getRes.json();
+      sha = fileData.sha;
+    } else if (getRes.status !== 404) {
+      throw new Error(`파일 정보를 가져오지 못했습니다. 상태코드: ${getRes.status}`);
+    }
+
+    const writtenArchive = localStorage.getItem("written_archive") || "[]";
+    const writtenVideo = localStorage.getItem("written_video") || "[]";
+    const practicalArchive = localStorage.getItem("practical_archive") || "[]";
+    const practicalVideo = localStorage.getItem("practical_video") || "[]";
+    const recommendSites = localStorage.getItem("recommend_sites") || "[]";
+
+    const newContent = `// --- Core Database & Data Management Module (Local Storage) ---
+// Generated automatically via GitHub Update action
+
+const DEFAULT_WRITTEN_ARCHIVE = ${JSON.stringify(JSON.parse(writtenArchive), null, 2)};
+
+const DEFAULT_WRITTEN_VIDEO = ${JSON.stringify(JSON.parse(writtenVideo), null, 2)};
+
+const DEFAULT_PRACTICAL_ARCHIVE = ${JSON.stringify(JSON.parse(practicalArchive), null, 2)};
+
+const DEFAULT_PRACTICAL_VIDEO = ${JSON.stringify(JSON.parse(practicalVideo), null, 2)};
+
+const DEFAULT_RECOMMEND_SITES = ${JSON.stringify(JSON.parse(recommendSites), null, 2)};
+
+// Database utility functions
+const DB = {
+  init() {
+    if (!localStorage.getItem("written_archive")) {
+      localStorage.setItem("written_archive", JSON.stringify(DEFAULT_WRITTEN_ARCHIVE));
+    }
+    if (!localStorage.getItem("written_video")) {
+      localStorage.setItem("written_video", JSON.stringify(DEFAULT_WRITTEN_VIDEO));
+    }
+    if (!localStorage.getItem("practical_archive")) {
+      localStorage.setItem("practical_archive", JSON.stringify(DEFAULT_PRACTICAL_ARCHIVE));
+    }
+    if (!localStorage.getItem("practical_video")) {
+      localStorage.setItem("practical_video", JSON.stringify(DEFAULT_PRACTICAL_VIDEO));
+    }
+    if (!localStorage.getItem("recommend_sites")) {
+      localStorage.setItem("recommend_sites", JSON.stringify(DEFAULT_RECOMMEND_SITES));
+    }
+    if (!localStorage.getItem("emailjs_settings")) {
+      localStorage.setItem("emailjs_settings", JSON.stringify({
+        publicKey: "",
+        serviceId: "",
+        templateId: "",
+        adminEmail: "admin@oamaster.co.kr"
+      }));
+    }
+  },
+  getAll(key) {
+    this.init();
+    return JSON.parse(localStorage.getItem(key)) || [];
+  },
+  getById(key, id) {
+    const list = this.getAll(key);
+    return list.find(item => item.id === id);
+  },
+  save(key, item) {
+    const list = this.getAll(key);
+    if (item.id) {
+      const index = list.findIndex(i => i.id === item.id);
+      if (index !== -1) {
+        list[index] = { ...list[index], ...item, date: new Date().toISOString().split('T')[0] };
+      }
+    } else {
+      item.id = key.substring(0, 2) + '-' + Date.now();
+      item.date = new Date().toISOString().split('T')[0];
+      item.author = "관리자";
+      list.unshift(item);
+    }
+    localStorage.setItem(key, JSON.stringify(list));
+    return item;
+  },
+  delete(key, id) {
+    let list = this.getAll(key);
+    list = list.filter(item => item.id !== id);
+    localStorage.setItem(key, JSON.stringify(list));
+    return true;
+  },
+  getEmailJSSettings() {
+    this.init();
+    return JSON.parse(localStorage.getItem("emailjs_settings"));
+  },
+  saveEmailJSSettings(settings) {
+    localStorage.setItem("emailjs_settings", JSON.stringify(settings));
+    return true;
+  }
+};
+
+window.DB = DB;
+DB.init();
+`;
+
+    const putUrl = `https://api.github.com/repos/${repo}/contents/${path}`;
+    const body = {
+      message: "admin: Update data source via Web JSON Update",
+      content: btoa(unescape(encodeURIComponent(newContent))),
+      branch: branch
+    };
+    if (sha) {
+      body.sha = sha;
+    }
+
+    const putRes = await fetch(putUrl, {
+      method: "PUT",
+      headers: {
+        "Authorization": `token ${token}`,
+        "Accept": "application/vnd.github.v3+json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(body)
+    });
+
+    if (putRes.status === 200 || putRes.status === 201) {
+      showToast('GitHub 데이터가 성공적으로 업데이트되었습니다! (수 초 후 웹페이지 반영)', 'success');
+    } else {
+      const errData = await putRes.json();
+      throw new Error(errData.message || 'GitHub API 호출 오류');
+    }
+  } catch (error) {
+    console.error(error);
+    showToast(`업데이트 실패: ${error.message}`, 'error');
+  }
 }
 
 // Send Notification via EmailJS
@@ -339,3 +511,6 @@ window.closeAdminModal = closeAdminModal;
 window.sendAdminEmailNotification = sendAdminEmailNotification;
 window.requestVerificationCode = requestVerificationCode;
 window.verifyAdminCode = verifyAdminCode;
+window.showGithubSettingsModal = showGithubSettingsModal;
+window.submitGithubSettings = submitGithubSettings;
+window.updateJSONData = updateJSONData;
