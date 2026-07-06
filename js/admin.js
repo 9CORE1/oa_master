@@ -259,6 +259,7 @@ function showGithubSettingsModal() {
           </div>
         </div>
         <div class="modal-footer">
+          <button class="btn btn-delete" onclick="clearGithubSettings()" style="margin-right: auto;"><i class="fas fa-trash-alt"></i> 설정 삭제</button>
           <button class="btn btn-secondary" onclick="closeAdminModal('githubSettingsModal')">취소</button>
           <button class="btn btn-primary" onclick="submitGithubSettings()">저장하기</button>
         </div>
@@ -294,6 +295,19 @@ function submitGithubSettings() {
   }));
   
   showToast('GitHub 설정이 저장되었습니다.', 'success');
+  closeAdminModal('githubSettingsModal');
+}
+
+function clearGithubSettings() {
+  if (!localStorage.getItem("github_settings")) {
+    showToast('저장된 GitHub 설정이 없습니다.', 'warning');
+    return;
+  }
+  
+  if (!confirm('저장된 GitHub 연동 설정을 모두 삭제하시겠습니까?')) return;
+  
+  localStorage.removeItem("github_settings");
+  showToast('GitHub 연동 설정이 삭제되었습니다.', 'success');
   closeAdminModal('githubSettingsModal');
 }
 
@@ -513,4 +527,5 @@ window.requestVerificationCode = requestVerificationCode;
 window.verifyAdminCode = verifyAdminCode;
 window.showGithubSettingsModal = showGithubSettingsModal;
 window.submitGithubSettings = submitGithubSettings;
+window.clearGithubSettings = clearGithubSettings;
 window.updateJSONData = updateJSONData;
