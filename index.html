@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OA MASTER - 사무자동화 및 컴퓨터활용능력 자격증</title>
+  <meta name="description" content="사무자동화 및 컴퓨터활용능력 자격증 단기 합격을 위한 최적의 학습 플랫폼 OA MASTER. 쉬운 기능도 뭉치면 통합니다!">
+  <!-- Google Fonts & FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <!-- EmailJS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+</head>
+<body class="theme-written">
+
+  <!-- Header -->
+  <header>
+    <div class="nav-container">
+      <a href="index.html" class="logo-group">
+        <img src="images/OA_master_LOGO.png" alt="OA MASTER Logo">
+        <div class="logo-text">
+          OA MASTER
+          <span class="logo-subtext">쉬운 기능도 뭉치면 통한다!</span>
+        </div>
+      </a>
+      
+      <!-- Desktop Links -->
+      <nav class="nav-links">
+        <div class="nav-item">
+          <a href="written_archive.html" class="nav-link"><i class="fas fa-book"></i> 필기과정 <i class="fas fa-chevron-down" style="font-size:10px;"></i></a>
+          <div class="dropdown-menu">
+            <a href="written_archive.html" class="dropdown-link"><i class="fas fa-folder-open"></i> 자료실</a>
+            <a href="written_lectures.html" class="dropdown-link"><i class="fas fa-video"></i> 영상보기</a>
+          </div>
+        </div>
+        <div class="nav-item">
+          <a href="practical_archive.html" class="nav-link"><i class="fas fa-laptop-code"></i> 실기과정 <i class="fas fa-chevron-down" style="font-size:10px;"></i></a>
+          <div class="dropdown-menu">
+            <a href="practical_archive.html" class="dropdown-link"><i class="fas fa-folder-open"></i> 자료실</a>
+            <a href="practical_lectures.html" class="dropdown-link"><i class="fas fa-video"></i> 영상보기</a>
+          </div>
+        </div>
+        <div class="nav-item">
+          <a href="recommendations.html" class="nav-link"><i class="fas fa-external-link-alt"></i> 추천 사이트</a>
+        </div>
+      </nav>
+
+      <div class="nav-cta">
+        <button id="adminModeBtn" class="btn-admin-mode">
+          <i class="fas fa-lock"></i> 관리자 모드
+        </button>
+        <button class="mobile-toggle">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Menu Drawer -->
+  <div class="mobile-nav-overlay"></div>
+  <div class="mobile-nav-drawer">
+    <div class="mobile-nav-header">
+      <div class="logo-text" style="color: var(--logo-color);">OA MASTER</div>
+      <button class="btn-close-mobile">&times;</button>
+    </div>
+    <div class="mobile-nav-list">
+      <div class="mobile-nav-group-title">필기과정</div>
+      <a href="written_archive.html" class="mobile-nav-link"><i class="fas fa-folder-open"></i> 필기 자료실</a>
+      <a href="written_lectures.html" class="mobile-nav-link"><i class="fas fa-video"></i> 필기 영상강의</a>
+      
+      <div class="mobile-nav-group-title">실기과정</div>
+      <a href="practical_archive.html" class="mobile-nav-link"><i class="fas fa-folder-open"></i> 실기 자료실</a>
+      <a href="practical_lectures.html" class="mobile-nav-link"><i class="fas fa-video"></i> 실기 영상강의</a>
+      
+      <div class="mobile-nav-group-title">추천 정보</div>
+      <a href="recommendations.html" class="mobile-nav-link"><i class="fas fa-external-link-alt"></i> 추천 사이트</a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main>
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="hero-bg-pattern"></div>
+      <div class="hero-container">
+        <div class="hero-badge">
+          <i class="fas fa-graduation-cap"></i> OA MASTER 자격증 교육 허브
+        </div>
+        <h1 class="hero-title">
+          쉬운 기능도 <span>뭉치면 통한다!</span><br>
+          자격증 취득의 지름길
+        </h1>
+        <p class="hero-description">
+          컴퓨터활용능력 및 사무자동화산업기사 자격증 취득을 원하시나요? <br>
+          엄선된 학습 요약본, 실습 기출문제 파일, 그리고 엄격하게 보호되는 고화질 무료 동영상 강의를 오직 OA MASTER에서 경험해 보세요.
+        </p>
+        <div class="hero-actions">
+          <a href="written_archive.html" class="btn btn-primary">필기과정 학습하기</a>
+          <a href="practical_archive.html" class="btn btn-secondary">실기과정 실습하기</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Features Grid -->
+    <div class="content-container" style="padding-top: 40px;">
+      <div class="grid">
+        <!-- Card 1: Written Course -->
+        <div class="card" style="border-top: 4px solid var(--theme-written);">
+          <div class="card-header">
+            <span class="card-badge card-badge-written">Written Exam</span>
+            <h3 class="card-title">필기 과정</h3>
+          </div>
+          <div class="card-body">
+            <p style="margin-bottom: 16px;">자격증 합격의 첫 단계! 개념 구조를 한눈에 파악하는 필기 마스터 코스입니다. 핵심 요약 자료와 최신 기출 강의로 이론을 탄탄하게 다집니다.</p>
+            <ul style="display: flex; flex-direction: column; gap: 8px; font-size: 13px;">
+              <li><i class="fas fa-check" style="color:var(--theme-written); margin-right:6px;"></i> 컴퓨터 일반 및 스프레드시트 기출 정리</li>
+              <li><i class="fas fa-check" style="color:var(--theme-written); margin-right:6px;"></i> 다운로드 가능한 PDF 필기 핵심요약집</li>
+              <li><i class="fas fa-check" style="color:var(--theme-written); margin-right:6px;"></i> 이해하기 쉬운 무료 동영상 개념 특강</li>
+            </ul>
+          </div>
+          <div class="card-footer">
+            <span style="font-weight:600; color:var(--theme-written);">이론 및 문제 풀이</span>
+            <div class="action-buttons">
+              <a href="written_archive.html" class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;"><i class="fas fa-folder-open"></i> 자료실</a>
+              <a href="written_lectures.html" class="btn btn-primary" style="padding: 6px 12px; font-size: 12px; background-color: var(--theme-written);"><i class="fas fa-play"></i> 강의</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2: Practical Course -->
+        <div class="card" style="border-top: 4px solid var(--theme-practical);">
+          <div class="card-header">
+            <span class="card-badge card-badge-practical">Practical Exam</span>
+            <h3 class="card-title">실기 과정</h3>
+          </div>
+          <div class="card-body">
+            <p style="margin-bottom: 16px;">합격을 결정짓는 실전 훈련! 엑셀(스프레드시트)과 액세스(데이터베이스), 파워포인트를 직접 실습할 수 있도록 설계된 체계적 강좌군입니다.</p>
+            <ul style="display: flex; flex-direction: column; gap: 8px; font-size: 13px;">
+              <li><i class="fas fa-check" style="color:var(--theme-practical); margin-right:6px;"></i> 엑셀 함수 및 배열수식 집중 트레이닝</li>
+              <li><i class="fas fa-check" style="color:var(--theme-practical); margin-right:6px;"></i> 공단 배포 정식 실습 예제 및 답안 템플릿</li>
+              <li><i class="fas fa-check" style="color:var(--theme-practical); margin-right:6px;"></i> 화면 밖으로 새어 나가지 않는 실전 해설 강의</li>
+            </ul>
+          </div>
+          <div class="card-footer">
+            <span style="font-weight:600; color:var(--theme-practical);">엑셀 / 데이터베이스 / PPT</span>
+            <div class="action-buttons">
+              <a href="practical_archive.html" class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;"><i class="fas fa-folder-open"></i> 자료실</a>
+              <a href="practical_lectures.html" class="btn btn-primary" style="padding: 6px 12px; font-size: 12px; background-color: var(--theme-practical);"><i class="fas fa-play"></i> 강의</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3: Recommendations -->
+        <div class="card" style="border-top: 4px solid var(--theme-recommend);">
+          <div class="card-header">
+            <span class="card-badge" style="background-color:rgba(129,41,64,0.1); color:var(--theme-recommend);">External Links</span>
+            <h3 class="card-title">추천 사이트</h3>
+          </div>
+          <div class="card-body">
+            <p style="margin-bottom: 16px;">원서 접수부터 수험생 커뮤니티, 전자 기출문제 풀이(CBT) 플랫폼까지 자격증 취득 여정에 큰 도움이 될 공신력 높은 외부 자원을 선별했습니다.</p>
+            <ul style="display: flex; flex-direction: column; gap: 8px; font-size: 13px;">
+              <li><i class="fas fa-check" style="color:var(--theme-recommend); margin-right:6px;"></i> 상공회의소 및 한국산업인력공단 공식 접수처</li>
+              <li><i class="fas fa-check" style="color:var(--theme-recommend); margin-right:6px;"></i> 자격증 최신 소식 및 수기 공유 커뮤니티</li>
+              <li><i class="fas fa-check" style="color:var(--theme-recommend); margin-right:6px;"></i> 무료 모의고사 자가 채점 시스템 링크</li>
+            </ul>
+          </div>
+          <div class="card-footer">
+            <span style="font-weight:600; color:var(--theme-recommend);">유용한 사이트 목록</span>
+            <a href="recommendations.html" class="btn btn-primary" style="padding: 6px 12px; font-size: 12px; background-color: var(--theme-recommend);"><i class="fas fa-arrow-right"></i> 이동하기</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-container">
+      <div class="footer-top">
+        <div class="footer-info">
+          <div class="footer-logo">
+            <img src="images/OA_master_LOGO.png" alt="OA MASTER Logo">
+            <span class="footer-logo-text">OA MASTER</span>
+          </div>
+          <p class="footer-slogan">"쉬운 기능도 뭉치면 통한다!"</p>
+          <p style="font-size:13px; color: var(--neutral-500);">
+            OA MASTER는 컴퓨터활용능력 1급/2급 및 사무자동화산업기사 자격증 취득에 최적화된 고품질 교육 콘텐츠를 서비스합니다.
+          </p>
+        </div>
+        
+        <div class="footer-links-grid">
+          <div class="footer-links-col">
+            <h4>필기과정</h4>
+            <ul>
+              <li><a href="written_archive.html">필기 자료실</a></li>
+              <li><a href="written_lectures.html">필기 영상보기</a></li>
+            </ul>
+          </div>
+          <div class="footer-links-col">
+            <h4>실기과정</h4>
+            <ul>
+              <li><a href="practical_archive.html">실기 자료실</a></li>
+              <li><a href="practical_lectures.html">실기 영상보기</a></li>
+            </ul>
+          </div>
+          <div class="footer-links-col">
+            <h4>추천 사이트</h4>
+            <ul>
+              <li><a href="recommendations.html">외부 유용 링크</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; 2026 OA MASTER. All Rights Reserved. Designed for Excellence.</p>
+        <div class="footer-bottom-links">
+          <a href="#" onclick="toggleAdminMode(); return false;"><i class="fas fa-user-shield"></i> 관리자 로그인</a>
+          <span style="color:var(--neutral-700);">|</span>
+          <a href="#">개인정보처리방침</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>
