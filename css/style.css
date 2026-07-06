@@ -622,6 +622,7 @@ main {
   background: var(--bg-white);
   border-radius: var(--radius-lg);
   border: var(--border-width) solid var(--border-color);
+  border-top: 4px solid var(--theme-primary);
   box-shadow: var(--shadow-md);
   overflow: hidden;
 }
