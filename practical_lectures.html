@@ -477,7 +477,10 @@
     function loadYouTubePlayer(videoId) {
       if (ytPlayer) {
         try {
-          ytPlayer.loadVideoById(videoId);
+          ytPlayer.loadVideoById({
+            videoId: videoId,
+            suggestedQuality: 'hd1080'
+          });
           ytPlayer.pauseVideo();
           return;
         } catch (e) {
@@ -511,6 +514,11 @@
       const vol = document.getElementById('volumeSlider').value;
       ytPlayer.setVolume(vol);
       
+      // Suggest 1080p playback quality
+      if (typeof ytPlayer.setPlaybackQuality === 'function') {
+        ytPlayer.setPlaybackQuality('hd1080');
+      }
+      
       document.getElementById('coverPlayBtn').onclick = () => {
         document.getElementById('playerCover').classList.add('playing');
         ytPlayer.playVideo();
@@ -526,6 +534,10 @@
       const cover = document.getElementById('playerCover');
       
       if (event.data === YT.PlayerState.PLAYING) {
+        // Enforce 1080p when playback actually starts
+        if (typeof ytPlayer.setPlaybackQuality === 'function') {
+          ytPlayer.setPlaybackQuality('hd1080');
+        }
         playBtn.innerHTML = '<i class="fas fa-pause"></i>';
         cover.classList.add('playing');
         startProgressTracking();
