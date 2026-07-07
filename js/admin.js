@@ -468,42 +468,8 @@ DB.init();
 
 // Send Notification via EmailJS
 function sendAdminEmailNotification(action, title, messageText) {
-  const settings = window.DB.getEmailJSSettings();
-  
-  // If settings are not configured, warn in console but don't break flow
-  if (!settings.publicKey || !settings.serviceId || !settings.templateId) {
-    console.warn("EmailJS is not fully configured. Email notification skipped.");
-    showToast("로컬 데이터는 저장되었으나, EmailJS 설정이 누락되어 이메일 알림은 발송되지 않았습니다.", "warning");
-    return Promise.resolve(false);
-  }
-  
-  // Load emailjs script if not loaded
-  if (typeof emailjs === 'undefined') {
-    console.error("EmailJS SDK is not loaded.");
-    return Promise.resolve(false);
-  }
-  
-  // Initialize emailjs
-  emailjs.init(settings.publicKey);
-  
-  const templateParams = {
-    action: action, // e.g. "신규 자료실 게시글 등록"
-    title: title,   // e.g. "[요약본] 2026 컴활 1급 필기 요약"
-    message: messageText, // e.g. "파일명: xxx.pdf, 크기: 4.8MB"
-    to_email: settings.adminEmail,
-    date: new Date().toLocaleString()
-  };
-  
-  return emailjs.send(settings.serviceId, settings.templateId, templateParams)
-    .then(response => {
-      console.log('EmailJS Notification Sent SUCCESS!', response.status, response.text);
-      showToast('변경 사항이 저장되었으며, EmailJS 이메일 알림이 발송되었습니다.', 'success');
-      return true;
-    }, error => {
-      console.error('EmailJS Notification FAILED...', error);
-      showToast('이메일 알림 발송 중 오류가 발생했습니다. (관리자 설정을 확인해 주세요)', 'error');
-      return false;
-    });
+  // 관리자모드로 로그인된 상태이므로 자료 등록/수정/삭제 시 추가 이메일 발송(인증 알림)을 생략합니다.
+  return Promise.resolve(true);
 }
 
 // Add Admin UI Trigger to header when page loads
