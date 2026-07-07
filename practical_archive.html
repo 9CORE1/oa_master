@@ -240,6 +240,8 @@
           <td style="font-family:var(--font-accent); font-size:13px;">${item.date}</td>
           <td class="admin-only" style="${is_admin ? '' : 'display:none;'}">
             <div class="action-buttons">
+              <button class="btn-icon btn-move" onclick="moveArchiveUp('${item.id}')" title="위로" ${index === 0 ? 'disabled style="opacity:0.3; cursor:not-allowed;"' : ''}><i class="fas fa-arrow-up"></i></button>
+              <button class="btn-icon btn-move" onclick="moveArchiveDown('${item.id}')" title="아래로" ${index === data.length - 1 ? 'disabled style="opacity:0.3; cursor:not-allowed;"' : ''}><i class="fas fa-arrow-down"></i></button>
               <button class="btn-icon btn-edit" onclick="openArchiveModal('${item.id}')" title="수정"><i class="fas fa-edit"></i></button>
               <button class="btn-icon btn-delete" onclick="deleteArchive('${item.id}')" title="삭제"><i class="fas fa-trash-alt"></i></button>
             </div>
@@ -423,6 +425,20 @@
       setTimeout(() => {
         document.getElementById('detailModal').classList.add('open');
       }, 50);
+    }
+
+    function moveArchiveUp(id) {
+      if (window.DB.moveUp(STORE_KEY, id)) {
+        renderArchiveTable();
+        showToast('게시물 순서가 변경되었습니다.', 'success');
+      }
+    }
+
+    function moveArchiveDown(id) {
+      if (window.DB.moveDown(STORE_KEY, id)) {
+        renderArchiveTable();
+        showToast('게시물 순서가 변경되었습니다.', 'success');
+      }
     }
   </script>
 </body>

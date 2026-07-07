@@ -420,6 +420,30 @@ const DB = {
     localStorage.setItem(key, JSON.stringify(list));
     return true;
   },
+  moveUp(key, id) {
+    const list = this.getAll(key);
+    const index = list.findIndex(item => item.id === id);
+    if (index > 0) {
+      const temp = list[index];
+      list[index] = list[index - 1];
+      list[index - 1] = temp;
+      localStorage.setItem(key, JSON.stringify(list));
+      return true;
+    }
+    return false;
+  },
+  moveDown(key, id) {
+    const list = this.getAll(key);
+    const index = list.findIndex(item => item.id === id);
+    if (index !== -1 && index < list.length - 1) {
+      const temp = list[index];
+      list[index] = list[index + 1];
+      list[index + 1] = temp;
+      localStorage.setItem(key, JSON.stringify(list));
+      return true;
+    }
+    return false;
+  },
   getEmailJSSettings() {
     this.init();
     return JSON.parse(localStorage.getItem("emailjs_settings"));

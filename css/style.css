@@ -532,6 +532,16 @@ main {
   color: #fff;
 }
 
+.btn-move {
+  background-color: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+}
+
+.btn-move:hover:not(:disabled) {
+  background-color: #3b82f6;
+  color: #fff;
+}
+
 /* --- Cards / Grid Layout --- */
 .grid {
   display: grid;

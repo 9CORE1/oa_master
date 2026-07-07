@@ -292,7 +292,7 @@
         return;
       }
 
-      data.forEach((item) => {
+      data.forEach((item, index) => {
         const activeClass = selectedVideo && selectedVideo.id === item.id ? 'active-card' : '';
         const card = document.createElement('div');
         card.style.cssText = `
@@ -323,7 +323,7 @@
 
         card.innerHTML = `
           <div onclick="selectVideo('${item.id}')">
-            <h4 style="font-size:14px; font-weight:700; color:var(--neutral-900); margin-bottom:6px; padding-right:50px;">
+            <h4 style="font-size:14px; font-weight:700; color:var(--neutral-900); margin-bottom:6px; padding-right:110px;">
               <i class="far fa-play-circle" style="color:${selectedVideo && selectedVideo.id === item.id ? 'var(--theme-primary)' : 'var(--neutral-500)'}; margin-right:6px;"></i>${item.title}
             </h4>
             <div style="font-size:12px; color:var(--neutral-500); display:flex; gap:12px;">
@@ -333,6 +333,8 @@
           </div>
           
           <div class="admin-only" style="position:absolute; top:12px; right:12px; display:${is_admin ? 'flex' : 'none'}; gap:4px;">
+            <button class="btn-icon btn-move" onclick="moveVideoUp('${item.id}'); event.stopPropagation();" style="width:26px; height:26px; font-size:11px;" ${index === 0 ? 'disabled style="opacity:0.3; cursor:not-allowed;"' : ''}><i class="fas fa-arrow-up"></i></button>
+            <button class="btn-icon btn-move" onclick="moveVideoDown('${item.id}'); event.stopPropagation();" style="width:26px; height:26px; font-size:11px;" ${index === data.length - 1 ? 'disabled style="opacity:0.3; cursor:not-allowed;"' : ''}><i class="fas fa-arrow-down"></i></button>
             <button class="btn-icon btn-edit" onclick="openVideoModal('${item.id}'); event.stopPropagation();" style="width:26px; height:26px; font-size:11px;"><i class="fas fa-edit"></i></button>
             <button class="btn-icon btn-delete" onclick="deleteVideo('${item.id}'); event.stopPropagation();" style="width:26px; height:26px; font-size:11px;"><i class="fas fa-trash-alt"></i></button>
           </div>
@@ -702,6 +704,20 @@
           }
           renderPlaylist();
         });
+    }
+
+    function moveVideoUp(id) {
+      if (window.DB.moveUp(STORE_KEY, id)) {
+        renderPlaylist();
+        showToast('영상 순서가 변경되었습니다.', 'success');
+      }
+    }
+
+    function moveVideoDown(id) {
+      if (window.DB.moveDown(STORE_KEY, id)) {
+        renderPlaylist();
+        showToast('영상 순서가 변경되었습니다.', 'success');
+      }
     }
   </script>
 </body>
