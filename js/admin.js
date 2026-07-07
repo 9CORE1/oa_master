@@ -409,7 +409,7 @@ const DB = {
       item.id = key.substring(0, 2) + '-' + Date.now();
       item.date = new Date().toISOString().split('T')[0];
       item.author = "관리자";
-      list.unshift(item);
+      list.push(item);
     }
     localStorage.setItem(key, JSON.stringify(list));
     return item;
