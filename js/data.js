@@ -120,6 +120,86 @@ const DEFAULT_PRACTICAL_VIDEO = [
     "id": "pr-1783386781182",
     "date": "2026-07-07",
     "author": "관리자"
+  },
+  {
+    "title": "컴활2급 기출문제풀이(1)-기본작업",
+    "description": "컴퓨터활용능력2급 기출문제 풀이(1)-Part 1. 기본작업",
+    "youtubeId": "we12lT4FtX8",
+    "id": "pr-1783387704761",
+    "date": "2026-07-07",
+    "author": "관리자"
+  },
+  {
+    "title": "컴활2급 기출문제풀이(1)-계산작업①",
+    "description": "컴퓨터활용능력2급 기출문제 풀이(1)-Part 2. 계산작업①",
+    "youtubeId": "HmS5YSTh2CE",
+    "id": "pr-1783387730928",
+    "date": "2026-07-07",
+    "author": "관리자"
+  },
+  {
+    "title": "컴활2급 기출문제풀이(1)-계산작업②",
+    "description": "컴퓨터활용능력2급 기출문제 풀이(1)-Part 2. 계산작업②",
+    "youtubeId": "2DFDtS-lH54",
+    "id": "pr-1783387759312",
+    "date": "2026-07-07",
+    "author": "관리자"
+  },
+  {
+    "title": "컴활2급 기출문제풀이(1)-분석작업",
+    "description": "컴퓨터활용능력2급 기출문제 풀이(1)-Part 3. 분석작업",
+    "youtubeId": "NIDOurJH9Io",
+    "id": "pr-1783387781178",
+    "date": "2026-07-07",
+    "author": "관리자"
+  },
+  {
+    "title": "컴활2급 기출문제풀이(1)-기타작업 中 매크로",
+    "description": "컴퓨터활용능력2급 기출문제 풀이(1)-Part 4. 기타작업 中 매크로",
+    "youtubeId": "ee42PSBPIIw",
+    "id": "pr-1783387817842",
+    "date": "2026-07-07",
+    "author": "관리자"
+  },
+  {
+    "title": "컴활2급 기출문제풀이(1)-기타작업 中 차트",
+    "description": "컴퓨터활용능력2급 기출문제 풀이(1)-Part 4. 기타작업 中 차트",
+    "youtubeId": "4VXr0mZJ5dw",
+    "id": "pr-1783387843236",
+    "date": "2026-07-07",
+    "author": "관리자"
+  },
+  {
+    "title": "컴활2급 기출문제풀이(2)-기본작업",
+    "description": "컴퓨터활용능력2급 기출문제 풀이(2)-Part 1. 기본작업",
+    "youtubeId": "9_2pFnBMrQ4",
+    "id": "pr-1783387904195",
+    "date": "2026-07-07",
+    "author": "관리자"
+  },
+  {
+    "title": "컴활2급 기출문제풀이(2)-계산작업",
+    "description": "컴퓨터활용능력2급 기출문제 풀이(2)-Part 2. 계산작업",
+    "youtubeId": "gpv-ggIBJ1Y",
+    "id": "pr-1783387930562",
+    "date": "2026-07-07",
+    "author": "관리자"
+  },
+  {
+    "title": "컴활2급 기출문제풀이(2)-분석작업",
+    "description": "컴퓨터활용능력2급 기출문제 풀이(2)-Part 3. 분석작업",
+    "youtubeId": "3GBweEizEkE",
+    "id": "pr-1783387950061",
+    "date": "2026-07-07",
+    "author": "관리자"
+  },
+  {
+    "title": "컴활2급 기출문제풀이(2)-기타작업",
+    "description": "컴퓨터활용능력2급 기출문제 풀이(2)-Part 4. 기타작업",
+    "youtubeId": "U955kn_6LYY",
+    "id": "pr-1783387978827",
+    "date": "2026-07-07",
+    "author": "관리자"
   }
 ];
 
