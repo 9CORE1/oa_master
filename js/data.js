@@ -34,27 +34,30 @@ const DEFAULT_WRITTEN_ARCHIVE = [
 const DEFAULT_WRITTEN_VIDEO = [
   {
     "id": "wv-1",
-    "title": "컴퓨터활용능력 1급 필기 1과목 컴퓨터 일반 핵심이론 총정리",
-    "description": "컴활 1급 필기 1과목 컴퓨터 일반 파트를 단 1시간 만에 총정리하는 핵심 인강입니다. 자주 출제되는 하드웨어, 소프트웨어, 네트워크 개념 완벽 정복!",
-    "youtubeId": "W-c_lU4Xy2s",
-    "date": "2026-06-10",
-    "author": "관리자"
+    "title": "컴활2급대비 함수사용법(1)",
+    "description": "컴퓨터활용능력 2급에 출제되는 함수 제대로 알아봅시다!",
+    "youtubeId": "NA6cU9s1GLU",
+    "date": "2026-07-07",
+    "author": "관리자",
+    "tag": "2급"
   },
   {
     "id": "wv-2",
-    "title": "사무자동화산업기사 필기 1주 합격 전략 및 과목별 요점정리",
-    "description": "사무자동화산업기사 필기 시험 합격을 위한 공부 순서 및 주요 출제 포인트 분석 특강입니다. 효율적인 시간 배분과 문제 풀이 요령을 전수합니다.",
-    "youtubeId": "Rlz_g1oX6_4",
-    "date": "2026-05-18",
-    "author": "관리자"
+    "title": "컴활2급대비 함수사용법(2)",
+    "description": "컴퓨터활용능력 2급에 출제되는 함수 제대로 알아봅시다!",
+    "youtubeId": "4Nazc-vY0TI",
+    "date": "2026-07-07",
+    "author": "관리자",
+    "tag": "2급"
   },
   {
     "id": "wv-3",
-    "title": "컴활 2급 필기 스프레드시트 일반 수식/함수 완벽 가이드",
-    "description": "어려운 스프레드시트 수식과 기본 함수들을 그림과 함께 직관적으로 설명해주는 동영상 강의입니다. 실기에도 바로 연결되므로 반드시 숙지해야 합니다.",
-    "youtubeId": "lQ8QhSj7VwU",
-    "date": "2026-06-02",
-    "author": "관리자"
+    "title": "컴활2급대비 함수사용법(3)",
+    "description": "컴퓨터활용능력 2급에 출제되는 함수 제대로 알아봅시다!",
+    "youtubeId": "1UWeDaNNn_E",
+    "date": "2026-07-07",
+    "author": "관리자",
+    "tag": "2급"
   }
 ];
 
@@ -95,7 +98,8 @@ const DEFAULT_PRACTICAL_VIDEO = [
     "description": "[컴퓨터활용능력 2급 실기]\n컴퓨터활용능력2급 실기대비(1)-기본작업\n\n컴활2급 실기 연습문제 [기본작업]을 함께 해 봅니다.\n(연습문제 출처 : 대한상공회의소)",
     "youtubeId": "zlSm9i7hai8",
     "date": "2026-07-07",
-    "author": "관리자"
+    "author": "관리자",
+    "tag": "2급"
   },
   {
     "id": "pv-2",
