@@ -542,6 +542,24 @@ main {
   color: #fff;
 }
 
+.filter-btn {
+  background: transparent;
+  color: var(--neutral-600);
+  border: none;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filter-btn.active {
+  background: #fff;
+  color: var(--theme-primary);
+  box-shadow: var(--shadow-sm);
+}
+
 /* --- Cards / Grid Layout --- */
 .grid {
   display: grid;
