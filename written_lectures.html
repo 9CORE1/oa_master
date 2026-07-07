@@ -166,10 +166,18 @@
         
         <!-- Right: Playlist Card List -->
         <div>
-          <h3 style="font-size:18px; font-weight:700; color:var(--neutral-800); margin-bottom:16px; display:flex; justify-content:space-between; align-items:center;">
-            <span>재생 강좌 목록</span>
-            <span style="font-size:12px; font-weight:500; color:var(--neutral-400);" id="lectureCount">3개의 강좌</span>
-          </h3>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
+            <h3 style="font-size:18px; font-weight:700; color:var(--neutral-800); margin:0;">필기 재생 목록</h3>
+            <div style="display:flex; gap:6px; align-items:center;">
+              <!-- Filter Buttons -->
+              <div class="filter-group" style="display:flex; gap:4px; background:var(--neutral-100); padding:3px; border-radius:var(--radius-md);">
+                <button class="filter-btn active" onclick="setFilter('all')" id="filter-all">전체</button>
+                <button class="filter-btn" onclick="setFilter('1급')" id="filter-1급">1급</button>
+                <button class="filter-btn" onclick="setFilter('2급')" id="filter-2급">2급</button>
+              </div>
+              <span style="font-size:12px; font-weight:500; color:var(--neutral-400); margin-left:8px;" id="lectureCount">3개의 강좌</span>
+            </div>
+          </div>
           
           <div style="display:flex; flex-direction:column; gap:16px;" id="playlistContainer">
             <!-- Playlist items rendered dynamically -->
@@ -200,6 +208,14 @@
           <label class="form-label" for="youtubeId">YouTube 동영상 ID</label>
           <input type="text" id="youtubeId" class="form-input" placeholder="예: W-c_lU4Xy2s">
           <p class="form-helper">유튜브 영상 공유 URL의 맨 뒷부분 고유 코드(11자리)를 적어주세요.</p>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="videoTag">급수 구분 (태그)</label>
+          <select id="videoTag" class="form-input">
+            <option value="1급">1급</option>
+            <option value="2급">2급</option>
+            <option value="기타">기타 (사무자동화 등)</option>
+          </select>
         </div>
       </div>
       <div class="modal-footer">
@@ -262,6 +278,7 @@
     let ytApiReady = false;
     let currentPage = 1;
     const itemsPerPage = 6;
+    let currentFilter = 'all';
 
     // 1. YouTube IFrame API Callback
     function onYouTubeIframeAPIReady() {
@@ -282,10 +299,18 @@
 
     // 3. Render playlist panel cards
     function renderPlaylist() {
-      const data = window.DB.getAll(STORE_KEY);
+      let data = window.DB.getAll(STORE_KEY);
       const container = document.getElementById('playlistContainer');
       const is_admin = window.isAdmin();
       
+      // Filter list based on selected tab
+      if (currentFilter !== 'all') {
+        data = data.filter(item => {
+          const itemTag = item.tag || (item.title.includes('1급') ? '1급' : (item.title.includes('2급') ? '2급' : '기타'));
+          return itemTag === currentFilter;
+        });
+      }
+
       document.getElementById('lectureCount').innerText = `${data.length}개의 강좌`;
       container.innerHTML = '';
 
@@ -335,13 +360,16 @@
           }
         };
 
+        const itemTag = item.tag || (item.title.includes('1급') ? '1급' : (item.title.includes('2급') ? '2급' : '기타'));
+
         card.innerHTML = `
           <div onclick="selectVideo('${item.id}')">
             <h4 style="font-size:14px; font-weight:700; color:var(--neutral-900); margin-bottom:6px; padding-right:110px;">
               <i class="far fa-play-circle" style="color:${selectedVideo && selectedVideo.id === item.id ? 'var(--theme-primary)' : 'var(--neutral-500)'}; margin-right:6px;"></i>${item.title}
             </h4>
-            <div style="font-size:12px; color:var(--neutral-500); display:flex; gap:12px;">
+            <div style="font-size:12px; color:var(--neutral-500); display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
               <span><i class="far fa-calendar"></i> ${item.date}</span>
+              <span class="card-badge" style="background-color:rgba(var(--theme-primary-rgb),0.1); color:var(--theme-primary); font-size:10px; padding:2px 6px; border-radius:10px; font-weight:600; margin:0; line-height:1.2; display:inline-flex; align-items:center;">${itemTag}</span>
               <span><i class="far fa-clock"></i> 유튜브 연동</span>
             </div>
           </div>
@@ -406,6 +434,17 @@
         nextBtn.onclick = () => { currentPage++; renderPlaylist(); };
       }
       paginationContainer.appendChild(nextBtn);
+    }
+
+    function setFilter(filterValue) {
+      currentFilter = filterValue;
+      currentPage = 1; // Reset to page 1
+      
+      document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+      const activeBtn = document.getElementById(`filter-${filterValue}`);
+      if (activeBtn) activeBtn.classList.add('active');
+      
+      renderPlaylist();
     }
 
     // 4. Select video to load
@@ -677,6 +716,7 @@
       document.getElementById('videoTitle').value = '';
       document.getElementById('videoDesc').value = '';
       document.getElementById('youtubeId').value = '';
+      document.getElementById('videoTag').value = '1급';
       
       if (isEdit) {
         const item = window.DB.getById(STORE_KEY, id);
@@ -684,6 +724,7 @@
           document.getElementById('videoTitle').value = item.title;
           document.getElementById('videoDesc').value = item.description;
           document.getElementById('youtubeId').value = item.youtubeId;
+          document.getElementById('videoTag').value = item.tag || (item.title.includes('1급') ? '1급' : (item.title.includes('2급') ? '2급' : '기타'));
         }
       }
       
@@ -700,6 +741,7 @@
       const title = document.getElementById('videoTitle').value;
       const description = document.getElementById('videoDesc').value;
       const youtubeId = document.getElementById('youtubeId').value;
+      const tag = document.getElementById('videoTag').value;
       
       if (!title || !description || !youtubeId) {
         showToast('모든 항목을 올바르게 채워주세요.', 'error');
@@ -709,7 +751,8 @@
       const item = {
         title,
         description,
-        youtubeId
+        youtubeId,
+        tag
       };
       
       if (id) item.id = id;
