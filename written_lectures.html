@@ -260,6 +260,8 @@
     let updateProgressTimer = null;
     let selectedVideo = null;
     let ytApiReady = false;
+    let currentPage = 1;
+    const itemsPerPage = 7;
 
     // 1. YouTube IFrame API Callback
     function onYouTubeIframeAPIReady() {
@@ -289,10 +291,22 @@
 
       if (data.length === 0) {
         container.innerHTML = '<p class="empty-state">등록된 필기 영상이 없습니다.</p>';
+        const paginationContainer = document.getElementById('playlistPagination');
+        if (paginationContainer) paginationContainer.innerHTML = '';
         return;
       }
 
-      data.forEach((item, index) => {
+      // Pagination slice
+      const totalPages = Math.ceil(data.length / itemsPerPage);
+      if (currentPage > totalPages) currentPage = totalPages;
+      if (currentPage < 1) currentPage = 1;
+      
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = Math.min(startIndex + itemsPerPage, data.length);
+      const pageData = data.slice(startIndex, endIndex);
+
+      pageData.forEach((item, relativeIndex) => {
+        const index = startIndex + relativeIndex;
         const activeClass = selectedVideo && selectedVideo.id === item.id ? 'active-card' : '';
         const card = document.createElement('div');
         card.style.cssText = `
@@ -342,6 +356,56 @@
         
         container.appendChild(card);
       });
+
+      renderPagination(totalPages);
+    }
+
+    function renderPagination(totalPages) {
+      let paginationContainer = document.getElementById('playlistPagination');
+      if (!paginationContainer) {
+        paginationContainer = document.createElement('div');
+        paginationContainer.id = 'playlistPagination';
+        paginationContainer.style.cssText = 'display:flex; justify-content:center; align-items:center; gap:8px; margin-top:20px;';
+        document.getElementById('playlistContainer').parentNode.appendChild(paginationContainer);
+      }
+      
+      paginationContainer.innerHTML = '';
+      if (totalPages <= 1) return;
+
+      const prevBtn = document.createElement('button');
+      prevBtn.className = 'btn-icon';
+      prevBtn.style.cssText = 'width:30px; height:30px; border-radius:50%; border:1px solid var(--border-color); background:#fff; cursor:pointer; display:flex; align-items:center; justify-content:center;';
+      prevBtn.innerHTML = '<i class="fas fa-chevron-left"></i>';
+      if (currentPage === 1) {
+        prevBtn.disabled = true;
+        prevBtn.style.opacity = '0.4';
+        prevBtn.style.cursor = 'not-allowed';
+      } else {
+        prevBtn.onclick = () => { currentPage--; renderPlaylist(); };
+      }
+      paginationContainer.appendChild(prevBtn);
+
+      for (let i = 1; i <= totalPages; i++) {
+        const pageBtn = document.createElement('button');
+        pageBtn.className = 'btn-icon';
+        pageBtn.style.cssText = `width:30px; height:30px; border-radius:50%; border:1px solid ${currentPage === i ? 'var(--theme-primary)' : 'var(--border-color)'}; background:${currentPage === i ? 'var(--theme-primary)' : '#fff'}; color:${currentPage === i ? '#fff' : 'var(--neutral-700)'}; cursor:pointer; font-weight:600; display:flex; align-items:center; justify-content:center;`;
+        pageBtn.innerText = i;
+        pageBtn.onclick = () => { currentPage = i; renderPlaylist(); };
+        paginationContainer.appendChild(pageBtn);
+      }
+
+      const nextBtn = document.createElement('button');
+      nextBtn.className = 'btn-icon';
+      nextBtn.style.cssText = 'width:30px; height:30px; border-radius:50%; border:1px solid var(--border-color); background:#fff; cursor:pointer; display:flex; align-items:center; justify-content:center;';
+      nextBtn.innerHTML = '<i class="fas fa-chevron-right"></i>';
+      if (currentPage === totalPages) {
+        nextBtn.disabled = true;
+        nextBtn.style.opacity = '0.4';
+        nextBtn.style.cursor = 'not-allowed';
+      } else {
+        nextBtn.onclick = () => { currentPage++; renderPlaylist(); };
+      }
+      paginationContainer.appendChild(nextBtn);
     }
 
     // 4. Select video to load
@@ -708,6 +772,9 @@
 
     function moveVideoUp(id) {
       if (window.DB.moveUp(STORE_KEY, id)) {
+        const data = window.DB.getAll(STORE_KEY);
+        const index = data.findIndex(item => item.id === id);
+        currentPage = Math.floor(index / itemsPerPage) + 1;
         renderPlaylist();
         showToast('영상 순서가 변경되었습니다.', 'success');
       }
@@ -715,6 +782,9 @@
 
     function moveVideoDown(id) {
       if (window.DB.moveDown(STORE_KEY, id)) {
+        const data = window.DB.getAll(STORE_KEY);
+        const index = data.findIndex(item => item.id === id);
+        currentPage = Math.floor(index / itemsPerPage) + 1;
         renderPlaylist();
         showToast('영상 순서가 변경되었습니다.', 'success');
       }
