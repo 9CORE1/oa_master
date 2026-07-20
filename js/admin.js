@@ -510,6 +510,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Export functions to window scope
 window.isAdmin = isAdmin;
+window.toggleAdminMode = toggleAdminMode;
 window.updateAdminUI = updateAdminUI;
 window.closeAdminModal = closeAdminModal;
 window.sendAdminEmailNotification = sendAdminEmailNotification;
