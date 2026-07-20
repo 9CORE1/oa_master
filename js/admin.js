@@ -134,9 +134,15 @@ function requestVerificationCode() {
   };
 
   if (!settings.publicKey || !settings.serviceId || !settings.templateId) {
-    alert(`💡 EmailJS 설정이 미적용되어 개발 콘솔용 임시 인증번호가 생성되었습니다.\n\n🔑 임시 인증번호: [ ${auth_code} ]`);
-    if (window.showToast) window.showToast('EmailJS 설정 누락. F12 개발자 도구 콘솔창을 확인하세요.', 'warning');
-    console.log(`[OA MASTER Admin Auth Code] Temp Code: ${auth_code}`);
+    const confirmSettings = confirm(
+      `💡 EmailJS 서비스 키(Public Key / Service ID / Template ID)가 설정되지 않았습니다.\n\n` +
+      `🔑 개발 콘솔용 인증번호: [ ${auth_code} ]\n\n` +
+      `지금 EmailJS 서비스 키를 입력/설정하시겠습니까?`
+    );
+    if (confirmSettings) {
+      showEmailJSSettingsModal();
+      return;
+    }
     switchToVerificationUI();
     return;
   }
@@ -548,6 +554,78 @@ document.addEventListener('DOMContentLoaded', () => {
   updateAdminUI();
 });
 
+// Show EmailJS Settings Modal
+function showEmailJSSettingsModal() {
+  const existingModal = document.getElementById('emailjsSettingsModal');
+  if (existingModal) existingModal.remove();
+
+  let settings = (window.DB && window.DB.getEmailJSSettings) ? window.DB.getEmailJSSettings() : {
+    publicKey: "",
+    serviceId: "",
+    templateId: "",
+    adminEmail: "teacha99@gmail.com"
+  };
+
+  const modalHTML = `
+    <div class="modal-backdrop open" id="emailjsSettingsModal" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:99999999; display:flex; justify-content:center; align-items:center;">
+      <div class="modal-content" style="background:#fff; padding:30px; border-radius:12px; max-width:480px; width:90%; position:relative; text-align:left; box-shadow:0 20px 25px -5px rgba(0,0,0,0.3);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; border-bottom:1px solid #eee; padding-bottom:10px;">
+          <h3 style="margin:0; font-size:18px; color:#1e293b;"><i class="fas fa-envelope-open-text" style="color:var(--theme-written, #0e4987);"></i> EmailJS 연동 키 설정</h3>
+          <button onclick="closeAdminModal('emailjsSettingsModal')" style="background:none; border:none; font-size:24px; cursor:pointer; color:#64748b;">&times;</button>
+        </div>
+        <div class="modal-body" style="display:flex; flex-direction:column; gap:12px;">
+          <div>
+            <label style="display:block; font-weight:bold; font-size:13px; margin-bottom:4px; color:#334155;">Public Key (공개 키)</label>
+            <input type="text" id="emailjsPublicKey" value="${settings.publicKey || ''}" placeholder="예: user_xxxxxxxxxxxx" style="width:100%; padding:9px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; font-size:13px;">
+          </div>
+          <div>
+            <label style="display:block; font-weight:bold; font-size:13px; margin-bottom:4px; color:#334155;">Service ID (서비스 ID)</label>
+            <input type="text" id="emailjsServiceId" value="${settings.serviceId || ''}" placeholder="예: service_xxxxxxx" style="width:100%; padding:9px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; font-size:13px;">
+          </div>
+          <div>
+            <label style="display:block; font-weight:bold; font-size:13px; margin-bottom:4px; color:#334155;">Template ID (템플릿 ID)</label>
+            <input type="text" id="emailjsTemplateId" value="${settings.templateId || ''}" placeholder="예: template_xxxxxxx" style="width:100%; padding:9px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; font-size:13px;">
+          </div>
+          <div>
+            <label style="display:block; font-weight:bold; font-size:13px; margin-bottom:4px; color:#334155;">관리자 수신 이메일 주소</label>
+            <input type="email" id="emailjsAdminEmail" value="${settings.adminEmail || 'teacha99@gmail.com'}" style="width:100%; padding:9px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; font-size:13px;">
+          </div>
+        </div>
+        <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:20px;">
+          <button type="button" onclick="closeAdminModal('emailjsSettingsModal')" style="padding:8px 16px; background:#e2e8f0; border:none; border-radius:6px; cursor:pointer; font-weight:600; color:#475569;">취소</button>
+          <button type="button" onclick="saveEmailJSSettingsFromModal()" style="padding:8px 16px; background:var(--theme-written, #0e4987); color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:bold;">설정 저장</button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  const tempDiv = document.createElement('div');
+  tempDiv.innerHTML = modalHTML;
+  document.body.appendChild(tempDiv.firstElementChild);
+}
+
+function saveEmailJSSettingsFromModal() {
+  const publicKey = document.getElementById('emailjsPublicKey').value.trim();
+  const serviceId = document.getElementById('emailjsServiceId').value.trim();
+  const templateId = document.getElementById('emailjsTemplateId').value.trim();
+  const adminEmail = document.getElementById('emailjsAdminEmail').value.trim();
+
+  if (!publicKey || !serviceId || !templateId || !adminEmail) {
+    alert('❌ 모든 EmailJS 항목을 입력해 주세요.');
+    return;
+  }
+
+  const newSettings = { publicKey, serviceId, templateId, adminEmail };
+  if (window.DB && window.DB.saveEmailJSSettings) {
+    window.DB.saveEmailJSSettings(newSettings);
+  } else {
+    localStorage.setItem("emailjs_settings", JSON.stringify(newSettings));
+  }
+
+  alert('🎉 EmailJS 연동 설정이 성공적으로 저장되었습니다!');
+  closeAdminModal('emailjsSettingsModal');
+}
+
 // Export functions to window scope
 window.isAdmin = isAdmin;
 window.toggleAdminMode = toggleAdminMode;
@@ -561,3 +639,5 @@ window.showGithubSettingsModal = showGithubSettingsModal;
 window.submitGithubSettings = submitGithubSettings;
 window.clearGithubSettings = clearGithubSettings;
 window.updateJSONData = updateJSONData;
+window.showEmailJSSettingsModal = showEmailJSSettingsModal;
+window.saveEmailJSSettingsFromModal = saveEmailJSSettingsFromModal;
