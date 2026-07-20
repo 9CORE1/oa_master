@@ -81,11 +81,16 @@ function closeAdminModal(modalId) {
 // Request Email Verification Code using EmailJS
 function requestVerificationCode() {
   const emailInput = document.getElementById('adminLoginEmail') || document.getElementById('loginEmail');
-  if (!emailInput) return;
+  if (!emailInput) {
+    alert('이메일 입력란을 찾을 수 없습니다.');
+    return;
+  }
 
   const loginEmail = emailInput.value.trim();
   if (!loginEmail) {
-    showToast('이메일 주소를 입력해주세요.', 'error');
+    alert('❌ 관리자 이메일 주소를 입력해 주세요.');
+    if (window.showToast) window.showToast('이메일 주소를 입력해주세요.', 'error');
+    emailInput.focus();
     return;
   }
 
@@ -93,7 +98,8 @@ function requestVerificationCode() {
   const adminEmail = (settings.adminEmail || 'teacha99@gmail.com').trim();
 
   if (loginEmail.toLowerCase() !== adminEmail.toLowerCase()) {
-    showToast('등록된 관리자 이메일 주소가 아닙니다.', 'error');
+    alert(`❌ 등록된 관리자 이메일 주소가 아닙니다. (${loginEmail})`);
+    if (window.showToast) window.showToast('등록된 관리자 이메일 주소가 아닙니다.', 'error');
     return;
   }
 
@@ -122,22 +128,23 @@ function requestVerificationCode() {
   };
 
   if (!settings.publicKey || !settings.serviceId || !settings.templateId) {
-    showToast('EmailJS 설정이 누락되었습니다. F12 콘솔창에서 임시 인증번호를 확인하세요.', 'warning');
+    alert(`💡 EmailJS 설정이 미적용되어 개발 콘솔용 임시 인증번호가 생성되었습니다.\n\n🔑 임시 인증번호: [ ${auth_code} ]`);
+    if (window.showToast) window.showToast('EmailJS 설정 누락. F12 개발자 도구 콘솔창을 확인하세요.', 'warning');
     console.log(`[OA MASTER Admin Auth Code] Temp Code: ${auth_code}`);
     switchToVerificationUI();
     return;
   }
 
   if (typeof emailjs === 'undefined') {
-    showToast('EmailJS SDK가 로드되지 않았습니다. 콘솔창에서 임시 인증번호를 확인하세요.', 'error');
+    alert(`💡 EmailJS 모듈 로딩 중입니다. 임시 인증번호로 진행합니다.\n\n🔑 인증번호: [ ${auth_code} ]`);
+    if (window.showToast) window.showToast('EmailJS SDK 준비 중. 콘솔창을 확인하세요.', 'warning');
     console.log(`[OA MASTER Admin Auth Code] Temp Code: ${auth_code}`);
     switchToVerificationUI();
     return;
   }
 
-  showToast('인증번호를 이메일로 발송 중입니다...', 'info');
+  if (window.showToast) window.showToast('인증번호를 이메일로 발송 중입니다...', 'info');
 
-  // Initialize emailjs
   emailjs.init(settings.publicKey);
 
   const templateParams = {
@@ -151,11 +158,13 @@ function requestVerificationCode() {
 
   emailjs.send(settings.serviceId, settings.templateId, templateParams)
     .then(response => {
-      showToast('인증번호가 관리자 이메일로 발송되었습니다.', 'success');
+      alert(`📧 인증번호가 관리자 이메일(${adminEmail})로 성공적으로 발송되었습니다!`);
+      if (window.showToast) window.showToast('인증번호가 발송되었습니다.', 'success');
       switchToVerificationUI();
     }, error => {
       console.error('Email Verification Send FAILED...', error);
-      showToast('인증 메일 발송에 실패했습니다. 콘솔창에서 임시 인증번호를 확인하세요.', 'error');
+      alert(`📧 메일 발송에 오류가 발생했습니다. 콘솔창에 임시 인증번호가 생성되었습니다.\n\n🔑 임시 인증번호: [ ${auth_code} ]`);
+      if (window.showToast) window.showToast('인증 메일 발송 오류. 콘솔창을 확인하세요.', 'error');
       console.log(`[OA MASTER Admin Auth Code] Temp Code: ${auth_code}`);
       switchToVerificationUI();
     });
@@ -172,13 +181,15 @@ function verifyAdminCode() {
   if (enteredCode === savedCode && savedCode) {
     sessionStorage.removeItem('admin_auth_code');
     localStorage.setItem('isAdminActive', 'true');
-    showToast('관리자 모드로 인증되었습니다!', 'success');
+    alert('🎉 관리자 모드로 성황리에 인증되었습니다!');
+    if (window.showToast) window.showToast('관리자 모드로 인증되었습니다!', 'success');
     const modal = document.getElementById('adminAuthModal') || document.getElementById('loginModal');
     if (modal) modal.style.display = 'none';
     updateAdminUI();
-    setTimeout(() => window.location.reload(), 800);
+    setTimeout(() => window.location.reload(), 600);
   } else {
-    showToast('인증번호가 일치하지 않습니다. 다시 확인해 주세요.', 'error');
+    alert('❌ 인증번호가 일치하지 않습니다. 다시 확인해 주세요.');
+    if (window.showToast) window.showToast('인증번호가 일치하지 않습니다. 다시 확인해 주세요.', 'error');
     codeInput.select();
   }
 }

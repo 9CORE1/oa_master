@@ -324,8 +324,8 @@
 
       <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:24px;">
         <button type="button" onclick="document.getElementById('adminAuthModal').style.display='none';" style="padding:8px 16px; background:#e2e8f0; border:none; border-radius:6px; cursor:pointer; font-weight:600; color:#475569;">취소</button>
-        <button type="button" id="btnAdminRequestCode" style="padding:8px 16px; background:var(--theme-written, #0e4987); color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:bold;">인증번호 전송</button>
-        <button type="button" id="btnAdminVerifyCode" style="display:none; padding:8px 16px; background:#10b981; color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:bold;">인증 완료</button>
+        <button type="button" id="btnAdminRequestCode" onclick="window.requestVerificationCode();" style="padding:8px 16px; background:var(--theme-written, #0e4987); color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:bold;">인증번호 전송</button>
+        <button type="button" id="btnAdminVerifyCode" onclick="window.verifyAdminCode();" style="display:none; padding:8px 16px; background:#10b981; color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:bold;">인증 완료</button>
       </div>
     </div>
   </div>
