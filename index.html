@@ -454,12 +454,14 @@
         if (authModal) authModal.style.display = 'flex';
       }
 
-      // 로그인 버튼 클릭 시 모달 열기
-      if (openAuthBtn) {
-        openAuthBtn.onclick = () => {
-          authModal.style.display = 'flex';
-        };
-      }
+      // 로그인 버튼 클릭 시 모달 열기 (이벤트 위임으로 언제든 100% 동작)
+      document.addEventListener('click', (e) => {
+        const btn = e.target.closest('#openAuthBtn');
+        if (btn) {
+          e.preventDefault();
+          if (authModal) authModal.style.display = 'flex';
+        }
+      });
 
       // 모든 서비스 링크 클릭 보호 (비로그인 시 이동 차단)
       const protectedServiceLinks = [
@@ -473,6 +475,7 @@
       document.addEventListener('click', (e) => {
         const link = e.target.closest('a');
         if (!link) return;
+        if (link.id === 'openAuthBtn' || link.id === 'myPageBtn') return;
 
         const href = link.getAttribute('href');
         if (href && protectedServiceLinks.some(page => href.includes(page))) {
@@ -593,11 +596,8 @@
           };
         } else {
           userNav.innerHTML = `
-          <button id="openAuthBtn" class="btn-admin-mode" style="background:var(--theme-written); color:#fff; border:none; padding:6px 14px; border-radius:6px; cursor:pointer; font-weight:600;"><i class="fas fa-user"></i> 로그인 / 회원가입</button>
-        `;
-          document.getElementById('openAuthBtn').onclick = () => {
-            authModal.style.display = 'flex';
-          };
+            <button id="openAuthBtn" class="btn-admin-mode" style="background:var(--theme-written); color:#fff; border:none; padding:6px 14px; border-radius:6px; cursor:pointer; font-weight:600;"><i class="fas fa-user"></i> 로그인 / 회원가입</button>
+          `;
         }
       });
     });
