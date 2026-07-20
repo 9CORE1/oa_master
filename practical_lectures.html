@@ -826,5 +826,16 @@
       }
     }
   </script>
+
+  <!-- 🔒 Auth Guard: 비로그인 사용자 메인으로 이동 -->
+  <script type="module">
+    import { onAuthChange } from './js/firebase-config.js';
+    onAuthChange((user) => {
+      if (!user) {
+        alert('🔒 회원가입 및 로그인이 필요한 서비스입니다.');
+        window.location.href = 'index.html?auth=required';
+      }
+    });
+  </script>
 </body>
 </html>

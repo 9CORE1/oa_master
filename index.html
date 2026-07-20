@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,6 +14,7 @@
   <!-- EmailJS SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 </head>
+
 <body class="theme-written">
 
   <!-- Header -->
@@ -25,18 +27,20 @@
           <span class="logo-subtext">쉬운 기능도 뭉치면 통한다!</span>
         </div>
       </a>
-      
+
       <!-- Desktop Links -->
       <nav class="nav-links">
         <div class="nav-item">
-          <a href="written_archive.html" class="nav-link"><i class="fas fa-book"></i> 필기과정 <i class="fas fa-chevron-down" style="font-size:10px;"></i></a>
+          <a href="written_archive.html" class="nav-link"><i class="fas fa-book"></i> 필기과정 <i
+              class="fas fa-chevron-down" style="font-size:10px;"></i></a>
           <div class="dropdown-menu">
             <a href="written_archive.html" class="dropdown-link"><i class="fas fa-folder-open"></i> 자료실</a>
             <a href="written_lectures.html" class="dropdown-link"><i class="fas fa-video"></i> 영상보기</a>
           </div>
         </div>
         <div class="nav-item">
-          <a href="practical_archive.html" class="nav-link"><i class="fas fa-laptop-code"></i> 실기과정 <i class="fas fa-chevron-down" style="font-size:10px;"></i></a>
+          <a href="practical_archive.html" class="nav-link"><i class="fas fa-laptop-code"></i> 실기과정 <i
+              class="fas fa-chevron-down" style="font-size:10px;"></i></a>
           <div class="dropdown-menu">
             <a href="practical_archive.html" class="dropdown-link"><i class="fas fa-folder-open"></i> 자료실</a>
             <a href="practical_lectures.html" class="dropdown-link"><i class="fas fa-video"></i> 영상보기</a>
@@ -48,6 +52,13 @@
       </nav>
 
       <div class="nav-cta">
+        <!-- 🔹 동적으로 로그인 버튼 또는 프로필이 들어갈 영역 -->
+        <div id="userNavArea" style="display:inline-block; margin-right:8px;">
+          <button id="openAuthBtn" class="btn-admin-mode" style="background:var(--theme-written); color:#fff; border:none; padding:6px 14px; border-radius:6px; cursor:pointer; font-weight:600;">
+            <i class="fas fa-user"></i> 로그인 / 회원가입
+          </button>
+        </div>
+
         <button id="adminModeBtn" class="btn-admin-mode">
           <i class="fas fa-lock"></i> 관리자 모드
         </button>
@@ -69,11 +80,11 @@
       <div class="mobile-nav-group-title">필기과정</div>
       <a href="written_archive.html" class="mobile-nav-link"><i class="fas fa-folder-open"></i> 필기 자료실</a>
       <a href="written_lectures.html" class="mobile-nav-link"><i class="fas fa-video"></i> 필기 영상강의</a>
-      
+
       <div class="mobile-nav-group-title">실기과정</div>
       <a href="practical_archive.html" class="mobile-nav-link"><i class="fas fa-folder-open"></i> 실기 자료실</a>
       <a href="practical_lectures.html" class="mobile-nav-link"><i class="fas fa-video"></i> 실기 영상강의</a>
-      
+
       <div class="mobile-nav-group-title">추천 정보</div>
       <a href="recommendations.html" class="mobile-nav-link"><i class="fas fa-external-link-alt"></i> 추천 사이트</a>
     </div>
@@ -113,18 +124,25 @@
             <h3 class="card-title">필기 과정</h3>
           </div>
           <div class="card-body">
-            <p style="margin-bottom: 16px;">자격증 합격의 첫 단계! 개념 구조를 한눈에 파악하는 필기 마스터 코스입니다. 핵심 요약 자료와 최신 기출 강의로 이론을 탄탄하게 다집니다.</p>
+            <p style="margin-bottom: 16px;">자격증 합격의 첫 단계! 개념 구조를 한눈에 파악하는 필기 마스터 코스입니다. 핵심 요약 자료와 최신 기출 강의로 이론을 탄탄하게
+              다집니다.</p>
             <ul style="display: flex; flex-direction: column; gap: 8px; font-size: 13px;">
-              <li><i class="fas fa-check" style="color:var(--theme-written); margin-right:6px;"></i> 컴퓨터 일반 및 스프레드시트 기출 정리</li>
-              <li><i class="fas fa-check" style="color:var(--theme-written); margin-right:6px;"></i> 다운로드 가능한 PDF 필기 핵심요약집</li>
-              <li><i class="fas fa-check" style="color:var(--theme-written); margin-right:6px;"></i> 이해하기 쉬운 무료 동영상 개념 특강</li>
+              <li><i class="fas fa-check" style="color:var(--theme-written); margin-right:6px;"></i> 컴퓨터 일반 및 스프레드시트 기출
+                정리</li>
+              <li><i class="fas fa-check" style="color:var(--theme-written); margin-right:6px;"></i> 다운로드 가능한 PDF 필기
+                핵심요약집</li>
+              <li><i class="fas fa-check" style="color:var(--theme-written); margin-right:6px;"></i> 이해하기 쉬운 무료 동영상 개념
+                특강</li>
             </ul>
           </div>
           <div class="card-footer">
             <span style="font-weight:600; color:var(--theme-written);">이론 및 문제 풀이</span>
             <div class="action-buttons">
-              <a href="written_archive.html" class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;"><i class="fas fa-folder-open"></i> 자료실</a>
-              <a href="written_lectures.html" class="btn btn-primary" style="padding: 6px 12px; font-size: 12px; background-color: var(--theme-written);"><i class="fas fa-play"></i> 강의</a>
+              <a href="written_archive.html" class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;"><i
+                  class="fas fa-folder-open"></i> 자료실</a>
+              <a href="written_lectures.html" class="btn btn-primary"
+                style="padding: 6px 12px; font-size: 12px; background-color: var(--theme-written);"><i
+                  class="fas fa-play"></i> 강의</a>
             </div>
           </div>
         </div>
@@ -136,18 +154,25 @@
             <h3 class="card-title">실기 과정</h3>
           </div>
           <div class="card-body">
-            <p style="margin-bottom: 16px;">합격을 결정짓는 실전 훈련! 엑셀(스프레드시트)과 액세스(데이터베이스), 파워포인트를 직접 실습할 수 있도록 설계된 체계적 강좌군입니다.</p>
+            <p style="margin-bottom: 16px;">합격을 결정짓는 실전 훈련! 엑셀(스프레드시트)과 액세스(데이터베이스), 파워포인트를 직접 실습할 수 있도록 설계된 체계적 강좌군입니다.
+            </p>
             <ul style="display: flex; flex-direction: column; gap: 8px; font-size: 13px;">
-              <li><i class="fas fa-check" style="color:var(--theme-practical); margin-right:6px;"></i> 엑셀 함수 및 배열수식 집중 트레이닝</li>
-              <li><i class="fas fa-check" style="color:var(--theme-practical); margin-right:6px;"></i> 공단 배포 정식 실습 예제 및 답안 템플릿</li>
-              <li><i class="fas fa-check" style="color:var(--theme-practical); margin-right:6px;"></i> 화면 밖으로 새어 나가지 않는 실전 해설 강의</li>
+              <li><i class="fas fa-check" style="color:var(--theme-practical); margin-right:6px;"></i> 엑셀 함수 및 배열수식 집중
+                트레이닝</li>
+              <li><i class="fas fa-check" style="color:var(--theme-practical); margin-right:6px;"></i> 공단 배포 정식 실습 예제 및
+                답안 템플릿</li>
+              <li><i class="fas fa-check" style="color:var(--theme-practical); margin-right:6px;"></i> 화면 밖으로 새어 나가지 않는
+                실전 해설 강의</li>
             </ul>
           </div>
           <div class="card-footer">
             <span style="font-weight:600; color:var(--theme-practical);">엑셀 / 데이터베이스 / PPT</span>
             <div class="action-buttons">
-              <a href="practical_archive.html" class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;"><i class="fas fa-folder-open"></i> 자료실</a>
-              <a href="practical_lectures.html" class="btn btn-primary" style="padding: 6px 12px; font-size: 12px; background-color: var(--theme-practical);"><i class="fas fa-play"></i> 강의</a>
+              <a href="practical_archive.html" class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;"><i
+                  class="fas fa-folder-open"></i> 자료실</a>
+              <a href="practical_lectures.html" class="btn btn-primary"
+                style="padding: 6px 12px; font-size: 12px; background-color: var(--theme-practical);"><i
+                  class="fas fa-play"></i> 강의</a>
             </div>
           </div>
         </div>
@@ -155,20 +180,27 @@
         <!-- Card 3: Recommendations -->
         <div class="card" style="border-top: 4px solid var(--theme-recommend);">
           <div class="card-header">
-            <span class="card-badge" style="background-color:rgba(129,41,64,0.1); color:var(--theme-recommend);">External Links</span>
+            <span class="card-badge"
+              style="background-color:rgba(129,41,64,0.1); color:var(--theme-recommend);">External Links</span>
             <h3 class="card-title">추천 사이트</h3>
           </div>
           <div class="card-body">
-            <p style="margin-bottom: 16px;">원서 접수부터 수험생 커뮤니티, 전자 기출문제 풀이(CBT) 플랫폼까지 자격증 취득 여정에 큰 도움이 될 공신력 높은 외부 자원을 선별했습니다.</p>
+            <p style="margin-bottom: 16px;">원서 접수부터 수험생 커뮤니티, 전자 기출문제 풀이(CBT) 플랫폼까지 자격증 취득 여정에 큰 도움이 될 공신력 높은 외부 자원을
+              선별했습니다.</p>
             <ul style="display: flex; flex-direction: column; gap: 8px; font-size: 13px;">
-              <li><i class="fas fa-check" style="color:var(--theme-recommend); margin-right:6px;"></i> 상공회의소 및 한국산업인력공단 공식 접수처</li>
-              <li><i class="fas fa-check" style="color:var(--theme-recommend); margin-right:6px;"></i> 자격증 최신 소식 및 수기 공유 커뮤니티</li>
-              <li><i class="fas fa-check" style="color:var(--theme-recommend); margin-right:6px;"></i> 무료 모의고사 자가 채점 시스템 링크</li>
+              <li><i class="fas fa-check" style="color:var(--theme-recommend); margin-right:6px;"></i> 상공회의소 및 한국산업인력공단
+                공식 접수처</li>
+              <li><i class="fas fa-check" style="color:var(--theme-recommend); margin-right:6px;"></i> 자격증 최신 소식 및 수기 공유
+                커뮤니티</li>
+              <li><i class="fas fa-check" style="color:var(--theme-recommend); margin-right:6px;"></i> 무료 모의고사 자가 채점 시스템
+                링크</li>
             </ul>
           </div>
           <div class="card-footer">
             <span style="font-weight:600; color:var(--theme-recommend);">유용한 사이트 목록</span>
-            <a href="recommendations.html" class="btn btn-primary" style="padding: 6px 12px; font-size: 12px; background-color: var(--theme-recommend);"><i class="fas fa-arrow-right"></i> 이동하기</a>
+            <a href="recommendations.html" class="btn btn-primary"
+              style="padding: 6px 12px; font-size: 12px; background-color: var(--theme-recommend);"><i
+                class="fas fa-arrow-right"></i> 이동하기</a>
           </div>
         </div>
       </div>
@@ -191,7 +223,7 @@
             OA MASTER는 컴퓨터활용능력 1급/2급 및 사무자동화산업기사 자격증 취득에 최적화된 고품질 교육 콘텐츠를 서비스합니다.
           </p>
         </div>
-        
+
         <div class="footer-links-grid">
           <div class="footer-links-col">
             <h4>필기과정</h4>
@@ -215,7 +247,7 @@
           </div>
         </div>
       </div>
-      
+
       <div class="footer-bottom">
         <p>&copy; 2026 OA MASTER. All Rights Reserved. Designed for Excellence.</p>
         <div class="footer-bottom-links">
@@ -227,9 +259,184 @@
     </div>
   </footer>
 
+  <!-- 🔹 로그인 및 Google 소셜 로그인 모달 팝업 -->
+  <div id="authModal" class="modal"
+    style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:9999; justify-content:center; align-items:center;">
+    <div class="modal-content"
+      style="background:#fff; padding:30px; border-radius:12px; max-width:400px; width:90%; position:relative; text-align:center;">
+      <span id="closeAuthModal"
+        style="position:absolute; right:15px; top:10px; font-size:24px; cursor:pointer;">&times;</span>
+
+      <h2 id="modalTitle" style="margin-bottom:20px;">로그인</h2>
+
+      <!-- 이메일 로그인 폼 -->
+      <form id="authForm" style="display:flex; flex-direction:column; gap:10px;">
+        <input type="email" id="authEmail" placeholder="이메일 주소" required
+          style="padding:10px; border:1px solid #ccc; border-radius:6px;">
+        <input type="password" id="authPassword" placeholder="비밀번호" required
+          style="padding:10px; border:1px solid #ccc; border-radius:6px;">
+        <button type="submit" id="authSubmitBtn"
+          style="padding:10px; background:var(--theme-written); color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:bold;">로그인</button>
+      </form>
+
+      <div style="margin:15px 0; font-size:14px; color:#666;">또는</div>
+
+      <!-- Google 로그인 버튼 -->
+      <button id="googleLoginBtn"
+        style="width:100%; padding:10px; background:#fff; border:1px solid #ddd; border-radius:6px; cursor:pointer; font-weight:bold; display:flex; align-items:center; justify-content:center; gap:8px;">
+        <i class="fab fa-google" style="color:#ea4335;"></i> Google 계정으로 계속하기
+      </button>
+
+      <!-- 모드 전환 -->
+      <div style="margin-top:15px; font-size:14px;">
+        <span id="toggleText">계정이 없으신가요?</span>
+        <a href="#" id="toggleAuthMode" style="color:var(--theme-written); font-weight:bold; margin-left:5px;">회원가입</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🔹 Firebase 연동 및 이벤트 스크립트 -->
+  <script type="module">
+    import {
+      signInWithEmail,
+      signUpWithEmail,
+      signInWithGoogle,
+      logout,
+      onAuthChange
+    } from './js/firebase-config.js';
+
+    let isSignUp = false;
+    let currentUser = null;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const authModal = document.getElementById('authModal');
+      const openAuthBtn = document.getElementById('openAuthBtn');
+      const closeBtn = document.getElementById('closeAuthModal');
+
+      // URL 파라미터 체크 (비로그인으로 접근 시도한 경우)
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('auth') === 'required') {
+        alert('회원가입 및 로그인을 해야 서비스를 이용하실 수 있습니다.');
+        if (authModal) authModal.style.display = 'flex';
+      }
+
+      // 로그인 버튼 클릭 시 모달 열기
+      if (openAuthBtn) {
+        openAuthBtn.onclick = () => {
+          authModal.style.display = 'flex';
+        };
+      }
+
+      // 모든 서비스 링크 클릭 보호 (비로그인 시 이동 차단)
+      const protectedServiceLinks = [
+        'written_archive.html',
+        'written_lectures.html',
+        'practical_archive.html',
+        'practical_lectures.html',
+        'recommendations.html'
+      ];
+
+      document.addEventListener('click', (e) => {
+        const link = e.target.closest('a');
+        if (!link) return;
+
+        const href = link.getAttribute('href');
+        if (href && protectedServiceLinks.some(page => href.includes(page))) {
+          if (!currentUser) {
+            e.preventDefault();
+            alert('🔒 회원가입 및 로그인을 해야 해당 서비스를 이용하실 수 있습니다.');
+            if (authModal) authModal.style.display = 'flex';
+          }
+        }
+      });
+
+      // 모달 닫기
+      const authForm = document.getElementById('authForm');
+      const googleBtn = document.getElementById('googleLoginBtn');
+      const toggleAuthMode = document.getElementById('toggleAuthMode');
+      const modalTitle = document.getElementById('modalTitle');
+      const authSubmitBtn = document.getElementById('authSubmitBtn');
+      const toggleText = document.getElementById('toggleText');
+
+      // 모달 닫기
+      if (closeBtn) closeBtn.onclick = () => authModal.style.display = 'none';
+
+      // 로그인 / 회원가입 전환
+      if (toggleAuthMode) {
+        toggleAuthMode.onclick = (e) => {
+          e.preventDefault();
+          isSignUp = !isSignUp;
+          modalTitle.textContent = isSignUp ? '회원가입' : '로그인';
+          authSubmitBtn.textContent = isSignUp ? '회원가입하기' : '로그인';
+          toggleText.textContent = isSignUp ? '이미 계정이 있으신가요?' : '계정이 없으신가요?';
+          toggleAuthMode.textContent = isSignUp ? '로그인' : '회원가입';
+        };
+      }
+
+      // Google 로그인
+      if (googleBtn) {
+        googleBtn.onclick = async () => {
+          const res = await signInWithGoogle();
+          if (res.success) {
+            alert(`${res.user.displayName || res.user.email}님 환영합니다!`);
+            authModal.style.display = 'none';
+          } else {
+            alert('Google 로그인 실패: ' + res.error);
+          }
+        };
+      }
+
+      // 이메일 Form 제출
+      if (authForm) {
+        authForm.onsubmit = async (e) => {
+          e.preventDefault();
+          const email = document.getElementById('authEmail').value;
+          const password = document.getElementById('authPassword').value;
+
+          const res = isSignUp
+            ? await signUpWithEmail(email, password)
+            : await signInWithEmail(email, password);
+
+          if (res.success) {
+            alert(isSignUp ? '회원가입 완료!' : '로그인 성공!');
+            authModal.style.display = 'none';
+          } else {
+            alert('오류: ' + res.error);
+          }
+        };
+      }
+
+      // 실시간 인증 상태 감지 및 UI 업데이트
+      onAuthChange((user) => {
+        currentUser = user;
+        const userNav = document.getElementById('userNavArea');
+        if (!userNav) return;
+
+        if (user) {
+          userNav.innerHTML = `
+          <span style="font-size:13px; font-weight:bold; margin-right:8px;">${user.displayName || user.email.split('@')[0]}님</span>
+          <button id="logoutBtn" class="btn-admin-mode" style="background:#ef4444; border:none; padding:6px 12px; cursor:pointer;">로그아웃</button>
+        `;
+          document.getElementById('logoutBtn').onclick = () => logout();
+        } else {
+          userNav.innerHTML = `
+          <button id="openAuthBtn" class="btn-admin-mode" style="background:var(--theme-written); color:#fff; border:none; padding:6px 14px; border-radius:6px; cursor:pointer; font-weight:600;"><i class="fas fa-user"></i> 로그인 / 회원가입</button>
+        `;
+          document.getElementById('openAuthBtn').onclick = () => {
+            authModal.style.display = 'flex';
+          };
+        }
+      });
+    });
+  </script>
+
+
   <!-- Scripts -->
   <script src="js/data.js"></script>
   <script src="js/main.js"></script>
   <script src="js/admin.js"></script>
+
+
 </body>
+
 </html>
