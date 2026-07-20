@@ -7,7 +7,8 @@ import {
     GoogleAuthProvider,
     signInWithPopup,
     signOut,
-    onAuthStateChanged
+    onAuthStateChanged,
+    updateProfile
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 // 1. Firebase 콘솔 > 프로젝트 설정에서 복사한 firebaseConfig 키값 입력
@@ -77,6 +78,17 @@ export async function logout() {
 // [기능 5] 로그인 상태 감지 리스너
 export function onAuthChange(callback) {
     return onAuthStateChanged(auth, callback);
+}
+
+// [기능 6] 닉네임/프로필 정보 수정
+export async function updateUserProfileName(newName) {
+    try {
+        if (!auth.currentUser) throw new Error("로그인된 사용자가 없습니다.");
+        await updateProfile(auth.currentUser, { displayName: newName });
+        return { success: true, user: auth.currentUser };
+    } catch (error) {
+        return { success: false, error: error.message };
+    }
 }
 
 // 한글 에러 처리 헬퍼 함수
