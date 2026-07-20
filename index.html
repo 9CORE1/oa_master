@@ -379,12 +379,26 @@
       signInWithGoogle,
       logout,
       onAuthChange,
-      updateUserProfile
+      updateUserProfile,
+      saveUserDataToFirestore,
+      getUserDataFromFirestore
     } from './js/firebase-config.js';
 
     let isSignUp = false;
     let currentUser = null;
     let selectedPhotoDataUrl = null;
+
+    // Firestore 데이터베이스 사용자 기본 문서 생성/동기화 헬퍼
+    const syncUserToFirestore = async (user) => {
+      if (!user) return;
+      await saveUserDataToFirestore(user.uid, {
+        uid: user.uid,
+        email: user.email,
+        displayName: user.displayName || user.email.split('@')[0],
+        photoURL: user.photoURL || null,
+        provider: user.providerData && user.providerData[0] ? user.providerData[0].providerId : 'email'
+      });
+    };
 
     document.addEventListener('DOMContentLoaded', () => {
       const authModal = document.getElementById('authModal');
@@ -458,7 +472,7 @@
         };
       }
 
-      // 1. 프로필 사진 개별 저장
+      // 1. 프로필 사진 개별 저장 (Cloud Firestore 데이터베이스 동기화)
       if (saveProfilePhotoBtn) {
         saveProfilePhotoBtn.onclick = async () => {
           if (!selectedPhotoDataUrl) {
@@ -467,8 +481,11 @@
           }
           const res = await updateUserProfile(undefined, selectedPhotoDataUrl);
           if (res.success) {
-            if (currentUser) currentUser.photoURL = selectedPhotoDataUrl;
-            alert('프로필 사진이 성공적으로 저장되었습니다!');
+            if (currentUser) {
+              currentUser.photoURL = selectedPhotoDataUrl;
+              await saveUserDataToFirestore(currentUser.uid, { photoURL: selectedPhotoDataUrl });
+            }
+            alert('프로필 사진이 클라우드 서버(Firestore)에 성공적으로 저장되었습니다!');
             // 헤더 프로필 이미지 갱신
             const headerIcon = document.querySelector('#myPageBtn i, #myPageBtn img');
             if (headerIcon) {
@@ -480,7 +497,7 @@
         };
       }
 
-      // 2. 닉네임 개별 저장
+      // 2. 닉네임 개별 저장 (Cloud Firestore 데이터베이스 동기화)
       if (saveProfileNameBtn) {
         saveProfileNameBtn.onclick = async () => {
           const newName = editProfileNameInput.value.trim();
@@ -490,8 +507,11 @@
           }
           const res = await updateUserProfile(newName, undefined);
           if (res.success) {
-            if (currentUser) currentUser.displayName = newName;
-            alert('닉네임이 성공적으로 저장되었습니다!');
+            if (currentUser) {
+              currentUser.displayName = newName;
+              await saveUserDataToFirestore(currentUser.uid, { displayName: newName });
+            }
+            alert('닉네임이 클라우드 서버(Firestore)에 성공적으로 저장되었습니다!');
             const myPageBtnSpan = document.querySelector('#myPageBtn span');
             if (myPageBtnSpan) myPageBtnSpan.textContent = `${newName}님`;
           } else {
@@ -500,9 +520,9 @@
         };
       }
 
-      // 3. 학교명 / 소속명 개별 저장
+      // 3. 학교명 / 소속명 개별 저장 (Cloud Firestore 데이터베이스 동기화)
       if (saveSchoolNameBtn) {
-        saveSchoolNameBtn.onclick = () => {
+        saveSchoolNameBtn.onclick = async () => {
           const schoolName = editSchoolNameInput ? editSchoolNameInput.value.trim() : '';
           if (!schoolName) {
             alert('저장할 학교명/소속명을 입력해 주세요.');
@@ -510,7 +530,8 @@
           }
           if (currentUser && currentUser.uid) {
             localStorage.setItem(`user_school_${currentUser.uid}`, schoolName);
-            alert('학교명/소속명이 성공적으로 저장되었습니다!');
+            await saveUserDataToFirestore(currentUser.uid, { schoolName: schoolName });
+            alert('학교명/소속명이 클라우드 서버(Firestore)에 성공적으로 저장되었습니다!');
           }
         };
       }
@@ -583,6 +604,7 @@
         googleBtn.onclick = async () => {
           const res = await signInWithGoogle();
           if (res.success) {
+            await syncUserToFirestore(res.user);
             alert(`${res.user.displayName || res.user.email}님 환영합니다!`);
             authModal.style.display = 'none';
           } else {
@@ -603,6 +625,7 @@
             : await signInWithEmail(email, password);
 
           if (res.success) {
+            await syncUserToFirestore(res.user);
             alert(isSignUp ? '회원가입 완료!' : '로그인 성공!');
             authModal.style.display = 'none';
           } else {
@@ -612,7 +635,7 @@
       }
 
       // 실시간 인증 상태 감지 및 UI 업데이트
-      onAuthChange((user) => {
+      onAuthChange(async (user) => {
         currentUser = user;
         const userNav = document.getElementById('userNavArea');
         if (!userNav) return;
@@ -635,17 +658,22 @@
           
           document.getElementById('logoutBtn').onclick = () => logout();
 
-          // 아이디 클릭 시 마이페이지 모달 열기
-          document.getElementById('myPageBtn').onclick = (e) => {
+          // 아이디 클릭 시 마이페이지 모달 열기 (Firestore 클라우드 데이터 연동)
+          document.getElementById('myPageBtn').onclick = async (e) => {
             e.preventDefault();
             if (editProfileNameInput) editProfileNameInput.value = displayName;
-            if (editSchoolNameInput && user && user.uid) {
-              editSchoolNameInput.value = localStorage.getItem(`user_school_${user.uid}`) || '';
-            }
             if (myProfileAvatarImg) {
               myProfileAvatarImg.src = user.photoURL || 'images/OA_master_LOGO.png';
             }
             selectedPhotoDataUrl = user.photoURL || null;
+
+            // Firestore 클라우드 데이터베이스에서 학교/소속 정보 조회
+            const fsRes = await getUserDataFromFirestore(user.uid);
+            if (fsRes.success && fsRes.data && fsRes.data.schoolName) {
+              if (editSchoolNameInput) editSchoolNameInput.value = fsRes.data.schoolName;
+            } else if (editSchoolNameInput && user && user.uid) {
+              editSchoolNameInput.value = localStorage.getItem(`user_school_${user.uid}`) || '';
+            }
 
             document.getElementById('myProfileEmail').textContent = user.email || '이메일 정보 없음';
             

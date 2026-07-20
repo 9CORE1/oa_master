@@ -1,5 +1,3 @@
-// js/firebase-config.js
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import {
     getAuth,
     createUserWithEmailAndPassword,
@@ -10,6 +8,15 @@ import {
     onAuthStateChanged,
     updateProfile
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+import {
+    getFirestore,
+    doc,
+    setDoc,
+    getDoc,
+    collection,
+    getDocs
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 // 1. Firebase 콘솔 > 프로젝트 설정에서 복사한 firebaseConfig 키값 입력
 const firebaseConfig = {
@@ -24,6 +31,7 @@ const firebaseConfig = {
 // Firebase 초기화
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
+export const db = getFirestore(app);
 
 // Google 인증 공급업체 객체 생성
 const googleProvider = new GoogleAuthProvider();
@@ -89,6 +97,55 @@ export async function updateUserProfile(newName, photoURL) {
         if (photoURL !== undefined && photoURL !== null) updateData.photoURL = photoURL;
         await updateProfile(auth.currentUser, updateData);
         return { success: true, user: auth.currentUser };
+    } catch (error) {
+        return { success: false, error: error.message };
+    }
+}
+
+// ----------------------------------------------------
+// Firestore 데이터베이스 사용자 통합 관리 함수
+// ----------------------------------------------------
+
+// [Firestore 1] 회원 프로필 통합 저장 (merge)
+export async function saveUserDataToFirestore(uid, userData) {
+    try {
+        const userRef = doc(db, "users", uid);
+        await setDoc(userRef, {
+            ...userData,
+            updatedAt: new Date().toISOString()
+        }, { merge: true });
+        return { success: true };
+    } catch (error) {
+        console.error("Firestore 저장 실패:", error);
+        return { success: false, error: error.message };
+    }
+}
+
+// [Firestore 2] 회원 프로필 통합 조회
+export async function getUserDataFromFirestore(uid) {
+    try {
+        const userRef = doc(db, "users", uid);
+        const snap = await getDoc(userRef);
+        if (snap.exists()) {
+            return { success: true, data: snap.data() };
+        } else {
+            return { success: false, error: "데이터 없음" };
+        }
+    } catch (error) {
+        console.error("Firestore 조회 실패:", error);
+        return { success: false, error: error.message };
+    }
+}
+
+// [Firestore 3] 전체 회원 목록 조회 (관리자용)
+export async function getAllUsersFromFirestore() {
+    try {
+        const querySnapshot = await getDocs(collection(db, "users"));
+        const users = [];
+        querySnapshot.forEach((docSnap) => {
+            users.push({ id: docSnap.id, ...docSnap.data() });
+        });
+        return { success: true, users };
     } catch (error) {
         return { success: false, error: error.message };
     }
