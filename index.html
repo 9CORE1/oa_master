@@ -296,24 +296,30 @@
   <div id="myPageModal" class="modal"
     style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:9999; justify-content:center; align-items:center;">
     <div class="modal-content"
-      style="background:#fff; padding:30px; border-radius:12px; max-width:440px; width:90%; position:relative; text-align:left;">
+      style="background:#fff; padding:30px; border-radius:12px; max-width:460px; width:90%; position:relative; text-align:left;">
       <span id="closeMyPageModal"
         style="position:absolute; right:15px; top:10px; font-size:24px; cursor:pointer;">&times;</span>
 
       <div style="text-align:center; margin-bottom:20px;">
-        <div style="position:relative; display:inline-block;">
+        <div style="position:relative; display:inline-block; margin-bottom:6px;">
           <img id="myProfileAvatarImg" src="images/OA_master_LOGO.png" alt="프로필 사진"
-            style="width:72px; height:72px; border-radius:50%; object-fit:cover; border:3px solid var(--theme-written); background:#f1f5f9;">
-          <label for="profilePhotoInput" style="position:absolute; bottom:0; right:0; background:var(--theme-written); color:#fff; border-radius:50%; width:26px; height:26px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:12px; border:2px solid #fff;" title="프로필 사진 변경">
+            style="width:76px; height:76px; border-radius:50%; object-fit:cover; border:3px solid var(--theme-written); background:#f1f5f9;">
+          <label for="profilePhotoInput" style="position:absolute; bottom:0; right:0; background:var(--theme-written); color:#fff; border-radius:50%; width:28px; height:28px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:12px; border:2px solid #fff;" title="사진 선택">
             <i class="fas fa-camera"></i>
           </label>
           <input type="file" id="profilePhotoInput" accept="image/*" style="display:none;">
         </div>
+        <div>
+          <button id="saveProfilePhotoBtn" style="padding:4px 12px; background:var(--theme-written); color:#fff; border:none; border-radius:14px; font-size:11px; cursor:pointer; font-weight:bold;">
+            <i class="fas fa-upload"></i> 사진 저장
+          </button>
+        </div>
         <h2 style="font-size:20px; color:#111; margin:8px 0 0 0;">마이 페이지</h2>
-        <p style="font-size:13px; color:#666; margin-top:2px;">프로필 사진 및 계정 정보 수정</p>
+        <p style="font-size:12px; color:#666; margin-top:2px;">계정 프로필 정보를 개별 설정하세요</p>
       </div>
 
       <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:16px; margin-bottom:20px; font-size:14px; display:flex; flex-direction:column; gap:12px;">
+        <!-- 1. 닉네임 수정 항목 -->
         <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #edf2f7; padding-bottom:10px;">
           <span style="color:#64748b; font-weight:600;"><i class="fas fa-user-circle"></i> 닉네임 / 성명</span>
           <div style="display:flex; gap:6px; align-items:center;">
@@ -323,10 +329,19 @@
             </button>
           </div>
         </div>
+
+        <!-- 2. 학교/소속명 수정 항목 -->
         <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #edf2f7; padding-bottom:10px;">
           <span style="color:#64748b; font-weight:600;"><i class="fas fa-graduation-cap"></i> 학교명 / 소속명</span>
-          <input type="text" id="editSchoolNameInput" placeholder="예: OO대학교 / OO고교" style="padding:6px 10px; border:1px solid #cbd5e1; border-radius:6px; font-size:13px; width:180px;">
+          <div style="display:flex; gap:6px; align-items:center;">
+            <input type="text" id="editSchoolNameInput" placeholder="학교/소속 입력" style="padding:6px 10px; border:1px solid #cbd5e1; border-radius:6px; font-size:13px; width:130px;">
+            <button id="saveSchoolNameBtn" style="padding:6px 10px; background:var(--theme-written); color:#fff; border:none; border-radius:6px; font-size:12px; cursor:pointer; font-weight:bold;">
+              저장
+            </button>
+          </div>
         </div>
+
+        <!-- 계정 정보 -->
         <div style="display:flex; justify-content:space-between; border-bottom:1px solid #edf2f7; padding-bottom:8px;">
           <span style="color:#64748b; font-weight:600;"><i class="fas fa-envelope"></i> 이메일 주소</span>
           <span id="myProfileEmail" style="font-weight:bold; color:#0f172a;">-</span>
@@ -380,6 +395,8 @@
       const myPageCloseBtn = document.getElementById('myPageCloseBtn');
       const myPageLogoutBtn = document.getElementById('myPageLogoutBtn');
       const saveProfileNameBtn = document.getElementById('saveProfileNameBtn');
+      const saveSchoolNameBtn = document.getElementById('saveSchoolNameBtn');
+      const saveProfilePhotoBtn = document.getElementById('saveProfilePhotoBtn');
       const editProfileNameInput = document.getElementById('editProfileNameInput');
       const editSchoolNameInput = document.getElementById('editSchoolNameInput');
       const profilePhotoInput = document.getElementById('profilePhotoInput');
@@ -411,38 +428,59 @@
         };
       }
 
-      // 닉네임, 학교명 및 프로필 사진 정보 저장
+      // 1. 프로필 사진 개별 저장
+      if (saveProfilePhotoBtn) {
+        saveProfilePhotoBtn.onclick = async () => {
+          if (!selectedPhotoDataUrl) {
+            alert('카메라 아이콘 버튼을 눌러 변경할 사진을 먼저 선택해 주세요.');
+            return;
+          }
+          const res = await updateUserProfile(undefined, selectedPhotoDataUrl);
+          if (res.success) {
+            if (currentUser) currentUser.photoURL = selectedPhotoDataUrl;
+            alert('프로필 사진이 성공적으로 저장되었습니다!');
+            // 헤더 프로필 이미지 갱신
+            const headerIcon = document.querySelector('#myPageBtn i, #myPageBtn img');
+            if (headerIcon) {
+              headerIcon.outerHTML = `<img src="${selectedPhotoDataUrl}" style="width:22px; height:22px; border-radius:50%; object-fit:cover;">`;
+            }
+          } else {
+            alert('사진 저장 실패: ' + res.error);
+          }
+        };
+      }
+
+      // 2. 닉네임 개별 저장
       if (saveProfileNameBtn) {
         saveProfileNameBtn.onclick = async () => {
           const newName = editProfileNameInput.value.trim();
-          const schoolName = editSchoolNameInput ? editSchoolNameInput.value.trim() : '';
           if (!newName) {
             alert('수정할 닉네임을 입력해 주세요.');
             return;
           }
-          const res = await updateUserProfile(newName, selectedPhotoDataUrl || undefined);
+          const res = await updateUserProfile(newName, undefined);
           if (res.success) {
-            if (currentUser && currentUser.uid) {
-              localStorage.setItem(`user_school_${currentUser.uid}`, schoolName);
-            }
-            alert('프로필 정보(닉네임/사진/학교소속)가 성공적으로 변경되었습니다!');
-            // UI 업데이트
-            if (currentUser) {
-              currentUser.displayName = newName;
-              if (selectedPhotoDataUrl) currentUser.photoURL = selectedPhotoDataUrl;
-            }
+            if (currentUser) currentUser.displayName = newName;
+            alert('닉네임이 성공적으로 저장되었습니다!');
             const myPageBtnSpan = document.querySelector('#myPageBtn span');
             if (myPageBtnSpan) myPageBtnSpan.textContent = `${newName}님`;
-            
-            // 헤더 프로필 이미지도 갱신
-            if (selectedPhotoDataUrl) {
-              const headerIcon = document.querySelector('#myPageBtn i, #myPageBtn img');
-              if (headerIcon) {
-                headerIcon.outerHTML = `<img src="${selectedPhotoDataUrl}" style="width:22px; height:22px; border-radius:50%; object-fit:cover;">`;
-              }
-            }
           } else {
-            alert('프로필 변경 실패: ' + res.error);
+            alert('닉네임 저장 실패: ' + res.error);
+          }
+        };
+      }
+
+      // 3. 학교명 / 소속명 개별 저장
+      if (saveSchoolNameBtn) {
+        saveSchoolNameBtn.onclick = () => {
+          const schoolName = editSchoolNameInput ? editSchoolNameInput.value.trim() : '';
+          if (!schoolName) {
+            alert('저장할 학교명/소속명을 입력해 주세요.');
+            return;
+          }
+          if (currentUser && currentUser.uid) {
+            localStorage.setItem(`user_school_${currentUser.uid}`, schoolName);
+            alert('학교명/소속명이 성공적으로 저장되었습니다!');
           }
         };
       }
