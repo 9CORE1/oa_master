@@ -6,7 +6,11 @@ function isAdmin() {
 }
 
 // Toggle Admin Mode State
-function toggleAdminMode() {
+function toggleAdminMode(e) {
+  if (e && e.preventDefault) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
   if (isAdmin()) {
     // Logout
     localStorage.setItem('isAdminActive', 'false');
