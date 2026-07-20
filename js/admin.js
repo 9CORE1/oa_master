@@ -332,7 +332,7 @@ function showGithubSettingsModal() {
             <p class="form-helper">repo 권한이 허용된 클래식 토큰(PAT)을 입력해주세요.</p>
           </div>
           <div class="form-group">
-            <label class="form-label" for="githubRepo">GitHub Repository (저장소 경로)</label>
+            <label class="form-label" for="githubRepo">GitHub Repository (아이디/저장소 경로)</label>
             <input type="text" id="githubRepo" class="form-input" value="${settings.repo || ''}" placeholder="예: username/repo-name">
           </div>
           <div class="form-group">
@@ -401,7 +401,8 @@ function clearGithubSettings() {
 async function updateJSONData() {
   const settings = JSON.parse(localStorage.getItem("github_settings")) || {};
   if (!settings.token || !settings.repo || !settings.path) {
-    showToast('GitHub 연동 설정을 먼저 완료해 주세요.', 'warning');
+    alert("💡 GitHub 연동 설정(Personal Access Token 및 저장소 이름)이 등록되어 있지 않습니다.\n\n열리는 설정 팝업창에 GitHub PAT 토큰과 Repository 경로(예: 내아이디/oa_master)를 입력해 주세요.");
+    if (window.showToast) window.showToast('GitHub 연동 설정을 완료해 주세요.', 'warning');
     showGithubSettingsModal();
     return;
   }
