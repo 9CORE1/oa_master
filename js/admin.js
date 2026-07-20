@@ -26,30 +26,33 @@ function toggleAdminMode(e) {
 
 // Show Admin Login modal
 function showAdminLoginModal() {
+  const existingModal = document.getElementById('loginModal');
+  if (existingModal) existingModal.remove();
+
   const modalHTML = `
-    <div class="modal-backdrop" id="loginModal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3><i class="fas fa-lock"></i> 관리자 이메일 인증</h3>
-          <button class="btn-close-modal" onclick="closeAdminModal('loginModal')">&times;</button>
+    <div class="modal-backdrop open" id="loginModal" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:9999999; display:flex; justify-content:center; align-items:center;">
+      <div class="modal-content" style="background:#fff; padding:30px; border-radius:12px; max-width:440px; width:90%; position:relative; box-shadow:0 20px 25px -5px rgba(0,0,0,0.3); text-align:left;">
+        <div class="modal-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid #eee; padding-bottom:12px;">
+          <h3 style="margin:0; font-size:18px; color:#1e293b;"><i class="fas fa-lock" style="color:var(--theme-written, #0e4987);"></i> 관리자 이메일 인증</h3>
+          <button class="btn-close-modal" onclick="closeAdminModal('loginModal')" style="background:none; border:none; font-size:24px; cursor:pointer; color:#64748b;">&times;</button>
         </div>
         <div class="modal-body">
           <div class="form-group" id="emailInputGroup">
-            <label class="form-label" for="loginEmail">관리자 이메일 주소</label>
-            <input type="email" id="loginEmail" class="form-input" placeholder="이메일 주소를 입력하세요">
-            <p class="form-helper">설정된 관리자 이메일 주소와 동일해야 인증번호가 발송됩니다.</p>
+            <label class="form-label" for="loginEmail" style="display:block; font-weight:bold; margin-bottom:6px; font-size:14px; color:#334155;">관리자 이메일 주소</label>
+            <input type="email" id="loginEmail" class="form-input" placeholder="이메일 주소를 입력하세요" style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; font-size:14px;">
+            <p class="form-helper" style="font-size:12px; color:#64748b; margin-top:6px;">설정된 관리자 이메일 주소와 동일해야 인증번호가 발송됩니다.</p>
           </div>
           
           <div class="form-group" id="codeVerificationGroup" style="display: none; margin-top: 15px;">
-            <label class="form-label" for="verificationCode">인증번호 (6자리)</label>
-            <input type="text" id="verificationCode" class="form-input" placeholder="인증번호 6자리를 입력하세요" maxlength="6">
-            <p class="form-helper" style="color: var(--success); font-weight: 500;">이메일로 발송된 6자리 인증번호를 입력하십시오.</p>
+            <label class="form-label" for="verificationCode" style="display:block; font-weight:bold; margin-bottom:6px; font-size:14px; color:#334155;">인증번호 (6자리)</label>
+            <input type="text" id="verificationCode" class="form-input" placeholder="인증번호 6자리를 입력하세요" maxlength="6" style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; font-size:14px;">
+            <p class="form-helper" style="color: #10b981; font-weight: 500; font-size:12px; margin-top:6px;">이메일로 발송된 6자리 인증번호를 입력하십시오.</p>
           </div>
         </div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" onclick="closeAdminModal('loginModal')">취소</button>
-          <button class="btn btn-primary" id="btnRequestCode" onclick="requestVerificationCode()">인증번호 전송</button>
-          <button class="btn btn-primary" id="btnVerifyCode" onclick="verifyAdminCode()" style="display: none;">인증 완료</button>
+        <div class="modal-footer" style="display:flex; justify-content:flex-end; gap:8px; margin-top:24px;">
+          <button class="btn btn-secondary" onclick="closeAdminModal('loginModal')" style="padding:8px 16px; background:#e2e8f0; border:none; border-radius:6px; cursor:pointer; font-weight:600; color:#475569;">취소</button>
+          <button class="btn btn-primary" id="btnRequestCode" onclick="requestVerificationCode()" style="padding:8px 16px; background:var(--theme-written, #0e4987); color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:bold;">인증번호 전송</button>
+          <button class="btn btn-primary" id="btnVerifyCode" onclick="verifyAdminCode()" style="display: none; padding:8px 16px; background:#10b981; color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:bold;">인증 완료</button>
         </div>
       </div>
     </div>
@@ -62,12 +65,13 @@ function showAdminLoginModal() {
   
   // Open modal animation
   setTimeout(() => {
-    document.getElementById('loginModal').classList.add('open');
-    document.getElementById('loginEmail').focus();
-    // Add enter key event to request code
-    document.getElementById('loginEmail').addEventListener('keyup', (e) => {
-      if (e.key === 'Enter') requestVerificationCode();
-    });
+    const emailEl = document.getElementById('loginEmail');
+    if (emailEl) {
+      emailEl.focus();
+      emailEl.addEventListener('keyup', (e) => {
+        if (e.key === 'Enter') requestVerificationCode();
+      });
+    }
   }, 50);
 }
 
