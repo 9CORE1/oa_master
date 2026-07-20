@@ -820,7 +820,10 @@
 
         const href = link.getAttribute('href') || link.getAttribute('onclick') || '';
         if (protectedServiceLinks.some(page => href.includes(page))) {
-          const isUserLoggedIn = (currentUser !== null) || (localStorage.getItem('isLoggedIn') === 'true');
+          const isUserLoggedIn = (currentUser !== null) ||
+            (localStorage.getItem('isLoggedIn') === 'true') ||
+            (typeof isAdmin === 'function' && isAdmin()) ||
+            (localStorage.getItem('isAdminActive') === 'true');
           if (!isUserLoggedIn) {
             e.preventDefault();
             e.stopPropagation();

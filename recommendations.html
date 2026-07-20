@@ -359,30 +359,12 @@
   <script type="module">
     import { onAuthChange, logout } from './js/firebase-config.js';
     onAuthChange((user) => {
-      const userNav = document.getElementById('userNavArea');
-      if (!user) {
+      const is_admin = (typeof isAdmin === 'function' && isAdmin()) || (localStorage.getItem('isAdminActive') === 'true');
+      if (!user && !is_admin) {
         alert('🔒 회원가입 및 로그인이 필요한 서비스입니다.');
         window.location.href = 'index.html?auth=required';
-      } else if (userNav) {
-        const displayName = user.displayName || user.email.split('@')[0];
-        const avatarIcon = user.photoURL 
-          ? `<img src="${user.photoURL}" style="width:22px; height:22px; border-radius:50%; object-fit:cover;">`
-          : `<i class="fas fa-user-circle" style="color:var(--theme-written); font-size:16px;"></i>`;
-
-        userNav.innerHTML = `
-          <div style="display:inline-flex; align-items:center; gap:10px; background:rgba(14,73,135,0.06); padding:4px 6px 4px 14px; border-radius:24px; border:1px solid rgba(14,73,135,0.2);">
-            <a href="index.html" style="font-size:13px; font-weight:bold; color:var(--neutral-900); text-decoration:none; display:inline-flex; align-items:center; gap:6px; cursor:pointer;" title="마이페이지">
-              ${avatarIcon}
-              <span>${displayName}님</span>
-            </a>
-            <button id="subLogoutBtn" style="background:var(--theme-recommend); color:#fff; border:none; padding:5px 12px; border-radius:16px; font-size:12px; font-weight:bold; cursor:pointer;">로그아웃</button>
-          </div>
-        `;
-        document.getElementById('subLogoutBtn').onclick = async () => {
-          await logout();
-          alert('로그아웃 되었습니다.');
-          window.location.href = 'index.html';
-        };
+      } else if (window.renderHeaderUserNav) {
+        window.renderHeaderUserNav(user);
       }
     });
   </script>
