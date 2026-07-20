@@ -411,12 +411,12 @@
       </div>
 
       <div style="display:flex; gap:10px;">
-        <button id="myPageLogoutBtn"
-          style="flex:1; padding:10px; background:var(--theme-recommend); color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:bold;">
-          <i class="fas fa-sign-out-alt"></i> 로그아웃
+        <button id="myPageSaveAllBtn"
+          style="flex:2; padding:10px; background:var(--theme-written, #0e4987); color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:bold; font-size:14px;">
+          <i class="fas fa-save"></i> 저장
         </button>
         <button id="myPageCloseBtn"
-          style="flex:1; padding:10px; background:#e2e8f0; color:#334155; border:none; border-radius:6px; cursor:pointer; font-weight:bold;">
+          style="flex:1; padding:10px; background:#e2e8f0; color:#334155; border:none; border-radius:6px; cursor:pointer; font-weight:bold; font-size:14px;">
           닫기
         </button>
       </div>
@@ -742,12 +742,58 @@
       // 마이페이지 닫기
       if (closeMyPageModal) closeMyPageModal.onclick = () => myPageModal.style.display = 'none';
       if (myPageCloseBtn) myPageCloseBtn.onclick = () => myPageModal.style.display = 'none';
-      if (myPageLogoutBtn) {
-        myPageLogoutBtn.onclick = async () => {
-          await logout();
-          renderHeaderUserNav(null);
-          if (myPageModal) myPageModal.style.display = 'none';
-          alert('로그아웃 되었습니다.');
+      const myPageSaveAllBtn = document.getElementById('myPageSaveAllBtn');
+      if (myPageSaveAllBtn) {
+        myPageSaveAllBtn.onclick = async (e) => {
+          if (e) e.preventDefault();
+          const targetUid = (currentUser && currentUser.uid) || localStorage.getItem('userUid');
+          if (!targetUid) {
+            alert('로그인 유저 정보를 확인할 수 없어 저장에 실패했습니다.');
+            return;
+          }
+
+          const originalText = myPageSaveAllBtn.innerHTML;
+          myPageSaveAllBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 저장 중...';
+          myPageSaveAllBtn.disabled = true;
+
+          try {
+            const newName = editProfileNameInput ? editProfileNameInput.value.trim() : '';
+            const schoolName = editSchoolNameInput ? editSchoolNameInput.value.trim() : '';
+
+            const updateData = {};
+            if (newName) updateData.displayName = newName;
+            if (schoolName) updateData.schoolName = schoolName;
+            if (selectedPhotoDataUrl) updateData.photoURL = selectedPhotoDataUrl;
+
+            if (newName || selectedPhotoDataUrl) {
+              await updateUserProfile(newName || undefined, selectedPhotoDataUrl || undefined);
+            }
+
+            if (newName) localStorage.setItem('userDisplayName', newName);
+            if (schoolName) localStorage.setItem(`user_school_${targetUid}`, schoolName);
+            if (selectedPhotoDataUrl) localStorage.setItem('userPhotoURL', selectedPhotoDataUrl);
+
+            await saveUserDataToFirestore(targetUid, updateData);
+
+            if (currentUser) {
+              if (newName) currentUser.displayName = newName;
+              if (selectedPhotoDataUrl) currentUser.photoURL = selectedPhotoDataUrl;
+            }
+            renderHeaderUserNav(currentUser || {
+              displayName: newName || localStorage.getItem('userDisplayName') || '회원',
+              photoURL: selectedPhotoDataUrl || localStorage.getItem('userPhotoURL') || null,
+              email: localStorage.getItem('userEmail') || ''
+            });
+
+            alert('🎉 마이페이지 모든 변경사항이 클라우드 서버(Firestore)에 성황리에 성공적으로 저장되었습니다!');
+            if (myPageModal) myPageModal.style.display = 'none';
+          } catch (err) {
+            console.error('마이페이지 전체 저장 오류:', err);
+            alert('저장 중 오류가 발생했습니다: ' + (err.message || err));
+          } finally {
+            myPageSaveAllBtn.innerHTML = originalText;
+            myPageSaveAllBtn.disabled = false;
+          }
         };
       }
 
