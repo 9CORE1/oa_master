@@ -413,7 +413,7 @@
       await saveUserDataToFirestore(user.uid, {
         uid: user.uid,
         email: user.email,
-        displayName: user.displayName || user.email.split('@')[0],
+        displayName: user.displayName || (user.email ? user.email.split('@')[0] : '회원'),
         photoURL: user.photoURL || null,
         provider: user.providerData && user.providerData[0] ? user.providerData[0].providerId : 'email'
       });
@@ -448,30 +448,126 @@
       if (!userNav) return;
 
       if (user) {
-        const displayName = user.displayName || (user.email ? user.email.split('@')[0] : '회원');
-        userNav.innerHTML = `
-          <div style="display:inline-flex; align-items:center; gap:10px; background:rgba(14,73,135,0.06); padding:4px 14px; border-radius:24px; border:1px solid rgba(14,73,135,0.2);">
-            <a href="#" id="myPageBtn" style="font-size:13px; font-weight:bold; color:var(--neutral-900); text-decoration:none;">${displayName}님</a>
-            <button id="logoutBtn" style="background:var(--theme-recommend); color:#fff; border:none; padding:4px 10px; border-radius:12px; font-size:11px; cursor:pointer;">로그아웃</button>
-          </div>
-        `;
-        document.getElementById('logoutBtn').onclick = async () => { await logout(); location.reload(); };
-        document.getElementById('myPageBtn').onclick = async (e) => {
-          e.preventDefault();
-          document.getElementById('myPageModal').style.display = 'flex';
-          document.getElementById('myProfileEmail').textContent = user.email;
-          document.getElementById('myProfileUid').textContent = user.uid;
-        };
+        try {
+          const displayName = user.displayName || (user.email ? user.email.split('@')[0] : '회원');
+          const avatarIcon = user.photoURL
+            ? `<img src="${user.photoURL}" style="width:22px; height:22px; border-radius:50%; object-fit:cover;">`
+            : `<i class="fas fa-user-circle" style="color:var(--theme-written); font-size:16px;"></i>`;
+
+          userNav.innerHTML = `
+            <div style="display:inline-flex; align-items:center; gap:10px; background:rgba(14,73,135,0.06); padding:4px 6px 4px 14px; border-radius:24px; border:1px solid rgba(14,73,135,0.2);">
+              <a href="#" id="myPageBtn" style="font-size:13px; font-weight:bold; color:var(--neutral-900); text-decoration:none; display:inline-flex; align-items:center; gap:6px; cursor:pointer;" title="마이페이지">
+                ${avatarIcon}
+                <span>${displayName}님</span>
+              </a>
+              <button id="logoutBtn" style="background:var(--theme-recommend); color:#fff; border:none; padding:5px 12px; border-radius:16px; font-size:12px; font-weight:bold; cursor:pointer; transition:opacity 0.2s;">로그아웃</button>
+            </div>
+          `;
+
+          const logoutBtn = document.getElementById('logoutBtn');
+          if (logoutBtn) {
+            logoutBtn.onclick = async () => {
+              await logout();
+              renderHeaderUserNav(null);
+              alert('로그아웃 되었습니다.');
+            };
+          }
+
+          const myPageBtn = document.getElementById('myPageBtn');
+          if (myPageBtn) {
+            myPageBtn.onclick = async (e) => {
+              e.preventDefault();
+              const myPageModal = document.getElementById('myPageModal');
+              const editProfileNameInput = document.getElementById('editProfileNameInput');
+              const editSchoolNameInput = document.getElementById('editSchoolNameInput');
+              const myProfileAvatarImg = document.getElementById('myProfileAvatarImg');
+
+              if (editProfileNameInput) editProfileNameInput.value = displayName;
+              if (myProfileAvatarImg) {
+                myProfileAvatarImg.src = user.photoURL || 'images/OA_master_LOGO.png';
+              }
+              selectedPhotoDataUrl = user.photoURL || null;
+
+              try {
+                if (user.uid) {
+                  const fsRes = await getUserDataFromFirestore(user.uid);
+                  if (fsRes.success && fsRes.data && fsRes.data.schoolName) {
+                    if (editSchoolNameInput) editSchoolNameInput.value = fsRes.data.schoolName;
+                  } else if (editSchoolNameInput) {
+                    editSchoolNameInput.value = localStorage.getItem(`user_school_${user.uid}`) || '';
+                  }
+                }
+              } catch (err) {
+                if (editSchoolNameInput && user && user.uid) {
+                  editSchoolNameInput.value = localStorage.getItem(`user_school_${user.uid}`) || '';
+                }
+              }
+
+              const elEmail = document.getElementById('myProfileEmail');
+              if (elEmail) elEmail.textContent = user.email || '이메일 정보 없음';
+
+              const providerId = user.providerData && user.providerData[0] ? user.providerData[0].providerId : '';
+              const elProvider = document.getElementById('myProfileProvider');
+              if (elProvider) {
+                elProvider.innerHTML = providerId.includes('google')
+                  ? '<span style="color:#ea4335;"><i class="fab fa-google"></i> Google 소셜 로그인</span>'
+                  : '<span style="color:var(--theme-written);"><i class="fas fa-envelope"></i> 이메일 / 비밀번호</span>';
+              }
+
+              const createdDate = user.metadata && user.metadata.creationTime
+                ? new Date(user.metadata.creationTime).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })
+                : '정보 없음';
+              const elCreated = document.getElementById('myProfileCreated');
+              if (elCreated) elCreated.textContent = createdDate;
+
+              const elUid = document.getElementById('myProfileUid');
+              if (elUid) elUid.textContent = user.uid || '';
+
+              if (myPageModal) myPageModal.style.display = 'flex';
+            };
+          }
+        } catch (err) {
+          console.error('renderHeaderUserNav error:', err);
+        }
       } else {
-        userNav.innerHTML = `<button onclick="openAuthModal()" style="background:var(--theme-written); color:#fff; border:none; padding:6px 14px; border-radius:6px; cursor:pointer;">로그인</button>`;
+        userNav.innerHTML = `
+          <button id="openAuthBtn" class="btn-admin-mode" onclick="window.openAuthModal(); return false;" style="background:var(--theme-written); color:#fff; border:none; padding:6px 14px; border-radius:6px; cursor:pointer; font-weight:600;"><i class="fas fa-user"></i> 로그인 / 회원가입</button>
+        `;
       }
     };
 
-    onAuthChange((user) => renderHeaderUserNav(user));
+    // ⚡ 0초 반응: 로컬 세션 확인 및 즉시 헤더 렌더링
+    if (localStorage.getItem('isLoggedIn') === 'true') {
+      const cachedName = localStorage.getItem('userDisplayName') || '회원';
+      const cachedPhoto = localStorage.getItem('userPhotoURL') || null;
+      renderHeaderUserNav({
+        displayName: cachedName,
+        photoURL: cachedPhoto,
+        email: localStorage.getItem('userEmail') || ''
+      });
+    }
+
+    // ⚡ 파이어베이스 실시간 인증 감지기 탑레벨 등록 및 동기화
+    onAuthChange((user) => {
+      console.log('Firebase Auth State Changed:', user ? user.email : 'No User');
+      renderHeaderUserNav(user);
+    });
 
     document.addEventListener('DOMContentLoaded', () => {
       const authModal = document.getElementById('authModal');
+      const myPageModal = document.getElementById('myPageModal');
       const closeBtn = document.getElementById('closeAuthModal');
+      const closeMyPageModal = document.getElementById('closeMyPageModal');
+      const myPageCloseBtn = document.getElementById('myPageCloseBtn');
+      const myPageLogoutBtn = document.getElementById('myPageLogoutBtn');
+      const saveProfileNameBtn = document.getElementById('saveProfileNameBtn');
+      const saveSchoolNameBtn = document.getElementById('saveSchoolNameBtn');
+      const saveProfilePhotoBtn = document.getElementById('saveProfilePhotoBtn');
+      const editProfileNameInput = document.getElementById('editProfileNameInput');
+      const editSchoolNameInput = document.getElementById('editSchoolNameInput');
+      const profilePhotoInput = document.getElementById('profilePhotoInput');
+      const myProfileAvatarImg = document.getElementById('myProfileAvatarImg');
+
       const authForm = document.getElementById('authForm');
       const googleBtn = document.getElementById('googleLoginBtn');
       const toggleAuthMode = document.getElementById('toggleAuthMode');
@@ -479,8 +575,124 @@
       const authSubmitBtn = document.getElementById('authSubmitBtn');
       const toggleText = document.getElementById('toggleText');
 
+      // 마이페이지 닫기
+      if (closeMyPageModal) closeMyPageModal.onclick = () => myPageModal.style.display = 'none';
+      if (myPageCloseBtn) myPageCloseBtn.onclick = () => myPageModal.style.display = 'none';
+      if (myPageLogoutBtn) {
+        myPageLogoutBtn.onclick = async () => {
+          await logout();
+          renderHeaderUserNav(null);
+          if (myPageModal) myPageModal.style.display = 'none';
+          alert('로그아웃 되었습니다.');
+        };
+      }
+
+      // 프로필 이미지 선택 핸들러
+      if (profilePhotoInput) {
+        profilePhotoInput.onchange = async (e) => {
+          const file = e.target.files[0];
+          if (file) {
+            try {
+              const jpgDataUrl = await convertAndCompressToJpg(file, 200, 200);
+              selectedPhotoDataUrl = jpgDataUrl;
+              if (myProfileAvatarImg) myProfileAvatarImg.src = selectedPhotoDataUrl;
+            } catch (err) {
+              console.error('.jpg 변환 오류:', err);
+              alert('이미지 파일 변환 중 오류가 발생했습니다.');
+            }
+          }
+        };
+      }
+
+      // 프로필 사진 저장
+      if (saveProfilePhotoBtn) {
+        saveProfilePhotoBtn.onclick = async () => {
+          if (!selectedPhotoDataUrl) {
+            alert('카메라 아이콘 버튼을 눌러 변경할 사진을 먼저 선택해 주세요.');
+            return;
+          }
+          const res = await updateUserProfile(undefined, selectedPhotoDataUrl);
+          if (res.success) {
+            if (currentUser) {
+              currentUser.photoURL = selectedPhotoDataUrl;
+              await saveUserDataToFirestore(currentUser.uid, { photoURL: selectedPhotoDataUrl });
+              renderHeaderUserNav(currentUser);
+            }
+            alert('프로필 사진이 클라우드 서버(Firestore)에 성공적으로 저장되었습니다!');
+          } else {
+            alert('사진 저장 실패: ' + res.error);
+          }
+        };
+      }
+
+      // 닉네임 저장
+      if (saveProfileNameBtn) {
+        saveProfileNameBtn.onclick = async () => {
+          const newName = editProfileNameInput ? editProfileNameInput.value.trim() : '';
+          if (!newName) {
+            alert('수정할 닉네임을 입력해 주세요.');
+            return;
+          }
+          const res = await updateUserProfile(newName, undefined);
+          if (res.success) {
+            if (currentUser) {
+              currentUser.displayName = newName;
+              await saveUserDataToFirestore(currentUser.uid, { displayName: newName });
+              renderHeaderUserNav(currentUser);
+            }
+            alert('닉네임이 클라우드 서버(Firestore)에 성공적으로 저장되었습니다!');
+          } else {
+            alert('닉네임 저장 실패: ' + res.error);
+          }
+        };
+      }
+
+      // 학교/소속명 저장
+      if (saveSchoolNameBtn) {
+        saveSchoolNameBtn.onclick = async () => {
+          const schoolName = editSchoolNameInput ? editSchoolNameInput.value.trim() : '';
+          if (!schoolName) {
+            alert('저장할 학교명/소속명을 입력해 주세요.');
+            return;
+          }
+          if (currentUser && currentUser.uid) {
+            localStorage.setItem(`user_school_${currentUser.uid}`, schoolName);
+            await saveUserDataToFirestore(currentUser.uid, { schoolName: schoolName });
+            alert('학교명/소속명이 클라우드 서버(Firestore)에 성공적으로 저장되었습니다!');
+          }
+        };
+      }
+
+      // 비로그인 사용자 접근 제한 (보호 링크 클릭 시 이동 차단)
+      const protectedServiceLinks = [
+        'written_archive.html',
+        'written_lectures.html',
+        'practical_archive.html',
+        'practical_lectures.html',
+        'recommendations.html'
+      ];
+
+      document.addEventListener('click', (e) => {
+        const link = e.target.closest('a, button');
+        if (!link) return;
+        if (link.id === 'openAuthBtn' || link.id === 'myPageBtn' || link.id === 'closeAuthModal' || link.id === 'closeMyPageModal') return;
+
+        const href = link.getAttribute('href') || link.getAttribute('onclick') || '';
+        if (protectedServiceLinks.some(page => href.includes(page))) {
+          const isUserLoggedIn = (currentUser !== null) || (localStorage.getItem('isLoggedIn') === 'true');
+          if (!isUserLoggedIn) {
+            e.preventDefault();
+            e.stopPropagation();
+            alert('🔒 회원가입 및 로그인을 해야 해당 서비스를 이용하실 수 있습니다.');
+            if (authModal) authModal.style.display = 'flex';
+          }
+        }
+      }, true);
+
+      // 모달 닫기
       if (closeBtn) closeBtn.onclick = () => authModal.style.display = 'none';
 
+      // 로그인/회원가입 모드 전환
       if (toggleAuthMode) {
         toggleAuthMode.onclick = (e) => {
           e.preventDefault();
@@ -492,25 +704,35 @@
         };
       }
 
+      // 구글 로그인
       if (googleBtn) {
         googleBtn.onclick = async () => {
           const res = await signInWithGoogle();
           if (res.success) {
             await syncUserToFirestore(res.user);
-            alert('로그인 성공!');
+            renderHeaderUserNav(res.user);
+            alert(`${res.user.displayName || res.user.email}님 환영합니다!`);
             authModal.style.display = 'none';
+          } else {
+            alert('Google 로그인 실패: ' + res.error);
           }
         };
       }
 
+      // 이메일 로그인/회원가입 Form 제출
       if (authForm) {
         authForm.onsubmit = async (e) => {
           e.preventDefault();
           const email = document.getElementById('authEmail').value;
           const password = document.getElementById('authPassword').value;
-          const res = isSignUp ? await signUpWithEmail(email, password) : await signInWithEmail(email, password);
+
+          const res = isSignUp
+            ? await signUpWithEmail(email, password)
+            : await signInWithEmail(email, password);
+
           if (res.success) {
             await syncUserToFirestore(res.user);
+            renderHeaderUserNav(res.user);
             alert(isSignUp ? '회원가입 완료!' : '로그인 성공!');
             authModal.style.display = 'none';
           } else {
@@ -520,14 +742,6 @@
       }
     });
   </script>
-
-
-  <!-- Scripts -->
-  <script src="js/data.js"></script>
-  <script src="js/main.js"></script>
-  <script src="js/admin.js"></script>
-
-
 </body>
 
 </html>
