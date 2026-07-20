@@ -648,61 +648,76 @@
       }
 
       // 실시간 인증 상태 감지 및 UI 업데이트
-      onAuthChange(async (user) => {
+      onAuthChange((user) => {
         currentUser = user;
         const userNav = document.getElementById('userNavArea');
         if (!userNav) return;
 
         if (user) {
-          const displayName = user.displayName || user.email.split('@')[0];
-          const avatarIcon = user.photoURL 
-            ? `<img src="${user.photoURL}" style="width:22px; height:22px; border-radius:50%; object-fit:cover;">`
-            : `<i class="fas fa-user-circle" style="color:var(--theme-written); font-size:16px;"></i>`;
+          try {
+            const displayName = user.displayName || (user.email ? user.email.split('@')[0] : '회원');
+            const avatarIcon = user.photoURL 
+              ? `<img src="${user.photoURL}" style="width:22px; height:22px; border-radius:50%; object-fit:cover;">`
+              : `<i class="fas fa-user-circle" style="color:var(--theme-written); font-size:16px;"></i>`;
 
-          userNav.innerHTML = `
-            <div style="display:inline-flex; align-items:center; gap:10px; background:rgba(14,73,135,0.06); padding:4px 6px 4px 14px; border-radius:24px; border:1px solid rgba(14,73,135,0.2);">
-              <a href="#" id="myPageBtn" style="font-size:13px; font-weight:bold; color:var(--neutral-900); text-decoration:none; display:inline-flex; align-items:center; gap:6px; cursor:pointer;" title="마이페이지">
-                ${avatarIcon}
-                <span>${displayName}님</span>
-              </a>
-              <button id="logoutBtn" style="background:var(--theme-recommend); color:#fff; border:none; padding:5px 12px; border-radius:16px; font-size:12px; font-weight:bold; cursor:pointer; transition:opacity 0.2s;">로그아웃</button>
-            </div>
-          `;
-          
-          document.getElementById('logoutBtn').onclick = () => logout();
-
-          // 아이디 클릭 시 마이페이지 모달 열기 (Firestore 클라우드 데이터 연동)
-          document.getElementById('myPageBtn').onclick = async (e) => {
-            e.preventDefault();
-            if (editProfileNameInput) editProfileNameInput.value = displayName;
-            if (myProfileAvatarImg) {
-              myProfileAvatarImg.src = user.photoURL || 'images/OA_master_LOGO.png';
-            }
-            selectedPhotoDataUrl = user.photoURL || null;
-
-            // Firestore 클라우드 데이터베이스에서 학교/소속 정보 조회
-            const fsRes = await getUserDataFromFirestore(user.uid);
-            if (fsRes.success && fsRes.data && fsRes.data.schoolName) {
-              if (editSchoolNameInput) editSchoolNameInput.value = fsRes.data.schoolName;
-            } else if (editSchoolNameInput && user && user.uid) {
-              editSchoolNameInput.value = localStorage.getItem(`user_school_${user.uid}`) || '';
-            }
-
-            document.getElementById('myProfileEmail').textContent = user.email || '이메일 정보 없음';
+            userNav.innerHTML = `
+              <div style="display:inline-flex; align-items:center; gap:10px; background:rgba(14,73,135,0.06); padding:4px 6px 4px 14px; border-radius:24px; border:1px solid rgba(14,73,135,0.2);">
+                <a href="#" id="myPageBtn" style="font-size:13px; font-weight:bold; color:var(--neutral-900); text-decoration:none; display:inline-flex; align-items:center; gap:6px; cursor:pointer;" title="마이페이지">
+                  ${avatarIcon}
+                  <span>${displayName}님</span>
+                </a>
+                <button id="logoutBtn" style="background:var(--theme-recommend); color:#fff; border:none; padding:5px 12px; border-radius:16px; font-size:12px; font-weight:bold; cursor:pointer; transition:opacity 0.2s;">로그아웃</button>
+              </div>
+            `;
             
-            const providerId = user.providerData && user.providerData[0] ? user.providerData[0].providerId : '';
-            document.getElementById('myProfileProvider').innerHTML = providerId.includes('google') 
-              ? '<span style="color:#ea4335;"><i class="fab fa-google"></i> Google 소셜 로그인</span>' 
-              : '<span style="color:var(--theme-written);"><i class="fas fa-envelope"></i> 이메일 / 비밀번호</span>';
+            const logoutBtn = document.getElementById('logoutBtn');
+            if (logoutBtn) logoutBtn.onclick = () => logout();
 
-            const createdDate = user.metadata && user.metadata.creationTime 
-              ? new Date(user.metadata.creationTime).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })
-              : '정보 없음';
-            document.getElementById('myProfileCreated').textContent = createdDate;
-            document.getElementById('myProfileUid').textContent = user.uid;
+            // 아이디 클릭 시 마이페이지 모달 열기 (Firestore 클라우드 데이터 연동)
+            const myPageBtn = document.getElementById('myPageBtn');
+            if (myPageBtn) {
+              myPageBtn.onclick = async (e) => {
+                e.preventDefault();
+                if (editProfileNameInput) editProfileNameInput.value = displayName;
+                if (myProfileAvatarImg) {
+                  myProfileAvatarImg.src = user.photoURL || 'images/OA_master_LOGO.png';
+                }
+                selectedPhotoDataUrl = user.photoURL || null;
 
-            myPageModal.style.display = 'flex';
-          };
+                try {
+                  // Firestore 클라우드 데이터베이스에서 학교/소속 정보 조회
+                  const fsRes = await getUserDataFromFirestore(user.uid);
+                  if (fsRes.success && fsRes.data && fsRes.data.schoolName) {
+                    if (editSchoolNameInput) editSchoolNameInput.value = fsRes.data.schoolName;
+                  } else if (editSchoolNameInput && user && user.uid) {
+                    editSchoolNameInput.value = localStorage.getItem(`user_school_${user.uid}`) || '';
+                  }
+                } catch (err) {
+                  console.error('Firestore 소속 조회 오류:', err);
+                  if (editSchoolNameInput && user && user.uid) {
+                    editSchoolNameInput.value = localStorage.getItem(`user_school_${user.uid}`) || '';
+                  }
+                }
+
+                document.getElementById('myProfileEmail').textContent = user.email || '이메일 정보 없음';
+                
+                const providerId = user.providerData && user.providerData[0] ? user.providerData[0].providerId : '';
+                document.getElementById('myProfileProvider').innerHTML = providerId.includes('google') 
+                  ? '<span style="color:#ea4335;"><i class="fab fa-google"></i> Google 소셜 로그인</span>' 
+                  : '<span style="color:var(--theme-written);"><i class="fas fa-envelope"></i> 이메일 / 비밀번호</span>';
+
+                const createdDate = user.metadata && user.metadata.creationTime 
+                  ? new Date(user.metadata.creationTime).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })
+                  : '정보 없음';
+                document.getElementById('myProfileCreated').textContent = createdDate;
+                document.getElementById('myProfileUid').textContent = user.uid;
+
+                myPageModal.style.display = 'flex';
+              };
+            }
+          } catch (err) {
+            console.error('Header userNav render error:', err);
+          }
         } else {
           userNav.innerHTML = `
             <button id="openAuthBtn" class="btn-admin-mode" onclick="window.openAuthModal && window.openAuthModal(); return false;" style="background:var(--theme-written); color:#fff; border:none; padding:6px 14px; border-radius:6px; cursor:pointer; font-weight:600;"><i class="fas fa-user"></i> 로그인 / 회원가입</button>
