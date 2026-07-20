@@ -402,10 +402,13 @@
     let currentUser = null;
     let selectedPhotoDataUrl = null;
 
-    // ⚡ 마이페이지 오픈 전용 헬퍼 함수
+    // ⚡ 마이페이지 오픈 전용 헬퍼 함수 (클릭 즉시 0초 모달 오픈 후 비동기 데이터 로드)
     const openMyPageModal = async () => {
       const myPageModal = document.getElementById('myPageModal');
       if (!myPageModal) return;
+
+      // ⚡ 1. 클릭 즉시 팝업 창 0초 오픈
+      myPageModal.style.display = 'flex';
 
       const user = currentUser || {
         displayName: localStorage.getItem('userDisplayName') || '회원',
@@ -419,26 +422,12 @@
       const editSchoolNameInput = document.getElementById('editSchoolNameInput');
       const myProfileAvatarImg = document.getElementById('myProfileAvatarImg');
 
+      // ⚡ 2. 기본 정보 즉시 표시
       if (editProfileNameInput) editProfileNameInput.value = displayName;
       if (myProfileAvatarImg) {
         myProfileAvatarImg.src = user.photoURL || 'images/OA_master_LOGO.png';
       }
       selectedPhotoDataUrl = user.photoURL || null;
-
-      if (user.uid) {
-        try {
-          const fsRes = await getUserDataFromFirestore(user.uid);
-          if (fsRes.success && fsRes.data && fsRes.data.schoolName) {
-            if (editSchoolNameInput) editSchoolNameInput.value = fsRes.data.schoolName;
-          } else if (editSchoolNameInput) {
-            editSchoolNameInput.value = localStorage.getItem(`user_school_${user.uid}`) || '';
-          }
-        } catch (err) {
-          if (editSchoolNameInput) {
-            editSchoolNameInput.value = localStorage.getItem(`user_school_${user.uid}`) || '';
-          }
-        }
-      }
 
       const elEmail = document.getElementById('myProfileEmail');
       if (elEmail) elEmail.textContent = user.email || '이메일 정보 없음';
@@ -460,7 +449,21 @@
       const elUid = document.getElementById('myProfileUid');
       if (elUid) elUid.textContent = user.uid || '-';
 
-      myPageModal.style.display = 'flex';
+      // ⚡ 3. 비동기 소속/학교 데이터 백그라운드 로드 (창 열기를 전혀 블로킹하지 않음)
+      if (user.uid) {
+        try {
+          const fsRes = await getUserDataFromFirestore(user.uid);
+          if (fsRes && fsRes.success && fsRes.data && fsRes.data.schoolName) {
+            if (editSchoolNameInput) editSchoolNameInput.value = fsRes.data.schoolName;
+          } else if (editSchoolNameInput) {
+            editSchoolNameInput.value = localStorage.getItem(`user_school_${user.uid}`) || '';
+          }
+        } catch (err) {
+          if (editSchoolNameInput) {
+            editSchoolNameInput.value = localStorage.getItem(`user_school_${user.uid}`) || '';
+          }
+        }
+      }
     };
 
     window.openMyPageModal = openMyPageModal;
