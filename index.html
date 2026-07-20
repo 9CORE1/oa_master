@@ -542,7 +542,7 @@
           const displayName = user.displayName || (user.email ? user.email.split('@')[0] : '회원');
           const photoUrl = (user && user.photoURL) || localStorage.getItem('userPhotoURL') || null;
           const avatarIcon = photoUrl
-            ? `<img src="${photoUrl}" style="width:24px; height:24px; border-radius:50%; object-fit:cover; border:1.5px solid var(--theme-written); flex-shrink:0;">`
+            ? `<img src="${photoUrl}" style="width:24px; height:24px; border-radius:50%; object-fit:cover; flex-shrink:0;">`
             : `<i class="fas fa-user-circle" style="color:var(--theme-written); font-size:18px;"></i>`;
 
           userNav.innerHTML = `
