@@ -38,13 +38,21 @@ function openAdminAuthModalDirectly() {
   }
 }
 
-// Toggle Admin Mode State
+// Toggle Admin Mode State (Login or Logout)
 function toggleAdminMode(e) {
   if (e && e.preventDefault) {
     e.preventDefault();
     e.stopPropagation();
   }
-  openAdminAuthModalDirectly();
+
+  if (isAdmin()) {
+    localStorage.removeItem('isAdminActive');
+    if (window.showToast) window.showToast('관리자 모드가 해제되었습니다.', 'info');
+    alert('🔓 관리자 모드가 성공적으로 해제(로그아웃)되었습니다.');
+    updateAdminUI();
+  } else {
+    openAdminAuthModalDirectly();
+  }
 }
 
 // Show Admin Login modal
@@ -67,7 +75,7 @@ function showAdminLoginModal() {
     const btnVer = document.getElementById('btnAdminVerifyCode');
     if (btnVer) btnVer.style.display = 'none';
   } else {
-    alert('관리자 모달 요소를 찾을 수 없습니다.');
+    window.location.href = 'index.html';
   }
 }
 
