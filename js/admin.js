@@ -134,24 +134,13 @@ function requestVerificationCode() {
   };
 
   if (!settings.publicKey || !settings.serviceId || !settings.templateId) {
-    const confirmSettings = confirm(
-      `💡 EmailJS 서비스 키(Public Key / Service ID / Template ID)가 설정되지 않았습니다.\n\n` +
-      `🔑 개발 콘솔용 인증번호: [ ${auth_code} ]\n\n` +
-      `지금 EmailJS 서비스 키를 입력/설정하시겠습니까?`
-    );
-    if (confirmSettings) {
-      showEmailJSSettingsModal();
-      return;
-    }
-    switchToVerificationUI();
+    alert('❌ EmailJS 연동 키(Public Key / Service ID / Template ID)가 설정되지 않았습니다.');
+    showEmailJSSettingsModal();
     return;
   }
 
   if (typeof emailjs === 'undefined') {
-    alert(`💡 EmailJS 모듈 로딩 중입니다. 임시 인증번호로 진행합니다.\n\n🔑 인증번호: [ ${auth_code} ]`);
-    if (window.showToast) window.showToast('EmailJS SDK 준비 중. 콘솔창을 확인하세요.', 'warning');
-    console.log(`[OA MASTER Admin Auth Code] Temp Code: ${auth_code}`);
-    switchToVerificationUI();
+    alert('❌ EmailJS SDK 라이브러리를 불러올 수 없습니다. 인터넷 연결을 확인해 주세요.');
     return;
   }
 
@@ -175,10 +164,8 @@ function requestVerificationCode() {
       switchToVerificationUI();
     }, error => {
       console.error('Email Verification Send FAILED...', error);
-      alert(`📧 메일 발송에 오류가 발생했습니다. 콘솔창에 임시 인증번호가 생성되었습니다.\n\n🔑 임시 인증번호: [ ${auth_code} ]`);
-      if (window.showToast) window.showToast('인증 메일 발송 오류. 콘솔창을 확인하세요.', 'error');
-      console.log(`[OA MASTER Admin Auth Code] Temp Code: ${auth_code}`);
-      switchToVerificationUI();
+      alert('❌ 인증번호 메일 전송 중 오류가 발생했습니다. EmailJS 설정이나 템플릿 항목을 확인해 주세요.');
+      if (window.showToast) window.showToast('인증 메일 전송 실패', 'error');
     });
 }
 
