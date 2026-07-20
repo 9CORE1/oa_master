@@ -402,10 +402,16 @@
     let currentUser = null;
     let selectedPhotoDataUrl = null;
 
-    // 전역 모달 오픈 창 등록
+    // ⚡ 전역 스마트 모달 오픈 창 등록 (로그인 상태 시 마이페이지 모달, 비로그인 시 로그인 모달)
     window.openAuthModal = () => {
-      const authModal = document.getElementById('authModal');
-      if (authModal) authModal.style.display = 'flex';
+      const isUserLoggedIn = (currentUser !== null) || (localStorage.getItem('isLoggedIn') === 'true');
+      if (isUserLoggedIn) {
+        const myPageModal = document.getElementById('myPageModal');
+        if (myPageModal) myPageModal.style.display = 'flex';
+      } else {
+        const authModal = document.getElementById('authModal');
+        if (authModal) authModal.style.display = 'flex';
+      }
     };
 
     const syncUserToFirestore = async (user) => {
@@ -569,10 +575,10 @@
       const myProfileAvatarImg = document.getElementById('myProfileAvatarImg');
 
       const authForm = document.getElementById('authForm');
+      const authSubmitBtn = document.getElementById('authSubmitBtn');
       const googleBtn = document.getElementById('googleLoginBtn');
       const toggleAuthMode = document.getElementById('toggleAuthMode');
       const modalTitle = document.getElementById('modalTitle');
-      const authSubmitBtn = document.getElementById('authSubmitBtn');
       const toggleText = document.getElementById('toggleText');
 
       // 마이페이지 닫기
@@ -698,7 +704,7 @@
           e.preventDefault();
           isSignUp = !isSignUp;
           modalTitle.textContent = isSignUp ? '회원가입' : '로그인';
-          authSubmitBtn.textContent = isSignUp ? '회원가입하기' : '로그인';
+          if (authSubmitBtn) authSubmitBtn.textContent = isSignUp ? '회원가입하기' : '로그인';
           toggleText.textContent = isSignUp ? '이미 계정이 있으신가요?' : '계정이 없으신가요?';
           toggleAuthMode.textContent = isSignUp ? '로그인' : '회원가입';
         };
@@ -706,26 +712,41 @@
 
       // 구글 로그인
       if (googleBtn) {
-        googleBtn.onclick = async () => {
-          const res = await signInWithGoogle();
-          if (res.success) {
-            await syncUserToFirestore(res.user);
-            renderHeaderUserNav(res.user);
-            alert(`${res.user.displayName || res.user.email}님 환영합니다!`);
-            authModal.style.display = 'none';
-          } else {
-            alert('Google 로그인 실패: ' + res.error);
+        googleBtn.onclick = async (e) => {
+          if (e) e.preventDefault();
+          try {
+            const res = await signInWithGoogle();
+            if (res.success) {
+              await syncUserToFirestore(res.user);
+              renderHeaderUserNav(res.user);
+              alert(`${res.user.displayName || res.user.email}님 환영합니다!`);
+              if (authModal) authModal.style.display = 'none';
+            } else {
+              alert('Google 로그인 실패: ' + res.error);
+            }
+          } catch (err) {
+            console.error('Google 로그인 오류:', err);
+            alert('Google 로그인 처리 중 오류가 발생했습니다.');
           }
         };
       }
 
-      // 이메일 로그인/회원가입 Form 제출
-      if (authForm) {
-        authForm.onsubmit = async (e) => {
-          e.preventDefault();
-          const email = document.getElementById('authEmail').value;
-          const password = document.getElementById('authPassword').value;
+      // ⚡ 이메일 로그인/회원가입 제출 통합 핸들러 (100% 작동 보장)
+      const handleEmailAuth = async (e) => {
+        if (e) e.preventDefault();
+        const emailInput = document.getElementById('authEmail');
+        const passwordInput = document.getElementById('authPassword');
 
+        if (!emailInput || !passwordInput) return;
+        const email = emailInput.value.trim();
+        const password = passwordInput.value.trim();
+
+        if (!email || !password) {
+          alert('이메일과 비밀번호를 모두 입력해 주세요.');
+          return;
+        }
+
+        try {
           const res = isSignUp
             ? await signUpWithEmail(email, password)
             : await signInWithEmail(email, password);
@@ -734,12 +755,18 @@
             await syncUserToFirestore(res.user);
             renderHeaderUserNav(res.user);
             alert(isSignUp ? '회원가입 완료!' : '로그인 성공!');
-            authModal.style.display = 'none';
+            if (authModal) authModal.style.display = 'none';
           } else {
             alert('오류: ' + res.error);
           }
-        };
-      }
+        } catch (err) {
+          console.error('로그인 처리 중 오류 발생:', err);
+          alert('로그인 처리 중 오류가 발생했습니다: ' + (err.message || err));
+        }
+      };
+
+      if (authForm) authForm.onsubmit = handleEmailAuth;
+      if (authSubmitBtn) authSubmitBtn.onclick = handleEmailAuth;
     });
   </script>
 </body>
