@@ -314,7 +314,7 @@
           <input type="file" id="profilePhotoInput" accept="image/*" style="display:none;">
         </div>
         <div>
-          <button id="saveProfilePhotoBtn"
+          <button type="button" id="saveProfilePhotoBtn"
             style="padding:4px 12px; background:var(--theme-written); color:#fff; border:none; border-radius:14px; font-size:11px; cursor:pointer; font-weight:bold;">
             <i class="fas fa-upload"></i> 사진 저장
           </button>
@@ -639,11 +639,17 @@
 
       // 프로필 사진 저장
       if (saveProfilePhotoBtn) {
-        saveProfilePhotoBtn.onclick = async () => {
+        saveProfilePhotoBtn.onclick = async (e) => {
+          if (e) e.preventDefault();
           if (!selectedPhotoDataUrl) {
-            alert('카메라 아이콘 버튼을 눌러 변경할 사진을 먼저 선택해 주세요.');
+            alert('📷 카메라 아이콘 버튼을 눌러 변경할 사진을 먼저 선택해 주세요.');
             return;
           }
+
+          const originalText = saveProfilePhotoBtn.innerHTML;
+          saveProfilePhotoBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 저장 중...';
+          saveProfilePhotoBtn.disabled = true;
+
           try {
             await updateUserProfile(undefined, selectedPhotoDataUrl);
             const targetUid = (currentUser && currentUser.uid) || localStorage.getItem('userUid');
@@ -657,10 +663,13 @@
                 email: localStorage.getItem('userEmail') || ''
               });
             }
-            alert('프로필 사진이 성공적으로 저장되었습니다!');
+            alert('📷 프로필 사진이 성공적으로 저장되었습니다!');
           } catch (err) {
             console.error('프로필 사진 저장 오류:', err);
-            alert('사진 저장 중 오류가 발생했습니다.');
+            alert('사진 저장 중 오류가 발생했습니다: ' + (err.message || err));
+          } finally {
+            saveProfilePhotoBtn.innerHTML = originalText;
+            saveProfilePhotoBtn.disabled = false;
           }
         };
       }
