@@ -293,6 +293,37 @@
         <span id="toggleText">계정이 없으신가요?</span>
         <a href="#" id="toggleAuthMode" style="color:var(--theme-written); font-weight:bold; margin-left:5px;">회원가입</a>
       </div>
+  <!-- 🔹 관리자 이메일 인증 모달 팝업 -->
+  <div id="adminAuthModal" class="modal"
+    style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:9999999; justify-content:center; align-items:center;">
+    <div class="modal-content"
+      style="background:#fff; padding:30px; border-radius:12px; max-width:440px; width:90%; position:relative; text-align:left; box-shadow:0 20px 25px -5px rgba(0,0,0,0.3);">
+      <span id="closeAdminAuthModal" onclick="document.getElementById('adminAuthModal').style.display='none';"
+        style="position:absolute; right:15px; top:10px; font-size:24px; cursor:pointer; color:#64748b;">&times;</span>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid #eee; padding-bottom:12px;">
+        <h3 style="margin:0; font-size:18px; color:#1e293b;"><i class="fas fa-lock" style="color:var(--theme-written, #0e4987);"></i> 관리자 이메일 인증</h3>
+      </div>
+
+      <div class="modal-body">
+        <div id="adminEmailInputGroup">
+          <label for="adminLoginEmail" style="display:block; font-weight:bold; margin-bottom:6px; font-size:14px; color:#334155;">관리자 이메일 주소</label>
+          <input type="email" id="adminLoginEmail" placeholder="이메일 주소를 입력하세요" style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; font-size:14px;">
+          <p style="font-size:12px; color:#64748b; margin-top:6px;">설정된 관리자 이메일 주소와 동일해야 인증번호가 발송됩니다.</p>
+        </div>
+
+        <div id="adminCodeGroup" style="display:none; margin-top:15px;">
+          <label for="adminVerifyCodeInput" style="display:block; font-weight:bold; margin-bottom:6px; font-size:14px; color:#334155;">인증번호 (6자리)</label>
+          <input type="text" id="adminVerifyCodeInput" placeholder="인증번호 6자리를 입력하세요" maxlength="6" style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; font-size:14px;">
+          <p style="color:#10b981; font-weight:500; font-size:12px; margin-top:6px;">이메일로 발송된 6자리 인증번호를 입력하십시오.</p>
+        </div>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:24px;">
+        <button type="button" onclick="document.getElementById('adminAuthModal').style.display='none';" style="padding:8px 16px; background:#e2e8f0; border:none; border-radius:6px; cursor:pointer; font-weight:600; color:#475569;">취소</button>
+        <button type="button" id="btnAdminRequestCode" style="padding:8px 16px; background:var(--theme-written, #0e4987); color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:bold;">인증번호 전송</button>
+        <button type="button" id="btnAdminVerifyCode" style="display:none; padding:8px 16px; background:#10b981; color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:bold;">인증 완료</button>
+      </div>
     </div>
   </div>
 
