@@ -481,12 +481,25 @@
 
     const syncUserToFirestore = async (user) => {
       if (!user) return;
+      const createdDate = user.metadata && user.metadata.creationTime
+        ? new Date(user.metadata.creationTime).toISOString()
+        : new Date().toISOString();
+
+      const providerId = user.providerData && user.providerData[0]
+        ? user.providerData[0].providerId
+        : 'password';
+
+      const cachedPhoto = localStorage.getItem('userPhotoURL') || null;
+      const cachedSchool = localStorage.getItem(`user_school_${user.uid}`) || '';
+
       await saveUserDataToFirestore(user.uid, {
-        uid: user.uid,
-        email: user.email,
-        displayName: user.displayName || (user.email ? user.email.split('@')[0] : '회원'),
-        photoURL: user.photoURL || null,
-        provider: user.providerData && user.providerData[0] ? user.providerData[0].providerId : 'email'
+        uid: user.uid,                                                                   // 1. 회원 고유 UID
+        email: user.email || '',                                                         // 2. 이메일 주소
+        displayName: user.displayName || (user.email ? user.email.split('@')[0] : '회원'),    // 3. 닉네임/성명
+        photoURL: user.photoURL || cachedPhoto || null,                                  // 4. 프로필 사진 (.jpg)
+        schoolName: cachedSchool,                                                        // 5. 학교명/소속명
+        provider: providerId,                                                            // 6. 로그인 방식
+        createdAt: createdDate                                                           // 7. 가입 일자
       });
     };
 
