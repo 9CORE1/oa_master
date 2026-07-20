@@ -795,6 +795,7 @@
       document.addEventListener('click', (e) => {
         const link = e.target.closest('a, button');
         if (!link) return;
+        if (link.closest('#adminAuthModal')) return;
         if (link.id === 'openAuthBtn' || link.id === 'myPageBtn' || link.id === 'closeAuthModal' || link.id === 'closeMyPageModal' || link.id === 'footerAdminLoginBtn' || link.id === 'closeAdminAuthModal') return;
 
         const href = link.getAttribute('href') || link.getAttribute('onclick') || '';
