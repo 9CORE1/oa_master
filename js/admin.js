@@ -7,13 +7,6 @@ function isAdmin() {
 
 // Open Admin Auth Modal Directly
 function openAdminAuthModalDirectly() {
-  if (isAdmin()) {
-    localStorage.setItem('isAdminActive', 'false');
-    showToast('관리자 모드가 해제되었습니다.', 'success');
-    updateAdminUI();
-    setTimeout(() => window.location.reload(), 600);
-    return;
-  }
   const modal = document.getElementById('adminAuthModal');
   if (modal) {
     modal.style.display = 'flex';
