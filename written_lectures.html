@@ -388,6 +388,7 @@
       });
 
       renderPagination(totalPages);
+      if (window.updateAdminUI) window.updateAdminUI();
     }
 
     function renderPagination(totalPages) {

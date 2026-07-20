@@ -242,7 +242,15 @@ function updateAdminUI() {
   const adminOnlyElements = document.querySelectorAll('.admin-only');
   adminOnlyElements.forEach(el => {
     if (is_admin) {
-      el.style.setProperty('display', '', 'important');
+      if (el.tagName === 'TH' || el.tagName === 'TD') {
+        el.style.setProperty('display', 'table-cell', 'important');
+      } else if (el.classList.contains('action-buttons') || el.style.flexDirection === 'column') {
+        el.style.setProperty('display', 'flex', 'important');
+      } else if (el.tagName === 'BUTTON') {
+        el.style.setProperty('display', 'inline-flex', 'important');
+      } else {
+        el.style.setProperty('display', 'block', 'important');
+      }
     } else {
       el.style.setProperty('display', 'none', 'important');
     }
