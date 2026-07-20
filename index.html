@@ -418,16 +418,17 @@
       };
 
       const displayName = user.displayName || (user.email ? user.email.split('@')[0] : '회원');
+      const savedPhoto = user.photoURL || localStorage.getItem('userPhotoURL') || null;
       const editProfileNameInput = document.getElementById('editProfileNameInput');
       const editSchoolNameInput = document.getElementById('editSchoolNameInput');
       const myProfileAvatarImg = document.getElementById('myProfileAvatarImg');
 
-      // ⚡ 2. 기본 정보 즉시 표시
+      // ⚡ 2. 기본 정보 및 사진 즉시 표시
       if (editProfileNameInput) editProfileNameInput.value = displayName;
       if (myProfileAvatarImg) {
-        myProfileAvatarImg.src = user.photoURL || 'images/OA_master_LOGO.png';
+        myProfileAvatarImg.src = savedPhoto || 'images/OA_master_LOGO.png';
       }
-      selectedPhotoDataUrl = user.photoURL || null;
+      selectedPhotoDataUrl = savedPhoto;
 
       const elEmail = document.getElementById('myProfileEmail');
       if (elEmail) elEmail.textContent = user.email || '이메일 정보 없음';
@@ -449,14 +450,19 @@
       const elUid = document.getElementById('myProfileUid');
       if (elUid) elUid.textContent = user.uid || '-';
 
-      // ⚡ 3. 비동기 소속/학교 데이터 백그라운드 로드 (창 열기를 전혀 블로킹하지 않음)
+      // ⚡ 3. 비동기 소속/학교 및 클라우드 프로필 사진 백그라운드 로드
       if (user.uid) {
         try {
           const fsRes = await getUserDataFromFirestore(user.uid);
-          if (fsRes && fsRes.success && fsRes.data && fsRes.data.schoolName) {
-            if (editSchoolNameInput) editSchoolNameInput.value = fsRes.data.schoolName;
-          } else if (editSchoolNameInput) {
-            editSchoolNameInput.value = localStorage.getItem(`user_school_${user.uid}`) || '';
+          if (fsRes && fsRes.success && fsRes.data) {
+            if (fsRes.data.schoolName && editSchoolNameInput) {
+              editSchoolNameInput.value = fsRes.data.schoolName;
+            }
+            if (fsRes.data.photoURL) {
+              localStorage.setItem('userPhotoURL', fsRes.data.photoURL);
+              if (myProfileAvatarImg) myProfileAvatarImg.src = fsRes.data.photoURL;
+              selectedPhotoDataUrl = fsRes.data.photoURL;
+            }
           }
         } catch (err) {
           if (editSchoolNameInput) {
