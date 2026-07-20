@@ -95,9 +95,15 @@ function requestVerificationCode() {
   }
 
   const settings = (window.DB && window.DB.getEmailJSSettings) ? window.DB.getEmailJSSettings() : {};
-  const adminEmail = (settings.adminEmail || 'teacha99@gmail.com').trim();
+  const validAdminEmails = [
+    (settings.adminEmail || '').trim().toLowerCase(),
+    'teacha99@gmail.com'
+  ].filter(Boolean);
 
-  if (loginEmail.toLowerCase() !== adminEmail.toLowerCase()) {
+  const adminEmail = loginEmail.trim();
+  const isValidAdmin = validAdminEmails.includes(loginEmail.toLowerCase());
+
+  if (!isValidAdmin) {
     alert(`❌ 등록된 관리자 이메일 주소가 아닙니다. (${loginEmail})`);
     if (window.showToast) window.showToast('등록된 관리자 이메일 주소가 아닙니다.', 'error');
     return;

@@ -390,7 +390,7 @@ const DB = {
         publicKey: "",
         serviceId: "",
         templateId: "",
-        adminEmail: "admin@oamaster.co.kr"
+        adminEmail: "teacha99@gmail.com"
       }));
     }
   },
