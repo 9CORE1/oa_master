@@ -661,11 +661,27 @@
       });
     }
 
-    // ⚡ 파이어베이스 실시간 인증 감지기 탑레벨 등록 및 동기화
-    onAuthChange((user) => {
+    // ⚡ 파이어베이스 실시간 인증 감지기 탑레벨 등록 및 동기화 (새 기기 로그인 시 클라우드 마이페이지 데이터 자동복원)
+    onAuthChange(async (user) => {
       console.log('Firebase Auth State Changed:', user ? user.email : 'No User');
       if (user && user.uid) {
         localStorage.setItem('userUid', user.uid);
+        try {
+          const fsRes = await getUserDataFromFirestore(user.uid);
+          if (fsRes && fsRes.success && fsRes.data) {
+            if (fsRes.data.schoolName) {
+              localStorage.setItem(`user_school_${user.uid}`, fsRes.data.schoolName);
+            }
+            if (fsRes.data.photoURL) {
+              localStorage.setItem('userPhotoURL', fsRes.data.photoURL);
+            }
+            if (fsRes.data.displayName) {
+              localStorage.setItem('userDisplayName', fsRes.data.displayName);
+            }
+          }
+        } catch (err) {
+          console.warn('Firestore profile sync warning:', err);
+        }
       }
       renderHeaderUserNav(user);
       if (user) {
