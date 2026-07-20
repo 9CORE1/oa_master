@@ -307,6 +307,8 @@ function renderHeaderUserNavUniversal(user) {
   }
 }
 
+window.renderHeaderUserNav = renderHeaderUserNavUniversal;
+
 // Show GitHub Settings Modal
 function showGithubSettingsModal() {
   let settings = JSON.parse(localStorage.getItem("github_settings")) || { token: "", repo: "", path: "js/data.js", branch: "main" };
