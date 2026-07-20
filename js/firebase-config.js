@@ -77,15 +77,32 @@ export async function signInWithGoogle() {
 export async function logout() {
     try {
         await signOut(auth);
+        localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem('userEmail');
+        localStorage.removeItem('userDisplayName');
+        localStorage.removeItem('userPhotoURL');
         return { success: true };
     } catch (error) {
         return { success: false, error: error.message };
     }
 }
 
-// [기능 5] 로그인 상태 감지 리스너
+// [기능 5] 로그인 상태 감지 리스너 (로컬 세션 동기화)
 export function onAuthChange(callback) {
-    return onAuthStateChanged(auth, callback);
+    return onAuthStateChanged(auth, (user) => {
+        if (user) {
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('userEmail', user.email || '');
+            localStorage.setItem('userDisplayName', user.displayName || (user.email ? user.email.split('@')[0] : '회원'));
+            if (user.photoURL) localStorage.setItem('userPhotoURL', user.photoURL);
+        } else {
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('userDisplayName');
+            localStorage.removeItem('userPhotoURL');
+        }
+        callback(user);
+    });
 }
 
 // [기능 6] 닉네임 및 프로필 사진 정보 수정
