@@ -247,6 +247,10 @@ function updateAdminUI() {
       el.style.setProperty('display', 'none', 'important');
     }
   });
+
+  if (window.renderHeaderUserNav) {
+    window.renderHeaderUserNav(null);
+  }
 }
 
 // Show GitHub Settings Modal

@@ -590,6 +590,22 @@
       const userNav = document.getElementById('userNavArea');
       if (!userNav) return;
 
+      const is_admin = (typeof isAdmin === 'function' && isAdmin()) || (localStorage.getItem('isAdminActive') === 'true');
+
+      if (is_admin) {
+        userNav.innerHTML = `
+          <div style="display:inline-flex; align-items:center; gap:8px; background:rgba(234,88,12,0.1); padding:4px 10px 4px 12px; border-radius:24px; border:1px solid rgba(234,88,12,0.3);">
+            <span style="font-size:13px; font-weight:bold; color:#c2410c; display:inline-flex; align-items:center; gap:5px;">
+              <i class="fas fa-user-shield" style="color:#ea580c;"></i> 관리자모드
+            </span>
+            <button id="adminLogoutBtn" onclick="window.toggleAdminMode(); return false;" style="background:var(--theme-recommend, #e11d48); color:#fff; border:none; padding:5px 12px; border-radius:16px; font-size:12px; font-weight:bold; cursor:pointer; transition:opacity 0.2s;" title="관리자 모드 해제 및 로그아웃">
+              <i class="fas fa-sign-out-alt"></i> 로그아웃
+            </button>
+          </div>
+        `;
+        return;
+      }
+
       if (user) {
         try {
           const displayName = user.displayName || (user.email ? user.email.split('@')[0] : '회원');
@@ -625,6 +641,8 @@
         `;
       }
     };
+
+    window.renderHeaderUserNav = renderHeaderUserNav;
 
     // ⚡ 0초 반응: 로컬 세션 확인 및 즉시 헤더 렌더링
     if (localStorage.getItem('isLoggedIn') === 'true') {
