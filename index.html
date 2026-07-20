@@ -557,6 +557,10 @@
     onAuthChange((user) => {
       console.log('Firebase Auth State Changed:', user ? user.email : 'No User');
       renderHeaderUserNav(user);
+      if (user) {
+        const modal = document.getElementById('authModal');
+        if (modal) modal.style.display = 'none';
+      }
     });
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -719,8 +723,10 @@
             if (res.success) {
               await syncUserToFirestore(res.user);
               renderHeaderUserNav(res.user);
+              // ⚡ 팝업 창을 alert 전 미리 닫음
+              const targetModal = document.getElementById('authModal');
+              if (targetModal) targetModal.style.display = 'none';
               alert(`${res.user.displayName || res.user.email}님 환영합니다!`);
-              if (authModal) authModal.style.display = 'none';
             } else {
               alert('Google 로그인 실패: ' + res.error);
             }
@@ -754,8 +760,10 @@
           if (res.success) {
             await syncUserToFirestore(res.user);
             renderHeaderUserNav(res.user);
+            // ⚡ alert 창이 뜨기 전에 팝업 창을 즉시 먼저 닫음
+            const targetModal = document.getElementById('authModal');
+            if (targetModal) targetModal.style.display = 'none';
             alert(isSignUp ? '회원가입 완료!' : '로그인 성공!');
-            if (authModal) authModal.style.display = 'none';
           } else {
             alert('오류: ' + res.error);
           }
