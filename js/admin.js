@@ -258,6 +258,52 @@ function updateAdminUI() {
 
   if (window.renderHeaderUserNav) {
     window.renderHeaderUserNav(null);
+  } else {
+    renderHeaderUserNavUniversal(null);
+  }
+}
+
+// Universal Header User Nav Renderer for All Pages
+function renderHeaderUserNavUniversal(user) {
+  const userNav = document.getElementById('userNavArea');
+  if (!userNav) return;
+
+  const is_admin = isAdmin();
+
+  if (is_admin) {
+    userNav.innerHTML = `
+      <div style="display:inline-flex; align-items:center; gap:8px; background:rgba(234,88,12,0.1); padding:4px 10px 4px 12px; border-radius:24px; border:1px solid rgba(234,88,12,0.3);">
+        <span style="font-size:13px; font-weight:bold; color:#c2410c; display:inline-flex; align-items:center; gap:5px;">
+          <i class="fas fa-user-shield" style="color:#ea580c;"></i> 관리자모드
+        </span>
+        <button id="adminLogoutBtn" onclick="window.toggleAdminMode(); return false;" style="background:var(--theme-recommend, #e11d48); color:#fff; border:none; padding:5px 12px; border-radius:16px; font-size:12px; font-weight:bold; cursor:pointer; transition:opacity 0.2s;" title="관리자 모드 해제 및 로그아웃">
+          <i class="fas fa-sign-out-alt"></i> 로그아웃
+        </button>
+      </div>
+    `;
+    return;
+  }
+
+  if (user) {
+    const displayName = user.displayName || (user.email ? user.email.split('@')[0] : '회원');
+    const photoUrl = (user && user.photoURL) || localStorage.getItem('userPhotoURL') || null;
+    const avatarIcon = photoUrl
+      ? `<img src="${photoUrl}" style="width:24px; height:24px; border-radius:50%; object-fit:cover; flex-shrink:0;">`
+      : `<i class="fas fa-user-circle" style="color:var(--theme-written); font-size:18px;"></i>`;
+
+    userNav.innerHTML = `
+      <div style="display:inline-flex; align-items:center; gap:10px; background:rgba(14,73,135,0.06); padding:4px 8px 4px 12px; border-radius:24px; border:1px solid rgba(14,73,135,0.2);">
+        <a href="index.html" style="font-size:13px; font-weight:bold; color:var(--neutral-900); text-decoration:none; display:inline-flex; align-items:center; gap:6px; cursor:pointer;" title="마이페이지">
+          ${avatarIcon}
+          <span>${displayName}님</span>
+        </a>
+        <button id="logoutBtn" style="background:var(--theme-recommend); color:#fff; border:none; padding:5px 12px; border-radius:16px; font-size:12px; font-weight:bold; cursor:pointer; transition:opacity 0.2s;">로그아웃</button>
+      </div>
+    `;
+  } else {
+    userNav.innerHTML = `
+      <button id="openAuthBtn" class="btn-admin-mode" onclick="if(window.openAuthModal){window.openAuthModal();}else{window.location.href='index.html?auth=required';} return false;" style="background:var(--theme-written); color:#fff; border:none; padding:6px 14px; border-radius:6px; cursor:pointer; font-weight:600;"><i class="fas fa-user"></i> 로그인 / 회원가입</button>
+    `;
   }
 }
 
@@ -640,3 +686,4 @@ window.clearGithubSettings = clearGithubSettings;
 window.updateJSONData = updateJSONData;
 window.showEmailJSSettingsModal = showEmailJSSettingsModal;
 window.saveEmailJSSettingsFromModal = saveEmailJSSettingsFromModal;
+window.renderHeaderUserNavUniversal = renderHeaderUserNavUniversal;
