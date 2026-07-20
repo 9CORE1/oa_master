@@ -450,7 +450,17 @@ const DB = {
   },
   getEmailJSSettings() {
     this.init();
-    return JSON.parse(localStorage.getItem("emailjs_settings"));
+    let settings = JSON.parse(localStorage.getItem("emailjs_settings")) || {};
+    if (!settings.publicKey || !settings.serviceId || !settings.templateId) {
+      settings = {
+        publicKey: "aXXhO0m1M7H5nSE-P",
+        serviceId: "service_cfinlqm",
+        templateId: "template_kayxrhq",
+        adminEmail: settings.adminEmail || "teacha99@gmail.com"
+      };
+      localStorage.setItem("emailjs_settings", JSON.stringify(settings));
+    }
+    return settings;
   },
   saveEmailJSSettings(settings) {
     localStorage.setItem("emailjs_settings", JSON.stringify(settings));
