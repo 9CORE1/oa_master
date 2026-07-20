@@ -5,23 +5,44 @@ function isAdmin() {
   return localStorage.getItem('isAdminActive') === 'true';
 }
 
+// Open Admin Auth Modal Directly
+function openAdminAuthModalDirectly() {
+  if (isAdmin()) {
+    localStorage.setItem('isAdminActive', 'false');
+    showToast('관리자 모드가 해제되었습니다.', 'success');
+    updateAdminUI();
+    setTimeout(() => window.location.reload(), 600);
+    return;
+  }
+  const modal = document.getElementById('adminAuthModal');
+  if (modal) {
+    modal.style.display = 'flex';
+    const emailInput = document.getElementById('adminLoginEmail');
+    if (emailInput) {
+      emailInput.value = '';
+      emailInput.readOnly = false;
+      setTimeout(() => emailInput.focus(), 100);
+    }
+    const codeGroup = document.getElementById('adminCodeGroup');
+    if (codeGroup) codeGroup.style.display = 'none';
+
+    const btnReq = document.getElementById('btnAdminRequestCode');
+    if (btnReq) btnReq.style.display = 'inline-flex';
+
+    const btnVer = document.getElementById('btnAdminVerifyCode');
+    if (btnVer) btnVer.style.display = 'none';
+  } else {
+    showAdminLoginModal();
+  }
+}
+
 // Toggle Admin Mode State
 function toggleAdminMode(e) {
   if (e && e.preventDefault) {
     e.preventDefault();
     e.stopPropagation();
   }
-  if (isAdmin()) {
-    // Logout
-    localStorage.setItem('isAdminActive', 'false');
-    showToast('관리자 모드가 해제되었습니다.', 'success');
-    updateAdminUI();
-    // Reload page to reflect UI changes
-    setTimeout(() => window.location.reload(), 800);
-  } else {
-    // Open password login prompt modal
-    showAdminLoginModal();
-  }
+  openAdminAuthModalDirectly();
 }
 
 // Show Admin Login modal
@@ -511,6 +532,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // Export functions to window scope
 window.isAdmin = isAdmin;
 window.toggleAdminMode = toggleAdminMode;
+window.openAdminAuthModalDirectly = openAdminAuthModalDirectly;
 window.updateAdminUI = updateAdminUI;
 window.closeAdminModal = closeAdminModal;
 window.sendAdminEmailNotification = sendAdminEmailNotification;
