@@ -612,43 +612,8 @@
         };
       }
 
-      // Google 로그인
-      if (googleBtn) {
-        googleBtn.onclick = async () => {
-          const res = await signInWithGoogle();
-          if (res.success) {
-            await syncUserToFirestore(res.user);
-            alert(`${res.user.displayName || res.user.email}님 환영합니다!`);
-            authModal.style.display = 'none';
-          } else {
-            alert('Google 로그인 실패: ' + res.error);
-          }
-        };
-      }
-
-      // 이메일 Form 제출
-      if (authForm) {
-        authForm.onsubmit = async (e) => {
-          e.preventDefault();
-          const email = document.getElementById('authEmail').value;
-          const password = document.getElementById('authPassword').value;
-
-          const res = isSignUp
-            ? await signUpWithEmail(email, password)
-            : await signInWithEmail(email, password);
-
-          if (res.success) {
-            await syncUserToFirestore(res.user);
-            alert(isSignUp ? '회원가입 완료!' : '로그인 성공!');
-            authModal.style.display = 'none';
-          } else {
-            alert('오류: ' + res.error);
-          }
-        };
-      }
-
-      // 실시간 인증 상태 감지 및 UI 업데이트
-      onAuthChange((user) => {
+      // 헤더 사용자 영역 렌더링 전용 헬퍼 함수 (로그인 직후 0초 즉시 반영)
+      const renderHeaderUserNav = (user) => {
         currentUser = user;
         const userNav = document.getElementById('userNavArea');
         if (!userNav) return;
@@ -671,7 +636,13 @@
             `;
             
             const logoutBtn = document.getElementById('logoutBtn');
-            if (logoutBtn) logoutBtn.onclick = () => logout();
+            if (logoutBtn) {
+              logoutBtn.onclick = async () => {
+                await logout();
+                renderHeaderUserNav(null);
+                alert('로그아웃 되었습니다.');
+              };
+            }
 
             // 아이디 클릭 시 마이페이지 모달 열기 (Firestore 클라우드 데이터 연동)
             const myPageBtn = document.getElementById('myPageBtn');
@@ -693,7 +664,6 @@
                     editSchoolNameInput.value = localStorage.getItem(`user_school_${user.uid}`) || '';
                   }
                 } catch (err) {
-                  console.error('Firestore 소속 조회 오류:', err);
                   if (editSchoolNameInput && user && user.uid) {
                     editSchoolNameInput.value = localStorage.getItem(`user_school_${user.uid}`) || '';
                   }
@@ -716,13 +686,55 @@
               };
             }
           } catch (err) {
-            console.error('Header userNav render error:', err);
+            console.error('renderHeaderUserNav error:', err);
           }
         } else {
           userNav.innerHTML = `
             <button id="openAuthBtn" class="btn-admin-mode" onclick="document.getElementById('authModal').style.display='flex'; return false;" style="background:var(--theme-written); color:#fff; border:none; padding:6px 14px; border-radius:6px; cursor:pointer; font-weight:600;"><i class="fas fa-user"></i> 로그인 / 회원가입</button>
           `;
         }
+      };
+
+      // Google 로그인
+      if (googleBtn) {
+        googleBtn.onclick = async () => {
+          const res = await signInWithGoogle();
+          if (res.success) {
+            await syncUserToFirestore(res.user);
+            renderHeaderUserNav(res.user);
+            alert(`${res.user.displayName || res.user.email}님 환영합니다!`);
+            authModal.style.display = 'none';
+          } else {
+            alert('Google 로그인 실패: ' + res.error);
+          }
+        };
+      }
+
+      // 이메일 Form 제출
+      if (authForm) {
+        authForm.onsubmit = async (e) => {
+          e.preventDefault();
+          const email = document.getElementById('authEmail').value;
+          const password = document.getElementById('authPassword').value;
+
+          const res = isSignUp
+            ? await signUpWithEmail(email, password)
+            : await signInWithEmail(email, password);
+
+          if (res.success) {
+            await syncUserToFirestore(res.user);
+            renderHeaderUserNav(res.user);
+            alert(isSignUp ? '회원가입 완료!' : '로그인 성공!');
+            authModal.style.display = 'none';
+          } else {
+            alert('오류: ' + res.error);
+          }
+        };
+      }
+
+      // 실시간 인증 상태 감지 및 UI 업데이트
+      onAuthChange((user) => {
+        renderHeaderUserNav(user);
       });
     });
   </script>
