@@ -413,17 +413,47 @@
         };
       }
 
-      // 사진 선택 미리보기 핸들러
+      // 이미지를 최적화된 .jpg (image/jpeg) 포맷으로 간소화/압축 변환하는 헬퍼 함수
+      const convertAndCompressToJpg = (file, width = 200, height = 200) => {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            const img = new Image();
+            img.onload = () => {
+              const canvas = document.createElement('canvas');
+              canvas.width = width;
+              canvas.height = height;
+              const ctx = canvas.getContext('2d');
+              // 배경 흰색 처리 (투명 PNG 대응)
+              ctx.fillStyle = '#ffffff';
+              ctx.fillRect(0, 0, width, height);
+              ctx.drawImage(img, 0, 0, width, height);
+              // .jpg (image/jpeg, quality 0.85)로 변환
+              const jpgDataUrl = canvas.toDataURL('image/jpeg', 0.85);
+              resolve(jpgDataUrl);
+            };
+            img.onerror = reject;
+            img.src = e.target.result;
+          };
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        });
+      };
+
+      // 사진 선택 및 .jpg 포맷 자동 간소화 변환 핸들러
       if (profilePhotoInput) {
-        profilePhotoInput.onchange = (e) => {
+        profilePhotoInput.onchange = async (e) => {
           const file = e.target.files[0];
           if (file) {
-            const reader = new FileReader();
-            reader.onload = (event) => {
-              selectedPhotoDataUrl = event.target.result;
+            try {
+              // 200x200 규격의 최적화된 .jpg 포맷으로 변환
+              const jpgDataUrl = await convertAndCompressToJpg(file, 200, 200);
+              selectedPhotoDataUrl = jpgDataUrl;
               if (myProfileAvatarImg) myProfileAvatarImg.src = selectedPhotoDataUrl;
-            };
-            reader.readAsDataURL(file);
+            } catch (err) {
+              console.error('.jpg 변환 오류:', err);
+              alert('이미지 파일 변환 중 오류가 발생했습니다.');
+            }
           }
         };
       }
