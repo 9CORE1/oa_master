@@ -343,11 +343,12 @@ const DEFAULT_RECOMMEND_SITES = [
   },
   {
     "id": "rc-3",
-    "title": "시나공 IT 자격증 카페",
+    "title": "시나공 수험생 지원센터",
     "description": "길벗 출판사에서 운영하는 IT 자격증 전문 커뮤니티로, 무료 핵심요약 PDF 교재, 기출 해설, 질문 답변 게시판을 제공합니다.",
-    "siteUrl": "https://cafe.naver.com/sinagongit",
+    "siteUrl": "https://www.sinagong.co.kr/",
     "category": "학습 커뮤니티",
-    "tag": "시나공"
+    "tag": "시나공",
+    "date": "2026-07-20"
   },
   {
     "id": "rc-4",
@@ -387,10 +388,10 @@ const DB = {
     }
     if (!localStorage.getItem("emailjs_settings")) {
       localStorage.setItem("emailjs_settings", JSON.stringify({
-        publicKey: "aXXhO0m1M7H5nSE-P",
-        serviceId: "service_cfinlqm",
-        templateId: "template_kayxrhq",
-        adminEmail: "teacha99@gmail.com"
+        publicKey: "",
+        serviceId: "",
+        templateId: "",
+        adminEmail: "admin@oamaster.co.kr"
       }));
     }
   },
@@ -450,17 +451,7 @@ const DB = {
   },
   getEmailJSSettings() {
     this.init();
-    let settings = JSON.parse(localStorage.getItem("emailjs_settings")) || {};
-    if (!settings.publicKey || !settings.serviceId || !settings.templateId) {
-      settings = {
-        publicKey: "aXXhO0m1M7H5nSE-P",
-        serviceId: "service_cfinlqm",
-        templateId: "template_kayxrhq",
-        adminEmail: settings.adminEmail || "teacha99@gmail.com"
-      };
-      localStorage.setItem("emailjs_settings", JSON.stringify(settings));
-    }
-    return settings;
+    return JSON.parse(localStorage.getItem("emailjs_settings"));
   },
   saveEmailJSSettings(settings) {
     localStorage.setItem("emailjs_settings", JSON.stringify(settings));
