@@ -7,6 +7,15 @@ function isAdmin() {
 
 // Open Admin Auth Modal Directly
 function openAdminAuthModalDirectly() {
+  if (window.closeAllModals) {
+    window.closeAllModals();
+  } else {
+    const authModal = document.getElementById('authModal');
+    const myPageModal = document.getElementById('myPageModal');
+    if (authModal) authModal.style.display = 'none';
+    if (myPageModal) myPageModal.style.display = 'none';
+  }
+
   const modal = document.getElementById('adminAuthModal');
   if (modal) {
     modal.style.display = 'flex';

@@ -435,8 +435,22 @@
     let currentUser = null;
     let selectedPhotoDataUrl = null;
 
+    // ⚡ 전역 팝업 모달 상호 배제 닫기 헬퍼 함수 (모달 중첩 겹침 완전 방지)
+    const closeAllModals = () => {
+      const authModal = document.getElementById('authModal');
+      const myPageModal = document.getElementById('myPageModal');
+      const adminAuthModal = document.getElementById('adminAuthModal');
+
+      if (authModal) authModal.style.display = 'none';
+      if (myPageModal) myPageModal.style.display = 'none';
+      if (adminAuthModal) adminAuthModal.style.display = 'none';
+    };
+
+    window.closeAllModals = closeAllModals;
+
     // ⚡ 마이페이지 오픈 전용 헬퍼 함수 (클릭 즉시 0초 모달 오픈 후 비동기 데이터 로드)
     const openMyPageModal = async () => {
+      closeAllModals();
       const myPageModal = document.getElementById('myPageModal');
       if (!myPageModal) return;
 
@@ -509,6 +523,7 @@
 
     // ⚡ 전역 스마트 모달 오픈 창 등록 (로그인 상태 시 마이페이지 모달, 비로그인 시 로그인 모달)
     window.openAuthModal = () => {
+      closeAllModals();
       const isUserLoggedIn = (currentUser !== null) || (localStorage.getItem('isLoggedIn') === 'true');
       if (isUserLoggedIn) {
         openMyPageModal();
