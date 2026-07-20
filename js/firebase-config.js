@@ -113,8 +113,13 @@ export async function updateUserProfile(newName, photoURL) {
         if (!auth.currentUser) throw new Error("로그인된 사용자가 없습니다.");
         const updateData = {};
         if (newName !== undefined && newName !== null) updateData.displayName = newName;
-        if (photoURL !== undefined && photoURL !== null) updateData.photoURL = photoURL;
-        await updateProfile(auth.currentUser, updateData);
+        // ⚡ Firebase Auth의 updateProfile은 photoURL 길이가 2048자 이하일 때만 지원
+        if (photoURL !== undefined && photoURL !== null && photoURL.length <= 2048) {
+            updateData.photoURL = photoURL;
+        }
+        if (Object.keys(updateData).length > 0) {
+            await updateProfile(auth.currentUser, updateData);
+        }
         return { success: true, user: auth.currentUser };
     } catch (error) {
         return { success: false, error: error.message };
