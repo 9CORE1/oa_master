@@ -6,6 +6,8 @@ import {
     signInWithEmailAndPassword,
     GoogleAuthProvider,
     signInWithPopup,
+    signInWithRedirect,
+    getRedirectResult,
     signOut,
     onAuthStateChanged,
     updateProfile
@@ -38,6 +40,15 @@ export const db = getFirestore(app);
 // Google 인증 공급업체 객체 생성
 const googleProvider = new GoogleAuthProvider();
 
+// 리다이렉트 로그인 결과 자동 감지
+getRedirectResult(auth).then((result) => {
+    if (result && result.user) {
+        console.log("구글 리다이렉트 로그인 성공:", result.user.email);
+    }
+}).catch((err) => {
+    console.warn("리다이렉트 인증 감지:", err);
+});
+
 // ----------------------------------------------------
 // 인증 관련 핵심 함수 모움
 // ----------------------------------------------------
@@ -62,7 +73,7 @@ export async function signInWithEmail(email, password) {
     }
 }
 
-// [기능 3] Google 소셜 로그인 (팝업 창)
+// [기능 3] Google 소셜 로그인 (팝업 실패 시 리다이렉트 모드 자동 전환)
 export async function signInWithGoogle() {
     try {
         const result = await signInWithPopup(auth, googleProvider);
@@ -70,6 +81,17 @@ export async function signInWithGoogle() {
         const user = result.user;
         return { success: true, user };
     } catch (error) {
+        console.warn("팝업 구글 로그인 실패, 리다이렉트 모드 폴백 시도:", error.code);
+        // 팝업 차단 또는 팝업 핸들러 오류 발생 시 화면 리다이렉트 방식으로 자동 전환
+        if (error.code === 'auth/popup-blocked' || error.code === 'auth/popup-closed-by-user' || (error.message && error.message.includes('invalid'))) {
+            try {
+                await signInWithRedirect(auth, googleProvider);
+                return { success: true, isRedirecting: true };
+            } catch (redirErr) {
+                console.error("리다이렉트 전환 오류:", redirErr);
+            }
+        }
+
         console.error("Google 로그인 실패 상세:", error.code, error.message);
         const customMsg = getAuthErrorMessage(error.code);
         const currentHost = window.location.hostname || 'file://프로토콜';
