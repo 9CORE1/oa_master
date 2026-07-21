@@ -167,7 +167,12 @@
             <input type="url" id="archiveDriveUrl" class="form-input" placeholder="예: https://drive.google.com/file/d/xxxxxxx/view?usp=sharing" onchange="handleDriveUrlEntered(this)" style="background:#fff;">
           </div>
 
-          <p class="form-helper" style="margin-top: 10px;">* 파일 업로드 시 파일명과 크기가 자동으로 감지되며, 구글 드라이브 링크 입력 시 해당 링크로 연결됩니다.</p>
+          <div style="margin-top: 12px;">
+            <label class="form-label" for="archiveFormat" style="font-size:12px; margin-bottom:4px; color:var(--neutral-700); font-weight:700;">파일 형식 (확장자)</label>
+            <input type="text" id="archiveFormat" class="form-input" placeholder="예: XLSX, ZIP, PDF, HWP (파일 선택 시 자동 감지)" style="background:#fff;">
+          </div>
+
+          <p class="form-helper" style="margin-top: 10px;">* 파일 업로드 시 파일명과 형식(확장자)이 자동으로 감지되며, 구글 드라이브 선택 시 파일 형식을 자유롭게 입력하실 수 있습니다.</p>
         </div>
       </div>
       <div class="modal-footer">
@@ -251,31 +256,31 @@
         const row = document.createElement('tr');
 
         let formatDisplay = "";
+        const fmt = (item.fileFormat || (item.fileName && item.fileName.includes('.') ? item.fileName.substring(item.fileName.lastIndexOf('.')).replace('.', '') : 'XLSX')).toUpperCase();
+
+        let icon = '<i class="far fa-file-excel" style="margin-right:5px; color:#16a34a;"></i>';
         if (item.fileDriveUrl) {
-          formatDisplay = `<span style="font-size:12px; font-weight:bold; color:#15803d; background:rgba(34,197,94,0.12); padding:3px 8px; border-radius:12px; display:inline-flex; align-items:center; gap:4px;"><i class="fab fa-google-drive"></i> 구글드라이브</span>`;
+          icon = '<i class="fab fa-google-drive" style="margin-right:5px; color:#34a853;"></i>';
+        } else if (fmt.includes('ZIP') || fmt.includes('7Z') || fmt.includes('RAR')) {
+          icon = '<i class="far fa-file-archive" style="margin-right:5px; color:#ea580c;"></i>';
+        } else if (fmt.includes('PDF')) {
+          icon = '<i class="far fa-file-pdf" style="margin-right:5px; color:#dc2626;"></i>';
+        } else if (fmt.includes('HWP') || fmt.includes('DOC')) {
+          icon = '<i class="far fa-file-word" style="margin-right:5px; color:#2563eb;"></i>';
+        }
+
+        if (item.fileDriveUrl) {
+          formatDisplay = `<span style="font-size:13px; font-weight:600; color:var(--neutral-800); font-family:var(--font-accent);">${icon}${fmt}</span>`;
         } else {
-          const fn = item.fileName || "";
-          const ext = fn.includes('.') ? fn.substring(fn.lastIndexOf('.')).toUpperCase() : '';
-          let icon = '<i class="far fa-file-excel" style="margin-right:5px; color:#16a34a;"></i>';
-          let extLabel = ext ? ext.replace('.', '') : 'FILE';
-
-          if (ext === '.ZIP' || ext === '.7Z' || ext === '.RAR') {
-            icon = '<i class="far fa-file-archive" style="margin-right:5px; color:#ea580c;"></i>';
-          } else if (ext === '.PDF') {
-            icon = '<i class="far fa-file-pdf" style="margin-right:5px; color:#dc2626;"></i>';
-          } else if (ext === '.HWP' || ext === '.HWPX' || ext === '.DOC' || ext === '.DOCX') {
-            icon = '<i class="far fa-file-word" style="margin-right:5px; color:#2563eb;"></i>';
-          }
-
-          formatDisplay = `<span style="font-size:13px; font-weight:600; color:var(--neutral-800); font-family:var(--font-accent);">${icon}${extLabel}</span>`;
+          formatDisplay = `<span style="font-size:13px; font-weight:600; color:var(--neutral-800); font-family:var(--font-accent);">${icon}${fmt}</span>`;
         }
 
         row.innerHTML = `
           <td>${index + 1}</td>
           <td>
             <div style="display:flex; align-items:center; flex-wrap:wrap; gap:6px;">
-              <span class="archive-title-cell" onclick="showArchiveDetail('${item.id}')">${item.title}</span>
               ${item.hasVideoLink ? `<span style="display:inline-flex; align-items:center; gap:4px; font-size:11px; font-weight:700; color:#6366f1; background:rgba(99,102,241,0.12); border:1px solid rgba(99,102,241,0.3); padding:2px 7px; border-radius:12px;" title="동영상 강의와 연계된 학습 자료입니다."><i class="fas fa-play-circle" style="color:#6366f1;"></i> 영상연계</span>` : ''}
+              <span class="archive-title-cell" onclick="showArchiveDetail('${item.id}')">${item.title}</span>
             </div>
             <div style="font-size:12px; color:var(--neutral-500); margin-top:4px;">${item.description}</div>
           </td>
@@ -316,6 +321,11 @@
       }
       window.detectedFileSize = sizeStr;
 
+      // Auto detect extension/format
+      const ext = file.name.includes('.') ? file.name.substring(file.name.lastIndexOf('.')).toUpperCase().replace('.', '') : 'XLSX';
+      const fmtInput = document.getElementById('archiveFormat');
+      if (fmtInput) fmtInput.value = ext;
+
       // Reset Google Drive URL if local file is selected
       const driveInput = document.getElementById('archiveDriveUrl');
       if (driveInput) driveInput.value = '';
@@ -337,6 +347,11 @@
       window.selectedArchiveFileData = null;
       window.detectedFileName = "구글드라이브_실습자료.zip";
       window.detectedFileSize = "Google Drive";
+
+      const fmtInput = document.getElementById('archiveFormat');
+      if (fmtInput && !fmtInput.value.trim()) {
+        fmtInput.value = "ZIP";
+      }
     }
 
     // 3. Open Write/Edit Modal
@@ -360,6 +375,8 @@
       if (driveUrlEl) driveUrlEl.value = '';
       const hasVideoEl = document.getElementById('archiveHasVideo');
       if (hasVideoEl) hasVideoEl.checked = false;
+      const fmtEl = document.getElementById('archiveFormat');
+      if (fmtEl) fmtEl.value = '';
 
       if (isEdit) {
         const item = window.DB.getById(STORE_KEY, id);
@@ -368,6 +385,7 @@
           document.getElementById('archiveDesc').value = item.description;
           if (driveUrlEl) driveUrlEl.value = item.fileDriveUrl || '';
           if (hasVideoEl) hasVideoEl.checked = !!item.hasVideoLink;
+          if (fmtEl) fmtEl.value = item.fileFormat || (item.fileName && item.fileName.includes('.') ? item.fileName.substring(item.fileName.lastIndexOf('.')).toUpperCase().replace('.', '') : 'XLSX');
           if (item.fileData) window.selectedArchiveFileData = item.fileData;
           window.detectedFileName = item.fileName;
           window.detectedFileSize = item.fileSize;
@@ -388,6 +406,7 @@
       const description = document.getElementById('archiveDesc').value.trim();
       const fileDriveUrl = document.getElementById('archiveDriveUrl') ? document.getElementById('archiveDriveUrl').value.trim() : '';
       const hasVideoLink = document.getElementById('archiveHasVideo') ? document.getElementById('archiveHasVideo').checked : false;
+      const fileFormat = document.getElementById('archiveFormat') ? document.getElementById('archiveFormat').value.trim().toUpperCase() : '';
 
       let existingItem = id ? window.DB.getById(STORE_KEY, id) : null;
 
@@ -413,6 +432,7 @@
         title,
         description,
         hasVideoLink,
+        fileFormat: fileFormat || (fileName && fileName.includes('.') ? fileName.substring(fileName.lastIndexOf('.')).toUpperCase().replace('.', '') : 'XLSX'),
         fileName: fileName || '실습자료.zip',
         fileSize: fileSize || '1.5 MB',
         fileDriveUrl: fileDriveUrl || (existingItem ? existingItem.fileDriveUrl : null)
@@ -431,7 +451,7 @@
 
       // Send EmailJS Notice
       const actionText = id ? "실기 자료 수정" : "실기 자료 신규 등록";
-      const emailMsg = `자료 제목: ${title}\n요구사항: ${description}\n영상연계여부: ${hasVideoLink ? '예' : '아니오'}\n파일명: ${item.fileName}\n수행자: 관리자`;
+      const emailMsg = `자료 제목: ${title}\n요구사항: ${description}\n형식: ${item.fileFormat}\n수행자: 관리자`;
 
       window.sendAdminEmailNotification(actionText, title, emailMsg)
         .then(() => {
