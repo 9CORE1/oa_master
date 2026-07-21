@@ -89,7 +89,7 @@ export async function logout() {
     }
 }
 
-// [기능 5] 로그인 상태 감지 리스너 (로컬 세션 동기화)
+// [기능 5] 로그인 상태 감지 리스너 (로컬 세션 및 Firestore 프로필 동기화)
 export function onAuthChange(callback) {
     return onAuthStateChanged(auth, (user) => {
         if (user) {
@@ -97,6 +97,15 @@ export function onAuthChange(callback) {
             localStorage.setItem('userEmail', user.email || '');
             localStorage.setItem('userDisplayName', user.displayName || (user.email ? user.email.split('@')[0] : '회원'));
             if (user.photoURL) localStorage.setItem('userPhotoURL', user.photoURL);
+
+            // Firestore에 프로필 사진 및 정보 자동 동기화
+            const providerId = (user.providerData && user.providerData.length > 0) ? user.providerData[0].providerId : 'password';
+            saveUserDataToFirestore(user.uid, {
+                email: user.email || '',
+                displayName: user.displayName || (user.email ? user.email.split('@')[0] : '회원'),
+                photoURL: user.photoURL || '',
+                provider: providerId
+            });
         } else {
             localStorage.removeItem('isLoggedIn');
             localStorage.removeItem('userEmail');
