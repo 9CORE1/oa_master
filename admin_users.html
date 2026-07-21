@@ -15,8 +15,27 @@
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 
   <style>
-    html, body {
+    html {
+      height: 100%;
       overflow-x: hidden;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    main {
+      flex: 1 0 auto;
+    }
+
+    footer {
+      margin-top: auto;
+      flex-shrink: 0;
+      background: #f8fafc;
+      border-top: 1px solid var(--border-color);
     }
 
     .content-container {
