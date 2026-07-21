@@ -382,8 +382,7 @@
                        (email === 'teacha99@gmail.com' || role === 'Host' || role === 'Manager');
 
       if (!user && !is_admin) {
-        alert('🔒 로그인 및 관리자(Host/Manager) 권한이 필요한 페이지입니다.');
-        window.location.replace('index.html?auth=required');
+        window.location.replace('index.html');
       } else if (!is_admin) {
         alert('🔒 관리자(Host/Manager) 권한이 있는 계정만 접근할 수 있습니다.');
         window.location.replace('index.html');
