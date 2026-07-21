@@ -148,21 +148,31 @@
         </div>
         <div class="form-group"
           style="background-color: var(--neutral-50); padding: 16px; border-radius: var(--radius-md); border: 1px dashed var(--neutral-300);">
-          <label class="form-label" style="display:flex; align-items:center; gap:6px;"><i class="fas fa-paperclip"
-              style="color:var(--theme-primary);"></i> 실습 파일 첨부 (업로드)</label>
-          <input type="file" id="archiveFile" class="form-input" onchange="handleFileSelected(this)"
-            style="margin-bottom: 10px; background:#fff;">
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <label class="form-label" style="display:flex; align-items:center; gap:6px; font-weight:700;">
+            <i class="fas fa-paperclip" style="color:var(--theme-primary);"></i> 실습 파일 첨부 방식 선택 (직접 업로드 또는 구글 드라이브)
+          </label>
+
+          <div style="margin-bottom: 12px;">
+            <label class="form-label" style="font-size:12px; margin-bottom:4px; color:var(--neutral-700);">방법 A: 컴퓨터 파일 직접 선택 (업로드)</label>
+            <input type="file" id="archiveFile" class="form-input" onchange="handleFileSelected(this)" style="margin-bottom: 8px; background:#fff;">
+          </div>
+
+          <div style="margin-bottom: 12px;">
+            <label class="form-label" style="font-size:12px; margin-bottom:4px; color:var(--neutral-700);"><i class="fab fa-google-drive" style="color:#34a853;"></i> 방법 B: 구글 드라이브 (또는 외부 대용량 공유 URL)</label>
+            <input type="url" id="archiveDriveUrl" class="form-input" placeholder="예: https://drive.google.com/file/d/xxxxxxx/view?usp=sharing" onchange="handleDriveUrlEntered(this)" style="background:#fff;">
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px;">
             <div>
-              <label class="form-label" style="font-size:12px; margin-bottom:4px;">파일명</label>
-              <input type="text" id="archiveFileName" class="form-input" readonly placeholder="파일이 선택되면 자동 입력됩니다.">
+              <label class="form-label" style="font-size:12px; margin-bottom:4px;">표시 파일명 *</label>
+              <input type="text" id="archiveFileName" class="form-input" placeholder="예: 2026_컴활1급_실기_엑셀예제.zip">
             </div>
             <div>
-              <label class="form-label" style="font-size:12px; margin-bottom:4px;">파일 크기</label>
-              <input type="text" id="archiveFileSize" class="form-input" readonly placeholder="자동 계산">
+              <label class="form-label" style="font-size:12px; margin-bottom:4px;">표시 파일 크기</label>
+              <input type="text" id="archiveFileSize" class="form-input" placeholder="예: 15.2 MB (또는 구글드라이브)">
             </div>
           </div>
-          <p class="form-helper" style="margin-top: 8px;">* 선택한 파일의 이름과 용량이 메타데이터로 추출되어 리스트에 등록됩니다.</p>
+          <p class="form-helper" style="margin-top: 8px;">* 구글 드라이브 링크 입력 시 사용자가 [다운로드] 클릭 시 해당 공유 링크로 바로 이동합니다.</p>
         </div>
       </div>
       <div class="modal-footer">
@@ -242,13 +252,14 @@
 
       data.forEach((item, index) => {
         const row = document.createElement('tr');
+        const fileIcon = item.fileDriveUrl ? '<i class="fab fa-google-drive" style="margin-right:6px; color:#34a853;"></i>' : '<i class="far fa-file-excel" style="margin-right:6px; color:var(--neutral-400);"></i>';
         row.innerHTML = `
           <td>${index + 1}</td>
           <td>
             <div class="archive-title-cell" onclick="showArchiveDetail('${item.id}')">${item.title}</div>
             <div style="font-size:12px; color:var(--neutral-500); margin-top:4px;">${item.description}</div>
           </td>
-          <td><i class="far fa-file-excel" style="margin-right:6px; color:var(--neutral-400);"></i>${item.fileName}</td>
+          <td>${fileIcon}${item.fileName}</td>
           <td style="font-family:var(--font-accent); font-size:13px;">${item.fileSize}</td>
           <td style="font-family:var(--font-accent); font-size:13px;">${item.date}</td>
           <td class="admin-only" style="${is_admin ? '' : 'display:none;'}">
@@ -260,7 +271,7 @@
             </div>
           </td>
           <td style="text-align: center;">
-            <a href="#" class="download-link" onclick="downloadVirtualFile(event, '${item.fileName}', '${item.title}')">
+            <a href="#" class="download-link" onclick="downloadVirtualFile(event, '${item.fileName}', '${item.title}', '${item.id}')">
               <i class="fas fa-download"></i> 다운로드
             </a>
           </td>
@@ -285,6 +296,36 @@
         sizeStr = (file.size / 1024).toFixed(0) + " KB";
       }
       document.getElementById('archiveFileSize').value = sizeStr;
+
+      // Reset Google Drive URL if local file is selected
+      const driveInput = document.getElementById('archiveDriveUrl');
+      if (driveInput) driveInput.value = '';
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        window.selectedArchiveFileData = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function handleDriveUrlEntered(input) {
+      const driveUrl = input.value.trim();
+      if (!driveUrl) return;
+
+      // Reset local file input
+      const fileInput = document.getElementById('archiveFile');
+      if (fileInput) fileInput.value = '';
+      window.selectedArchiveFileData = null;
+
+      const fnInput = document.getElementById('archiveFileName');
+      const fsInput = document.getElementById('archiveFileSize');
+
+      if (!fnInput.value) {
+        fnInput.value = "구글드라이브_실습자료.zip";
+      }
+      if (!fsInput.value) {
+        fsInput.value = "Google Drive";
+      }
     }
 
     // 3. Open Write/Edit Modal
@@ -297,10 +338,13 @@
         '<i class="fas fa-file-upload"></i> 신규 실기 자료 등록';
 
       // Reset form
+      window.selectedArchiveFileData = null;
       document.getElementById('archiveId').value = id || '';
       document.getElementById('archiveTitle').value = '';
       document.getElementById('archiveDesc').value = '';
       document.getElementById('archiveFile').value = '';
+      const driveUrlEl = document.getElementById('archiveDriveUrl');
+      if (driveUrlEl) driveUrlEl.value = '';
       document.getElementById('archiveFileName').value = '';
       document.getElementById('archiveFileSize').value = '';
 
@@ -311,6 +355,8 @@
           document.getElementById('archiveDesc').value = item.description;
           document.getElementById('archiveFileName').value = item.fileName;
           document.getElementById('archiveFileSize').value = item.fileSize;
+          if (driveUrlEl) driveUrlEl.value = item.fileDriveUrl || '';
+          if (item.fileData) window.selectedArchiveFileData = item.fileData;
         }
       }
 
@@ -324,22 +370,28 @@
     // 4. Form Submit
     function submitArchiveForm() {
       const id = document.getElementById('archiveId').value;
-      const title = document.getElementById('archiveTitle').value;
-      const description = document.getElementById('archiveDesc').value;
-      const fileName = document.getElementById('archiveFileName').value;
-      const fileSize = document.getElementById('archiveFileSize').value;
+      const title = document.getElementById('archiveTitle').value.trim();
+      const description = document.getElementById('archiveDesc').value.trim();
+      const fileName = document.getElementById('archiveFileName').value.trim();
+      const fileSize = document.getElementById('archiveFileSize').value.trim();
+      const fileDriveUrl = document.getElementById('archiveDriveUrl') ? document.getElementById('archiveDriveUrl').value.trim() : '';
 
-      if (!title || !description || !fileName) {
-        showToast('모든 필수 항목을 입력하거나 파일을 선택해주세요.', 'error');
+      if (!title || !description || (!fileName && !fileDriveUrl)) {
+        showToast('자료 제목, 설명 및 실습 파일(또는 구글 드라이브 링크)을 입력해주세요.', 'error');
         return;
       }
 
       const item = {
         title,
         description,
-        fileName,
-        fileSize: fileSize || '1.5 MB'
+        fileName: fileName || (fileDriveUrl ? '구글드라이브_실습자료.zip' : '실습자료.zip'),
+        fileSize: fileSize || (fileDriveUrl ? 'Google Drive' : '1.5 MB'),
+        fileDriveUrl: fileDriveUrl || null
       };
+
+      if (window.selectedArchiveFileData) {
+        item.fileData = window.selectedArchiveFileData;
+      }
 
       if (id) item.id = id;
 
@@ -348,7 +400,7 @@
 
       // Send EmailJS Notice
       const actionText = id ? "실기 자료 수정" : "실기 자료 신규 등록";
-      const emailMsg = `자료 제목: ${title}\n요구사항: ${description}\n파일명: ${fileName} (${fileSize || 'Unknown'})\n수행자: 관리자`;
+      const emailMsg = `자료 제목: ${title}\n요구사항: ${description}\n파일명: ${item.fileName} (${item.fileSize})\n수행자: 관리자`;
 
       window.sendAdminEmailNotification(actionText, title, emailMsg)
         .then(() => {
@@ -376,27 +428,48 @@
         });
     }
 
-    // 6. Virtual File Download Simulation
-    function downloadVirtualFile(event, fileName, fileTitle) {
+    // 6. File Download Processing
+    function downloadVirtualFile(event, fileName, fileTitle, itemId) {
       event.preventDefault();
 
-      // Create a dummy text file contents with brand metadata
-      const dummyContent = `==================================================\nOA MASTER - 쉬운 기능도 뭉치면 통한다!\n==================================================\n\n자료명: ${fileTitle}\n파일명: ${fileName}\n다운로드 일시: ${new Date().toLocaleString()}\n\n※ 본 파일은 실무/실습용 원본 예제 가상 다운로드 파일입니다.\n엑셀 및 데이터베이스 실전 합격을 위해 본 양식에 맞춰 연습하십시오.`;
+      const item = itemId ? window.DB.getById(STORE_KEY, itemId) : null;
+      if (item && item.fileDriveUrl) {
+        window.open(item.fileDriveUrl, '_blank');
+        showToast('🔗 구글 드라이브 공유 링크로 이동합니다.', 'info');
+        return;
+      }
 
-      const blob = new Blob([dummyContent], { type: 'text/plain;charset=utf-8' });
+      if (item && item.fileData) {
+        const a = document.createElement('a');
+        a.href = item.fileData;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        showToast(`${fileName} 파일 다운로드가 완료되었습니다.`, 'success');
+        return;
+      }
+
+      const ext = fileName.includes('.') ? fileName.substring(fileName.lastIndexOf('.')).toLowerCase() : '.zip';
+      let mimeType = 'application/octet-stream';
+      if (ext === '.zip') mimeType = 'application/zip';
+      else if (ext === '.pdf') mimeType = 'application/pdf';
+
+      const dummyContent = `==================================================\nOA MASTER - ${fileTitle}\n==================================================\n\n파일명: ${fileName}\n다운로드 일시: ${new Date().toLocaleString()}\n\n※ 본 파일은 OA MASTER에서 제공하는 실습 자료 샘플입니다.`;
+
+      const blob = new Blob([dummyContent], { type: mimeType });
       const downloadUrl = URL.createObjectURL(blob);
 
       const a = document.createElement('a');
       a.href = downloadUrl;
-      const downloadName = fileName.substring(0, fileName.lastIndexOf('.')) + "_practical_downloaded.txt";
-      a.download = downloadName;
+      a.download = fileName;
 
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
-      URL.revokeObjectURL(downloadUrl);
+      setTimeout(() => URL.revokeObjectURL(downloadUrl), 1000);
 
-      showToast(`${fileName} 실습 데이터가 가상 다운로드되었습니다.`, 'success');
+      showToast(`${fileName} 파일 다운로드가 완료되었습니다.`, 'success');
     }
 
     // 7. Show Detail Modal View (for general users)
