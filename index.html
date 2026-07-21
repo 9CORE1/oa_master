@@ -968,8 +968,8 @@
                 alert(`🎉 ${res.user.displayName || res.user.email}님 환영합니다!`);
               }
             } else {
-              if (res.error && !res.error.includes('auth/cancelled-popup-request') && !res.error.includes('popup-closed-by-user')) {
-                alert('Google 로그인 실패: ' + res.error);
+              if (!res.isCancelled && res.error && !res.error.includes('auth/cancelled-popup-request') && !res.error.includes('popup-closed-by-user')) {
+                alert('Google 로그인 안내: ' + res.error);
               }
             }
           } catch (err) {

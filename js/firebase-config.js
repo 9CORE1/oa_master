@@ -73,7 +73,7 @@ export async function signInWithEmail(email, password) {
     }
 }
 
-// [기능 3] Google 소셜 로그인 (팝업 실패 시 리다이렉트 모드 자동 전환)
+// [기능 3] Google 소셜 로그인 (팝업 창)
 export async function signInWithGoogle() {
     try {
         const result = await signInWithPopup(auth, googleProvider);
@@ -81,9 +81,15 @@ export async function signInWithGoogle() {
         const user = result.user;
         return { success: true, user };
     } catch (error) {
-        console.warn("팝업 구글 로그인 실패, 리다이렉트 모드 폴백 시도:", error.code);
-        // 팝업 차단 또는 팝업 핸들러 오류 발생 시 화면 리다이렉트 방식으로 자동 전환
-        if (error.code === 'auth/popup-blocked' || error.code === 'auth/popup-closed-by-user' || (error.message && error.message.includes('invalid'))) {
+        console.warn("Google 로그인 처리 상태:", error.code, error.message);
+
+        // 팝업창을 닫았거나 이중 클릭으로 취소된 경우 메인에 에러를 노출하지 않음
+        if (error.code === 'auth/popup-closed-by-user' || error.code === 'auth/cancelled-popup-request') {
+            return { success: false, isCancelled: true };
+        }
+
+        // 브라우저에 의해 팝업이 차단된 경우만 리다이렉트로 조용히 전환
+        if (error.code === 'auth/popup-blocked') {
             try {
                 await signInWithRedirect(auth, googleProvider);
                 return { success: true, isRedirecting: true };
@@ -98,7 +104,7 @@ export async function signInWithGoogle() {
         const domainInfo = `(현재 접속 주소: ${currentHost})`;
         const fullErr = customMsg
           ? `${customMsg}\n${domainInfo}`
-          : `[오류 코드: ${error.code || '알수없음'}]\n${error.message || 'The requested action is invalid.'}\n${domainInfo}`;
+          : `[오류 코드: ${error.code || '알수없음'}]\n${error.message || '로그인 처리 중 오류가 발생했습니다.'}\n${domainInfo}`;
         return { success: false, error: fullErr };
     }
 }
