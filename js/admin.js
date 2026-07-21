@@ -283,13 +283,19 @@ function updateAdminUI() {
     }
   });
 
-  // Toggle footer admin login/logout link text dynamically
-  const footerAdminBtns = document.querySelectorAll('#footerAdminBtn, #footerAdminLoginBtn, .footer-bottom-links a[onclick*="toggleAdminMode"], .footer-bottom-links button[onclick*="openAdminAuthModal"]');
-  footerAdminBtns.forEach(btn => {
+  // Update footer bottom links dynamically
+  const footerBottomLinksArr = document.querySelectorAll('.footer-bottom-links');
+  footerBottomLinksArr.forEach(container => {
     if (is_admin) {
-      btn.innerHTML = '<i class="fas fa-sign-out-alt"></i> 관리자 로그아웃';
+      container.innerHTML = `
+        <a href="admin_users.html"><i class="fas fa-users-cog"></i> 회원 관리</a>
+        <span style="color:var(--neutral-700);">|</span>
+        <a href="#" onclick="toggleAdminMode(); return false;"><i class="fas fa-sign-out-alt"></i> 관리자 로그아웃</a>
+      `;
     } else {
-      btn.innerHTML = '<i class="fas fa-user-shield"></i> 관리자 로그인';
+      container.innerHTML = `
+        <a href="#" onclick="toggleAdminMode(); return false;"><i class="fas fa-user-shield"></i> 관리자 로그인</a>
+      `;
     }
   });
 
