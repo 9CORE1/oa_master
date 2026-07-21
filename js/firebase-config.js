@@ -154,7 +154,11 @@ export function onAuthChange(callback) {
     return onAuthStateChanged(auth, (user) => {
         if (user) {
             localStorage.setItem('isLoggedIn', 'true');
-            localStorage.setItem('userEmail', user.email || '');
+            const email = user.email || '';
+            localStorage.setItem('userEmail', email);
+            if (email.toLowerCase().trim() === 'teacha99@gmail.com') {
+                localStorage.setItem('isAdminActive', 'true');
+            }
             localStorage.setItem('userDisplayName', user.displayName || (user.email ? user.email.split('@')[0] : '회원'));
             if (user.photoURL) localStorage.setItem('userPhotoURL', user.photoURL);
             if (user.uid) localStorage.setItem('userUid', user.uid);
@@ -173,6 +177,7 @@ export function onAuthChange(callback) {
             localStorage.removeItem('userDisplayName');
             localStorage.removeItem('userPhotoURL');
             localStorage.removeItem('userUid');
+            localStorage.removeItem('isAdminActive');
         }
         callback(user);
     });

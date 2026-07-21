@@ -2,6 +2,10 @@
 
 // Check login status
 function isAdmin() {
+  const userEmail = (localStorage.getItem('userEmail') || '').toLowerCase().trim();
+  if (userEmail === 'teacha99@gmail.com') {
+    return true;
+  }
   return localStorage.getItem('isAdminActive') === 'true';
 }
 
@@ -334,6 +338,7 @@ async function handleGlobalLogout() {
   } catch (err) {
     console.error('Logout error:', err);
   } finally {
+    localStorage.removeItem('isAdminActive');
     window.currentUser = null;
     const myPageModal = document.getElementById('myPageModal');
     if (myPageModal) myPageModal.style.display = 'none';

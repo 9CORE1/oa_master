@@ -676,10 +676,14 @@
     if (localStorage.getItem('isLoggedIn') === 'true') {
       const cachedName = localStorage.getItem('userDisplayName') || '회원';
       const cachedPhoto = localStorage.getItem('userPhotoURL') || null;
+      const cachedEmail = (localStorage.getItem('userEmail') || '').toLowerCase().trim();
+      if (cachedEmail === 'teacha99@gmail.com') {
+        localStorage.setItem('isAdminActive', 'true');
+      }
       renderHeaderUserNav({
         displayName: cachedName,
         photoURL: cachedPhoto,
-        email: localStorage.getItem('userEmail') || ''
+        email: cachedEmail
       });
     }
 
