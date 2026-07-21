@@ -226,6 +226,19 @@ function updateAdminUI() {
         adminBtn.parentNode.insertBefore(githubBtn, adminBtn);
       }
       
+      // Inject Admin Users Manager button into CTA area
+      if (!document.getElementById('adminUsersBtn')) {
+        const usersBtn = document.createElement('button');
+        usersBtn.id = 'adminUsersBtn';
+        usersBtn.className = 'btn-admin-mode';
+        usersBtn.style.background = 'rgba(var(--theme-primary-rgb), 0.15)';
+        usersBtn.style.color = 'var(--theme-primary)';
+        usersBtn.style.fontWeight = '700';
+        usersBtn.innerHTML = '<i class="fas fa-users-cog"></i> 회원 관리';
+        usersBtn.onclick = function() { window.location.href = 'admin_users.html'; };
+        adminBtn.parentNode.insertBefore(usersBtn, adminBtn);
+      }
+
       // Inject JSON Update button into CTA area
       if (!document.getElementById('jsonUpdateBtn')) {
         const jsonBtn = document.createElement('button');
@@ -240,6 +253,9 @@ function updateAdminUI() {
     } else {
       adminBtn.classList.remove('active');
       adminBtn.innerHTML = '<i class="fas fa-lock"></i> 관리자 모드';
+
+      const usersBtn = document.getElementById('adminUsersBtn');
+      if (usersBtn) usersBtn.remove();
       
       const githubBtn = document.getElementById('githubSettingsBtn');
       if (githubBtn) githubBtn.remove();

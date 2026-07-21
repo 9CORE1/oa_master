@@ -187,3 +187,20 @@ function getAuthErrorMessage(errorCode) {
         default: return '오류가 발생했습니다. 다시 시도해 주세요.';
     }
 }
+
+// ----------------------------------------------------
+// Global Window Binding for Easy Access
+// ----------------------------------------------------
+window.FirebaseApp = {
+    auth,
+    db,
+    signUpWithEmail,
+    signInWithEmail,
+    signInWithGoogle,
+    logout,
+    onAuthChange,
+    updateUserProfile,
+    saveUserDataToFirestore,
+    getUserDataFromFirestore,
+    getAllUsersFromFirestore
+};
