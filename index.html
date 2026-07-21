@@ -283,6 +283,9 @@
         style="width:100%; padding:10px; background:#fff; border:1px solid #ddd; border-radius:6px; cursor:pointer; font-weight:bold; display:flex; align-items:center; justify-content:center; gap:8px;">
         <i class="fab fa-google" style="color:#ea4335;"></i> Google 계정으로 계속하기
       </button>
+      <div style="margin-top:6px; text-align:center;">
+        <a href="#" onclick="if(window.FirebaseApp && window.FirebaseApp.signInWithGoogleRedirect){window.FirebaseApp.signInWithGoogleRedirect();} return false;" style="font-size:11px; color:#64748b; text-decoration:underline;" title="팝업 차단 환경용 구글 전면 화면 이동 로그인">구글 직접 화면 이동 로그인 (팝업 우회)</a>
+      </div>
 
       <!-- 모드 전환 -->
       <div style="margin-top:15px; font-size:14px;">

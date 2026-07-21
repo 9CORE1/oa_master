@@ -7,6 +7,7 @@ import {
     GoogleAuthProvider,
     signInWithPopup,
     signInWithRedirect,
+    signInWithCredential,
     getRedirectResult,
     signOut,
     onAuthStateChanged,
@@ -106,6 +107,29 @@ export async function signInWithGoogle() {
           ? `${customMsg}\n${domainInfo}`
           : `[오류 코드: ${error.code || '알수없음'}]\n${error.message || '로그인 처리 중 오류가 발생했습니다.'}\n${domainInfo}`;
         return { success: false, error: fullErr };
+    }
+}
+
+// [기능 3-2] 구글 화면 직접 리다이렉트 로그인 (팝업 우회)
+export async function signInWithGoogleRedirect() {
+    try {
+        await signInWithRedirect(auth, googleProvider);
+        return { success: true, isRedirecting: true };
+    } catch (error) {
+        console.error("Google 리다이렉트 로그인 실패:", error);
+        return { success: false, error: error.message };
+    }
+}
+
+// [기능 3-3] Google ID 토큰 직접 인증 (GIS SDK 연동용)
+export async function signInWithGoogleToken(idToken) {
+    try {
+        const credential = GoogleAuthProvider.credential(idToken);
+        const result = await signInWithCredential(auth, credential);
+        return { success: true, user: result.user };
+    } catch (error) {
+        console.error("Google ID 토큰 인증 실패:", error);
+        return { success: false, error: error.message };
     }
 }
 
@@ -243,6 +267,8 @@ window.FirebaseApp = {
     signUpWithEmail,
     signInWithEmail,
     signInWithGoogle,
+    signInWithGoogleRedirect,
+    signInWithGoogleToken,
     logout,
     onAuthChange,
     updateUserProfile,
