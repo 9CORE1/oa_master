@@ -416,10 +416,11 @@ main {
 .page-header {
   margin-bottom: 40px;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
   border-bottom: var(--border-width) solid var(--border-color);
   padding-bottom: 20px;
+  gap: 16px;
 }
 
 .page-title-group h2 {
