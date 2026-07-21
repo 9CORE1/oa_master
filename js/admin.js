@@ -289,9 +289,6 @@ function renderHeaderUserNavUniversal(user) {
         <span style="font-size:13px; font-weight:bold; color:#c2410c; display:inline-flex; align-items:center; gap:5px;">
           <i class="fas fa-user-shield" style="color:#ea580c;"></i> 관리자모드
         </span>
-        <button id="headerQuickAddBtn" onclick="if(window.openQuickAddModal){window.openQuickAddModal();} return false;" style="background:#16a34a; color:#fff; border:none; padding:5px 12px; border-radius:16px; font-size:12px; font-weight:bold; cursor:pointer; transition:opacity 0.2s;" title="자료실, 영상보기, 추천사이트 콘텐츠 추가">
-          <i class="fas fa-plus-circle"></i> 콘텐츠 추가
-        </button>
         <button id="headerJsonUpdateBtn" onclick="if(window.updateJSONData){window.updateJSONData();} return false;" style="background:#0284c7; color:#fff; border:none; padding:5px 12px; border-radius:16px; font-size:12px; font-weight:bold; cursor:pointer; transition:opacity 0.2s;" title="수정한 데이터를 GitHub 서버 소스코드로 자동 커밋 및 업데이트">
           <i class="fas fa-file-export"></i> JSON 업데이트
         </button>
