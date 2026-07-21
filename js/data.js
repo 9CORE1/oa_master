@@ -72,6 +72,18 @@ const DEFAULT_PRACTICAL_ARCHIVE = [
     "author": "관리자",
     "fileDriveUrl": "https://drive.google.com/file/d/1xi-FujeHiocGmceKpUdNZtwpuxTerkzs/view?usp=sharing",
     "hasVideoLink": true
+  },
+  {
+    "title": "컴활2급 기출문제풀이(1)",
+    "description": "컴활2급 기출문제풀이(1)-기본작업\n컴활2급 기출문제풀이(1)-계산작업①\n컴활2급 기출문제풀이(1)-계산작업②\n컴활2급 기출문제풀이(1)-분석작업\n컴활2급 기출문제풀이(1)-기타작업 中 매크로\n컴활2급 기출문제풀이(1)-기타작업 中 차트",
+    "hasVideoLink": true,
+    "fileFormat": "ZIP",
+    "fileName": "구글드라이브_실습자료.zip",
+    "fileSize": "Google Drive",
+    "fileDriveUrl": "https://drive.google.com/file/d/1Pa4Gh9QazNPGjI10nERKCsotB5EhnadS/view?usp=sharing",
+    "id": "pr-1784607773493",
+    "date": "2026-07-21",
+    "author": "관리자"
   }
 ];
 
