@@ -207,47 +207,47 @@ function verifyAdminCode() {
 
 // Update UI elements based on current admin state
 function updateAdminUI() {
-  const adminBtn = document.getElementById('adminModeBtn');
-  if (!adminBtn) return;
-  
   const is_admin = isAdmin();
-  
-  if (is_admin) {
-    adminBtn.classList.add('active');
-    adminBtn.innerHTML = '<i class="fas fa-lock-open"></i> 관리자 해제';
-    
-    // Inject GitHub Settings button into CTA area
-    if (!document.getElementById('githubSettingsBtn')) {
-      const githubBtn = document.createElement('button');
-      githubBtn.id = 'githubSettingsBtn';
-      githubBtn.className = 'btn-admin-mode';
-      githubBtn.style.background = 'rgba(var(--theme-primary-rgb), 0.1)';
-      githubBtn.style.color = 'var(--theme-primary)';
-      githubBtn.innerHTML = '<i class="fab fa-github"></i> GitHub 설정';
-      githubBtn.onclick = showGithubSettingsModal;
-      adminBtn.parentNode.insertBefore(githubBtn, adminBtn);
+
+  const adminBtn = document.getElementById('adminModeBtn');
+  if (adminBtn) {
+    if (is_admin) {
+      adminBtn.classList.add('active');
+      adminBtn.innerHTML = '<i class="fas fa-lock-open"></i> 관리자 해제';
+      
+      // Inject GitHub Settings button into CTA area
+      if (!document.getElementById('githubSettingsBtn')) {
+        const githubBtn = document.createElement('button');
+        githubBtn.id = 'githubSettingsBtn';
+        githubBtn.className = 'btn-admin-mode';
+        githubBtn.style.background = 'rgba(var(--theme-primary-rgb), 0.1)';
+        githubBtn.style.color = 'var(--theme-primary)';
+        githubBtn.innerHTML = '<i class="fab fa-github"></i> GitHub 설정';
+        githubBtn.onclick = showGithubSettingsModal;
+        adminBtn.parentNode.insertBefore(githubBtn, adminBtn);
+      }
+      
+      // Inject JSON Update button into CTA area
+      if (!document.getElementById('jsonUpdateBtn')) {
+        const jsonBtn = document.createElement('button');
+        jsonBtn.id = 'jsonUpdateBtn';
+        jsonBtn.className = 'btn-admin-mode';
+        jsonBtn.style.background = 'rgba(var(--theme-primary-rgb), 0.1)';
+        jsonBtn.style.color = 'var(--theme-primary)';
+        jsonBtn.innerHTML = '<i class="fas fa-file-export"></i> JSON 업데이트';
+        jsonBtn.onclick = updateJSONData;
+        adminBtn.parentNode.insertBefore(jsonBtn, adminBtn);
+      }
+    } else {
+      adminBtn.classList.remove('active');
+      adminBtn.innerHTML = '<i class="fas fa-lock"></i> 관리자 모드';
+      
+      const githubBtn = document.getElementById('githubSettingsBtn');
+      if (githubBtn) githubBtn.remove();
+      
+      const jsonBtn = document.getElementById('jsonUpdateBtn');
+      if (jsonBtn) jsonBtn.remove();
     }
-    
-    // Inject JSON Update button into CTA area
-    if (!document.getElementById('jsonUpdateBtn')) {
-      const jsonBtn = document.createElement('button');
-      jsonBtn.id = 'jsonUpdateBtn';
-      jsonBtn.className = 'btn-admin-mode';
-      jsonBtn.style.background = 'rgba(var(--theme-primary-rgb), 0.1)';
-      jsonBtn.style.color = 'var(--theme-primary)';
-      jsonBtn.innerHTML = '<i class="fas fa-file-export"></i> JSON 업데이트';
-      jsonBtn.onclick = updateJSONData;
-      adminBtn.parentNode.insertBefore(jsonBtn, adminBtn);
-    }
-  } else {
-    adminBtn.classList.remove('active');
-    adminBtn.innerHTML = '<i class="fas fa-lock"></i> 관리자 모드';
-    
-    const githubBtn = document.getElementById('githubSettingsBtn');
-    if (githubBtn) githubBtn.remove();
-    
-    const jsonBtn = document.getElementById('jsonUpdateBtn');
-    if (jsonBtn) jsonBtn.remove();
   }
   
   // Toggle visibility of admin-only content across the page
@@ -268,10 +268,11 @@ function updateAdminUI() {
     }
   });
 
+  const activeUser = window.currentUser || null;
   if (window.renderHeaderUserNav) {
-    window.renderHeaderUserNav(null);
+    window.renderHeaderUserNav(activeUser);
   } else {
-    renderHeaderUserNavUniversal(null);
+    renderHeaderUserNavUniversal(activeUser);
   }
 }
 
@@ -281,6 +282,7 @@ function renderHeaderUserNavUniversal(user) {
   if (!userNav) return;
 
   const is_admin = isAdmin();
+  const activeUser = user || window.currentUser || null;
 
   if (is_admin) {
     userNav.innerHTML = `
@@ -305,9 +307,9 @@ function renderHeaderUserNavUniversal(user) {
     return;
   }
 
-  if (user) {
-    const displayName = user.displayName || (user.email ? user.email.split('@')[0] : '회원');
-    const photoUrl = (user && user.photoURL) || localStorage.getItem('userPhotoURL') || null;
+  if (activeUser) {
+    const displayName = activeUser.displayName || (activeUser.email ? activeUser.email.split('@')[0] : '회원');
+    const photoUrl = (activeUser && activeUser.photoURL) || localStorage.getItem('userPhotoURL') || null;
     const avatarIcon = photoUrl
       ? `<img src="${photoUrl}" style="width:24px; height:24px; border-radius:50%; object-fit:cover; flex-shrink:0;">`
       : `<i class="fas fa-user-circle" style="color:var(--theme-written); font-size:18px;"></i>`;
@@ -323,7 +325,7 @@ function renderHeaderUserNavUniversal(user) {
     `;
   } else {
     userNav.innerHTML = `
-      <button id="openAuthBtn" class="btn-admin-mode" onclick="if(window.openAuthModal){window.openAuthModal();}else{window.location.href='index.html?auth=required';} return false;" style="background:var(--theme-written); color:#fff; border:none; padding:6px 14px; border-radius:6px; cursor:pointer; font-weight:600;"><i class="fas fa-user"></i> 로그인 / 회원가입</button>
+      <button id="openAuthBtn" class="btn-admin-mode" onclick="if(document.getElementById('authModal')){document.getElementById('authModal').style.display='flex';}else if(window.openAuthModal){window.openAuthModal();}else{window.location.href='index.html?auth=required';} return false;" style="background:var(--theme-written); color:#fff; border:none; padding:6px 14px; border-radius:6px; cursor:pointer; font-weight:600;"><i class="fas fa-user"></i> 로그인 / 회원가입</button>
     `;
   }
 }
