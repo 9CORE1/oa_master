@@ -53,6 +53,11 @@ function toggleAdminMode(e) {
     if (window.showToast) window.showToast('관리자 모드가 해제되었습니다.', 'info');
     alert('🔓 관리자 모드가 성공적으로 해제(로그아웃)되었습니다.');
     updateAdminUI();
+
+    // 회원 관리 페이지(admin_users.html)에서 관리자 로그아웃 시 일반 메인 페이지로 즉시 이동
+    if (window.location.pathname.includes('admin_users.html') || window.location.href.includes('admin_users.html')) {
+      window.location.href = 'index.html';
+    }
   } else {
     openAdminAuthModalDirectly();
   }
@@ -262,6 +267,11 @@ function updateAdminUI() {
       
       const jsonBtn = document.getElementById('jsonUpdateBtn');
       if (jsonBtn) jsonBtn.remove();
+
+      // 회원 관리 페이지에서 로그아웃 시 일반 메인 페이지로 자동 이동
+      if (window.location.pathname.includes('admin_users.html') || window.location.href.includes('admin_users.html')) {
+        window.location.href = 'index.html';
+      }
     }
   }
   

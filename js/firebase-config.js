@@ -70,8 +70,9 @@ export async function signInWithGoogle() {
         const user = result.user;
         return { success: true, user };
     } catch (error) {
-        console.error("Google 로그인 실패:", error);
-        return { success: false, error: "Google 로그인 처리 중 오류가 발생했습니다." };
+        console.error("Google 로그인 실패 상세:", error.code, error.message);
+        const customMsg = getAuthErrorMessage(error.code);
+        return { success: false, error: customMsg || error.message || "Google 로그인 처리 중 오류가 발생했습니다." };
     }
 }
 
@@ -193,7 +194,10 @@ function getAuthErrorMessage(errorCode) {
         case 'auth/user-not-found':
         case 'auth/wrong-password':
         case 'auth/invalid-credential': return '이메일 또는 비밀번호가 올바르지 않습니다.';
-        default: return '오류가 발생했습니다. 다시 시도해 주세요.';
+        case 'auth/unauthorized-domain': return 'Firebase 콘솔에 승인되지 않은 도메인(IP/Host)입니다. Firebase 콘솔 > Authentication > Settings > Authorized domains 에 접속 주소를 추가해 주세요.';
+        case 'auth/operation-not-allowed': return 'Firebase 콘솔에서 Google 로그인 제공업체(Provider)가 활성화되지 않았습니다.';
+        case 'auth/popup-closed-by-user': return 'Google 로그인 팝업 창이 닫혔습니다.';
+        default: return null;
     }
 }
 
