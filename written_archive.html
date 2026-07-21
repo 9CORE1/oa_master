@@ -95,10 +95,18 @@
           <h2><i class="fas fa-folder-open"></i> 필기과정 자료실</h2>
           <p>사무자동화 및 컴퓨터활용능력 필기 합격을 위한 필수 핵심 자료 요약집 및 기출문제 보관소입니다.</p>
         </div>
-        <button class="btn btn-primary admin-only" id="btnNewArchive" onclick="openArchiveModal()"
-          style="display: none;">
-          <i class="fas fa-plus"></i> 새 자료 등록
-        </button>
+        <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+          <!-- Grade Filter Buttons -->
+          <div class="filter-group">
+            <button class="filter-btn active" onclick="setArchiveFilter('all')" id="filter-all">전체</button>
+            <button class="filter-btn" onclick="setArchiveFilter('1급')" id="filter-1급">1급</button>
+            <button class="filter-btn" onclick="setArchiveFilter('2급')" id="filter-2급">2급</button>
+          </div>
+          <button class="btn btn-primary admin-only" id="btnNewArchive" onclick="openArchiveModal()"
+            style="display: none;">
+            <i class="fas fa-plus"></i> 새 자료 등록
+          </button>
+        </div>
       </div>
 
       <!-- Table View of Archives -->
@@ -124,6 +132,7 @@
           <i class="fas fa-file-archive"></i>
           <p>등록된 필기 자료가 없습니다.</p>
         </div>
+        <div class="pagination-container" id="paginationContainer"></div>
       </div>
     </div>
   </main>
@@ -194,7 +203,7 @@
   </div>
 
   <!-- Footer -->
-  <footer>
+  <footer class="footer">
     <div class="footer-container">
       <div class="footer-top">
         <div class="footer-info">
@@ -240,6 +249,9 @@
   <!-- Page Specific Script -->
   <script>
     const STORE_KEY = "written_archive";
+    let currentGradeFilter = 'all';
+    let currentPage = 1;
+    const ITEMS_PER_PAGE = 5;
 
     document.addEventListener('DOMContentLoaded', () => {
       renderArchiveTable();
@@ -248,22 +260,52 @@
       window.addEventListener('adminStateChanged', renderArchiveTable);
     });
 
+    function setArchiveFilter(grade) {
+      currentGradeFilter = grade;
+      currentPage = 1;
+
+      document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+      const activeBtn = document.getElementById(`filter-${grade}`);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      renderArchiveTable();
+    }
+
     // 1. Render data to the table
     function renderArchiveTable() {
-      const data = window.DB.getAll(STORE_KEY);
+      const allData = window.DB.getAll(STORE_KEY);
       const tbody = document.getElementById('archiveTableBody');
       const emptyState = document.getElementById('emptyState');
+      const paginationContainer = document.getElementById('paginationContainer');
       const is_admin = window.isAdmin();
+
+      // Filter by currentGradeFilter
+      const data = allData.filter(item => {
+        if (currentGradeFilter === 'all') return true;
+        const itemGrade = item.grade || (item.title && item.title.includes('2급') ? '2급' : (item.title && item.title.includes('공단') ? '공통' : '1급'));
+        if (itemGrade === '공통') return true;
+        return itemGrade === currentGradeFilter;
+      });
 
       tbody.innerHTML = '';
 
       if (data.length === 0) {
         emptyState.style.display = 'block';
+        if (paginationContainer) paginationContainer.innerHTML = '';
         return;
       }
       emptyState.style.display = 'none';
 
-      data.forEach((item, index) => {
+      // Calculate Pagination Slicing
+      const totalPages = Math.ceil(data.length / ITEMS_PER_PAGE);
+      if (currentPage > totalPages) currentPage = totalPages;
+      if (currentPage < 1) currentPage = 1;
+
+      const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+      const pageItems = data.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+
+      pageItems.forEach((item, index) => {
+        const globalIndex = startIndex + index;
         const row = document.createElement('tr');
 
         let formatDisplay = "";
@@ -282,11 +324,7 @@
           icon = '<i class="far fa-file-word" style="margin-right:5px; color:#2563eb;"></i>';
         }
 
-        if (item.fileDriveUrl) {
-          formatDisplay = `<span style="font-size:13px; font-weight:600; color:var(--neutral-800); font-family:var(--font-accent);">${icon}${fmt}</span>`;
-        } else {
-          formatDisplay = `<span style="font-size:13px; font-weight:600; color:var(--neutral-800); font-family:var(--font-accent);">${icon}${fmt}</span>`;
-        }
+        formatDisplay = `<span style="font-size:13px; font-weight:600; color:var(--neutral-800); font-family:var(--font-accent);">${icon}${fmt}</span>`;
 
         const grade = item.grade || (item.title && item.title.includes('2급') ? '2급' : (item.title && item.title.includes('공단') ? '공통' : '1급'));
 
@@ -299,7 +337,7 @@
         const gradeBadge = `<span style="font-size:11px; font-weight:700; padding:2px 7px; border-radius:12px; font-family:var(--font-accent); ${gradeStyle}" title="자격증 급수: ${grade}">${grade}</span>`;
 
         row.innerHTML = `
-          <td style="text-align: center; white-space: nowrap;">${index + 1}</td>
+          <td style="text-align: center; white-space: nowrap;">${globalIndex + 1}</td>
           <td>
             <div style="display:flex; align-items:center; flex-wrap:wrap; gap:6px;">
               ${gradeBadge}
@@ -312,8 +350,8 @@
           <td style="font-family:var(--font-accent); font-size:13px;">${item.date}</td>
           <td class="admin-only" style="${is_admin ? '' : 'display:none;'}">
             <div class="action-buttons">
-              <button class="btn-icon btn-move" onclick="moveArchiveUp('${item.id}')" title="위로" ${index === 0 ? 'disabled style="opacity:0.3; cursor:not-allowed;"' : ''}><i class="fas fa-arrow-up"></i></button>
-              <button class="btn-icon btn-move" onclick="moveArchiveDown('${item.id}')" title="아래로" ${index === data.length - 1 ? 'disabled style="opacity:0.3; cursor:not-allowed;"' : ''}><i class="fas fa-arrow-down"></i></button>
+              <button class="btn-icon btn-move" onclick="moveArchiveUp('${item.id}')" title="위로" ${globalIndex === 0 ? 'disabled style="opacity:0.3; cursor:not-allowed;"' : ''}><i class="fas fa-arrow-up"></i></button>
+              <button class="btn-icon btn-move" onclick="moveArchiveDown('${item.id}')" title="아래로" ${globalIndex === allData.length - 1 ? 'disabled style="opacity:0.3; cursor:not-allowed;"' : ''}><i class="fas fa-arrow-down"></i></button>
               <button class="btn-icon btn-edit" onclick="openArchiveModal('${item.id}')" title="수정"><i class="fas fa-edit"></i></button>
               <button class="btn-icon btn-delete" onclick="deleteArchive('${item.id}')" title="삭제"><i class="fas fa-trash-alt"></i></button>
             </div>
@@ -326,7 +364,35 @@
         `;
         tbody.appendChild(row);
       });
+
+      renderPagination(totalPages);
       if (window.updateAdminUI) window.updateAdminUI();
+    }
+
+    function renderPagination(totalPages) {
+      const container = document.getElementById('paginationContainer');
+      if (!container) return;
+
+      if (totalPages <= 1) {
+        container.innerHTML = '';
+        return;
+      }
+
+      let html = `<button class="pagination-btn" onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}><i class="fas fa-chevron-left"></i></button>`;
+
+      for (let p = 1; p <= totalPages; p++) {
+        html += `<button class="pagination-btn ${p === currentPage ? 'active' : ''}" onclick="goToPage(${p})">${p}</button>`;
+      }
+
+      html += `<button class="pagination-btn" onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}><i class="fas fa-chevron-right"></i></button>`;
+
+      container.innerHTML = html;
+    }
+
+    function goToPage(page) {
+      currentPage = page;
+      renderArchiveTable();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     // 2. File Select Handler (parses metadata)

@@ -746,6 +746,84 @@ main {
   color: var(--neutral-400);
 }
 
+/* --- Filter Group Buttons --- */
+.filter-group {
+  display: inline-flex;
+  gap: 4px;
+  background: var(--neutral-100);
+  padding: 4px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+}
+
+.filter-btn {
+  border: none;
+  background: transparent;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--neutral-600);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filter-btn:hover {
+  color: var(--neutral-900);
+}
+
+.filter-btn.active {
+  background: #fff;
+  color: var(--theme-primary);
+  font-weight: 700;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* --- Pagination Controls --- */
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  margin-top: 28px;
+}
+
+.pagination-btn {
+  min-width: 36px;
+  height: 36px;
+  padding: 0 10px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  background: var(--bg-white);
+  color: var(--neutral-700);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  border-color: var(--theme-primary);
+  color: var(--theme-primary);
+  background: rgba(var(--theme-primary-rgb), 0.05);
+}
+
+.pagination-btn.active {
+  background: var(--theme-primary);
+  color: #fff;
+  border-color: var(--theme-primary);
+  font-weight: 700;
+}
+
+.pagination-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 .empty-state i {
   font-size: 48px;
   margin-bottom: 16px;
@@ -969,6 +1047,7 @@ main {
   width: 80px;
   height: 4px;
   -webkit-appearance: none;
+  appearance: none;
   background: rgba(255, 255, 255, 0.3);
   border-radius: var(--radius-full);
   outline: none;
@@ -977,6 +1056,7 @@ main {
 
 .player-volume-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
+  appearance: none;
   width: 10px;
   height: 10px;
   border-radius: 50%;
