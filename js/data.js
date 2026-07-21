@@ -108,6 +108,18 @@ const DEFAULT_PRACTICAL_ARCHIVE = [
     "id": "pr-1784608126250",
     "date": "2026-07-21",
     "author": "관리자"
+  },
+  {
+    "title": "컴퓨터활용능력1급 DB실기",
+    "description": "컴퓨터활용능력1급 DB실기(1)-DB구축①\n컴퓨터활용능력1급 DB실기(2)-DB구축②\n컴퓨터활용능력1급 DB실기(3)-입력·수정 기능 구현\n컴퓨터활용능력1급 DB실기(4)-조회·출력 기능 구현①\n컴퓨터활용능력1급 DB실기(5)-조회·출력 기능 구현②\n컴퓨터활용능력1급 DB실기(6)-처리 기능 구현",
+    "hasVideoLink": true,
+    "fileFormat": "ZIP",
+    "fileName": "구글드라이브_실습자료.zip",
+    "fileSize": "Google Drive",
+    "fileDriveUrl": "https://drive.google.com/file/d/1h5BbmvhhxvXgu0CKslLblwInVoCpKfZ2/view?usp=sharing",
+    "id": "pr-1784608287594",
+    "date": "2026-07-21",
+    "author": "관리자"
   }
 ];
 
