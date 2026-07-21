@@ -154,25 +154,15 @@
 
           <div style="margin-bottom: 12px;">
             <label class="form-label" style="font-size:12px; margin-bottom:4px; color:var(--neutral-700);">방법 A: 컴퓨터 파일 직접 선택 (업로드)</label>
-            <input type="file" id="archiveFile" class="form-input" onchange="handleFileSelected(this)" style="margin-bottom: 8px; background:#fff;">
+            <input type="file" id="archiveFile" class="form-input" onchange="handleFileSelected(this)" style="background:#fff;">
           </div>
 
-          <div style="margin-bottom: 12px;">
+          <div>
             <label class="form-label" style="font-size:12px; margin-bottom:4px; color:var(--neutral-700);"><i class="fab fa-google-drive" style="color:#34a853;"></i> 방법 B: 구글 드라이브 (또는 외부 대용량 공유 URL)</label>
             <input type="url" id="archiveDriveUrl" class="form-input" placeholder="예: https://drive.google.com/file/d/xxxxxxx/view?usp=sharing" onchange="handleDriveUrlEntered(this)" style="background:#fff;">
           </div>
 
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px;">
-            <div>
-              <label class="form-label" style="font-size:12px; margin-bottom:4px;">표시 파일명 *</label>
-              <input type="text" id="archiveFileName" class="form-input" placeholder="예: 2026_컴활1급_필기_요약집.zip">
-            </div>
-            <div>
-              <label class="form-label" style="font-size:12px; margin-bottom:4px;">표시 파일 크기</label>
-              <input type="text" id="archiveFileSize" class="form-input" placeholder="예: 12.4 MB (또는 구글드라이브)">
-            </div>
-          </div>
-          <p class="form-helper" style="margin-top: 8px;">* 구글 드라이브 링크 입력 시 사용자가 [다운로드] 클릭 시 해당 공유 링크로 바로 이동합니다.</p>
+          <p class="form-helper" style="margin-top: 10px;">* 파일 업로드 시 파일명과 크기가 자동으로 감지되며, 구글 드라이브 링크 입력 시 해당 링크로 연결됩니다.</p>
         </div>
       </div>
       <div class="modal-footer">
@@ -288,7 +278,7 @@
       const file = input.files[0];
       if (!file) return;
 
-      document.getElementById('archiveFileName').value = file.name;
+      window.detectedFileName = file.name;
 
       // Calculate formatted size
       let sizeStr = "";
@@ -297,7 +287,7 @@
       } else {
         sizeStr = (file.size / 1024).toFixed(0) + " KB";
       }
-      document.getElementById('archiveFileSize').value = sizeStr;
+      window.detectedFileSize = sizeStr;
 
       // Reset Google Drive URL if local file is selected
       const driveInput = document.getElementById('archiveDriveUrl');
@@ -318,16 +308,8 @@
       const fileInput = document.getElementById('archiveFile');
       if (fileInput) fileInput.value = '';
       window.selectedArchiveFileData = null;
-
-      const fnInput = document.getElementById('archiveFileName');
-      const fsInput = document.getElementById('archiveFileSize');
-
-      if (!fnInput.value) {
-        fnInput.value = "구글드라이브_공유자료.zip";
-      }
-      if (!fsInput.value) {
-        fsInput.value = "Google Drive";
-      }
+      window.detectedFileName = "구글드라이브_공유자료.zip";
+      window.detectedFileSize = "Google Drive";
     }
 
     // 3. Open Write/Edit Modal
@@ -341,24 +323,24 @@
 
       // Reset form
       window.selectedArchiveFileData = null;
+      window.detectedFileName = null;
+      window.detectedFileSize = null;
       document.getElementById('archiveId').value = id || '';
       document.getElementById('archiveTitle').value = '';
       document.getElementById('archiveDesc').value = '';
       document.getElementById('archiveFile').value = '';
       const driveUrlEl = document.getElementById('archiveDriveUrl');
       if (driveUrlEl) driveUrlEl.value = '';
-      document.getElementById('archiveFileName').value = '';
-      document.getElementById('archiveFileSize').value = '';
 
       if (isEdit) {
         const item = window.DB.getById(STORE_KEY, id);
         if (item) {
           document.getElementById('archiveTitle').value = item.title;
           document.getElementById('archiveDesc').value = item.description;
-          document.getElementById('archiveFileName').value = item.fileName;
-          document.getElementById('archiveFileSize').value = item.fileSize;
           if (driveUrlEl) driveUrlEl.value = item.fileDriveUrl || '';
           if (item.fileData) window.selectedArchiveFileData = item.fileData;
+          window.detectedFileName = item.fileName;
+          window.detectedFileSize = item.fileSize;
         }
       }
 
@@ -374,25 +356,40 @@
       const id = document.getElementById('archiveId').value;
       const title = document.getElementById('archiveTitle').value.trim();
       const description = document.getElementById('archiveDesc').value.trim();
-      const fileName = document.getElementById('archiveFileName').value.trim();
-      const fileSize = document.getElementById('archiveFileSize').value.trim();
       const fileDriveUrl = document.getElementById('archiveDriveUrl') ? document.getElementById('archiveDriveUrl').value.trim() : '';
 
-      if (!title || !description || (!fileName && !fileDriveUrl)) {
-        showToast('자료 제목, 설명 및 파일(또는 구글 드라이브 링크)을 입력해주세요.', 'error');
+      let existingItem = id ? window.DB.getById(STORE_KEY, id) : null;
+
+      let fileName = window.detectedFileName || (existingItem ? existingItem.fileName : '');
+      let fileSize = window.detectedFileSize || (existingItem ? existingItem.fileSize : '');
+
+      if (fileDriveUrl && (!fileName || fileName === '자료.zip')) {
+        fileName = '구글드라이브_공유자료.zip';
+        fileSize = 'Google Drive';
+      }
+
+      if (!title || !description) {
+        showToast('자료 제목과 설명을 입력해주세요.', 'error');
+        return;
+      }
+
+      if (!fileName && !fileDriveUrl && !id) {
+        showToast('파일을 선택하거나 구글 드라이브 링크를 입력해주세요.', 'error');
         return;
       }
 
       const item = {
         title,
         description,
-        fileName: fileName || (fileDriveUrl ? '구글드라이브_공유자료.zip' : '자료.zip'),
-        fileSize: fileSize || (fileDriveUrl ? 'Google Drive' : '1.0 MB'),
-        fileDriveUrl: fileDriveUrl || null
+        fileName: fileName || '자료.zip',
+        fileSize: fileSize || '1.0 MB',
+        fileDriveUrl: fileDriveUrl || (existingItem ? existingItem.fileDriveUrl : null)
       };
 
       if (window.selectedArchiveFileData) {
         item.fileData = window.selectedArchiveFileData;
+      } else if (existingItem && existingItem.fileData && !fileDriveUrl) {
+        item.fileData = existingItem.fileData;
       }
 
       if (id) item.id = id;

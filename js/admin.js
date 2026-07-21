@@ -777,19 +777,17 @@ function handleQuickAddTypeChange(type) {
         <label style="display:block; font-weight:700; font-size:13px; margin-bottom:4px; color:#334155;">자료 설명 및 안내 *</label>
         <textarea id="qaDesc" placeholder="자료의 세부 특징 및 학습 활용법을 입력하세요." style="width:100%; height:70px; padding:9px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; font-size:13px; resize:vertical;"></textarea>
       </div>
-      <div style="background:#f8fafc; padding:12px; border-radius:8px; border:1px dashed #cbd5e1;">
-        <label style="display:block; font-weight:700; font-size:13px; margin-bottom:6px; color:#334155;"><i class="fas fa-paperclip" style="color:#0284c7;"></i> 실습/요약 파일 선택</label>
-        <input type="file" id="qaFile" onchange="handleQuickAddFileSelected(this)" style="margin-bottom:8px; width:100%; font-size:12px;">
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
-          <div>
-            <label style="font-size:11px; font-weight:600; color:#64748b;">파일명</label>
-            <input type="text" id="qaFileName" readonly placeholder="파일 선택 시 자동 입력" style="width:100%; padding:6px; border:1px solid #cbd5e1; border-radius:4px; font-size:12px; background:#fff;">
-          </div>
-          <div>
-            <label style="font-size:11px; font-weight:600; color:#64748b;">파일 크기</label>
-            <input type="text" id="qaFileSize" readonly placeholder="자동 계산" style="width:100%; padding:6px; border:1px solid #cbd5e1; border-radius:4px; font-size:12px; background:#fff;">
-          </div>
+      <div style="background:#f8fafc; padding:12px; border-radius:8px; border:1px dashed #cbd5e1; display:flex; flex-direction:column; gap:10px;">
+        <div>
+          <label style="display:block; font-weight:700; font-size:12px; margin-bottom:4px; color:#334155;">방법 A: 컴퓨터 파일 선택 (업로드)</label>
+          <input type="file" id="qaFile" onchange="handleQuickAddFileSelected(this)" style="width:100%; font-size:12px; background:#fff; padding:6px; border:1px solid #cbd5e1; border-radius:6px;">
         </div>
+        <div>
+          <label style="display:block; font-weight:700; font-size:12px; margin-bottom:4px; color:#334155;"><i class="fab fa-google-drive" style="color:#34a853;"></i> 방법 B: 구글 드라이브 (또는 외부 공유 URL)</label>
+          <input type="url" id="qaDriveUrl" placeholder="예: https://drive.google.com/file/d/..." style="width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; font-size:12px;">
+        </div>
+        <input type="hidden" id="qaFileName">
+        <input type="hidden" id="qaFileSize">
       </div>
     `;
   } else if (type === 'written_video' || type === 'practical_video') {
@@ -855,19 +853,27 @@ function handleQuickAddFileSelected(input) {
   const file = input.files[0];
   if (!file) return;
 
+  window.quickAddFileName = file.name;
+
+  let sizeStr = "";
+  if (file.size > 1024 * 1024) {
+    sizeStr = (file.size / (1024 * 1024)).toFixed(1) + " MB";
+  } else {
+    sizeStr = (file.size / 1024).toFixed(0) + " KB";
+  }
+  window.quickAddFileSize = sizeStr;
+
   const fnInput = document.getElementById('qaFileName');
   const fsInput = document.getElementById('qaFileSize');
 
   if (fnInput) fnInput.value = file.name;
-  if (fsInput) {
-    let sizeStr = "";
-    if (file.size > 1024 * 1024) {
-      sizeStr = (file.size / (1024 * 1024)).toFixed(1) + " MB";
-    } else {
-      sizeStr = (file.size / 1024).toFixed(0) + " KB";
-    }
-    fsInput.value = sizeStr;
-  }
+  if (fsInput) fsInput.value = sizeStr;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    window.quickAddFileData = e.target.result;
+  };
+  reader.readAsDataURL(file);
 }
 
 function submitQuickAddForm() {
@@ -885,14 +891,24 @@ function submitQuickAddForm() {
 
   if (type === 'written_archive' || type === 'practical_archive') {
     typeLabel = type === 'written_archive' ? '필기 자료실' : '실기 자료실';
-    const fileName = document.getElementById('qaFileName') ? document.getElementById('qaFileName').value.trim() : '';
-    const fileSize = document.getElementById('qaFileSize') ? document.getElementById('qaFileSize').value.trim() : '';
-    if (!fileName) {
-      alert('❌ 파일명이 선택되지 않았습니다.');
+    const driveUrl = document.getElementById('qaDriveUrl') ? document.getElementById('qaDriveUrl').value.trim() : '';
+    let fileName = (document.getElementById('qaFileName') ? document.getElementById('qaFileName').value.trim() : '') || window.quickAddFileName;
+    let fileSize = (document.getElementById('qaFileSize') ? document.getElementById('qaFileSize').value.trim() : '') || window.quickAddFileSize;
+
+    if (driveUrl && (!fileName || fileName === '자료.zip')) {
+      fileName = '구글드라이브_공유자료.zip';
+      fileSize = 'Google Drive';
+    }
+
+    if (!fileName && !driveUrl) {
+      alert('❌ 파일을 선택하거나 구글 드라이브 링크를 입력해주세요.');
       return;
     }
-    itemData.fileName = fileName;
+
+    itemData.fileName = fileName || '자료.zip';
     itemData.fileSize = fileSize || '1.0 MB';
+    if (driveUrl) itemData.fileDriveUrl = driveUrl;
+    if (window.quickAddFileData) itemData.fileData = window.quickAddFileData;
   } else if (type === 'written_video' || type === 'practical_video') {
     typeLabel = type === 'written_video' ? '필기 영상강의' : '실기 영상강의';
     const rawYoutube = document.getElementById('qaYoutube') ? document.getElementById('qaYoutube').value.trim() : '';
