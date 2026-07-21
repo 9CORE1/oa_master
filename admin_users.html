@@ -112,6 +112,8 @@
       border-radius: 6px;
       border: 1px solid #cbd5e1;
     }
+  </style>
+
   <!-- 🔒 Synchronous Early Auth Guard -->
   <script>
     (function() {
@@ -193,7 +195,7 @@
           <h2><i class="fas fa-users-cog" style="color:var(--theme-primary);"></i> 회원 관리 모듈</h2>
           <p>Cloud Firestore에 가입된 서비스 회원 정보 조회, 검색, 필터링 및 관리자 특이사항 메모 기능입니다.</p>
         </div>
-        <button class="btn btn-secondary" onclick="loadMembersData()">
+        <button id="refreshUsersBtn" class="btn btn-secondary" onclick="loadMembersData(true)">
           <i class="fas fa-sync-alt"></i> 새로고침
         </button>
       </div>
@@ -397,23 +399,45 @@
       });
     });
 
-    async function loadMembersData() {
-      if (!window.FirebaseApp || !window.FirebaseApp.getAllUsersFromFirestore) {
-        showToast('Firebase 연결을 확인하는 중입니다...', 'warning');
-        setTimeout(loadMembersData, 500);
-        return;
-      }
+    async function loadMembersData(showNotification = false) {
+      const btn = document.getElementById('refreshUsersBtn');
+      const icon = btn ? btn.querySelector('i') : null;
 
-      const res = await window.FirebaseApp.getAllUsersFromFirestore();
-      if (res.success) {
-        rawUsersList = res.users || [];
-      } else {
-        rawUsersList = [];
-        showToast('회원 목록을 불러오는 중 오류가 발생했습니다.', 'error');
-      }
+      if (btn) btn.disabled = true;
+      if (icon) icon.classList.add('fa-spin');
 
-      updateKPICards();
-      renderUsersTable();
+      try {
+        if (!window.FirebaseApp || !window.FirebaseApp.getAllUsersFromFirestore) {
+          if (typeof showToast === 'function') showToast('Firebase 연결을 확인하는 중입니다...', 'warning');
+          setTimeout(() => loadMembersData(showNotification), 500);
+          return;
+        }
+
+        const res = await window.FirebaseApp.getAllUsersFromFirestore();
+        if (res.success) {
+          rawUsersList = res.users || [];
+          if (showNotification) {
+            const toastFunc = window.showToast || (typeof showToast === 'function' ? showToast : null);
+            if (toastFunc) {
+              toastFunc('🎉 최신 회원 목록 데이터가 새로고침되었습니다.', 'success');
+            }
+          }
+        } else {
+          rawUsersList = [];
+          const toastFunc = window.showToast || (typeof showToast === 'function' ? showToast : null);
+          if (toastFunc) {
+            toastFunc('회원 목록을 불러오는 중 오류가 발생했습니다: ' + res.error, 'error');
+          }
+        }
+
+        updateKPICards();
+        renderUsersTable();
+      } catch (err) {
+        console.error('loadMembersData error:', err);
+      } finally {
+        if (icon) icon.classList.remove('fa-spin');
+        if (btn) btn.disabled = false;
+      }
     }
 
     function updateKPICards() {

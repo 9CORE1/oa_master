@@ -82,8 +82,12 @@ function initToastContainer() {
 }
 
 function showToast(message, type = 'success') {
-  const container = document.querySelector('.toast-container');
-  if (!container) return;
+  let container = document.querySelector('.toast-container');
+  if (!container) {
+    container = document.createElement('div');
+    container.className = 'toast-container';
+    document.body.appendChild(container);
+  }
 
   const toast = document.createElement('div');
   toast.className = `toast ${type}`;
