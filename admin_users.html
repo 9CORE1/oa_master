@@ -112,10 +112,25 @@
       border-radius: 6px;
       border: 1px solid #cbd5e1;
     }
-  </style>
+  <!-- 🔒 Synchronous Early Auth Guard -->
+  <script>
+    (function() {
+      var email = (localStorage.getItem('userEmail') || '').toLowerCase().trim();
+      var role = localStorage.getItem('userRole');
+      var isAdminActive = localStorage.getItem('isAdminActive') === 'true';
+      var isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+
+      var isAdminUser = isAdminActive || (isLoggedIn && (email === 'teacha99@gmail.com' || role === 'Host' || role === 'Manager'));
+
+      if (!isAdminUser) {
+        alert('🔒 로그인 및 관리자(Host/Manager) 권한이 필요한 페이지입니다.');
+        window.location.replace('index.html?auth=required');
+      }
+    })();
+  </script>
 </head>
 
-<body class="theme-written">
+<body class="theme-written" style="display:none;">
 
   <!-- Header -->
   <header>
@@ -324,7 +339,29 @@
   <script src="js/data.js"></script>
   <script src="js/main.js"></script>
   <script src="js/admin.js"></script>
-  <script type="module" src="js/firebase-config.js"></script>
+  <!-- 🔒 Module Auth Guard & Realtime State Listener -->
+  <script type="module">
+    import { onAuthChange } from './js/firebase-config.js';
+    onAuthChange((user) => {
+      const email = (localStorage.getItem('userEmail') || '').toLowerCase().trim();
+      const role = localStorage.getItem('userRole');
+      const is_admin = (typeof isAdmin === 'function' && isAdmin()) ||
+                       (localStorage.getItem('isAdminActive') === 'true') ||
+                       (email === 'teacha99@gmail.com' || role === 'Host' || role === 'Manager');
+
+      if (!user && !is_admin) {
+        alert('🔒 로그인 및 관리자(Host/Manager) 권한이 필요한 페이지입니다.');
+        window.location.replace('index.html?auth=required');
+      } else if (!is_admin) {
+        alert('🔒 관리자(Host/Manager) 권한이 있는 계정만 접근할 수 있습니다.');
+        window.location.replace('index.html');
+      } else {
+        document.body.style.display = 'block';
+        if (window.renderHeaderUserNav) window.renderHeaderUserNav(user);
+        if (typeof loadMembersData === 'function') loadMembersData();
+      }
+    });
+  </script>
 
   <script>
     let rawUsersList = [];
@@ -336,15 +373,20 @@
     const ITEMS_PER_PAGE = 5;
 
     document.addEventListener('DOMContentLoaded', () => {
-      // 1. Guard check: only Admin allowed
-      setTimeout(() => {
-        if (!window.isAdmin || !window.isAdmin()) {
-          alert('🔒 관리자 전용 기능입니다. 관리자로 로그인 후 이용해주세요.');
-          window.location.href = 'index.html';
-          return;
-        }
-        loadMembersData();
-      }, 300);
+      const email = (localStorage.getItem('userEmail') || '').toLowerCase().trim();
+      const role = localStorage.getItem('userRole');
+      const is_admin = (typeof isAdmin === 'function' && isAdmin()) ||
+                       (localStorage.getItem('isAdminActive') === 'true') ||
+                       (email === 'teacha99@gmail.com' || role === 'Host' || role === 'Manager');
+
+      if (!is_admin) {
+        alert('🔒 관리자 전용 기능입니다. 로그인 후 이용해 주세요.');
+        window.location.replace('index.html?auth=required');
+        return;
+      }
+
+      document.body.style.display = 'block';
+      loadMembersData();
 
       window.addEventListener('adminStateChanged', () => {
         if (!window.isAdmin || !window.isAdmin()) {
