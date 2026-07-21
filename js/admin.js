@@ -3,7 +3,8 @@
 // Check login status
 function isAdmin() {
   const userEmail = (localStorage.getItem('userEmail') || '').toLowerCase().trim();
-  if (userEmail === 'teacha99@gmail.com') {
+  const userRole = localStorage.getItem('userRole');
+  if (userEmail === 'teacha99@gmail.com' || userRole === 'Host' || userRole === 'Manager') {
     return true;
   }
   return localStorage.getItem('isAdminActive') === 'true';

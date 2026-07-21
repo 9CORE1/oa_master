@@ -145,31 +145,52 @@ export async function logout() {
         localStorage.removeItem('userDisplayName');
         localStorage.removeItem('userPhotoURL');
         localStorage.removeItem('userUid');
+        localStorage.removeItem('userRole');
+        localStorage.removeItem('isAdminActive');
     }
     return { success: true };
 }
 
 // [기능 5] 로그인 상태 감지 리스너 (로컬 세션 및 Firestore 프로필 동기화)
 export function onAuthChange(callback) {
-    return onAuthStateChanged(auth, (user) => {
+    return onAuthStateChanged(auth, async (user) => {
         if (user) {
             localStorage.setItem('isLoggedIn', 'true');
-            const email = user.email || '';
+            const email = (user.email || '').toLowerCase().trim();
             localStorage.setItem('userEmail', email);
-            if (email.toLowerCase().trim() === 'teacha99@gmail.com') {
+
+            let role = 'User';
+            if (email === 'teacha99@gmail.com') {
+                role = 'Host';
+                localStorage.setItem('isAdminActive', 'true');
+            } else {
+                try {
+                    const fsRes = await getUserDataFromFirestore(user.uid);
+                    if (fsRes && fsRes.success && fsRes.data && fsRes.data.role) {
+                        role = fsRes.data.role;
+                    }
+                } catch (e) {
+                    console.warn("Role fetch error:", e);
+                }
+            }
+
+            if (role === 'Host' || role === 'Manager') {
                 localStorage.setItem('isAdminActive', 'true');
             }
+
+            localStorage.setItem('userRole', role);
             localStorage.setItem('userDisplayName', user.displayName || (user.email ? user.email.split('@')[0] : '회원'));
             if (user.photoURL) localStorage.setItem('userPhotoURL', user.photoURL);
             if (user.uid) localStorage.setItem('userUid', user.uid);
 
-            // Firestore에 프로필 사진 및 정보 자동 동기화
+            // Firestore에 프로필 사진, 역할(role) 및 정보 자동 동기화
             const providerId = (user.providerData && user.providerData.length > 0) ? user.providerData[0].providerId : 'password';
             saveUserDataToFirestore(user.uid, {
                 email: user.email || '',
                 displayName: user.displayName || (user.email ? user.email.split('@')[0] : '회원'),
                 photoURL: user.photoURL || '',
-                provider: providerId
+                provider: providerId,
+                role: role
             });
         } else {
             localStorage.removeItem('isLoggedIn');
@@ -177,6 +198,7 @@ export function onAuthChange(callback) {
             localStorage.removeItem('userDisplayName');
             localStorage.removeItem('userPhotoURL');
             localStorage.removeItem('userUid');
+            localStorage.removeItem('userRole');
             localStorage.removeItem('isAdminActive');
         }
         callback(user);

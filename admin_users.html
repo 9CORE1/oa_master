@@ -223,10 +223,11 @@
                 <th style="width: 60px; white-space: nowrap; text-align: center;">번호</th>
                 <th style="white-space: nowrap;">회원 프로필 / 성명</th>
                 <th style="white-space: nowrap;">이메일 주소</th>
+                <th style="width: 110px; white-space: nowrap; text-align: center;">회원 등급</th>
                 <th style="white-space: nowrap;">학교명 / 소속명</th>
-                <th style="width: 120px; white-space: nowrap; text-align: center;">가입 유형</th>
-                <th style="width: 130px; white-space: nowrap; text-align: center;">회원가입일시</th>
-                <th style="width: 180px; white-space: nowrap;">관리자 메모</th>
+                <th style="width: 110px; white-space: nowrap; text-align: center;">가입 유형</th>
+                <th style="width: 120px; white-space: nowrap; text-align: center;">회원가입일시</th>
+                <th style="width: 160px; white-space: nowrap;">관리자 메모</th>
                 <th style="width: 80px; white-space: nowrap; text-align: center;">관리</th>
               </tr>
             </thead>
@@ -248,7 +249,7 @@
   <div class="modal-backdrop" id="memoModal">
     <div class="modal-content">
       <div class="modal-header">
-        <h3><i class="fas fa-sticky-note" style="color:var(--theme-primary);"></i> 회원 관리자 메모 작성</h3>
+        <h3><i class="fas fa-user-cog" style="color:var(--theme-primary);"></i> 회원 정보 및 등급 관리</h3>
         <button class="btn-close-modal" onclick="closeMemoModal()">&times;</button>
       </div>
       <div class="modal-body">
@@ -258,9 +259,18 @@
           <div style="font-size:12px; color:#64748b;" id="memoTargetEmail">email@example.com</div>
         </div>
 
+        <div class="form-group" style="margin-bottom:14px;">
+          <label class="form-label" for="userRoleSelect" style="font-weight:700;">회원 등급 설정</label>
+          <select id="userRoleSelect" class="form-input" style="background:#fff;">
+            <option value="User">User (일반 회원)</option>
+            <option value="Manager">Manager (매니저)</option>
+            <option value="Host">Host (관리자)</option>
+          </select>
+        </div>
+
         <div class="form-group">
           <label class="form-label" for="userMemoText" style="font-weight:700;">특이사항 및 메모 내용</label>
-          <textarea id="userMemoText" class="form-input" placeholder="해당 회원의 수강 정보, 가입 목적 또는 문의 내역 등의 특이사항을 기록해 주세요." style="height:110px;"></textarea>
+          <textarea id="userMemoText" class="form-input" placeholder="해당 회원의 수강 정보, 가입 목적 또는 문의 내역 등의 특이사항을 기록해 주세요." style="height:100px;"></textarea>
         </div>
       </div>
       <div class="modal-footer">
@@ -442,6 +452,22 @@
           `<span style="font-size:12px; font-weight:700; color:#15803d; background:rgba(34,197,94,0.12); padding:3px 8px; border-radius:12px; display:inline-flex; align-items:center; gap:4px;"><i class="fab fa-google"></i> 구글</span>` :
           `<span style="font-size:12px; font-weight:700; color:#4338ca; background:rgba(99,102,241,0.12); padding:3px 8px; border-radius:12px; display:inline-flex; align-items:center; gap:4px;"><i class="fas fa-envelope"></i> 이메일</span>`;
 
+        let uRole = u.role;
+        if (u.email && u.email.toLowerCase().trim() === 'teacha99@gmail.com') {
+          uRole = 'Host';
+        } else if (!uRole) {
+          uRole = 'User';
+        }
+
+        let roleBadge = '';
+        if (uRole === 'Host') {
+          roleBadge = `<span style="font-size:12px; font-weight:700; color:#b91c1c; background:rgba(239,68,68,0.12); padding:3px 8px; border-radius:12px; display:inline-flex; align-items:center; gap:4px;"><i class="fas fa-crown" style="color:#f59e0b;"></i> Host (관리자)</span>`;
+        } else if (uRole === 'Manager') {
+          roleBadge = `<span style="font-size:12px; font-weight:700; color:#0369a1; background:rgba(14,165,233,0.12); padding:3px 8px; border-radius:12px; display:inline-flex; align-items:center; gap:4px;"><i class="fas fa-user-shield" style="color:#0284c7;"></i> Manager (매니저)</span>`;
+        } else {
+          roleBadge = `<span style="font-size:12px; font-weight:700; color:#475569; background:rgba(100,116,139,0.12); padding:3px 8px; border-radius:12px; display:inline-flex; align-items:center; gap:4px;"><i class="fas fa-user" style="color:#64748b;"></i> User (회원)</span>`;
+        }
+
         const name = u.displayName || u.name || (u.email ? u.email.split('@')[0] : '회원');
         const photo = u.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=0e4987&color=fff&size=80`;
         const joinDateStr = u.createdAt ? u.createdAt.split('T')[0] : (u.updatedAt ? u.updatedAt.split('T')[0] : (u.date || '-'));
@@ -461,13 +487,14 @@
             </div>
           </td>
           <td style="font-family:var(--font-accent); font-size:13px; color:var(--neutral-700); white-space:nowrap;">${u.email || '-'}</td>
+          <td style="text-align:center; white-space:nowrap;">${roleBadge}</td>
           <td style="white-space:nowrap;">${schoolDisplay}</td>
           <td style="text-align:center; white-space:nowrap;">${providerBadge}</td>
           <td style="text-align:center; font-family:var(--font-accent); font-size:13px; white-space:nowrap;">${joinDateStr}</td>
           <td>${memoStr}</td>
           <td style="text-align:center; white-space:nowrap;">
-            <button class="btn-icon btn-edit" onclick="openMemoModal('${u.id}', '${name.replace(/'/g, "\\'")}', '${(u.email || '').replace(/'/g, "\\'")}', '${(u.memo || '').replace(/'/g, "\\'")}')" title="메모 작성/수정">
-              <i class="fas fa-edit"></i>
+            <button class="btn-icon btn-edit" onclick="openMemoModal('${u.id}', '${name.replace(/'/g, "\\'")}', '${(u.email || '').replace(/'/g, "\\'")}', '${(u.memo || '').replace(/'/g, "\\'")}', '${uRole}')" title="회원 정보/등급 수정">
+              <i class="fas fa-user-edit"></i>
             </button>
           </td>
         `;
@@ -502,11 +529,17 @@
     }
 
     // Modal logic
-    function openMemoModal(uid, name, email, existingMemo) {
+    function openMemoModal(uid, name, email, existingMemo, role) {
       document.getElementById('memoTargetUid').value = uid;
       document.getElementById('memoTargetName').innerText = name;
       document.getElementById('memoTargetEmail').innerText = email;
       document.getElementById('userMemoText').value = existingMemo || '';
+      
+      const roleSelect = document.getElementById('userRoleSelect');
+      if (roleSelect) {
+        const activeRole = (email && email.toLowerCase().trim() === 'teacha99@gmail.com') ? 'Host' : (role || 'User');
+        roleSelect.value = activeRole;
+      }
       document.getElementById('memoModal').classList.add('open');
     }
 
@@ -517,21 +550,26 @@
     async function submitUserMemo() {
       const uid = document.getElementById('memoTargetUid').value;
       const memo = document.getElementById('userMemoText').value.trim();
+      const roleSelect = document.getElementById('userRoleSelect');
+      const role = roleSelect ? roleSelect.value : 'User';
 
       if (!uid) return;
 
-      const res = await window.FirebaseApp.saveUserDataToFirestore(uid, { memo });
+      const res = await window.FirebaseApp.saveUserDataToFirestore(uid, { memo, role });
       if (res.success) {
-        showToast('회원 메모가 성공적으로 저장되었습니다.', 'success');
+        showToast('회원 등급 및 메모가 성공적으로 저장되었습니다.', 'success');
         closeMemoModal();
 
         // Update local memory list & re-render
         const item = rawUsersList.find(u => u.id === uid);
-        if (item) item.memo = memo;
+        if (item) {
+          item.memo = memo;
+          item.role = role;
+        }
 
         renderUsersTable();
       } else {
-        showToast('메모 저장 중 오류가 발생했습니다: ' + res.error, 'error');
+        showToast('저장 중 오류가 발생했습니다: ' + res.error, 'error');
       }
     }
   </script>
