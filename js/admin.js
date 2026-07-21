@@ -50,6 +50,10 @@ function toggleAdminMode(e) {
   }
 
   if (isAdmin()) {
+    if (localStorage.getItem('isLoggedIn') === 'true' && typeof handleGlobalLogout === 'function') {
+      handleGlobalLogout();
+      return;
+    }
     localStorage.removeItem('isAdminActive');
     localStorage.removeItem('github_settings');
     sessionStorage.removeItem('admin_auth_code');
@@ -304,7 +308,7 @@ function updateAdminUI() {
       container.innerHTML = `
         <a href="admin_users.html"><i class="fas fa-users-cog"></i> 회원 관리</a>
         <span style="color:var(--neutral-700);">|</span>
-        <a href="#" onclick="toggleAdminMode(); return false;"><i class="fas fa-sign-out-alt"></i> 관리자 로그아웃</a>
+        <a href="#" onclick="if(window.handleGlobalLogout){window.handleGlobalLogout();}else{toggleAdminMode();} return false;"><i class="fas fa-sign-out-alt"></i> 관리자 로그아웃</a>
       `;
     } else {
       container.innerHTML = `
@@ -312,13 +316,6 @@ function updateAdminUI() {
       `;
     }
   });
-
-  const activeUser = window.currentUser || null;
-  if (window.renderHeaderUserNav) {
-    window.renderHeaderUserNav(activeUser);
-  } else {
-    renderHeaderUserNavUniversal(activeUser);
-  }
 }
 
 // Global User Logout Handler
@@ -392,10 +389,7 @@ function renderHeaderUserNavUniversal(user) {
         </button>
       </div>
     `;
-    return;
-  }
-
-  if (activeUser) {
+  } else if (activeUser) {
     const displayName = activeUser.displayName || (activeUser.email ? activeUser.email.split('@')[0] : '회원');
     const photoUrl = (activeUser && activeUser.photoURL) || localStorage.getItem('userPhotoURL') || null;
     const avatarIcon = photoUrl
@@ -1085,4 +1079,13 @@ window.openQuickAddModal = openQuickAddModal;
 window.handleQuickAddTypeChange = handleQuickAddTypeChange;
 window.handleQuickAddFileSelected = handleQuickAddFileSelected;
 window.submitQuickAddForm = submitQuickAddForm;
+
+// Auto-initialize Admin UI on page load
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    if (typeof updateAdminUI === 'function') updateAdminUI();
+  });
+} else {
+  if (typeof updateAdminUI === 'function') updateAdminUI();
+}
 
