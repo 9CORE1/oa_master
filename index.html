@@ -409,6 +409,10 @@
           style="flex:2; padding:10px; background:var(--theme-written, #0e4987); color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:bold; font-size:14px;">
           <i class="fas fa-save"></i> 저장
         </button>
+        <button id="myPageLogoutBtn" onclick="if(window.handleGlobalLogout){window.handleGlobalLogout();} return false;"
+          style="flex:1; padding:10px; background:var(--theme-recommend, #e11d48); color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:bold; font-size:14px;">
+          <i class="fas fa-sign-out-alt"></i> 로그아웃
+        </button>
         <button id="myPageCloseBtn"
           style="flex:1; padding:10px; background:#e2e8f0; color:#334155; border:none; border-radius:6px; cursor:pointer; font-weight:bold; font-size:14px;">
           닫기
@@ -638,16 +642,22 @@
                 ${avatarIcon}
                 <span>${displayName}님</span>
               </a>
-              <button id="logoutBtn" style="background:var(--theme-recommend); color:#fff; border:none; padding:5px 12px; border-radius:16px; font-size:12px; font-weight:bold; cursor:pointer; transition:opacity 0.2s;">로그아웃</button>
+              <button id="logoutBtn" onclick="if(window.handleGlobalLogout){window.handleGlobalLogout();} return false;" style="background:var(--theme-recommend); color:#fff; border:none; padding:5px 12px; border-radius:16px; font-size:12px; font-weight:bold; cursor:pointer; transition:opacity 0.2s;">로그아웃</button>
             </div>
           `;
 
           const logoutBtn = document.getElementById('logoutBtn');
           if (logoutBtn) {
-            logoutBtn.onclick = async () => {
-              await logout();
-              renderHeaderUserNav(null);
-              alert('로그아웃 되었습니다.');
+            logoutBtn.onclick = (e) => {
+              if (e) e.preventDefault();
+              if (window.handleGlobalLogout) {
+                window.handleGlobalLogout();
+              } else {
+                logout().then(() => {
+                  renderHeaderUserNav(null);
+                  alert('로그아웃 되었습니다.');
+                });
+              }
             };
           }
         } catch (err) {
@@ -733,9 +743,23 @@
         }
       });
 
-      // 마이페이지 닫기
+      // 마이페이지 닫기 및 로그아웃
       if (closeMyPageModal) closeMyPageModal.onclick = () => myPageModal.style.display = 'none';
       if (myPageCloseBtn) myPageCloseBtn.onclick = () => myPageModal.style.display = 'none';
+      if (myPageLogoutBtn) {
+        myPageLogoutBtn.onclick = (e) => {
+          if (e) e.preventDefault();
+          if (window.handleGlobalLogout) {
+            window.handleGlobalLogout();
+          } else {
+            logout().then(() => {
+              myPageModal.style.display = 'none';
+              renderHeaderUserNav(null);
+              alert('로그아웃 되었습니다.');
+            });
+          }
+        };
+      }
       const myPageSaveAllBtn = document.getElementById('myPageSaveAllBtn');
       if (myPageSaveAllBtn) {
         myPageSaveAllBtn.onclick = async (e) => {

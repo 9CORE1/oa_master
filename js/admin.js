@@ -317,6 +317,51 @@ function updateAdminUI() {
   }
 }
 
+// Global User Logout Handler
+async function handleGlobalLogout() {
+  try {
+    if (window.FirebaseApp && typeof window.FirebaseApp.logout === 'function') {
+      await window.FirebaseApp.logout();
+    } else if (typeof window.logout === 'function') {
+      await window.logout();
+    } else {
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('userEmail');
+      localStorage.removeItem('userDisplayName');
+      localStorage.removeItem('userPhotoURL');
+      localStorage.removeItem('userUid');
+    }
+  } catch (err) {
+    console.error('Logout error:', err);
+  } finally {
+    window.currentUser = null;
+    const myPageModal = document.getElementById('myPageModal');
+    if (myPageModal) myPageModal.style.display = 'none';
+
+    if (typeof window.renderHeaderUserNav === 'function') {
+      window.renderHeaderUserNav(null);
+    }
+    alert('로그아웃 되었습니다.');
+
+    const pathname = window.location.pathname;
+    if (pathname.includes('written_') || pathname.includes('practical_') || pathname.includes('recommendations') || pathname.includes('admin_users')) {
+      if (localStorage.getItem('isAdminActive') !== 'true') {
+        window.location.href = 'index.html';
+      }
+    }
+  }
+}
+window.handleGlobalLogout = handleGlobalLogout;
+
+// Global Document Click Delegation for Logout Buttons
+document.addEventListener('click', (e) => {
+  const btn = e.target.closest('#logoutBtn, #myPageLogoutBtn');
+  if (btn) {
+    e.preventDefault();
+    handleGlobalLogout();
+  }
+});
+
 // Universal Header User Nav Renderer for All Pages
 function renderHeaderUserNavUniversal(user) {
   const userNav = document.getElementById('userNavArea');
@@ -358,9 +403,17 @@ function renderHeaderUserNavUniversal(user) {
           ${avatarIcon}
           <span>${displayName}님</span>
         </a>
-        <button id="logoutBtn" style="background:var(--theme-recommend); color:#fff; border:none; padding:5px 12px; border-radius:16px; font-size:12px; font-weight:bold; cursor:pointer; transition:opacity 0.2s;">로그아웃</button>
+        <button id="logoutBtn" onclick="window.handleGlobalLogout(); return false;" style="background:var(--theme-recommend); color:#fff; border:none; padding:5px 12px; border-radius:16px; font-size:12px; font-weight:bold; cursor:pointer; transition:opacity 0.2s;">로그아웃</button>
       </div>
     `;
+
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+      logoutBtn.onclick = (e) => {
+        if (e) e.preventDefault();
+        window.handleGlobalLogout();
+      };
+    }
   } else {
     userNav.innerHTML = `
       <button id="openAuthBtn" class="btn-admin-mode" onclick="if(document.getElementById('authModal')){document.getElementById('authModal').style.display='flex';}else if(window.openAuthModal){window.openAuthModal();}else{window.location.href='index.html?auth=required';} return false;" style="background:var(--theme-written); color:#fff; border:none; padding:6px 14px; border-radius:6px; cursor:pointer; font-weight:600;"><i class="fas fa-user"></i> 로그인 / 회원가입</button>

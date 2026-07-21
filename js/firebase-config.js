@@ -137,14 +137,16 @@ export async function signInWithGoogleToken(idToken) {
 export async function logout() {
     try {
         await signOut(auth);
+    } catch (error) {
+        console.warn("Firebase signOut error:", error);
+    } finally {
         localStorage.removeItem('isLoggedIn');
         localStorage.removeItem('userEmail');
         localStorage.removeItem('userDisplayName');
         localStorage.removeItem('userPhotoURL');
-        return { success: true };
-    } catch (error) {
-        return { success: false, error: error.message };
+        localStorage.removeItem('userUid');
     }
+    return { success: true };
 }
 
 // [기능 5] 로그인 상태 감지 리스너 (로컬 세션 및 Firestore 프로필 동기화)
@@ -155,6 +157,7 @@ export function onAuthChange(callback) {
             localStorage.setItem('userEmail', user.email || '');
             localStorage.setItem('userDisplayName', user.displayName || (user.email ? user.email.split('@')[0] : '회원'));
             if (user.photoURL) localStorage.setItem('userPhotoURL', user.photoURL);
+            if (user.uid) localStorage.setItem('userUid', user.uid);
 
             // Firestore에 프로필 사진 및 정보 자동 동기화
             const providerId = (user.providerData && user.providerData.length > 0) ? user.providerData[0].providerId : 'password';
@@ -169,6 +172,7 @@ export function onAuthChange(callback) {
             localStorage.removeItem('userEmail');
             localStorage.removeItem('userDisplayName');
             localStorage.removeItem('userPhotoURL');
+            localStorage.removeItem('userUid');
         }
         callback(user);
     });
@@ -261,6 +265,7 @@ function getAuthErrorMessage(errorCode) {
 // ----------------------------------------------------
 // Global Window Binding for Easy Access
 // ----------------------------------------------------
+window.logout = logout;
 window.FirebaseApp = {
     auth,
     db,
