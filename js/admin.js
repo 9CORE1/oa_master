@@ -48,11 +48,10 @@ function toggleAdminMode(e) {
   if (isAdmin()) {
     localStorage.removeItem('isAdminActive');
     localStorage.removeItem('github_settings');
-    localStorage.removeItem('emailjs_settings');
     sessionStorage.removeItem('admin_auth_code');
 
-    if (window.showToast) window.showToast('관리자 모드 해제 및 설정(GitHub, EmailJS)이 제거되었습니다.', 'info');
-    alert('🔓 관리자 모드가 성공적으로 해제(로그아웃)되었으며, 저장된 GitHub 및 EmailJS 설정이 삭제되었습니다.');
+    if (window.showToast) window.showToast('관리자 모드가 해제되었습니다.', 'info');
+    alert('🔓 관리자 모드가 성공적으로 해제(로그아웃)되었습니다.');
     updateAdminUI();
   } else {
     openAdminAuthModalDirectly();
