@@ -777,6 +777,20 @@ function handleQuickAddTypeChange(type) {
         <label style="display:block; font-weight:700; font-size:13px; margin-bottom:4px; color:#334155;">자료 설명 및 안내 *</label>
         <textarea id="qaDesc" placeholder="자료의 세부 특징 및 학습 활용법을 입력하세요." style="width:100%; height:70px; padding:9px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; font-size:13px; resize:vertical;"></textarea>
       </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+        <div>
+          <label style="display:block; font-weight:700; font-size:13px; margin-bottom:4px; color:#334155;">급수 구분 *</label>
+          <select id="qaGrade" style="width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:6px; font-size:13px; background:#fff;">
+            <option value="1급">1급</option>
+            <option value="2급">2급</option>
+            <option value="공통">공통 (1/2급)</option>
+          </select>
+        </div>
+        <div>
+          <label style="display:block; font-weight:700; font-size:13px; margin-bottom:4px; color:#334155;">파일 형식 (확장자)</label>
+          <input type="text" id="qaFormat" placeholder="예: ZIP, PDF, XLSX" style="width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; font-size:13px;">
+        </div>
+      </div>
       <div style="background:#f8fafc; padding:12px; border-radius:8px; border:1px dashed #cbd5e1; display:flex; flex-direction:column; gap:10px;">
         <div>
           <label style="display:block; font-weight:700; font-size:12px; margin-bottom:4px; color:#334155;">방법 A: 컴퓨터 파일 선택 (업로드)</label>
@@ -892,6 +906,8 @@ function submitQuickAddForm() {
   if (type === 'written_archive' || type === 'practical_archive') {
     typeLabel = type === 'written_archive' ? '필기 자료실' : '실기 자료실';
     const driveUrl = document.getElementById('qaDriveUrl') ? document.getElementById('qaDriveUrl').value.trim() : '';
+    const grade = document.getElementById('qaGrade') ? document.getElementById('qaGrade').value : '1급';
+    const fileFormat = document.getElementById('qaFormat') ? document.getElementById('qaFormat').value.trim().toUpperCase() : '';
     let fileName = (document.getElementById('qaFileName') ? document.getElementById('qaFileName').value.trim() : '') || window.quickAddFileName;
     let fileSize = (document.getElementById('qaFileSize') ? document.getElementById('qaFileSize').value.trim() : '') || window.quickAddFileSize;
 
@@ -905,8 +921,10 @@ function submitQuickAddForm() {
       return;
     }
 
+    itemData.grade = grade;
     itemData.fileName = fileName || '자료.zip';
     itemData.fileSize = fileSize || '1.0 MB';
+    if (fileFormat) itemData.fileFormat = fileFormat;
     if (driveUrl) itemData.fileDriveUrl = driveUrl;
     if (window.quickAddFileData) itemData.fileData = window.quickAddFileData;
   } else if (type === 'written_video' || type === 'practical_video') {

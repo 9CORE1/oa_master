@@ -145,12 +145,28 @@
           <label class="form-label" for="archiveDesc">자료 설명</label>
           <textarea id="archiveDesc" class="form-input" placeholder="자료에 대한 간략한 핵심 정보를 입력하세요."></textarea>
         </div>
-        <div class="form-group" style="background:#f1f5f9; padding:12px 14px; border-radius:8px; border:1px solid #cbd5e1;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label" for="archiveGrade" style="font-weight:700;">자격증 급수 구분 *</label>
+            <select id="archiveGrade" class="form-input" style="background:#fff;">
+              <option value="1급">1급</option>
+              <option value="2급">2급</option>
+              <option value="공통">공통 (1/2급)</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label" for="archiveFormat" style="font-weight:700;">파일 형식 (확장자)</label>
+            <input type="text" id="archiveFormat" class="form-input" placeholder="예: ZIP, PDF, XLSX (자동 감지)" style="background:#fff;">
+          </div>
+        </div>
+
+        <div class="form-group" style="background:#f1f5f9; padding:12px 14px; border-radius:8px; border:1px solid #cbd5e1; margin-bottom:12px;">
           <label style="display:inline-flex; align-items:center; gap:8px; cursor:pointer; font-weight:700; color:#334155; font-size:13px; user-select:none;">
             <input type="checkbox" id="archiveHasVideo" style="width:16px; height:16px; cursor:pointer;">
             <span><i class="fas fa-play-circle" style="color:#6366f1;"></i> 동영상 강좌 연계 자료 (영상연계 표시)</span>
           </label>
         </div>
+
         <div class="form-group"
           style="background-color: var(--neutral-50); padding: 16px; border-radius: var(--radius-md); border: 1px dashed var(--neutral-300);">
           <label class="form-label" style="display:flex; align-items:center; gap:6px; font-weight:700;">
@@ -165,11 +181,6 @@
           <div>
             <label class="form-label" style="font-size:12px; margin-bottom:4px; color:var(--neutral-700);"><i class="fab fa-google-drive" style="color:#34a853;"></i> 방법 B: 구글 드라이브 (또는 외부 대용량 공유 URL)</label>
             <input type="url" id="archiveDriveUrl" class="form-input" placeholder="예: https://drive.google.com/file/d/xxxxxxx/view?usp=sharing" onchange="handleDriveUrlEntered(this)" style="background:#fff;">
-          </div>
-
-          <div style="margin-top: 12px;">
-            <label class="form-label" for="archiveFormat" style="font-size:12px; margin-bottom:4px; color:var(--neutral-700); font-weight:700;">파일 형식 (확장자)</label>
-            <input type="text" id="archiveFormat" class="form-input" placeholder="예: ZIP, PDF, XLSX, HWP (파일 선택 시 자동 감지)" style="background:#fff;">
           </div>
 
           <p class="form-helper" style="margin-top: 10px;">* 파일 업로드 시 파일명과 형식(확장자)이 자동으로 감지되며, 구글 드라이브 선택 시 파일 형식을 자유롭게 입력하실 수 있습니다.</p>
@@ -277,10 +288,21 @@
           formatDisplay = `<span style="font-size:13px; font-weight:600; color:var(--neutral-800); font-family:var(--font-accent);">${icon}${fmt}</span>`;
         }
 
+        const grade = item.grade || (item.title && item.title.includes('2급') ? '2급' : (item.title && item.title.includes('공단') ? '공통' : '1급'));
+
+        let gradeStyle = 'background:rgba(14,73,135,0.1); color:#0e4987; border:1px solid rgba(14,73,135,0.3);';
+        if (grade === '2급') {
+          gradeStyle = 'background:rgba(13,148,136,0.1); color:#0d9488; border:1px solid rgba(13,148,136,0.3);';
+        } else if (grade === '공통') {
+          gradeStyle = 'background:rgba(100,116,139,0.1); color:#475569; border:1px solid rgba(100,116,139,0.3);';
+        }
+        const gradeBadge = `<span style="font-size:11px; font-weight:700; padding:2px 7px; border-radius:12px; font-family:var(--font-accent); ${gradeStyle}" title="자격증 급수: ${grade}">${grade}</span>`;
+
         row.innerHTML = `
           <td>${index + 1}</td>
           <td>
             <div style="display:flex; align-items:center; flex-wrap:wrap; gap:6px;">
+              ${gradeBadge}
               ${item.hasVideoLink ? `<span style="display:inline-flex; align-items:center; gap:4px; font-size:11px; font-weight:700; color:#6366f1; background:rgba(99,102,241,0.12); border:1px solid rgba(99,102,241,0.3); padding:2px 7px; border-radius:12px;" title="동영상 강의와 연계된 학습 자료입니다."><i class="fas fa-play-circle" style="color:#6366f1;"></i> 영상연계</span>` : ''}
               <span class="archive-title-cell" onclick="showArchiveDetail('${item.id}')">${item.title}</span>
             </div>
@@ -379,6 +401,8 @@
       if (hasVideoEl) hasVideoEl.checked = false;
       const fmtEl = document.getElementById('archiveFormat');
       if (fmtEl) fmtEl.value = '';
+      const gradeEl = document.getElementById('archiveGrade');
+      if (gradeEl) gradeEl.value = '1급';
 
       if (isEdit) {
         const item = window.DB.getById(STORE_KEY, id);
@@ -388,6 +412,7 @@
           if (driveUrlEl) driveUrlEl.value = item.fileDriveUrl || '';
           if (hasVideoEl) hasVideoEl.checked = !!item.hasVideoLink;
           if (fmtEl) fmtEl.value = item.fileFormat || (item.fileName && item.fileName.includes('.') ? item.fileName.substring(item.fileName.lastIndexOf('.')).toUpperCase().replace('.', '') : 'ZIP');
+          if (gradeEl) gradeEl.value = item.grade || (item.title && item.title.includes('2급') ? '2급' : '1급');
           if (item.fileData) window.selectedArchiveFileData = item.fileData;
           window.detectedFileName = item.fileName;
           window.detectedFileSize = item.fileSize;
@@ -409,6 +434,7 @@
       const fileDriveUrl = document.getElementById('archiveDriveUrl') ? document.getElementById('archiveDriveUrl').value.trim() : '';
       const hasVideoLink = document.getElementById('archiveHasVideo') ? document.getElementById('archiveHasVideo').checked : false;
       const fileFormat = document.getElementById('archiveFormat') ? document.getElementById('archiveFormat').value.trim().toUpperCase() : '';
+      const grade = document.getElementById('archiveGrade') ? document.getElementById('archiveGrade').value : '1급';
 
       let existingItem = id ? window.DB.getById(STORE_KEY, id) : null;
 
@@ -433,6 +459,7 @@
       const item = {
         title,
         description,
+        grade,
         hasVideoLink,
         fileFormat: fileFormat || (fileName && fileName.includes('.') ? fileName.substring(fileName.lastIndexOf('.')).toUpperCase().replace('.', '') : 'ZIP'),
         fileName: fileName || '자료.zip',
