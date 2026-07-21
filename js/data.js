@@ -4,29 +4,26 @@
 const DEFAULT_WRITTEN_ARCHIVE = [
   {
     "id": "wa-1",
-    "title": "[핵심요약] 2026년 컴퓨터활용능력 1급 필기 핵심 요약집",
-    "description": "컴퓨터활용능력 1급 필기 시험 대비 핵심 이론 요약집입니다. 컴퓨터 일반, 스프레드시트 일반, 데이터베이스 일반 전체 내용을 한눈에 볼 수 있도록 정리했습니다.",
-    "fileName": "2026_컴활1급_필기_핵심요약.pdf",
-    "fileSize": "4.8 MB",
-    "date": "2026-06-15",
-    "author": "관리자"
+    "title": "컴활2급_용어_정리_250선",
+    "description": "컴퓨터활영능력 용어 250선(이기적)",
+    "fileName": "구글드라이브_공유자료.zip",
+    "fileSize": "Google Drive",
+    "date": "2026-07-21",
+    "author": "관리자",
+    "hasVideoLink": false,
+    "fileFormat": "PDF",
+    "fileDriveUrl": "https://drive.google.com/file/d/1OSgfBOvPZaoA2AniymfBpNJ8_DWM2eIj/view?usp=sharing"
   },
   {
-    "id": "wa-2",
-    "title": "[기출문제] 2025년 사무자동화산업기사 필기 기출문제 및 해설",
-    "description": "2025년에 시행된 사무자동화산업기사 필기 기출문제집과 오답 정리를 포함한 상세 해설 파일입니다. PDF 포맷으로 인쇄에 최적화되어 있습니다.",
-    "fileName": "2025_사무자동화_필기_기출해설.zip",
-    "fileSize": "12.4 MB",
-    "date": "2026-05-20",
-    "author": "관리자"
-  },
-  {
-    "id": "wa-3",
-    "title": "[벼락치기] 컴활 2급 필기 3일 합격 암기노트",
-    "description": "시간이 부족한 수험생들을 위한 단기 합격용 요약노트입니다. 출제 빈도가 가장 높은 상위 100가지 개념만을 엄선하여 정리했습니다.",
-    "fileName": "컴활2급_필기_3일합격_노트.pdf",
-    "fileSize": "2.1 MB",
-    "date": "2026-06-01",
+    "title": "컴활2급필기_핵심_요약",
+    "description": "컴퓨터활용능력 2급 필기 핵심 요약(이기적)",
+    "hasVideoLink": false,
+    "fileFormat": "PDF",
+    "fileName": "구글드라이브_공유자료.zip",
+    "fileSize": "Google Drive",
+    "fileDriveUrl": "https://drive.google.com/file/d/1a2-fUKG9TfS3pg6bKAgbKGtsDU8BC6Nt/view?usp=sharing",
+    "id": "wr-1784608848283",
+    "date": "2026-07-21",
     "author": "관리자"
   }
 ];
