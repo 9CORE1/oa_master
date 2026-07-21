@@ -267,6 +267,16 @@ function updateAdminUI() {
     }
   });
 
+  // Toggle footer admin login/logout link text dynamically
+  const footerAdminBtns = document.querySelectorAll('#footerAdminBtn, #footerAdminLoginBtn, .footer-bottom-links a[onclick*="toggleAdminMode"], .footer-bottom-links button[onclick*="openAdminAuthModal"]');
+  footerAdminBtns.forEach(btn => {
+    if (is_admin) {
+      btn.innerHTML = '<i class="fas fa-sign-out-alt"></i> 관리자 로그아웃';
+    } else {
+      btn.innerHTML = '<i class="fas fa-user-shield"></i> 관리자 로그인';
+    }
+  });
+
   const activeUser = window.currentUser || null;
   if (window.renderHeaderUserNav) {
     window.renderHeaderUserNav(activeUser);
