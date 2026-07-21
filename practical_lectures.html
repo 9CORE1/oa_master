@@ -739,7 +739,8 @@
       const id = document.getElementById('videoId').value;
       const title = document.getElementById('videoTitle').value;
       const description = document.getElementById('videoDesc').value;
-      const youtubeId = document.getElementById('youtubeId').value;
+      const rawYoutubeId = document.getElementById('youtubeId').value;
+      const youtubeId = (window.extractYoutubeId ? window.extractYoutubeId(rawYoutubeId) : rawYoutubeId).trim();
       const tag = document.getElementById('videoTag').value;
       
       if (!title || !description || !youtubeId) {

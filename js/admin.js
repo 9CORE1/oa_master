@@ -284,6 +284,9 @@ function renderHeaderUserNavUniversal(user) {
         <span style="font-size:13px; font-weight:bold; color:#c2410c; display:inline-flex; align-items:center; gap:5px;">
           <i class="fas fa-user-shield" style="color:#ea580c;"></i> 관리자모드
         </span>
+        <button id="headerQuickAddBtn" onclick="if(window.openQuickAddModal){window.openQuickAddModal();} return false;" style="background:#16a34a; color:#fff; border:none; padding:5px 12px; border-radius:16px; font-size:12px; font-weight:bold; cursor:pointer; transition:opacity 0.2s;" title="자료실, 영상보기, 추천사이트 콘텐츠 추가">
+          <i class="fas fa-plus-circle"></i> 콘텐츠 추가
+        </button>
         <button id="headerJsonUpdateBtn" onclick="if(window.updateJSONData){window.updateJSONData();} return false;" style="background:#0284c7; color:#fff; border:none; padding:5px 12px; border-radius:16px; font-size:12px; font-weight:bold; cursor:pointer; transition:opacity 0.2s;" title="수정한 데이터를 GitHub 서버 소스코드로 자동 커밋 및 업데이트">
           <i class="fas fa-file-export"></i> JSON 업데이트
         </button>
@@ -688,6 +691,243 @@ function saveEmailJSSettingsFromModal() {
   closeAdminModal('emailjsSettingsModal');
 }
 
+// --- Global YouTube ID Extractor ---
+function extractYoutubeId(input) {
+  if (!input) return '';
+  const str = input.trim();
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+  const match = str.match(regExp);
+  if (match && match[2] && match[2].length === 11) {
+    return match[2];
+  }
+  return str;
+}
+
+// --- Admin Quick Content Add Modal (자료실 / 영상보기 / 추천사이트) ---
+function openQuickAddModal(defaultType = 'written_archive') {
+  const existingModal = document.getElementById('quickAddModal');
+  if (existingModal) existingModal.remove();
+
+  const modalHTML = `
+    <div class="modal-backdrop open" id="quickAddModal" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:9999999; display:flex; justify-content:center; align-items:center;">
+      <div class="modal-content" style="background:#fff; padding:28px; border-radius:14px; max-width:520px; width:92%; position:relative; text-align:left; box-shadow:0 20px 30px rgba(0,0,0,0.3); max-height:90vh; overflow-y:auto;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; border-bottom:1px solid #e2e8f0; padding-bottom:12px;">
+          <h3 style="margin:0; font-size:19px; color:#0f172a; font-weight:700; display:flex; align-items:center; gap:8px;">
+            <i class="fas fa-plus-circle" style="color:#16a34a;"></i> 관리자 콘텐츠 신규 등록
+          </h3>
+          <button onclick="closeAdminModal('quickAddModal')" style="background:none; border:none; font-size:24px; cursor:pointer; color:#64748b;">&times;</button>
+        </div>
+
+        <div class="modal-body" style="display:flex; flex-direction:column; gap:14px;">
+          <div>
+            <label style="display:block; font-weight:700; font-size:13px; margin-bottom:6px; color:#334155;">등록할 항목 구분 (카테고리)</label>
+            <select id="quickAddType" onchange="handleQuickAddTypeChange(this.value)" style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:8px; font-size:14px; font-weight:600; background:#f8fafc; color:#0f172a;">
+              <option value="written_archive" ${defaultType === 'written_archive' ? 'selected' : ''}>📁 [자료실] 필기과정 핵심요약 / 기출자료</option>
+              <option value="practical_archive" ${defaultType === 'practical_archive' ? 'selected' : ''}>💻 [자료실] 실기과정 실습예제 / 서식자료</option>
+              <option value="written_video" ${defaultType === 'written_video' ? 'selected' : ''}>🎥 [영상보기] 필기과정 이론 및 풀이강의</option>
+              <option value="practical_video" ${defaultType === 'practical_video' ? 'selected' : ''}>🎬 [영상보기] 실기과정 엑셀/액세스/PPT강의</option>
+              <option value="recommend_sites" ${defaultType === 'recommend_sites' ? 'selected' : ''}>🔗 [추천사이트] 외부 유용한 수험 링크</option>
+            </select>
+          </div>
+
+          <div id="quickFormFields" style="display:flex; flex-direction:column; gap:14px;">
+            <!-- Fields rendered dynamically via handleQuickAddTypeChange -->
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:22px; border-top:1px solid #f1f5f9; padding-top:14px;">
+          <button type="button" onclick="closeAdminModal('quickAddModal')" style="padding:9px 18px; background:#e2e8f0; border:none; border-radius:8px; cursor:pointer; font-weight:600; color:#475569;">취소</button>
+          <button type="button" onclick="submitQuickAddForm()" style="padding:9px 20px; background:#16a34a; color:#fff; border:none; border-radius:8px; cursor:pointer; font-weight:700; box-shadow:0 4px 12px rgba(22,163,74,0.3);">등록 완료</button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  const tempDiv = document.createElement('div');
+  tempDiv.innerHTML = modalHTML;
+  document.body.appendChild(tempDiv.firstElementChild);
+
+  handleQuickAddTypeChange(defaultType);
+}
+
+function handleQuickAddTypeChange(type) {
+  const container = document.getElementById('quickFormFields');
+  if (!container) return;
+
+  if (type === 'written_archive' || type === 'practical_archive') {
+    const isWritten = type === 'written_archive';
+    container.innerHTML = `
+      <div>
+        <label style="display:block; font-weight:700; font-size:13px; margin-bottom:4px; color:#334155;">자료 제목 *</label>
+        <input type="text" id="qaTitle" placeholder="${isWritten ? '예: [핵심요약] 2026년 컴활 1급 필기 요약집' : '예: [실습파일] 엑셀 스프레드시트 기출 예제'}" style="width:100%; padding:9px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; font-size:13px;">
+      </div>
+      <div>
+        <label style="display:block; font-weight:700; font-size:13px; margin-bottom:4px; color:#334155;">자료 설명 및 안내 *</label>
+        <textarea id="qaDesc" placeholder="자료의 세부 특징 및 학습 활용법을 입력하세요." style="width:100%; height:70px; padding:9px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; font-size:13px; resize:vertical;"></textarea>
+      </div>
+      <div style="background:#f8fafc; padding:12px; border-radius:8px; border:1px dashed #cbd5e1;">
+        <label style="display:block; font-weight:700; font-size:13px; margin-bottom:6px; color:#334155;"><i class="fas fa-paperclip" style="color:#0284c7;"></i> 실습/요약 파일 선택</label>
+        <input type="file" id="qaFile" onchange="handleQuickAddFileSelected(this)" style="margin-bottom:8px; width:100%; font-size:12px;">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+          <div>
+            <label style="font-size:11px; font-weight:600; color:#64748b;">파일명</label>
+            <input type="text" id="qaFileName" readonly placeholder="파일 선택 시 자동 입력" style="width:100%; padding:6px; border:1px solid #cbd5e1; border-radius:4px; font-size:12px; background:#fff;">
+          </div>
+          <div>
+            <label style="font-size:11px; font-weight:600; color:#64748b;">파일 크기</label>
+            <input type="text" id="qaFileSize" readonly placeholder="자동 계산" style="width:100%; padding:6px; border:1px solid #cbd5e1; border-radius:4px; font-size:12px; background:#fff;">
+          </div>
+        </div>
+      </div>
+    `;
+  } else if (type === 'written_video' || type === 'practical_video') {
+    const isWritten = type === 'written_video';
+    container.innerHTML = `
+      <div>
+        <label style="display:block; font-weight:700; font-size:13px; margin-bottom:4px; color:#334155;">강의 제목 *</label>
+        <input type="text" id="qaTitle" placeholder="${isWritten ? '예: 컴퓨터활용능력 2급 필기 핵심 특강' : '예: 컴퓨터활용능력 1급 실기 엑셀 수식 완전정복'}" style="width:100%; padding:9px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; font-size:13px;">
+      </div>
+      <div>
+        <label style="display:block; font-weight:700; font-size:13px; margin-bottom:4px; color:#334155;">강의 상세 설명 *</label>
+        <textarea id="qaDesc" placeholder="동영상 강의 주제 및 커리큘럼 소개" style="width:100%; height:70px; padding:9px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; font-size:13px; resize:vertical;"></textarea>
+      </div>
+      <div>
+        <label style="display:block; font-weight:700; font-size:13px; margin-bottom:4px; color:#334155;">유튜브 링크 또는 ID *</label>
+        <input type="text" id="qaYoutube" placeholder="예: https://www.youtube.com/watch?v=NA6cU9s1GLU 또는 NA6cU9s1GLU" style="width:100%; padding:9px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; font-size:13px;">
+        <p style="margin:4px 0 0; font-size:11px; color:#64748b;">유튜브 주소를 그대로 붙여넣으셔도 비디오 ID가 자동 추출됩니다.</p>
+      </div>
+      <div>
+        <label style="display:block; font-weight:700; font-size:13px; margin-bottom:4px; color:#334155;">과목 급수 태그</label>
+        <select id="qaTag" style="width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:6px; font-size:13px;">
+          <option value="1급">1급</option>
+          <option value="2급">2급</option>
+          <option value="기타">기타 (전체)</option>
+        </select>
+      </div>
+    `;
+  } else if (type === 'recommend_sites') {
+    container.innerHTML = `
+      <div>
+        <label style="display:block; font-weight:700; font-size:13px; margin-bottom:4px; color:#334155;">사이트 이름 *</label>
+        <input type="text" id="qaTitle" placeholder="예: 대한상공회의소 자격평가사업단" style="width:100%; padding:9px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; font-size:13px;">
+      </div>
+      <div>
+        <label style="display:block; font-weight:700; font-size:13px; margin-bottom:4px; color:#334155;">사이트 URL (주소) *</label>
+        <input type="url" id="qaUrl" placeholder="예: https://license.korcham.net" style="width:100%; padding:9px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; font-size:13px;">
+      </div>
+      <div>
+        <label style="display:block; font-weight:700; font-size:13px; margin-bottom:4px; color:#334155;">사이트 소개 및 활용 팁 *</label>
+        <textarea id="qaDesc" placeholder="수험생들을 위한 해당 사이트 활용 가이드" style="width:100%; height:70px; padding:9px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; font-size:13px; resize:vertical;"></textarea>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+        <div>
+          <label style="display:block; font-weight:700; font-size:13px; margin-bottom:4px; color:#334155;">카테고리</label>
+          <select id="qaCategory" style="width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:6px; font-size:13px;">
+            <option value="공식 접수처">공식 접수처</option>
+            <option value="학습 커뮤니티">학습 커뮤니티</option>
+            <option value="인터넷 강의">인터넷 강의</option>
+            <option value="무료 기출풀이">무료 기출풀이</option>
+            <option value="기타 자료실">기타 자료실</option>
+          </select>
+        </div>
+        <div>
+          <label style="display:block; font-weight:700; font-size:13px; margin-bottom:4px; color:#334155;">축약 태그</label>
+          <input type="text" id="qaTag" placeholder="예: 상공회의소" style="width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; font-size:13px;">
+        </div>
+      </div>
+    `;
+  }
+}
+
+function handleQuickAddFileSelected(input) {
+  const file = input.files[0];
+  if (!file) return;
+
+  const fnInput = document.getElementById('qaFileName');
+  const fsInput = document.getElementById('qaFileSize');
+
+  if (fnInput) fnInput.value = file.name;
+  if (fsInput) {
+    let sizeStr = "";
+    if (file.size > 1024 * 1024) {
+      sizeStr = (file.size / (1024 * 1024)).toFixed(1) + " MB";
+    } else {
+      sizeStr = (file.size / 1024).toFixed(0) + " KB";
+    }
+    fsInput.value = sizeStr;
+  }
+}
+
+function submitQuickAddForm() {
+  const type = document.getElementById('quickAddType').value;
+  const title = document.getElementById('qaTitle') ? document.getElementById('qaTitle').value.trim() : '';
+  const desc = document.getElementById('qaDesc') ? document.getElementById('qaDesc').value.trim() : '';
+
+  if (!title || !desc) {
+    alert('❌ 필수 입력 항목(제목, 설명)을 기입해주세요.');
+    return;
+  }
+
+  let itemData = { title, description: desc };
+  let typeLabel = "";
+
+  if (type === 'written_archive' || type === 'practical_archive') {
+    typeLabel = type === 'written_archive' ? '필기 자료실' : '실기 자료실';
+    const fileName = document.getElementById('qaFileName') ? document.getElementById('qaFileName').value.trim() : '';
+    const fileSize = document.getElementById('qaFileSize') ? document.getElementById('qaFileSize').value.trim() : '';
+    if (!fileName) {
+      alert('❌ 파일명이 선택되지 않았습니다.');
+      return;
+    }
+    itemData.fileName = fileName;
+    itemData.fileSize = fileSize || '1.0 MB';
+  } else if (type === 'written_video' || type === 'practical_video') {
+    typeLabel = type === 'written_video' ? '필기 영상강의' : '실기 영상강의';
+    const rawYoutube = document.getElementById('qaYoutube') ? document.getElementById('qaYoutube').value.trim() : '';
+    const tag = document.getElementById('qaTag') ? document.getElementById('qaTag').value : '1급';
+    const youtubeId = extractYoutubeId(rawYoutube);
+
+    if (!youtubeId) {
+      alert('❌ 올바른 유튜브 주소 또는 비디오 ID를 입력해주세요.');
+      return;
+    }
+    itemData.youtubeId = youtubeId;
+    itemData.tag = tag;
+  } else if (type === 'recommend_sites') {
+    typeLabel = '추천 사이트';
+    const siteUrl = document.getElementById('qaUrl') ? document.getElementById('qaUrl').value.trim() : '';
+    const category = document.getElementById('qaCategory') ? document.getElementById('qaCategory').value : '공식 접수처';
+    const tag = document.getElementById('qaTag') ? document.getElementById('qaTag').value.trim() : '링크';
+
+    if (!siteUrl) {
+      alert('❌ 사이트 URL 주소를 입력해주세요.');
+      return;
+    }
+    itemData.siteUrl = siteUrl;
+    itemData.category = category;
+    itemData.tag = tag || '링크';
+  }
+
+  // Save item using DB.save
+  window.DB.save(type, itemData);
+
+  if (window.showToast) {
+    window.showToast(`🎉 [${typeLabel}] 신규 콘텐츠가 성공적으로 등록되었습니다!`, 'success');
+  } else {
+    alert(`🎉 [${typeLabel}] 신규 콘텐츠가 성공적으로 등록되었습니다!`);
+  }
+
+  closeAdminModal('quickAddModal');
+
+  // Trigger state refresh
+  window.dispatchEvent(new CustomEvent('adminStateChanged'));
+
+  // If page rendering functions exist, invoke them
+  if (window.renderArchiveTable) window.renderArchiveTable();
+  if (window.renderPlaylist) window.renderPlaylist();
+  if (window.renderSitesGrid) window.renderSitesGrid();
+}
+
 // Export functions to window scope
 window.isAdmin = isAdmin;
 window.toggleAdminMode = toggleAdminMode;
@@ -704,3 +944,9 @@ window.updateJSONData = updateJSONData;
 window.showEmailJSSettingsModal = showEmailJSSettingsModal;
 window.saveEmailJSSettingsFromModal = saveEmailJSSettingsFromModal;
 window.renderHeaderUserNavUniversal = renderHeaderUserNavUniversal;
+window.extractYoutubeId = extractYoutubeId;
+window.openQuickAddModal = openQuickAddModal;
+window.handleQuickAddTypeChange = handleQuickAddTypeChange;
+window.handleQuickAddFileSelected = handleQuickAddFileSelected;
+window.submitQuickAddForm = submitQuickAddForm;
+
