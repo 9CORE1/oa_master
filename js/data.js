@@ -63,23 +63,15 @@ const DEFAULT_WRITTEN_VIDEO = [
 
 const DEFAULT_PRACTICAL_ARCHIVE = [
   {
-    "id": "pa-2",
-    "title": "[공식문제] 사무자동화산업기사 실기 공단 공개문제 6선",
-    "description": "산업인력공단에서 배포한 사무자동화 실기(엑셀, 액세스, 파워포인트) 공식 공개문제 파일과 해설 문서입니다. 시험장에 가기 전 반드시 마스터해야 하는 필수 자료입니다.",
-    "fileName": "사무자동화_실기_공개문제_6선.zip",
-    "fileSize": "8.7 MB",
-    "date": "2026-04-28",
-    "author": "관리자"
-  },
-  {
-    "title": "[영상] 컴퓨터활용능력2급 실기대비(1)",
+    "title": "컴퓨터활용능력2급 실기대비(1)",
     "description": "컴퓨터활용능력2급 실기대비(1)-기본작업\n컴퓨터활용능력2급 실기대비(2)-계산작업\n컴퓨터활용능력2급 실기대비(3)-분석작업\n컴퓨터활용능력2급 실기대비(4)-기타작업",
     "fileName": "구글드라이브_실습자료.zip",
     "fileSize": "Google Drive",
     "id": "pr-1784605257489",
     "date": "2026-07-21",
     "author": "관리자",
-    "fileDriveUrl": "https://drive.google.com/file/d/1xi-FujeHiocGmceKpUdNZtwpuxTerkzs/view?usp=sharing"
+    "fileDriveUrl": "https://drive.google.com/file/d/1xi-FujeHiocGmceKpUdNZtwpuxTerkzs/view?usp=sharing",
+    "hasVideoLink": true
   }
 ];
 
