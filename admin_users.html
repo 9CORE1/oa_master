@@ -34,13 +34,15 @@
     footer {
       margin-top: auto;
       flex-shrink: 0;
-      background: #f8fafc;
-      border-top: 1px solid var(--border-color);
+      background-color: var(--neutral-900);
+      color: var(--neutral-400);
+      border-top: var(--border-width) solid var(--neutral-800);
+      padding: 24px 0;
     }
 
     .content-container {
       max-width: 1360px;
-      padding: 30px 20px;
+      padding: 30px 20px 60px 20px;
     }
 
     .table-responsive {
@@ -350,12 +352,12 @@
 
   <!-- Footer -->
   <footer>
-    <div class="footer-container" style="padding-top: 15px; padding-bottom: 25px;">
-      <div class="footer-bottom" style="border-top: none; padding-top: 0;">
-        <p>&copy; 2026 OA MASTER. All Rights Reserved. Designed for Excellence.</p>
+    <div class="footer-container" style="gap:0; padding:0 20px;">
+      <div class="footer-bottom" style="border-top:none; padding-top:0;">
+        <p style="color:var(--neutral-400);">&copy; 2026 OA MASTER. All Rights Reserved. Designed for Excellence.</p>
         <div class="footer-bottom-links">
           <a href="admin_users.html" style="color:var(--theme-primary); font-weight:700;"><i class="fas fa-users-cog"></i> 회원 관리</a>
-          <a href="#" onclick="if(window.handleGlobalLogout){window.handleGlobalLogout();}else{toggleAdminMode();} return false;"><i class="fas fa-sign-out-alt"></i> 관리자 로그아웃</a>
+          <a href="#" onclick="if(window.handleGlobalLogout){window.handleGlobalLogout();}else{toggleAdminMode();} return false;" style="color:var(--neutral-400);"><i class="fas fa-sign-out-alt"></i> 관리자 로그아웃</a>
         </div>
       </div>
     </div>
