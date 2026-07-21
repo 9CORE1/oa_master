@@ -107,12 +107,12 @@
           <table class="archive-table">
             <thead>
               <tr>
-                <th style="width: 70px;">번호</th>
+                <th style="width: 70px; white-space: nowrap; text-align: center;">번호</th>
                 <th>실습 자료 제목 및 요약</th>
                 <th style="width: 140px;">파일 형식</th>
                 <th style="width: 120px;">등록일</th>
                 <th class="admin-only" style="width: 120px; display: none;">관리</th>
-                <th style="width: 140px; text-align: center;">다운로드</th>
+                <th style="width: 140px; text-align: center; white-space: nowrap;">다운로드</th>
               </tr>
             </thead>
             <tbody id="archiveTableBody">
@@ -297,14 +297,14 @@
         const gradeBadge = `<span style="font-size:11px; font-weight:700; padding:2px 7px; border-radius:12px; font-family:var(--font-accent); ${gradeStyle}" title="자격증 급수: ${grade}">${grade}</span>`;
 
         row.innerHTML = `
-          <td>${index + 1}</td>
+          <td style="text-align: center; white-space: nowrap;">${index + 1}</td>
           <td>
             <div style="display:flex; align-items:center; flex-wrap:wrap; gap:6px;">
               ${gradeBadge}
               ${item.hasVideoLink ? `<span style="display:inline-flex; align-items:center; gap:4px; font-size:11px; font-weight:700; color:#6366f1; background:rgba(99,102,241,0.12); border:1px solid rgba(99,102,241,0.3); padding:2px 7px; border-radius:12px;" title="동영상 강의와 연계된 학습 자료입니다."><i class="fas fa-play-circle" style="color:#6366f1;"></i> 영상연계</span>` : ''}
               <span class="archive-title-cell" onclick="showArchiveDetail('${item.id}')">${item.title}</span>
             </div>
-            <div style="font-size:12px; color:var(--neutral-500); margin-top:4px;">${item.description}</div>
+            <div style="font-size:12px; color:var(--neutral-500); margin-top:4px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; text-overflow:ellipsis; line-height:1.4;" title="${item.description}">${item.description}</div>
           </td>
           <td>${formatDisplay}</td>
           <td style="font-family:var(--font-accent); font-size:13px;">${item.date}</td>
@@ -316,7 +316,7 @@
               <button class="btn-icon btn-delete" onclick="deleteArchive('${item.id}')" title="삭제"><i class="fas fa-trash-alt"></i></button>
             </div>
           </td>
-          <td style="text-align: center;">
+          <td style="text-align: center; white-space: nowrap;">
             <a href="#" class="download-link" onclick="downloadVirtualFile(event, '${item.fileName}', '${item.title}', '${item.id}')">
               <i class="fas fa-download"></i> 다운로드
             </a>

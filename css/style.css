@@ -725,10 +725,12 @@ main {
   font-weight: 600;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
-  padding: 6px 12px;
+  padding: 6px 14px;
   border-radius: var(--radius-sm);
   background-color: rgba(var(--theme-primary-rgb), 0.08);
+  white-space: nowrap;
 }
 
 .download-link:hover {
