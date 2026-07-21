@@ -74,11 +74,12 @@ const DEFAULT_PRACTICAL_ARCHIVE = [
   {
     "title": "[영상] 컴퓨터활용능력2급 실기대비(1)",
     "description": "컴퓨터활용능력2급 실기대비(1)-기본작업\n컴퓨터활용능력2급 실기대비(2)-계산작업\n컴퓨터활용능력2급 실기대비(3)-분석작업\n컴퓨터활용능력2급 실기대비(4)-기타작업",
-    "fileName": "2급 엑셀 A형.zip",
-    "fileSize": "314 KB",
+    "fileName": "구글드라이브_실습자료.zip",
+    "fileSize": "Google Drive",
     "id": "pr-1784605257489",
     "date": "2026-07-21",
-    "author": "관리자"
+    "author": "관리자",
+    "fileDriveUrl": "https://drive.google.com/file/d/1xi-FujeHiocGmceKpUdNZtwpuxTerkzs/view?usp=sharing"
   }
 ];
 
