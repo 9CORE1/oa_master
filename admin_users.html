@@ -209,12 +209,13 @@
             <thead>
               <tr>
                 <th style="width: 60px; white-space: nowrap; text-align: center;">번호</th>
-                <th>회원 프로필 / 닉네임</th>
-                <th>이메일 주소</th>
-                <th style="width: 120px; text-align: center;">가입 유형</th>
-                <th style="width: 130px; text-align: center;">등록/최종일시</th>
-                <th style="width: 200px;">관리자 메모</th>
-                <th style="width: 100px; text-align: center; white-space: nowrap;">관리</th>
+                <th style="white-space: nowrap;">회원 프로필 / 닉네임</th>
+                <th style="white-space: nowrap;">이메일 주소</th>
+                <th style="white-space: nowrap;">학교명 / 소속명</th>
+                <th style="width: 120px; white-space: nowrap; text-align: center;">가입 유형</th>
+                <th style="width: 130px; white-space: nowrap; text-align: center;">등록/최종일시</th>
+                <th style="width: 180px; white-space: nowrap;">관리자 메모</th>
+                <th style="width: 80px; white-space: nowrap; text-align: center;">관리</th>
               </tr>
             </thead>
             <tbody id="usersTableBody">
@@ -371,7 +372,8 @@
         if (currentSearchQuery) {
           const emailStr = (u.email || '').toLowerCase();
           const nameStr = (u.displayName || u.name || '').toLowerCase();
-          if (!emailStr.includes(currentSearchQuery) && !nameStr.includes(currentSearchQuery)) {
+          const schoolStr = (u.schoolName || u.school || u.organization || u.belong || '').toLowerCase();
+          if (!emailStr.includes(currentSearchQuery) && !nameStr.includes(currentSearchQuery) && !schoolStr.includes(currentSearchQuery)) {
             return false;
           }
         }
@@ -409,9 +411,12 @@
         const dateStr = u.updatedAt ? u.updatedAt.split('T')[0] : (u.createdAt ? u.createdAt.split('T')[0] : '-');
         const memoStr = u.memo ? `<span class="memo-badge" title="${u.memo}">${u.memo}</span>` : `<span style="color:var(--neutral-400); font-size:12px;">-</span>`;
 
+        const schoolVal = u.schoolName || u.school || u.organization || u.belong || '';
+        const schoolDisplay = schoolVal ? `<span style="font-size:13px; font-weight:600; color:var(--neutral-800);"><i class="fas fa-graduation-cap" style="color:var(--theme-primary); margin-right:4px;"></i>${schoolVal}</span>` : `<span style="color:var(--neutral-400); font-size:12px;">-</span>`;
+
         row.innerHTML = `
           <td style="text-align:center; white-space:nowrap;">${globalIdx + 1}</td>
-          <td>
+          <td style="white-space:nowrap;">
             <div class="user-avatar-cell">
               <img src="${photo}" class="user-avatar-img" alt="avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=0e4987&color=fff'">
               <div>
@@ -419,9 +424,10 @@
               </div>
             </div>
           </td>
-          <td style="font-family:var(--font-accent); font-size:13px; color:var(--neutral-700);">${u.email || '-'}</td>
-          <td style="text-align:center;">${providerBadge}</td>
-          <td style="text-align:center; font-family:var(--font-accent); font-size:13px;">${dateStr}</td>
+          <td style="font-family:var(--font-accent); font-size:13px; color:var(--neutral-700); white-space:nowrap;">${u.email || '-'}</td>
+          <td style="white-space:nowrap;">${schoolDisplay}</td>
+          <td style="text-align:center; white-space:nowrap;">${providerBadge}</td>
+          <td style="text-align:center; font-family:var(--font-accent); font-size:13px; white-space:nowrap;">${dateStr}</td>
           <td>${memoStr}</td>
           <td style="text-align:center; white-space:nowrap;">
             <button class="btn-icon btn-edit" onclick="openMemoModal('${u.id}', '${name.replace(/'/g, "\\'")}', '${(u.email || '').replace(/'/g, "\\'")}', '${(u.memo || '').replace(/'/g, "\\'")}')" title="메모 작성/수정">
