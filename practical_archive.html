@@ -109,8 +109,7 @@
               <tr>
                 <th style="width: 70px;">번호</th>
                 <th>실습 자료 제목 및 요약</th>
-                <th style="width: 150px;">파일명</th>
-                <th style="width: 100px;">파일 크기</th>
+                <th style="width: 140px;">파일 형식</th>
                 <th style="width: 120px;">등록일</th>
                 <th class="admin-only" style="width: 120px; display: none;">관리</th>
                 <th style="width: 140px; text-align: center;">다운로드</th>
@@ -140,11 +139,17 @@
         <input type="hidden" id="archiveId">
         <div class="form-group">
           <label class="form-label" for="archiveTitle">실습 자료 제목</label>
-          <input type="text" id="archiveTitle" class="form-input" placeholder="실습 파일의 제목을 입력하세요.">
+          <input type="text" id="archiveTitle" class="form-input" placeholder="예: [컴활 1급 실기] 엑셀 스프레드시트 기출 종합 예제">
         </div>
         <div class="form-group">
           <label class="form-label" for="archiveDesc">자료 설명 및 요구조건</label>
           <textarea id="archiveDesc" class="form-input" placeholder="엑셀 버전 안내 또는 실습 시 주의사항 등을 적어주세요."></textarea>
+        </div>
+        <div class="form-group" style="background:#f1f5f9; padding:12px 14px; border-radius:8px; border:1px solid #cbd5e1;">
+          <label style="display:inline-flex; align-items:center; gap:8px; cursor:pointer; font-weight:700; color:#334155; font-size:13px; user-select:none;">
+            <input type="checkbox" id="archiveHasVideo" style="width:16px; height:16px; cursor:pointer;">
+            <span><i class="fas fa-play-circle" style="color:#6366f1;"></i> 동영상 강좌 연계 자료 (영상연계 표시)</span>
+          </label>
         </div>
         <div class="form-group"
           style="background-color: var(--neutral-50); padding: 16px; border-radius: var(--radius-md); border: 1px dashed var(--neutral-300);">
@@ -173,7 +178,7 @@
   </div>
 
   <!-- Footer -->
-  <footer>
+  <footer class="footer">
     <div class="footer-container">
       <div class="footer-top">
         <div class="footer-info">
@@ -222,6 +227,8 @@
 
     document.addEventListener('DOMContentLoaded', () => {
       renderArchiveTable();
+
+      // Listen for custom trigger to reload when admin login completes
       window.addEventListener('adminStateChanged', renderArchiveTable);
     });
 
@@ -242,15 +249,37 @@
 
       data.forEach((item, index) => {
         const row = document.createElement('tr');
-        const fileIcon = item.fileDriveUrl ? '<i class="fab fa-google-drive" style="margin-right:6px; color:#34a853;"></i>' : '<i class="far fa-file-excel" style="margin-right:6px; color:var(--neutral-400);"></i>';
+
+        let formatDisplay = "";
+        if (item.fileDriveUrl) {
+          formatDisplay = `<span style="font-size:12px; font-weight:bold; color:#15803d; background:rgba(34,197,94,0.12); padding:3px 8px; border-radius:12px; display:inline-flex; align-items:center; gap:4px;"><i class="fab fa-google-drive"></i> 구글드라이브</span>`;
+        } else {
+          const fn = item.fileName || "";
+          const ext = fn.includes('.') ? fn.substring(fn.lastIndexOf('.')).toUpperCase() : '';
+          let icon = '<i class="far fa-file-excel" style="margin-right:5px; color:#16a34a;"></i>';
+          let extLabel = ext ? ext.replace('.', '') : 'FILE';
+
+          if (ext === '.ZIP' || ext === '.7Z' || ext === '.RAR') {
+            icon = '<i class="far fa-file-archive" style="margin-right:5px; color:#ea580c;"></i>';
+          } else if (ext === '.PDF') {
+            icon = '<i class="far fa-file-pdf" style="margin-right:5px; color:#dc2626;"></i>';
+          } else if (ext === '.HWP' || ext === '.HWPX' || ext === '.DOC' || ext === '.DOCX') {
+            icon = '<i class="far fa-file-word" style="margin-right:5px; color:#2563eb;"></i>';
+          }
+
+          formatDisplay = `<span style="font-size:13px; font-weight:600; color:var(--neutral-800); font-family:var(--font-accent);">${icon}${extLabel}</span>`;
+        }
+
         row.innerHTML = `
           <td>${index + 1}</td>
           <td>
-            <div class="archive-title-cell" onclick="showArchiveDetail('${item.id}')">${item.title}</div>
+            <div style="display:flex; align-items:center; flex-wrap:wrap; gap:6px;">
+              <span class="archive-title-cell" onclick="showArchiveDetail('${item.id}')">${item.title}</span>
+              ${item.hasVideoLink ? `<span style="display:inline-flex; align-items:center; gap:4px; font-size:11px; font-weight:700; color:#6366f1; background:rgba(99,102,241,0.12); border:1px solid rgba(99,102,241,0.3); padding:2px 7px; border-radius:12px;" title="동영상 강의와 연계된 학습 자료입니다."><i class="fas fa-play-circle" style="color:#6366f1;"></i> 영상연계</span>` : ''}
+            </div>
             <div style="font-size:12px; color:var(--neutral-500); margin-top:4px;">${item.description}</div>
           </td>
-          <td>${fileIcon}${item.fileName}</td>
-          <td style="font-family:var(--font-accent); font-size:13px;">${item.fileSize}</td>
+          <td>${formatDisplay}</td>
           <td style="font-family:var(--font-accent); font-size:13px;">${item.date}</td>
           <td class="admin-only" style="${is_admin ? '' : 'display:none;'}">
             <div class="action-buttons">
@@ -329,6 +358,8 @@
       document.getElementById('archiveFile').value = '';
       const driveUrlEl = document.getElementById('archiveDriveUrl');
       if (driveUrlEl) driveUrlEl.value = '';
+      const hasVideoEl = document.getElementById('archiveHasVideo');
+      if (hasVideoEl) hasVideoEl.checked = false;
 
       if (isEdit) {
         const item = window.DB.getById(STORE_KEY, id);
@@ -336,6 +367,7 @@
           document.getElementById('archiveTitle').value = item.title;
           document.getElementById('archiveDesc').value = item.description;
           if (driveUrlEl) driveUrlEl.value = item.fileDriveUrl || '';
+          if (hasVideoEl) hasVideoEl.checked = !!item.hasVideoLink;
           if (item.fileData) window.selectedArchiveFileData = item.fileData;
           window.detectedFileName = item.fileName;
           window.detectedFileSize = item.fileSize;
@@ -355,6 +387,7 @@
       const title = document.getElementById('archiveTitle').value.trim();
       const description = document.getElementById('archiveDesc').value.trim();
       const fileDriveUrl = document.getElementById('archiveDriveUrl') ? document.getElementById('archiveDriveUrl').value.trim() : '';
+      const hasVideoLink = document.getElementById('archiveHasVideo') ? document.getElementById('archiveHasVideo').checked : false;
 
       let existingItem = id ? window.DB.getById(STORE_KEY, id) : null;
 
@@ -379,6 +412,7 @@
       const item = {
         title,
         description,
+        hasVideoLink,
         fileName: fileName || '실습자료.zip',
         fileSize: fileSize || '1.5 MB',
         fileDriveUrl: fileDriveUrl || (existingItem ? existingItem.fileDriveUrl : null)
@@ -397,7 +431,7 @@
 
       // Send EmailJS Notice
       const actionText = id ? "실기 자료 수정" : "실기 자료 신규 등록";
-      const emailMsg = `자료 제목: ${title}\n요구사항: ${description}\n파일명: ${item.fileName} (${item.fileSize})\n수행자: 관리자`;
+      const emailMsg = `자료 제목: ${title}\n요구사항: ${description}\n영상연계여부: ${hasVideoLink ? '예' : '아니오'}\n파일명: ${item.fileName}\n수행자: 관리자`;
 
       window.sendAdminEmailNotification(actionText, title, emailMsg)
         .then(() => {
