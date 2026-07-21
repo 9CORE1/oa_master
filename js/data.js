@@ -84,6 +84,30 @@ const DEFAULT_PRACTICAL_ARCHIVE = [
     "id": "pr-1784607773493",
     "date": "2026-07-21",
     "author": "관리자"
+  },
+  {
+    "title": "컴활2급 기출문제풀이(2)",
+    "description": "컴활2급 기출문제풀이(2)-기본작업\n컴활2급 기출문제풀이(2)-계산작업\n컴활2급 기출문제풀이(2)-분석작업\n컴활2급 기출문제풀이(2)-기타작업",
+    "hasVideoLink": true,
+    "fileFormat": "ZIP",
+    "fileName": "구글드라이브_실습자료.zip",
+    "fileSize": "Google Drive",
+    "fileDriveUrl": "https://drive.google.com/file/d/1U1IbtjheW6bghmdK8aOLAa2NU-K-HNDY/view?usp=sharing",
+    "id": "pr-1784607915491",
+    "date": "2026-07-21",
+    "author": "관리자"
+  },
+  {
+    "title": "컴퓨터활용능력1급 실기대비(1)-엑셀작업",
+    "description": "컴퓨터활용능력1급 실기대비(1)-기본작업①\n컴퓨터활용능력1급 실기대비(2)-기본작업②\n컴퓨터활용능력1급 실기대비(3)-계산작업①\n컴퓨터활용능력1급 실기대비(4)-계산작업②\n컴퓨터활용능력1급 실기대비(5)-분석작업\n컴퓨터활용능력1급 실기대비(6)-기타작업①\n컴퓨터활용능력1급 실기대비(7)-기타작업②",
+    "hasVideoLink": true,
+    "fileFormat": "ZIP",
+    "fileName": "구글드라이브_실습자료.zip",
+    "fileSize": "Google Drive",
+    "fileDriveUrl": "https://drive.google.com/file/d/1tU-VwTvXn-xQ72C-hym8v0vsX407zAGy/view?usp=sharing",
+    "id": "pr-1784608126250",
+    "date": "2026-07-21",
+    "author": "관리자"
   }
 ];
 
