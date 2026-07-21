@@ -268,14 +268,12 @@
 
       <h2 id="modalTitle" style="margin-bottom:20px;">로그인</h2>
 
-      <!-- 이메일 로그인 폼 -->
+      <!-- 이메일 로그인/회원가입 폼 -->
       <form id="authForm" style="display:flex; flex-direction:column; gap:10px;">
-        <input type="email" id="authEmail" placeholder="이메일 주소" required
-          style="padding:10px; border:1px solid #ccc; border-radius:6px;">
-        <input type="password" id="authPassword" placeholder="비밀번호" required
-          style="padding:10px; border:1px solid #ccc; border-radius:6px;">
-        <button type="submit" id="authSubmitBtn"
-          style="padding:10px; background:var(--theme-written); color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:bold;">로그인</button>
+        <input type="text" id="authName" placeholder="성명 (실명 입력)" style="padding:10px; border:1px solid #ccc; border-radius:6px; display:none;">
+        <input type="email" id="authEmail" placeholder="이메일 주소" required style="padding:10px; border:1px solid #ccc; border-radius:6px;">
+        <input type="password" id="authPassword" placeholder="비밀번호" required style="padding:10px; border:1px solid #ccc; border-radius:6px;">
+        <button type="submit" id="authSubmitBtn" style="padding:10px; background:var(--theme-written); color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:bold;">로그인</button>
       </form>
 
       <div style="margin:15px 0; font-size:14px; color:#666;">또는</div>
@@ -936,6 +934,13 @@
           if (authSubmitBtn) authSubmitBtn.textContent = isSignUp ? '회원가입하기' : '로그인';
           toggleText.textContent = isSignUp ? '이미 계정이 있으신가요?' : '계정이 없으신가요?';
           toggleAuthMode.textContent = isSignUp ? '로그인' : '회원가입';
+
+          const nameInput = document.getElementById('authName');
+          if (nameInput) {
+            nameInput.style.display = isSignUp ? 'block' : 'none';
+            nameInput.required = isSignUp;
+            if (isSignUp) setTimeout(() => nameInput.focus(), 100);
+          }
         };
       }
 
@@ -964,12 +969,20 @@
       // ⚡ 이메일 로그인/회원가입 제출 통합 핸들러 (100% 작동 보장)
       const handleEmailAuth = async (e) => {
         if (e) e.preventDefault();
+        const nameInput = document.getElementById('authName');
         const emailInput = document.getElementById('authEmail');
         const passwordInput = document.getElementById('authPassword');
 
         if (!emailInput || !passwordInput) return;
+        const name = nameInput ? nameInput.value.trim() : '';
         const email = emailInput.value.trim();
         const password = passwordInput.value.trim();
+
+        if (isSignUp && !name) {
+          alert('성명(실명)을 입력해 주세요.');
+          if (nameInput) nameInput.focus();
+          return;
+        }
 
         if (!email || !password) {
           alert('이메일과 비밀번호를 모두 입력해 주세요.');
@@ -982,17 +995,22 @@
             : await signInWithEmail(email, password);
 
           if (res.success) {
+            if (isSignUp && name) {
+              await updateUserProfile(name, undefined);
+              res.user.displayName = name;
+              localStorage.setItem('userDisplayName', name);
+            }
             await syncUserToFirestore(res.user);
             renderHeaderUserNav(res.user);
             const targetModal = document.getElementById('authModal');
             if (targetModal) targetModal.style.display = 'none';
-            alert(isSignUp ? '회원가입 완료!' : '로그인 성공!');
+            alert(isSignUp ? '회원가입이 성공적으로 완료되었습니다!' : '로그인 성공!');
           } else {
             alert('오류: ' + res.error);
           }
         } catch (err) {
-          console.error('로그인 처리 중 오류 발생:', err);
-          alert('로그인 처리 중 오류가 발생했습니다: ' + (err.message || err));
+          console.error('로그인/회원가입 처리 중 오류 발생:', err);
+          alert('처리 중 오류가 발생했습니다: ' + (err.message || err));
         }
       };
 
