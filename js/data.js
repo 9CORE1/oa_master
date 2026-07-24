@@ -317,32 +317,40 @@ const DEFAULT_PRACTICAL_VIDEO = [
     "description": "컴퓨터활용능력2급 기출문제 풀이(2)-Part 1. 기본작업",
     "youtubeId": "9_2pFnBMrQ4",
     "id": "pr-1783387904195",
-    "date": "2026-07-07",
-    "author": "관리자"
+    "date": "2026-07-24",
+    "author": "관리자",
+    "tag": "2급",
+    "archiveId": "pr-1784607915491"
   },
   {
     "title": "컴활2급 기출문제풀이(2)-계산작업",
     "description": "컴퓨터활용능력2급 기출문제 풀이(2)-Part 2. 계산작업",
     "youtubeId": "gpv-ggIBJ1Y",
     "id": "pr-1783387930562",
-    "date": "2026-07-07",
-    "author": "관리자"
+    "date": "2026-07-24",
+    "author": "관리자",
+    "tag": "2급",
+    "archiveId": "pr-1784607915491"
   },
   {
     "title": "컴활2급 기출문제풀이(2)-분석작업",
     "description": "컴퓨터활용능력2급 기출문제 풀이(2)-Part 3. 분석작업",
     "youtubeId": "3GBweEizEkE",
     "id": "pr-1783387950061",
-    "date": "2026-07-07",
-    "author": "관리자"
+    "date": "2026-07-24",
+    "author": "관리자",
+    "tag": "2급",
+    "archiveId": "pr-1784607915491"
   },
   {
     "title": "컴활2급 기출문제풀이(2)-기타작업",
     "description": "컴퓨터활용능력2급 기출문제 풀이(2)-Part 4. 기타작업",
     "youtubeId": "U955kn_6LYY",
     "id": "pr-1783387978827",
-    "date": "2026-07-07",
-    "author": "관리자"
+    "date": "2026-07-24",
+    "author": "관리자",
+    "tag": "2급",
+    "archiveId": "pr-1784607915491"
   },
   {
     "title": "컴퓨터활용능력1급 실기대비(1)-기본작업(1)",
