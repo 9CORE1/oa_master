@@ -309,29 +309,20 @@
         let formatDisplay = "";
         const fmt = (item.fileFormat || (item.fileName && item.fileName.includes('.') ? item.fileName.substring(item.fileName.lastIndexOf('.')).replace('.', '') : 'XLSX')).toUpperCase();
 
-        let badgeStyle = "background: rgba(148, 163, 184, 0.1); color: #475569; border: 1px solid rgba(148, 163, 184, 0.3);";
-        let icon = '<i class="far fa-file-excel" style="margin-right:5px;"></i>';
-        
+        let icon = '<i class="far fa-file-excel" style="margin-right:5px; color:#16a34a;"></i>';
         if (fmt.includes('ZIP') || fmt.includes('7Z') || fmt.includes('RAR')) {
-          badgeStyle = "background: rgba(249, 115, 22, 0.1); color: #c2410c; border: 1px solid rgba(249, 115, 22, 0.3);";
-          icon = '<i class="far fa-file-archive" style="margin-right:5px;"></i>';
+          icon = '<i class="far fa-file-archive" style="margin-right:5px; color:#ea580c;"></i>';
         } else if (fmt.includes('PDF')) {
-          badgeStyle = "background: rgba(239, 68, 68, 0.1); color: #b91c1c; border: 1px solid rgba(239, 68, 68, 0.3);";
-          icon = '<i class="far fa-file-pdf" style="margin-right:5px;"></i>';
+          icon = '<i class="far fa-file-pdf" style="margin-right:5px; color:#dc2626;"></i>';
         } else if (fmt.includes('XLS') || fmt.includes('CSV')) {
-          badgeStyle = "background: rgba(34, 197, 94, 0.1); color: #15803d; border: 1px solid rgba(34, 197, 94, 0.3);";
-          icon = '<i class="far fa-file-excel" style="margin-right:5px;"></i>';
-        } else if (fmt.includes('HWP') || fmt.includes('DOC')) {
-          badgeStyle = "background: rgba(59, 130, 246, 0.1); color: #1d4ed8; border: 1px solid rgba(59, 130, 246, 0.3);";
-          icon = '<i class="far fa-file-word" style="margin-right:5px;"></i>';
-        }
-        
-        if (item.fileDriveUrl) {
+          icon = '<i class="far fa-file-excel" style="margin-right:5px; color:#16a34a;"></i>';
+        } else if (fmt.includes('HWP') || fmt.includes('DOC') || fmt.includes('HWPX')) {
+          icon = '<i class="far fa-file-word" style="margin-right:5px; color:#2563eb;"></i>';
+        } else if (item.fileDriveUrl) {
           icon = '<i class="fab fa-google-drive" style="margin-right:5px; color:#34a853;"></i>';
-          badgeStyle = "background: rgba(52, 168, 83, 0.1); color: #1e7e34; border: 1px solid rgba(52, 168, 83, 0.3);";
         }
 
-        formatDisplay = `<span style="font-size:11px; font-weight:700; padding:3px 8px; border-radius:12px; font-family:var(--font-accent); display:inline-flex; align-items:center; ${badgeStyle}">${icon}${fmt}</span>`;
+        formatDisplay = `<span style="font-size:13px; font-weight:600; color:var(--neutral-800); font-family:var(--font-accent);">${icon}${fmt}</span>`;
 
         const grade = item.grade || (item.title && item.title.includes('2급') ? '2급' : (item.title && item.title.includes('공단') ? '공통' : '1급'));
 
