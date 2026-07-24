@@ -578,8 +578,36 @@
 
       const item = itemId ? window.DB.getById(STORE_KEY, itemId) : null;
       if (item && item.fileDriveUrl) {
-        window.open(item.fileDriveUrl, '_blank');
-        showToast('🔗 구글 드라이브 공유 링크로 이동합니다.', 'info');
+        let downloadUrl = null;
+        const url = item.fileDriveUrl;
+        
+        let match = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+        if (match && match[1]) {
+          downloadUrl = `https://drive.google.com/uc?export=download&id=${match[1]}`;
+        } else {
+          match = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+          if (match && match[1]) {
+            downloadUrl = `https://drive.google.com/uc?export=download&id=${match[1]}`;
+          } else if (url.includes('drive.google.com/uc') || url.includes('docs.google.com/uc')) {
+            downloadUrl = url;
+          }
+        }
+
+        if (downloadUrl) {
+          const iframe = document.createElement('iframe');
+          iframe.style.display = 'none';
+          iframe.src = downloadUrl;
+          document.body.appendChild(iframe);
+          setTimeout(() => {
+            if (document.body.contains(iframe)) {
+              document.body.removeChild(iframe);
+            }
+          }, 5000);
+          showToast(`${fileName} 파일 다운로드를 시작합니다.`, 'success');
+        } else {
+          window.open(item.fileDriveUrl, '_blank');
+          showToast('🔗 구글 드라이브 공유 링크로 이동합니다.', 'info');
+        }
         return;
       }
 
@@ -639,7 +667,7 @@
               </div>
               <div style="display:flex; justify-content:space-between; align-items:center; background-color:rgba(var(--theme-primary-rgb), 0.03); padding: 12px 16px; border-radius: var(--radius-sm);">
                 <span style="font-size: 13px; font-weight:500; color:var(--neutral-600);"><i class="fas fa-paperclip"></i> ${item.fileName} (${item.fileSize})</span>
-                <button class="btn btn-primary" onclick="closeAdminModal('detailModal'); downloadVirtualFile(event, '${item.fileName}', '${item.title}');" style="padding:8px 16px; font-size:13px;"><i class="fas fa-download"></i> 받기</button>
+                <button class="btn btn-primary" onclick="closeAdminModal('detailModal'); downloadVirtualFile(event, '${item.fileName}', '${item.title}', '${item.id}');" style="padding:8px 16px; font-size:13px;"><i class="fas fa-download"></i> 받기</button>
               </div>
             </div>
             <div class="modal-footer">
