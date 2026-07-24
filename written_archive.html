@@ -582,7 +582,7 @@
         const url = item.fileDriveUrl;
         
         let fileId = null;
-        let match = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+        let match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
         if (match && match[1]) {
           fileId = match[1];
         } else {
@@ -594,8 +594,9 @@
 
         if (fileId) {
           const ext = fileName.includes('.') ? fileName.substring(fileName.lastIndexOf('.')).toLowerCase() : '';
-          if (ext === '.xlsx' || ext === '.xlsm') {
-            downloadUrl = `https://docs.google.com/spreadsheets/d/${fileId}/export?format=${ext.substring(1)}`;
+          if (url.includes('spreadsheets') || ext === '.xlsx' || ext === '.xlsm') {
+            const formatType = (ext === '.xlsm') ? 'xlsm' : 'xlsx';
+            downloadUrl = `https://docs.google.com/spreadsheets/d/${fileId}/export?format=${formatType}`;
           } else {
             downloadUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
           }
