@@ -428,8 +428,9 @@ const DEFAULT_PRACTICAL_VIDEO = [
     "youtubeId": "DrdfU2GP6ik",
     "tag": "1급",
     "id": "pr-1783396020452",
-    "date": "2026-07-07",
-    "author": "관리자"
+    "date": "2026-07-24",
+    "author": "관리자",
+    "archiveId": "pr-1784608287594"
   },
   {
     "title": "컴퓨터활용능력1급 DB실기(2)-DB구축(2)",
@@ -437,8 +438,9 @@ const DEFAULT_PRACTICAL_VIDEO = [
     "youtubeId": "wc9nI28gLe8",
     "tag": "1급",
     "id": "pr-1783396040385",
-    "date": "2026-07-07",
-    "author": "관리자"
+    "date": "2026-07-24",
+    "author": "관리자",
+    "archiveId": "pr-1784608287594"
   },
   {
     "title": "컴퓨터활용능력1급 DB실기(3)-입력·수정 기능 구현",
@@ -446,8 +448,9 @@ const DEFAULT_PRACTICAL_VIDEO = [
     "youtubeId": "K9YV8h8KkNI",
     "tag": "1급",
     "id": "pr-1783396062987",
-    "date": "2026-07-07",
-    "author": "관리자"
+    "date": "2026-07-24",
+    "author": "관리자",
+    "archiveId": "pr-1784608287594"
   },
   {
     "title": "컴퓨터활용능력1급 DB실기(4)-조회·출력 기능 구현(1)",
@@ -455,8 +458,9 @@ const DEFAULT_PRACTICAL_VIDEO = [
     "youtubeId": "H9crXYaa-eY",
     "tag": "1급",
     "id": "pr-1783396082891",
-    "date": "2026-07-07",
-    "author": "관리자"
+    "date": "2026-07-24",
+    "author": "관리자",
+    "archiveId": "pr-1784608287594"
   },
   {
     "title": "컴퓨터활용능력1급 DB실기(5)-조회·출력 기능 구현(2)",
@@ -464,8 +468,9 @@ const DEFAULT_PRACTICAL_VIDEO = [
     "youtubeId": "ZN574AalN5g",
     "tag": "1급",
     "id": "pr-1783396101185",
-    "date": "2026-07-07",
-    "author": "관리자"
+    "date": "2026-07-24",
+    "author": "관리자",
+    "archiveId": "pr-1784608287594"
   },
   {
     "title": "컴퓨터활용능력1급 DB실기(6)-처리 기능 구현",
@@ -473,8 +478,9 @@ const DEFAULT_PRACTICAL_VIDEO = [
     "youtubeId": "dEUjfBIOwLo",
     "tag": "1급",
     "id": "pr-1783396124354",
-    "date": "2026-07-07",
-    "author": "관리자"
+    "date": "2026-07-24",
+    "author": "관리자",
+    "archiveId": "pr-1784608287594"
   }
 ];
 
