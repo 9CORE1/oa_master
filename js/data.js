@@ -112,7 +112,7 @@ const DEFAULT_PRACTICAL_ARCHIVE = [
     "author": "관리자"
   },
   {
-    "title": "계산작업만 다시 공부하기",
+    "title": "[수업중] 계산작업만 다시 공부하기",
     "description": "컴활2급 계산작업만 공부하기\n\n압축풀기 하면, 계산작업 문제파일이 PDF로 저장되어 있음!",
     "grade": "2급",
     "hasVideoLink": false,
@@ -125,7 +125,7 @@ const DEFAULT_PRACTICAL_ARCHIVE = [
     "author": "관리자"
   },
   {
-    "title": "성적처리하면서 함수 익히기",
+    "title": "[수업중] 성적처리하면서 함수 익히기",
     "description": "엑셀 함수를 한번에 정리해 봅시다!!\n\n성적처리하면서 함수 익히기",
     "grade": "2급",
     "hasVideoLink": false,
