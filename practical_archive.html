@@ -256,6 +256,15 @@
 
       // Listen for custom trigger to reload when admin login completes
       window.addEventListener('adminStateChanged', renderArchiveTable);
+
+      // Automatically open detail modal if archiveId exists in query parameters
+      const urlParams = new URLSearchParams(window.location.search);
+      const archiveId = urlParams.get('archiveId');
+      if (archiveId) {
+        setTimeout(() => {
+          showArchiveDetail(archiveId);
+        }, 300);
+      }
     });
 
     function setArchiveFilter(grade) {

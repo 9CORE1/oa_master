@@ -168,8 +168,11 @@
           <!-- Selected Video Description -->
           <div
             style="background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--shadow-sm); border-top: 4px solid var(--theme-primary);">
-            <h3 style="font-size: 22px; font-weight: 800; color: var(--neutral-900); margin-bottom: 12px;"
-              id="currentVideoTitle">학습하실 실기 강의를 선택하세요</h3>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px;">
+              <h3 style="font-size: 22px; font-weight: 800; color: var(--neutral-900); margin: 0;"
+                id="currentVideoTitle">학습하실 실기 강의를 선택하세요</h3>
+              <a href="#" id="videoDownloadBtn" class="btn btn-primary" style="display: none; padding: 6px 14px; font-size: 13px; background-color: var(--theme-primary); align-items: center; gap: 6px; border-radius: var(--radius-sm);"><i class="fas fa-download"></i> 다운로드</a>
+            </div>
             <div style="font-size:13px; color:var(--neutral-400); margin-bottom:16px; display:flex; gap:16px;">
               <span><i class="far fa-calendar"></i> 등록일: <span id="currentVideoDate">-</span></span>
               <span><i class="far fa-user"></i> 강사: OA MASTER 전문강사진</span>
@@ -235,6 +238,12 @@
             <option value="1급">1급</option>
             <option value="2급">2급</option>
             <option value="기타">기타 (사무자동화 등)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="videoArchiveId">연계 실습 자료 (자료실 게시물)</label>
+          <select id="videoArchiveId" class="form-input">
+            <option value="">-- 연계할 자료 선택 안함 --</option>
           </select>
         </div>
       </div>
@@ -478,6 +487,19 @@
       document.getElementById('currentVideoTitle').innerText = item.title;
       document.getElementById('currentVideoDate').innerText = item.date;
       document.getElementById('currentVideoDesc').innerText = item.description;
+
+      const downloadBtn = document.getElementById('videoDownloadBtn');
+      if (downloadBtn) {
+        if (item.archiveId) {
+          downloadBtn.style.display = 'inline-flex';
+          downloadBtn.onclick = (e) => {
+            e.preventDefault();
+            window.location.href = `practical_archive.html?archiveId=${item.archiveId}`;
+          };
+        } else {
+          downloadBtn.style.display = 'none';
+        }
+      }
 
       // Update cover graphics
       document.getElementById('coverTitle').innerText = item.title;
@@ -735,6 +757,18 @@
       document.getElementById('youtubeId').value = '';
       document.getElementById('videoTag').value = '1급';
 
+      const archiveSelect = document.getElementById('videoArchiveId');
+      if (archiveSelect) {
+        archiveSelect.innerHTML = '<option value="">-- 연계할 자료 선택 안함 --</option>';
+        const archives = window.DB.getAll('practical_archive') || [];
+        archives.forEach(arch => {
+          const opt = document.createElement('option');
+          opt.value = arch.id;
+          opt.innerText = `[${arch.grade || '공통'}] ${arch.title}`;
+          archiveSelect.appendChild(opt);
+        });
+      }
+
       if (isEdit) {
         const item = window.DB.getById(STORE_KEY, id);
         if (item) {
@@ -742,6 +776,9 @@
           document.getElementById('videoDesc').value = item.description;
           document.getElementById('youtubeId').value = item.youtubeId;
           document.getElementById('videoTag').value = item.tag || (item.title.includes('1급') ? '1급' : (item.title.includes('2급') ? '2급' : '기타'));
+          if (archiveSelect) {
+            archiveSelect.value = item.archiveId || '';
+          }
         }
       }
 
@@ -759,6 +796,7 @@
       const rawYoutubeId = document.getElementById('youtubeId').value;
       const youtubeId = (window.extractYoutubeId ? window.extractYoutubeId(rawYoutubeId) : rawYoutubeId).trim();
       const tag = document.getElementById('videoTag').value;
+      const archiveId = document.getElementById('videoArchiveId').value;
 
       if (!title || !description || !youtubeId) {
         showToast('모든 항목을 성실히 기입해 주십시오.', 'error');
@@ -769,7 +807,8 @@
         title,
         description,
         youtubeId,
-        tag
+        tag,
+        archiveId
       };
 
       if (id) item.id = id;
