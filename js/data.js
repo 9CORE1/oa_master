@@ -138,6 +138,19 @@ const DEFAULT_PRACTICAL_ARCHIVE = [
     "author": "관리자"
   },
   {
+    "title": "[수업중] 작업별 연습 추가",
+    "description": "엑셀 기능 및 함수를 다시 연습해봅니다~\n(각 수행할 작업은 시트에 들어있습니다!)\n\n기능1 외부데이터가져오기\n기능2 셀서식\n기능3 조건부서식\n기능4 고급필터자동필터\n기능5 통계텍스트함수\n기능6 수학삼각찾기참조함수\n기능7 데이터베이스날짜시간함수\n기능8 논리함수\n기능9 부분합정렬\n기능10 피벗테이블\n기능11 데이터표\n기능12 시나리오\n기능13 데이터통합\n기능14 목표값찾기\n기능15 매크로\n기능16 차트",
+    "grade": "2급",
+    "hasVideoLink": false,
+    "fileFormat": "ZIP",
+    "fileName": "구글드라이브_실습자료.zip",
+    "fileSize": "Google Drive",
+    "fileDriveUrl": "https://drive.google.com/file/d/1Zx6D_w-e0xxjJN-F0L2the2K1YFrCcPj/view?usp=sharing",
+    "id": "pr-1784887109645",
+    "date": "2026-07-24",
+    "author": "관리자"
+  },
+  {
     "title": "컴퓨터활용능력2급 실기대비(1)",
     "description": "컴퓨터활용능력2급 실기대비(1)-기본작업\n컴퓨터활용능력2급 실기대비(2)-계산작업\n컴퓨터활용능력2급 실기대비(3)-분석작업\n컴퓨터활용능력2급 실기대비(4)-기타작업",
     "fileName": "구글드라이브_실습자료.zip",
