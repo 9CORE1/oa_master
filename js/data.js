@@ -3,16 +3,17 @@
 
 const DEFAULT_WRITTEN_ARCHIVE = [
   {
-    "id": "wa-1",
-    "title": "컴활2급_용어_정리_250선",
-    "description": "컴퓨터활영능력 용어 250선(이기적)",
-    "fileName": "구글드라이브_공유자료.zip",
-    "fileSize": "Google Drive",
-    "date": "2026-07-21",
-    "author": "관리자",
+    "title": "컴퓨터활용능력 자격 정보 요약",
+    "description": "컴퓨터활용능력 자격 정보 및 2027년 변경사항 요약",
+    "grade": "공통",
     "hasVideoLink": false,
     "fileFormat": "PDF",
-    "fileDriveUrl": "https://drive.google.com/file/d/1OSgfBOvPZaoA2AniymfBpNJ8_DWM2eIj/view?usp=sharing"
+    "fileName": "구글드라이브_공유자료.zip",
+    "fileSize": "Google Drive",
+    "fileDriveUrl": "https://drive.google.com/file/d/1ORiCTuYasIwpI0LlirAnnIPkkXIgg4Wu/view?usp=drive_link",
+    "id": "wr-1784875149482",
+    "date": "2026-07-24",
+    "author": "관리자"
   },
   {
     "title": "컴활2급필기_핵심_요약",
@@ -25,6 +26,18 @@ const DEFAULT_WRITTEN_ARCHIVE = [
     "id": "wr-1784608848283",
     "date": "2026-07-21",
     "author": "관리자"
+  },
+  {
+    "id": "wa-1",
+    "title": "컴활2급_용어_정리_250선",
+    "description": "컴퓨터활영능력 용어 250선(이기적)",
+    "fileName": "구글드라이브_공유자료.zip",
+    "fileSize": "Google Drive",
+    "date": "2026-07-21",
+    "author": "관리자",
+    "hasVideoLink": false,
+    "fileFormat": "PDF",
+    "fileDriveUrl": "https://drive.google.com/file/d/1OSgfBOvPZaoA2AniymfBpNJ8_DWM2eIj/view?usp=sharing"
   }
 ];
 
@@ -59,6 +72,71 @@ const DEFAULT_WRITTEN_VIDEO = [
 ];
 
 const DEFAULT_PRACTICAL_ARCHIVE = [
+  {
+    "title": "컴활 2급 실기 기본서 실습예제파일(시나공)",
+    "description": "컴활 2급 실기 기본서 실습예제파일(시나공)\n\n(출처)\nhttps://www.sinagong.co.kr/pds/003002002/books",
+    "grade": "2급",
+    "hasVideoLink": false,
+    "fileFormat": "ZIP",
+    "fileName": "구글드라이브_실습자료.zip",
+    "fileSize": "Google Drive",
+    "fileDriveUrl": "https://drive.google.com/file/d/1eDicd-E3QIXGHWCrCDUci-J-ApJzyQDB/view?usp=sharing",
+    "id": "pr-1784875451394",
+    "date": "2026-07-24",
+    "author": "관리자"
+  },
+  {
+    "title": "[수업중] 2026_컴활2급실기_기본서_섹션별 문제포함",
+    "description": "2026_컴활2급실기_기본서 中 기본편\n섹션별 문제 포함파일",
+    "grade": "2급",
+    "hasVideoLink": false,
+    "fileFormat": "ZIP",
+    "fileName": "구글드라이브_실습자료.zip",
+    "fileSize": "Google Drive",
+    "fileDriveUrl": "https://drive.google.com/file/d/1RYIPABl5EPYV7UA70FkM_LuV7UGW377K/view?usp=sharing",
+    "id": "pr-1784883095050",
+    "date": "2026-07-24",
+    "author": "관리자"
+  },
+  {
+    "title": "[수업중] 셀참조방식 이해하기",
+    "description": "상대참조, 절대참조, 혼합참조, 이름참조\n\n다양한 참조방식에 대해 이해해봅시다!",
+    "grade": "2급",
+    "hasVideoLink": false,
+    "fileFormat": "XLSX",
+    "fileName": "구글드라이브_실습자료.zip",
+    "fileSize": "Google Drive",
+    "fileDriveUrl": "https://docs.google.com/spreadsheets/d/1Eoo0nXjpZ0iLr9bp0kT6wnKExBtJp98B/edit?usp=sharing&ouid=110810627928172311649&rtpof=true&sd=true",
+    "id": "pr-1784883721394",
+    "date": "2026-07-24",
+    "author": "관리자"
+  },
+  {
+    "title": "계산작업만 다시 공부하기",
+    "description": "컴활2급 계산작업만 공부하기\n\n압축풀기 하면, 계산작업 문제파일이 PDF로 저장되어 있음!",
+    "grade": "2급",
+    "hasVideoLink": false,
+    "fileFormat": "ZIP",
+    "fileName": "구글드라이브_실습자료.zip",
+    "fileSize": "Google Drive",
+    "fileDriveUrl": "https://drive.google.com/file/d/17FD7FyKZRbWZYtrYYB8Yg58RCc4_z7h8/view?usp=drive_link",
+    "id": "pr-1784883460813",
+    "date": "2026-07-24",
+    "author": "관리자"
+  },
+  {
+    "title": "성적처리하면서 함수 익히기",
+    "description": "엑셀 함수를 한번에 정리해 봅시다!!\n\n성적처리하면서 함수 익히기",
+    "grade": "2급",
+    "hasVideoLink": false,
+    "fileFormat": "XLSX",
+    "fileName": "구글드라이브_실습자료.zip",
+    "fileSize": "Google Drive",
+    "fileDriveUrl": "https://docs.google.com/spreadsheets/d/14Han6trHta3u0G-LxON-xwYjPkcbYtqW/edit?usp=sharing&ouid=110810627928172311649&rtpof=true&sd=true",
+    "id": "pr-1784886534284",
+    "date": "2026-07-24",
+    "author": "관리자"
+  },
   {
     "title": "컴퓨터활용능력2급 실기대비(1)",
     "description": "컴퓨터활용능력2급 실기대비(1)-기본작업\n컴퓨터활용능력2급 실기대비(2)-계산작업\n컴퓨터활용능력2급 실기대비(3)-분석작업\n컴퓨터활용능력2급 실기대비(4)-기타작업",
