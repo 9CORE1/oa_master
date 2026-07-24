@@ -257,24 +257,30 @@ const DEFAULT_PRACTICAL_VIDEO = [
     "description": "컴퓨터활용능력2급 기출문제 풀이(1)-Part 1. 기본작업",
     "youtubeId": "we12lT4FtX8",
     "id": "pr-1783387704761",
-    "date": "2026-07-07",
-    "author": "관리자"
+    "date": "2026-07-24",
+    "author": "관리자",
+    "tag": "2급",
+    "archiveId": "pr-1784607773493"
   },
   {
     "title": "컴활2급 기출문제풀이(1)-계산작업①",
     "description": "컴퓨터활용능력2급 기출문제 풀이(1)-Part 2. 계산작업①",
     "youtubeId": "HmS5YSTh2CE",
     "id": "pr-1783387730928",
-    "date": "2026-07-07",
-    "author": "관리자"
+    "date": "2026-07-24",
+    "author": "관리자",
+    "tag": "2급",
+    "archiveId": "pr-1784607773493"
   },
   {
     "title": "컴활2급 기출문제풀이(1)-계산작업②",
     "description": "컴퓨터활용능력2급 기출문제 풀이(1)-Part 2. 계산작업②",
     "youtubeId": "2DFDtS-lH54",
     "id": "pr-1783387759312",
-    "date": "2026-07-07",
-    "author": "관리자"
+    "date": "2026-07-24",
+    "author": "관리자",
+    "tag": "2급",
+    "archiveId": "pr-1784607773493"
   },
   {
     "title": "컴활2급 기출문제풀이(1)-분석작업",
