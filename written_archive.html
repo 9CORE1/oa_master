@@ -581,16 +581,26 @@
         let downloadUrl = null;
         const url = item.fileDriveUrl;
         
+        let fileId = null;
         let match = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
         if (match && match[1]) {
-          downloadUrl = `https://drive.google.com/uc?export=download&id=${match[1]}`;
+          fileId = match[1];
         } else {
           match = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
           if (match && match[1]) {
-            downloadUrl = `https://drive.google.com/uc?export=download&id=${match[1]}`;
-          } else if (url.includes('drive.google.com/uc') || url.includes('docs.google.com/uc')) {
-            downloadUrl = url;
+            fileId = match[1];
           }
+        }
+
+        if (fileId) {
+          const ext = fileName.includes('.') ? fileName.substring(fileName.lastIndexOf('.')).toLowerCase() : '';
+          if (ext === '.xlsx' || ext === '.xlsm') {
+            downloadUrl = `https://docs.google.com/spreadsheets/d/${fileId}/export?format=${ext.substring(1)}`;
+          } else {
+            downloadUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
+          }
+        } else if (url.includes('drive.google.com/uc') || url.includes('docs.google.com/uc')) {
+          downloadUrl = url;
         }
 
         if (downloadUrl) {
