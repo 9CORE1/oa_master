@@ -604,15 +604,11 @@
         }
 
         if (downloadUrl) {
-          const iframe = document.createElement('iframe');
-          iframe.style.display = 'none';
-          iframe.src = downloadUrl;
-          document.body.appendChild(iframe);
-          setTimeout(() => {
-            if (document.body.contains(iframe)) {
-              document.body.removeChild(iframe);
-            }
-          }, 5000);
+          const a = document.createElement('a');
+          a.href = downloadUrl;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
           showToast(`${fileName} 파일 다운로드를 시작합니다.`, 'success');
         } else {
           window.open(item.fileDriveUrl, '_blank');
