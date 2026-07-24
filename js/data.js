@@ -358,8 +358,9 @@ const DEFAULT_PRACTICAL_VIDEO = [
     "youtubeId": "k91L6o5gg9s",
     "tag": "1급",
     "id": "pr-1783395832491",
-    "date": "2026-07-07",
-    "author": "관리자"
+    "date": "2026-07-24",
+    "author": "관리자",
+    "archiveId": "pr-1784608126250"
   },
   {
     "title": "컴퓨터활용능력1급 실기대비(2)-기본작업(2)",
@@ -367,8 +368,9 @@ const DEFAULT_PRACTICAL_VIDEO = [
     "youtubeId": "Q54HRe0lNk0",
     "tag": "1급",
     "id": "pr-1783395857359",
-    "date": "2026-07-07",
-    "author": "관리자"
+    "date": "2026-07-24",
+    "author": "관리자",
+    "archiveId": "pr-1784608126250"
   },
   {
     "title": "컴퓨터활용능력1급 실기대비(3)-계산작업(1)",
@@ -376,8 +378,9 @@ const DEFAULT_PRACTICAL_VIDEO = [
     "youtubeId": "J3c_OK_XnqY",
     "tag": "1급",
     "id": "pr-1783395884333",
-    "date": "2026-07-07",
-    "author": "관리자"
+    "date": "2026-07-24",
+    "author": "관리자",
+    "archiveId": "pr-1784608126250"
   },
   {
     "title": "컴퓨터활용능력1급 실기대비(4)-계산작업(2)",
@@ -385,8 +388,9 @@ const DEFAULT_PRACTICAL_VIDEO = [
     "youtubeId": "LxToyxxj0lE",
     "tag": "1급",
     "id": "pr-1783395906466",
-    "date": "2026-07-07",
-    "author": "관리자"
+    "date": "2026-07-24",
+    "author": "관리자",
+    "archiveId": "pr-1784608126250"
   },
   {
     "title": "컴퓨터활용능력1급 실기대비(5)-분석작업",
@@ -394,8 +398,9 @@ const DEFAULT_PRACTICAL_VIDEO = [
     "youtubeId": "k-nVx5le9W4",
     "tag": "1급",
     "id": "pr-1783395937488",
-    "date": "2026-07-07",
-    "author": "관리자"
+    "date": "2026-07-24",
+    "author": "관리자",
+    "archiveId": "pr-1784608126250"
   },
   {
     "title": "컴퓨터활용능력1급 실기대비(6)-기타작업(1)",
@@ -403,8 +408,9 @@ const DEFAULT_PRACTICAL_VIDEO = [
     "youtubeId": "HbjR0wt389Q",
     "tag": "1급",
     "id": "pr-1783395964406",
-    "date": "2026-07-07",
-    "author": "관리자"
+    "date": "2026-07-24",
+    "author": "관리자",
+    "archiveId": "pr-1784608126250"
   },
   {
     "title": "컴퓨터활용능력1급 실기대비(7)-기타작업(2)",
@@ -412,8 +418,9 @@ const DEFAULT_PRACTICAL_VIDEO = [
     "youtubeId": "3ioN4o8Gl8Q",
     "tag": "1급",
     "id": "pr-1783395988397",
-    "date": "2026-07-07",
-    "author": "관리자"
+    "date": "2026-07-24",
+    "author": "관리자",
+    "archiveId": "pr-1784608126250"
   },
   {
     "title": "컴퓨터활용능력1급 DB실기(1)-DB구축(1)",
