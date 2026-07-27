@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>실기 영상보기 - OA MASTER | 사무자동화 & 컴퓨터활용능력 자격증</title>
+  <meta name="description" content="사무자동화 및 컴퓨터활용능력 실기 엑셀 수식 작성, 액세스 쿼리/보고서, 파워포인트 슬라이드 실전 풀이 동영상 강좌입니다. 쉬운 기능도 뭉치면 통한다!">
+  <!-- Google Fonts & FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Favicon -->
+  <link rel="icon" href="images/OA_master_LOGO.png" type="image/png">
+  <!-- EmailJS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <!-- YouTube IFrame Player API -->
+  <script src="https://www.youtube.com/iframe_api"></script>
+</head>
+
+<body class="theme-practical">
+
+  <!-- Header -->
+  <header>
+    <div class="nav-container">
+      <a href="index.html" class="logo-group">
+        <img src="images/OA_master_LOGO.png" alt="OA MASTER Logo">
+        <div class="logo-text">
+          OA MASTER
+          <span class="logo-subtext">쉬운 기능도 뭉치면 통한다!</span>
+        </div>
+      </a>
+
+      <!-- Desktop Links -->
+      <nav class="nav-links">
+        <div class="nav-item">
+          <a href="written_archive.html" class="nav-link"><i class="fas fa-book"></i> 필기과정 <i
+              class="fas fa-chevron-down" style="font-size:10px;"></i></a>
+          <div class="dropdown-menu">
+            <a href="written_archive.html" class="dropdown-link"><i class="fas fa-folder-open"></i> 자료실</a>
+            <a href="written_lectures.html" class="dropdown-link"><i class="fas fa-video"></i> 영상보기</a>
+          </div>
+        </div>
+        <div class="nav-item active">
+          <a href="practical_archive.html" class="nav-link"><i class="fas fa-laptop-code"></i> 실기과정 <i
+              class="fas fa-chevron-down" style="font-size:10px;"></i></a>
+          <div class="dropdown-menu">
+            <a href="practical_archive.html" class="dropdown-link"><i class="fas fa-folder-open"></i> 자료실</a>
+            <a href="practical_lectures.html" class="dropdown-link"><i class="fas fa-video"></i> 영상보기</a>
+          </div>
+        </div>
+        <div class="nav-item">
+          <a href="recommendations.html" class="nav-link"><i class="fas fa-external-link-alt"></i> 추천 사이트</a>
+        </div>
+      </nav>
+
+      <div class="nav-cta">
+        <div id="userNavArea" style="display:inline-block; margin-right:8px;">
+          <button id="openAuthBtn" class="btn-admin-mode"
+            onclick="window.location.href='index.html?auth=required'; return false;"
+            style="background:var(--theme-written); color:#fff; border:none; padding:6px 14px; border-radius:6px; cursor:pointer; font-weight:600;">
+            <i class="fas fa-user"></i> 로그인 / 회원가입
+          </button>
+        </div>
+        <button class="mobile-toggle">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Menu Drawer -->
+  <div class="mobile-nav-overlay"></div>
+  <div class="mobile-nav-drawer">
+    <div class="mobile-nav-header">
+      <div class="logo-text" style="color: var(--logo-color);">OA MASTER</div>
+      <button class="btn-close-mobile">&times;</button>
+    </div>
+    <div class="mobile-nav-list">
+      <div class="mobile-nav-group-title">필기과정</div>
+      <a href="written_archive.html" class="mobile-nav-link"><i class="fas fa-folder-open"></i> 필기 자료실</a>
+      <a href="written_lectures.html" class="mobile-nav-link"><i class="fas fa-video"></i> 필기 영상강의</a>
+
+      <div class="mobile-nav-group-title">실기과정</div>
+      <a href="practical_archive.html" class="mobile-nav-link"><i class="fas fa-folder-open"></i> 실기 자료실</a>
+      <a href="practical_lectures.html" class="mobile-nav-link"><i class="fas fa-video"></i> 실기 영상강의</a>
+
+      <div class="mobile-nav-group-title">추천 정보</div>
+      <a href="recommendations.html" class="mobile-nav-link"><i class="fas fa-external-link-alt"></i> 추천 사이트</a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main>
+    <div class="content-container">
+      <div class="page-header">
+        <div class="page-title-group">
+          <h2><i class="fas fa-video"></i> 실기과정 영상보기</h2>
+          <p>엑셀 스프레드시트 수식 작성, 액세스 쿼리 및 보고서 빌드, 파워포인트 슬라이드 기출 풀이 고화질 영상 목록입니다.</p>
+        </div>
+        <button class="btn btn-primary admin-only" id="btnNewVideo" onclick="openVideoModal()"
+          style="display: none; background-color: var(--theme-primary); box-shadow: 0 4px 14px rgba(var(--theme-primary-rgb), 0.3);">
+          <i class="fas fa-plus"></i> 새 강의 등록
+        </button>
+      </div>
+
+      <!-- Player & Info Layout -->
+      <div style="display: grid; grid-template-columns: 1.6fr 1fr; gap: 40px; margin-bottom: 60px;" id="playerGrid">
+
+        <!-- Left: Custom Protected YouTube Player -->
+        <div>
+          <div class="youtube-player-container" id="videoPlayerContainer">
+            <!-- Warning Badge: No Sharing -->
+            <div class="player-block-warning">
+              <i class="fas fa-shield-alt"></i> <span>무단 캡처 및 공유 제한 모드 작동 중</span>
+            </div>
+
+            <!-- Target Iframe container (API target) -->
+            <div class="youtube-iframe-wrapper">
+              <div id="youtubePlayer"></div>
+            </div>
+
+            <!-- Click Shield: Blocks all mouse clicks/context menu within the iframe -->
+            <div class="youtube-screen-overlay" id="playerShield"></div>
+
+            <!-- Pre-play cover graphic -->
+            <div class="player-custom-cover" id="playerCover">
+              <div class="player-custom-cover-content">
+                <button class="player-play-btn" id="coverPlayBtn"
+                  style="background-color: var(--theme-primary); box-shadow: 0 4px 20px rgba(var(--theme-primary-rgb), 0.5);"><i
+                    class="fas fa-play"></i></button>
+                <h3 style="font-size:20px; font-weight:700; margin-bottom:6px;" id="coverTitle">강의를 선택해주세요</h3>
+                <p style="font-size:13px; color:rgba(255,255,255,0.7);" id="coverDesc">오른쪽 목록에서 보고 싶은 실기 강의를 클릭하세요.</p>
+              </div>
+            </div>
+
+            <!-- Custom HTML5 Video Controls -->
+            <div class="player-controls">
+              <!-- Progress Bar -->
+              <div class="player-progress-bar-container" id="progressBarContainer">
+                <div class="player-progress-bar" id="progressBar" style="background-color: var(--theme-primary);">
+                  <div class="player-progress-handle"></div>
+                </div>
+              </div>
+
+              <!-- Bottom Row Buttons -->
+              <div class="player-controls-row">
+                <div class="player-controls-left">
+                  <button class="player-ctrl-btn" id="ctrlPlayBtn" title="재생 (Space)"><i
+                      class="fas fa-play"></i></button>
+                  <button class="player-ctrl-btn" id="ctrlStopBtn" title="정지"><i class="fas fa-stop"></i></button>
+                  <div class="player-time-display">
+                    <span id="currentTime">00:00</span> / <span id="durationTime">00:00</span>
+                  </div>
+                </div>
+                <div class="player-controls-right">
+                  <div class="player-volume-container">
+                    <button class="player-ctrl-btn" id="ctrlMuteBtn" title="음소거"><i
+                        class="fas fa-volume-up"></i></button>
+                    <input type="range" class="player-volume-slider" id="volumeSlider" min="0" max="100" value="50">
+                  </div>
+                  <button class="player-ctrl-btn" id="ctrlFullscreenBtn" title="전체화면"><i
+                      class="fas fa-expand"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Selected Video Description -->
+          <div
+            style="background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--shadow-sm); border-top: 4px solid var(--theme-primary);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px;">
+              <h3 style="font-size: 22px; font-weight: 800; color: var(--neutral-900); margin: 0;"
+                id="currentVideoTitle">학습하실 실기 강의를 선택하세요</h3>
+              <a href="#" id="videoDownloadBtn" class="btn btn-primary" style="display: none; padding: 6px 14px; font-size: 13px; background-color: var(--theme-primary); align-items: center; gap: 6px; border-radius: var(--radius-sm);"><i class="fas fa-download"></i> 다운로드</a>
+            </div>
+            <div style="font-size:13px; color:var(--neutral-400); margin-bottom:16px; display:flex; gap:16px;">
+              <span><i class="far fa-calendar"></i> 등록일: <span id="currentVideoDate">-</span></span>
+              <span><i class="far fa-user"></i> 강사: OA MASTER 전문강사진</span>
+            </div>
+            <p style="color:var(--neutral-600); line-height: 1.7; white-space:pre-line;" id="currentVideoDesc">
+              재생목록 카드에서 강의를 선택하시면 유튜브 연동 동영상이 재생됩니다.
+              동영상 공유 및 퍼가기 보호 기능이 실시간 작동하여, YouTube 본 사이트로의 외부 이동 및 우클릭 복사 기능이 완전히 제한됩니다.
+            </p>
+          </div>
+        </div>
+
+        <!-- Right: Playlist Card List -->
+        <div>
+          <div
+            style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
+            <h3 style="font-size:18px; font-weight:700; color:var(--neutral-800); margin:0;">실기 재생 목록</h3>
+            <div style="display:flex; gap:6px; align-items:center;">
+              <!-- Filter Buttons -->
+              <div class="filter-group"
+                style="display:flex; gap:4px; background:var(--neutral-100); padding:3px; border-radius:var(--radius-md);">
+                <button class="filter-btn active" onclick="setFilter('all')" id="filter-all">전체</button>
+                <button class="filter-btn" onclick="setFilter('1급')" id="filter-1급">1급</button>
+                <button class="filter-btn" onclick="setFilter('2급')" id="filter-2급">2급</button>
+              </div>
+              <span style="font-size:12px; font-weight:500; color:var(--neutral-400); margin-left:8px;"
+                id="lectureCount">3개의 강좌</span>
+            </div>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:16px;" id="playlistContainer">
+            <!-- Playlist items rendered dynamically -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Video Write/Edit Modal -->
+  <div class="modal-backdrop" id="videoModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modalTitle"><i class="fas fa-video"></i> 실기 영상강의 등록/수정</h3>
+        <button class="btn-close-modal" onclick="closeVideoModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="videoId">
+        <div class="form-group">
+          <label class="form-label" for="videoTitle">강의 제목</label>
+          <input type="text" id="videoTitle" class="form-input" placeholder="실기 강의의 제목을 입력하세요.">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="videoDesc">실습 내용 설명</label>
+          <textarea id="videoDesc" class="form-input" placeholder="엑셀 핵심 기능 및 수식 구조에 대해 간략히 설명하세요."></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="youtubeId">YouTube 동영상 ID</label>
+          <input type="text" id="youtubeId" class="form-input" placeholder="예: jG-B-wz4a5I">
+          <p class="form-helper">유튜브 영상 공유 URL의 고유 11자리 코드를 입력해주세요.</p>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="videoTag">급수 구분 (태그)</label>
+          <select id="videoTag" class="form-input">
+            <option value="1급">1급</option>
+            <option value="2급">2급</option>
+            <option value="기타">기타 (사무자동화 등)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="videoArchiveId">연계 실습 자료 (자료실 게시물)</label>
+          <select id="videoArchiveId" class="form-input">
+            <option value="">-- 연계할 자료 선택 안함 --</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeVideoModal()">취소</button>
+        <button class="btn btn-primary" onclick="submitVideoForm()"
+          style="background-color: var(--theme-primary);">저장하기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-container">
+      <div class="footer-top">
+        <div class="footer-info">
+          <div class="footer-logo">
+            <img src="images/OA_master_LOGO.png" alt="OA MASTER Logo">
+            <span class="footer-logo-text">OA MASTER</span>
+          </div>
+          <p class="footer-slogan">"쉬운 기능도 뭉치면 통한다!"</p>
+        </div>
+        <div class="footer-links-grid">
+          <div class="footer-links-col">
+            <h4>필기과정</h4>
+            <ul>
+              <li><a href="written_archive.html">필기 자료실</a></li>
+              <li><a href="written_lectures.html">필기 영상보기</a></li>
+            </ul>
+          </div>
+          <div class="footer-links-col">
+            <h4>실기과정</h4>
+            <ul>
+              <li><a href="practical_archive.html">실기 자료실</a></li>
+              <li><a href="practical_lectures.html">실기 영상보기</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 OA MASTER. All Rights Reserved. Designed for Excellence.</p>
+        <div class="footer-bottom-links">
+          <a href="#" onclick="toggleAdminMode(); return false;"><i class="fas fa-user-shield"></i> 관리자 로그인</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/admin.js"></script>
+
+  <!-- Custom YouTube Player & Playlist Logic -->
+  <script>
+    const STORE_KEY = "practical_video";
+    let ytPlayer = null;
+    let updateProgressTimer = null;
+    let selectedVideo = null;
+    let ytApiReady = false;
+    let currentPage = 1;
+    const itemsPerPage = 7;
+    let currentFilter = 'all';
+
+    // 1. YouTube IFrame API Callback
+    function onYouTubeIframeAPIReady() {
+      ytApiReady = true;
+      initPlaylist();
+    }
+
+    // 2. Initialize list
+    function initPlaylist() {
+      renderPlaylist();
+      window.addEventListener('adminStateChanged', renderPlaylist);
+
+      const list = window.DB.getAll(STORE_KEY);
+      if (list.length > 0) {
+        selectVideo(list[0].id);
+      }
+    }
+
+    // 3. Render playlist panel cards
+    function renderPlaylist() {
+      let data = window.DB.getAll(STORE_KEY);
+      const container = document.getElementById('playlistContainer');
+      const is_admin = window.isAdmin();
+
+      // Filter list based on selected tab
+      if (currentFilter !== 'all') {
+        data = data.filter(item => {
+          const itemTag = item.tag || (item.title.includes('1급') ? '1급' : (item.title.includes('2급') ? '2급' : '기타'));
+          return itemTag === currentFilter;
+        });
+      }
+
+      document.getElementById('lectureCount').innerText = `${data.length}개의 강좌`;
+      container.innerHTML = '';
+
+      if (data.length === 0) {
+        container.innerHTML = '<p class="empty-state">등록된 실기 영상이 없습니다.</p>';
+        const paginationContainer = document.getElementById('playlistPagination');
+        if (paginationContainer) paginationContainer.innerHTML = '';
+        return;
+      }
+
+      // Pagination slice
+      const totalPages = Math.ceil(data.length / itemsPerPage);
+      if (currentPage > totalPages) currentPage = totalPages;
+      if (currentPage < 1) currentPage = 1;
+
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = Math.min(startIndex + itemsPerPage, data.length);
+      const pageData = data.slice(startIndex, endIndex);
+
+      pageData.forEach((item, relativeIndex) => {
+        const index = startIndex + relativeIndex;
+        const card = document.createElement('div');
+        card.style.cssText = `
+          background-color: var(--bg-card);
+          border: 1px solid ${selectedVideo && selectedVideo.id === item.id ? 'var(--theme-primary)' : 'var(--border-color)'};
+          border-left: 4px solid ${selectedVideo && selectedVideo.id === item.id ? 'var(--theme-primary)' : 'rgba(var(--theme-primary-rgb), 0.25)'};
+          padding: 16px;
+          border-radius: var(--radius-md);
+          cursor: pointer;
+          position: relative;
+          transition: all 0.2s ease;
+          box-shadow: ${selectedVideo && selectedVideo.id === item.id ? 'var(--shadow-md)' : 'var(--shadow-sm)'};
+        `;
+
+        // Hover dynamics
+        card.onmouseover = () => {
+          if (!selectedVideo || selectedVideo.id !== item.id) {
+            card.style.borderColor = 'var(--neutral-400)';
+            card.style.transform = 'translateX(3px)';
+          }
+        };
+        card.onmouseout = () => {
+          if (!selectedVideo || selectedVideo.id !== item.id) {
+            card.style.borderColor = 'var(--border-color)';
+            card.style.transform = '';
+          }
+        };
+
+        const itemTag = item.tag || (item.title.includes('1급') ? '1급' : (item.title.includes('2급') ? '2급' : '기타'));
+
+        card.innerHTML = `
+          <div onclick="selectVideo('${item.id}')">
+            <h4 style="font-size:14px; font-weight:700; color:var(--neutral-900); margin-bottom:6px; padding-right:110px;">
+              <i class="far fa-play-circle" style="color:${selectedVideo && selectedVideo.id === item.id ? 'var(--theme-primary)' : 'var(--neutral-500)'}; margin-right:6px;"></i>${item.title}
+            </h4>
+            <div style="font-size:12px; color:var(--neutral-500); display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
+              <span><i class="far fa-calendar"></i> ${item.date}</span>
+              <span class="card-badge" style="background-color:rgba(var(--theme-primary-rgb),0.1); color:var(--theme-primary); font-size:10px; padding:2px 6px; border-radius:10px; font-weight:600; margin:0; line-height:1.2; display:inline-flex; align-items:center;">${itemTag}</span>
+              <span><i class="far fa-clock"></i> 유튜브 연동</span>
+            </div>
+          </div>
+          
+          <div class="admin-only" style="position:absolute; top:12px; right:12px; display:${is_admin ? 'flex' : 'none'}; gap:4px;">
+            <button class="btn-icon btn-move" onclick="moveVideoUp('${item.id}'); event.stopPropagation();" style="width:26px; height:26px; font-size:11px;" ${index === 0 ? 'disabled style="opacity:0.3; cursor:not-allowed;"' : ''}><i class="fas fa-arrow-up"></i></button>
+            <button class="btn-icon btn-move" onclick="moveVideoDown('${item.id}'); event.stopPropagation();" style="width:26px; height:26px; font-size:11px;" ${index === data.length - 1 ? 'disabled style="opacity:0.3; cursor:not-allowed;"' : ''}><i class="fas fa-arrow-down"></i></button>
+            <button class="btn-icon btn-edit" onclick="openVideoModal('${item.id}'); event.stopPropagation();" style="width:26px; height:26px; font-size:11px;"><i class="fas fa-edit"></i></button>
+            <button class="btn-icon btn-delete" onclick="deleteVideo('${item.id}'); event.stopPropagation();" style="width:26px; height:26px; font-size:11px;"><i class="fas fa-trash-alt"></i></button>
+          </div>
+        `;
+
+        container.appendChild(card);
+      });
+
+      renderPagination(totalPages);
+      if (window.updateAdminUI) window.updateAdminUI();
+    }
+
+    function renderPagination(totalPages) {
+      let paginationContainer = document.getElementById('playlistPagination');
+      if (!paginationContainer) {
+        paginationContainer = document.createElement('div');
+        paginationContainer.id = 'playlistPagination';
+        paginationContainer.style.cssText = 'display:flex; justify-content:center; align-items:center; gap:8px; margin-top:20px;';
+        document.getElementById('playlistContainer').parentNode.appendChild(paginationContainer);
+      }
+
+      paginationContainer.innerHTML = '';
+      if (totalPages <= 1) return;
+
+      const prevBtn = document.createElement('button');
+      prevBtn.className = 'btn-icon';
+      prevBtn.style.cssText = 'width:30px; height:30px; border-radius:50%; border:1px solid var(--border-color); background:#fff; cursor:pointer; display:flex; align-items:center; justify-content:center;';
+      prevBtn.innerHTML = '<i class="fas fa-chevron-left"></i>';
+      if (currentPage === 1) {
+        prevBtn.disabled = true;
+        prevBtn.style.opacity = '0.4';
+        prevBtn.style.cursor = 'not-allowed';
+      } else {
+        prevBtn.onclick = () => { currentPage--; renderPlaylist(); };
+      }
+      paginationContainer.appendChild(prevBtn);
+
+      for (let i = 1; i <= totalPages; i++) {
+        const pageBtn = document.createElement('button');
+        pageBtn.className = 'btn-icon';
+        pageBtn.style.cssText = `width:30px; height:30px; border-radius:50%; border:1px solid ${currentPage === i ? 'var(--theme-primary)' : 'var(--border-color)'}; background:${currentPage === i ? 'var(--theme-primary)' : '#fff'}; color:${currentPage === i ? '#fff' : 'var(--neutral-700)'}; cursor:pointer; font-weight:600; display:flex; align-items:center; justify-content:center;`;
+        pageBtn.innerText = i;
+        pageBtn.onclick = () => { currentPage = i; renderPlaylist(); };
+        paginationContainer.appendChild(pageBtn);
+      }
+
+      const nextBtn = document.createElement('button');
+      nextBtn.className = 'btn-icon';
+      nextBtn.style.cssText = 'width:30px; height:30px; border-radius:50%; border:1px solid var(--border-color); background:#fff; cursor:pointer; display:flex; align-items:center; justify-content:center;';
+      nextBtn.innerHTML = '<i class="fas fa-chevron-right"></i>';
+      if (currentPage === totalPages) {
+        nextBtn.disabled = true;
+        nextBtn.style.opacity = '0.4';
+        nextBtn.style.cursor = 'not-allowed';
+      } else {
+        nextBtn.onclick = () => { currentPage++; renderPlaylist(); };
+      }
+      paginationContainer.appendChild(nextBtn);
+    }
+
+    function setFilter(filterValue) {
+      currentFilter = filterValue;
+      currentPage = 1; // Reset to page 1
+
+      document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+      const activeBtn = document.getElementById(`filter-${filterValue}`);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      renderPlaylist();
+    }
+
+    // 4. Select video to load
+    function selectVideo(id) {
+      const item = window.DB.getById(STORE_KEY, id);
+      if (!item) return;
+
+      selectedVideo = item;
+      renderPlaylist(); // Update border states
+
+      // Update Detail UI
+      document.getElementById('currentVideoTitle').innerText = item.title;
+      document.getElementById('currentVideoDate').innerText = item.date;
+      document.getElementById('currentVideoDesc').innerText = item.description;
+
+      const downloadBtn = document.getElementById('videoDownloadBtn');
+      if (downloadBtn) {
+        if (item.archiveId) {
+          downloadBtn.style.display = 'inline-flex';
+          downloadBtn.onclick = (e) => {
+            e.preventDefault();
+            showArchiveDetail(item.archiveId);
+          };
+        } else {
+          downloadBtn.style.display = 'none';
+        }
+      }
+
+      // Update cover graphics
+      document.getElementById('coverTitle').innerText = item.title;
+      document.getElementById('coverDesc').innerText = "재생 버튼을 누르시면 공유 보호 모드로 실기 강의를 학습할 수 있습니다.";
+      document.getElementById('playerCover').style.backgroundImage = `url('https://img.youtube.com/vi/${item.youtubeId}/maxresdefault.jpg')`;
+      document.getElementById('playerCover').classList.remove('playing');
+
+      // (Re)load YouTube player
+      if (ytApiReady) {
+        loadYouTubePlayer(item.youtubeId);
+      }
+
+      resetPlayerControlsUI();
+    }
+
+    // 5. Build/Replace Iframe Player
+    function loadYouTubePlayer(videoId) {
+      if (ytPlayer) {
+        try {
+          ytPlayer.loadVideoById({
+            videoId: videoId,
+            suggestedQuality: 'hd1080'
+          });
+          ytPlayer.pauseVideo();
+          return;
+        } catch (e) {
+          console.log("Re-initializing player");
+        }
+      }
+
+      ytPlayer = new YT.Player('youtubePlayer', {
+        height: '100%',
+        width: '100%',
+        videoId: videoId,
+        playerVars: {
+          'controls': 0,
+          'disablekb': 1,
+          'fs': 0,
+          'modestbranding': 1,
+          'rel': 0,
+          'showinfo': 0,
+          'iv_load_policy': 3,
+          'playsinline': 1,
+          'origin': window.location.origin
+        },
+        events: {
+          'onReady': onPlayerReady,
+          'onStateChange': onPlayerStateChange
+        }
+      });
+    }
+
+    function onPlayerReady(event) {
+      const vol = document.getElementById('volumeSlider').value;
+      ytPlayer.setVolume(vol);
+
+      // Suggest 1080p playback quality
+      if (typeof ytPlayer.setPlaybackQuality === 'function') {
+        ytPlayer.setPlaybackQuality('hd1080');
+      }
+
+      document.getElementById('coverPlayBtn').onclick = () => {
+        document.getElementById('playerCover').classList.add('playing');
+        ytPlayer.playVideo();
+      };
+
+      document.getElementById('playerShield').onclick = () => {
+        togglePlayPause();
+      };
+    }
+
+    function onPlayerStateChange(event) {
+      const playBtn = document.getElementById('ctrlPlayBtn');
+      const cover = document.getElementById('playerCover');
+
+      if (event.data === YT.PlayerState.PLAYING) {
+        // Enforce 1080p when playback actually starts
+        if (typeof ytPlayer.setPlaybackQuality === 'function') {
+          ytPlayer.setPlaybackQuality('hd1080');
+        }
+        playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+        cover.classList.add('playing');
+        startProgressTracking();
+      } else {
+        playBtn.innerHTML = '<i class="fas fa-play"></i>';
+        stopProgressTracking();
+
+        if (event.data === YT.PlayerState.ENDED) {
+          cover.classList.remove('playing');
+          resetPlayerControlsUI();
+        }
+      }
+
+      const duration = ytPlayer.getDuration();
+      document.getElementById('durationTime').innerText = formatTime(duration);
+    }
+
+    // 6. Custom Controls Implementation
+    function togglePlayPause() {
+      if (!ytPlayer || typeof ytPlayer.getPlayerState !== 'function') return;
+      const state = ytPlayer.getPlayerState();
+      if (state === YT.PlayerState.PLAYING) {
+        ytPlayer.pauseVideo();
+      } else {
+        document.getElementById('playerCover').classList.add('playing');
+        ytPlayer.playVideo();
+      }
+    }
+
+    document.getElementById('ctrlPlayBtn').onclick = togglePlayPause;
+
+    document.getElementById('ctrlStopBtn').onclick = () => {
+      if (!ytPlayer) return;
+      ytPlayer.stopVideo();
+      document.getElementById('playerCover').classList.remove('playing');
+      resetPlayerControlsUI();
+    };
+
+    const muteBtn = document.getElementById('ctrlMuteBtn');
+    muteBtn.onclick = () => {
+      if (!ytPlayer) return;
+      if (ytPlayer.isMuted()) {
+        ytPlayer.unMute();
+        muteBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+        document.getElementById('volumeSlider').value = ytPlayer.getVolume();
+      } else {
+        ytPlayer.mute();
+        muteBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+        document.getElementById('volumeSlider').value = 0;
+      }
+    };
+
+    document.getElementById('volumeSlider').oninput = (e) => {
+      if (!ytPlayer) return;
+      const val = e.target.value;
+      ytPlayer.setVolume(val);
+      if (val == 0) {
+        ytPlayer.mute();
+        muteBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+      } else {
+        ytPlayer.unMute();
+        muteBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+      }
+    };
+
+    document.getElementById('progressBarContainer').onclick = (e) => {
+      if (!ytPlayer || typeof ytPlayer.getDuration !== 'function') return;
+      const rect = e.currentTarget.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const width = rect.width;
+      const percentage = clickX / width;
+      const duration = ytPlayer.getDuration();
+      const targetTime = duration * percentage;
+
+      ytPlayer.seekTo(targetTime, true);
+      updateProgressBar(targetTime, duration);
+    };
+
+    function startProgressTracking() {
+      if (updateProgressTimer) clearInterval(updateProgressTimer);
+      updateProgressTimer = setInterval(() => {
+        if (!ytPlayer || typeof ytPlayer.getCurrentTime !== 'function') return;
+        const current = ytPlayer.getCurrentTime();
+        const duration = ytPlayer.getDuration();
+
+        document.getElementById('currentTime').innerText = formatTime(current);
+        updateProgressBar(current, duration);
+      }, 250);
+    }
+
+    function stopProgressTracking() {
+      if (updateProgressTimer) {
+        clearInterval(updateProgressTimer);
+        updateProgressTimer = null;
+      }
+    }
+
+    function updateProgressBar(current, duration) {
+      if (!duration || duration === 0) return;
+      const percentage = (current / duration) * 100;
+      document.getElementById('progressBar').style.width = `${percentage}%`;
+    }
+
+    function resetPlayerControlsUI() {
+      document.getElementById('currentTime').innerText = "00:00";
+      document.getElementById('progressBar').style.width = "0%";
+      document.getElementById('ctrlPlayBtn').innerHTML = '<i class="fas fa-play"></i>';
+      stopProgressTracking();
+    }
+
+    function formatTime(seconds) {
+      if (isNaN(seconds)) return "00:00";
+      const mins = Math.floor(seconds / 60);
+      const secs = Math.floor(seconds % 60);
+      return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    }
+
+    // Right click prevention
+    document.getElementById('videoPlayerContainer').addEventListener('contextmenu', (e) => {
+      e.preventDefault();
+      showToast('강의 콘텐츠 복사 및 공유 행위는 약관에 의해 철저히 차단됩니다.', 'warning');
+    });
+
+    // Spacebar control interceptor
+    window.addEventListener('keydown', (e) => {
+      if (document.querySelector('.modal-backdrop.open')) return;
+
+      const container = document.getElementById('videoPlayerContainer');
+      const rect = container.getBoundingClientRect();
+      const isVisible = (rect.top < window.innerHeight && rect.bottom >= 0);
+
+      if (isVisible && e.key === ' ' && e.target === document.body) {
+        e.preventDefault();
+        togglePlayPause();
+      }
+    });
+
+    // Fullscreen Controller
+    document.getElementById('ctrlFullscreenBtn').onclick = () => {
+      const container = document.getElementById('videoPlayerContainer');
+      if (!document.fullscreenElement) {
+        container.requestFullscreen().catch(err => {
+          showToast('전체화면을 활성화할 수 없습니다.', 'error');
+        });
+      } else {
+        document.exitFullscreen();
+      }
+    };
+
+    document.addEventListener('fullscreenchange', () => {
+      const container = document.getElementById('videoPlayerContainer');
+      if (document.fullscreenElement) {
+        container.classList.add('controls-active');
+      } else {
+        container.classList.remove('controls-active');
+      }
+    });
+
+
+    // ==========================================
+    // ADMIN FUNCTIONS FOR VIDEOS
+    // ==========================================
+
+    function openVideoModal(id = null) {
+      const modal = document.getElementById('videoModal');
+      const isEdit = id !== null;
+
+      document.getElementById('modalTitle').innerHTML = isEdit ?
+        '<i class="fas fa-edit"></i> 실기 동영상 강좌 정보 수정' :
+        '<i class="fas fa-plus"></i> 신규 실기 동영상 강의 추가';
+
+      document.getElementById('videoId').value = id || '';
+      document.getElementById('videoTitle').value = '';
+      document.getElementById('videoDesc').value = '';
+      document.getElementById('youtubeId').value = '';
+      document.getElementById('videoTag').value = '1급';
+
+      const archiveSelect = document.getElementById('videoArchiveId');
+      if (archiveSelect) {
+        archiveSelect.innerHTML = '<option value="">-- 연계할 자료 선택 안함 --</option>';
+        const archives = window.DB.getAll('practical_archive') || [];
+        archives.forEach(arch => {
+          const opt = document.createElement('option');
+          opt.value = arch.id;
+          opt.innerText = `[${arch.grade || '공통'}] ${arch.title}`;
+          archiveSelect.appendChild(opt);
+        });
+      }
+
+      if (isEdit) {
+        const item = window.DB.getById(STORE_KEY, id);
+        if (item) {
+          document.getElementById('videoTitle').value = item.title;
+          document.getElementById('videoDesc').value = item.description;
+          document.getElementById('youtubeId').value = item.youtubeId;
+          document.getElementById('videoTag').value = item.tag || (item.title.includes('1급') ? '1급' : (item.title.includes('2급') ? '2급' : '기타'));
+          if (archiveSelect) {
+            archiveSelect.value = item.archiveId || '';
+          }
+        }
+      }
+
+      modal.classList.add('open');
+    }
+
+    function closeVideoModal() {
+      document.getElementById('videoModal').classList.remove('open');
+    }
+
+    function submitVideoForm() {
+      const id = document.getElementById('videoId').value;
+      const title = document.getElementById('videoTitle').value;
+      const description = document.getElementById('videoDesc').value;
+      const rawYoutubeId = document.getElementById('youtubeId').value;
+      const youtubeId = (window.extractYoutubeId ? window.extractYoutubeId(rawYoutubeId) : rawYoutubeId).trim();
+      const tag = document.getElementById('videoTag').value;
+      const archiveId = document.getElementById('videoArchiveId').value;
+
+      if (!title || !description || !youtubeId) {
+        showToast('모든 항목을 성실히 기입해 주십시오.', 'error');
+        return;
+      }
+
+      const item = {
+        title,
+        description,
+        youtubeId,
+        tag,
+        archiveId
+      };
+
+      if (id) item.id = id;
+
+      const savedItem = window.DB.save(STORE_KEY, item);
+
+      // EmailJS Alert
+      const actionText = id ? "실기 동영상 강의 수정" : "실기 동영상 강의 등록";
+      const emailMsg = `강의 제목: ${title}\n상세 설명: ${description}\n유튜브 ID: ${youtubeId}\n수행자: 관리자`;
+
+      window.sendAdminEmailNotification(actionText, title, emailMsg)
+        .then(() => {
+          showToast(id ? '강의 정보가 성공적으로 변경되었습니다.' : '새 실기 영상 강좌가 추가되었습니다.', 'success');
+          closeVideoModal();
+          renderPlaylist();
+
+          if (selectedVideo && selectedVideo.id === savedItem.id) {
+            selectVideo(savedItem.id);
+          } else if (!selectedVideo) {
+            selectVideo(savedItem.id);
+          }
+        });
+    }
+
+    function deleteVideo(id) {
+      if (!confirm('정말로 이 실기 동영상 강좌를 삭제하시겠습니까?')) return;
+
+      const item = window.DB.getById(STORE_KEY, id);
+      const title = item ? item.title : '알 수 없음';
+
+      window.DB.delete(STORE_KEY, id);
+
+      // EmailJS Alert
+      const emailMsg = `삭제 대상 실기 강의: ${title}\n수행자: 관리자`;
+      window.sendAdminEmailNotification("실기 동영상 삭제", title, emailMsg)
+        .then(() => {
+          showToast('성공적으로 삭제 처리되었습니다.', 'success');
+
+          const list = window.DB.getAll(STORE_KEY);
+          if (selectedVideo && selectedVideo.id === id) {
+            if (list.length > 0) {
+              selectVideo(list[0].id);
+            } else {
+              selectedVideo = null;
+              resetPlayerControlsUI();
+              document.getElementById('currentVideoTitle').innerText = "강의를 선택해주세요";
+              document.getElementById('currentVideoDesc').innerText = "실기 재생목록이 비어있습니다.";
+              document.getElementById('playerCover').style.backgroundImage = 'none';
+              document.getElementById('playerCover').classList.remove('playing');
+              if (ytPlayer) ytPlayer.destroy();
+              ytPlayer = null;
+            }
+          }
+          renderPlaylist();
+        });
+    }
+
+    function moveVideoUp(id) {
+      if (window.DB.moveUp(STORE_KEY, id)) {
+        const data = window.DB.getAll(STORE_KEY);
+        const index = data.findIndex(item => item.id === id);
+        currentPage = Math.floor(index / itemsPerPage) + 1;
+        renderPlaylist();
+        showToast('영상 순서가 변경되었습니다.', 'success');
+      }
+    }
+
+    function moveVideoDown(id) {
+      if (window.DB.moveDown(STORE_KEY, id)) {
+        const data = window.DB.getAll(STORE_KEY);
+        const index = data.findIndex(item => item.id === id);
+        currentPage = Math.floor(index / itemsPerPage) + 1;
+        renderPlaylist();
+        showToast('영상 순서가 변경되었습니다.', 'success');
+      }
+    }
+
+    // 연계 실습 자료 상세 보기 모달 직접 띄우기 (페이지 이동 방지)
+    function showArchiveDetail(id) {
+      const item = window.DB.getById("practical_archive", id);
+      if (!item) {
+        showToast('연계된 실습 자료를 찾을 수 없습니다.', 'error');
+        return;
+      }
+
+      const modalHTML = `
+        <div class="modal-backdrop" id="detailModal">
+          <div class="modal-content">
+            <div class="modal-header" style="border-bottom: 2px solid var(--theme-primary);">
+              <h3><i class="far fa-file-excel"></i> 실기 자료 상세 보기</h3>
+              <button class="btn-close-modal" onclick="closeAdminModal('detailModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+              <h2 style="font-size: 20px; color: var(--neutral-900); margin-bottom: 12px;">${item.title}</h2>
+              <div style="font-size: 13px; color: var(--neutral-400); margin-bottom: 20px; display:flex; gap:16px;">
+                <span><i class="far fa-calendar"></i> 등록일: ${item.date}</span>
+                <span><i class="far fa-user"></i> 작성자: ${item.author}</span>
+              </div>
+              <div style="background-color: var(--neutral-50); padding: 20px; border-radius: var(--radius-md); border:1px solid var(--border-color); margin-bottom: 20px; white-space:pre-line; color: var(--neutral-700);">
+                ${item.description}
+              </div>
+              <div style="display:flex; justify-content:space-between; align-items:center; background-color:rgba(var(--theme-primary-rgb), 0.03); padding: 12px 16px; border-radius: var(--radius-sm);">
+                <span style="font-size: 13px; font-weight:500; color:var(--neutral-600);"><i class="fas fa-paperclip"></i> ${item.fileName} (${item.fileSize})</span>
+                <button class="btn btn-primary" onclick="downloadVirtualFile(event, '${item.fileName}', '${item.title}', '${item.id}');" style="padding:8px 16px; font-size:13px; background-color:var(--theme-primary);"><i class="fas fa-download"></i> 받기</button>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-secondary" onclick="closeAdminModal('detailModal')">닫기</button>
+            </div>
+          </div>
+        </div>
+      `;
+
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = modalHTML;
+      document.body.appendChild(tempDiv.firstElementChild);
+
+      setTimeout(() => {
+        const modal = document.getElementById('detailModal');
+        if (modal) modal.classList.add('open');
+      }, 50);
+    }
+
+    // 연계 실습 자료 백그라운드 다운로드 처리
+    function downloadVirtualFile(event, fileName, fileTitle, itemId) {
+      event.preventDefault();
+
+      const item = itemId ? window.DB.getById("practical_archive", itemId) : null;
+      if (item && item.fileDriveUrl) {
+        let downloadUrl = null;
+        const url = item.fileDriveUrl;
+        
+        let fileId = null;
+        let match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+        if (match && match[1]) {
+          fileId = match[1];
+        } else {
+          match = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+          if (match && match[1]) {
+            fileId = match[1];
+          }
+        }
+
+        if (fileId) {
+          const ext = fileName.includes('.') ? fileName.substring(fileName.lastIndexOf('.')).toLowerCase() : '';
+          if (url.includes('spreadsheets') || ext === '.xlsx' || ext === '.xlsm') {
+            const formatType = (ext === '.xlsm') ? 'xlsm' : 'xlsx';
+            downloadUrl = `https://docs.google.com/spreadsheets/d/${fileId}/export?format=${formatType}`;
+          } else {
+            downloadUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
+          }
+        } else if (url.includes('drive.google.com/uc') || url.includes('docs.google.com/uc')) {
+          downloadUrl = url;
+        }
+
+        if (downloadUrl) {
+          const a = document.createElement('a');
+          a.href = downloadUrl;
+          a.target = '_blank';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          showToast(`${fileName} 파일 다운로드를 시작합니다.`, 'success');
+        } else {
+          window.open(item.fileDriveUrl, '_blank');
+          showToast('🔗 구글 드라이브 공유 링크로 이동합니다.', 'info');
+        }
+        return;
+      }
+
+      if (item && item.fileData) {
+        const a = document.createElement('a');
+        a.href = item.fileData;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        showToast(`${fileName} 파일 다운로드가 완료되었습니다.`, 'success');
+        return;
+      }
+
+      const ext = fileName.includes('.') ? fileName.substring(fileName.lastIndexOf('.')).toLowerCase() : '.zip';
+      let mimeType = 'application/octet-stream';
+      if (ext === '.zip') mimeType = 'application/zip';
+      else if (ext === '.pdf') mimeType = 'application/pdf';
+
+      const dummyContent = `==================================================\nOA MASTER - ${fileTitle}\n==================================================\n\n파일명: ${fileName}\n다운로드 일시: ${new Date().toLocaleString()}\n\n※ 본 파일은 OA MASTER에서 제공하는 실습 자료 샘플입니다.`;
+
+      const blob = new Blob([dummyContent], { type: mimeType });
+      const downloadUrl = URL.createObjectURL(blob);
+
+      const a = document.createElement('a');
+      a.href = downloadUrl;
+      a.download = fileName;
+
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(downloadUrl), 1000);
+
+      showToast(`${fileName} 파일 다운로드가 완료되었습니다.`, 'success');
+    }
+  </script>
+
+  <!-- 🔒 Auth Guard & 로그인 사용자 상태 표시 -->
+  <script type="module">
+    import { onAuthChange, logout } from './js/firebase-config.js';
+    onAuthChange((user) => {
+      const is_admin = (typeof isAdmin === 'function' && isAdmin()) || (localStorage.getItem('isAdminActive') === 'true');
+      if (!user && !is_admin) {
+        alert('🔒 회원가입 및 로그인이 필요한 서비스입니다.');
+        window.location.href = 'index.html?auth=required';
+      } else if (window.renderHeaderUserNav) {
+        window.renderHeaderUserNav(user);
+      }
+    });
+  </script>
+</body>
+
+</html>

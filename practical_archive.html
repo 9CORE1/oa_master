@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>실기 자료실 - OA MASTER | 사무자동화 & 컴퓨터활용능력 자격증</title>
+  <meta name="description" content="사무자동화 및 컴퓨터활용능력 실기 엑셀, 액세스, 파워포인트 실습예제 및 기출문제 자료실입니다. 쉬운 기능도 뭉치면 통한다!">
+  <!-- Google Fonts & FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Favicon -->
+  <link rel="icon" href="images/OA_master_LOGO.png" type="image/png">
+  <!-- EmailJS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+</head>
+
+<body class="theme-practical">
+
+  <!-- Header -->
+  <header>
+    <div class="nav-container">
+      <a href="index.html" class="logo-group">
+        <img src="images/OA_master_LOGO.png" alt="OA MASTER Logo">
+        <div class="logo-text">
+          OA MASTER
+          <span class="logo-subtext">쉬운 기능도 뭉치면 통한다!</span>
+        </div>
+      </a>
+
+      <!-- Desktop Links -->
+      <nav class="nav-links">
+        <div class="nav-item">
+          <a href="written_archive.html" class="nav-link"><i class="fas fa-book"></i> 필기과정 <i
+              class="fas fa-chevron-down" style="font-size:10px;"></i></a>
+          <div class="dropdown-menu">
+            <a href="written_archive.html" class="dropdown-link"><i class="fas fa-folder-open"></i> 자료실</a>
+            <a href="written_lectures.html" class="dropdown-link"><i class="fas fa-video"></i> 영상보기</a>
+          </div>
+        </div>
+        <div class="nav-item active">
+          <a href="practical_archive.html" class="nav-link"><i class="fas fa-laptop-code"></i> 실기과정 <i
+              class="fas fa-chevron-down" style="font-size:10px;"></i></a>
+          <div class="dropdown-menu">
+            <a href="practical_archive.html" class="dropdown-link"><i class="fas fa-folder-open"></i> 자료실</a>
+            <a href="practical_lectures.html" class="dropdown-link"><i class="fas fa-video"></i> 영상보기</a>
+          </div>
+        </div>
+        <div class="nav-item">
+          <a href="recommendations.html" class="nav-link"><i class="fas fa-external-link-alt"></i> 추천 사이트</a>
+        </div>
+      </nav>
+
+      <div class="nav-cta">
+        <div id="userNavArea" style="display:inline-block; margin-right:8px;">
+          <button id="openAuthBtn" class="btn-admin-mode"
+            onclick="window.location.href='index.html?auth=required'; return false;"
+            style="background:var(--theme-written); color:#fff; border:none; padding:6px 14px; border-radius:6px; cursor:pointer; font-weight:600;">
+            <i class="fas fa-user"></i> 로그인 / 회원가입
+          </button>
+        </div>
+        <button class="mobile-toggle">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Menu Drawer -->
+  <div class="mobile-nav-overlay"></div>
+  <div class="mobile-nav-drawer">
+    <div class="mobile-nav-header">
+      <div class="logo-text" style="color: var(--logo-color);">OA MASTER</div>
+      <button class="btn-close-mobile">&times;</button>
+    </div>
+    <div class="mobile-nav-list">
+      <div class="mobile-nav-group-title">필기과정</div>
+      <a href="written_archive.html" class="mobile-nav-link"><i class="fas fa-folder-open"></i> 필기 자료실</a>
+      <a href="written_lectures.html" class="mobile-nav-link"><i class="fas fa-video"></i> 필기 영상강의</a>
+
+      <div class="mobile-nav-group-title">실기과정</div>
+      <a href="practical_archive.html" class="mobile-nav-link"><i class="fas fa-folder-open"></i> 실기 자료실</a>
+      <a href="practical_lectures.html" class="mobile-nav-link"><i class="fas fa-video"></i> 실기 영상강의</a>
+
+      <div class="mobile-nav-group-title">추천 정보</div>
+      <a href="recommendations.html" class="mobile-nav-link"><i class="fas fa-external-link-alt"></i> 추천 사이트</a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main>
+    <div class="content-container">
+      <div class="page-header">
+        <div class="page-title-group">
+          <h2><i class="fas fa-folder-open"></i> 실기과정 자료실</h2>
+          <p>엑셀(스프레드시트), 액세스(데이터베이스), 파워포인트 실습용 원본 예제 파일 및 모의고사 문제 보관소입니다.</p>
+        </div>
+        <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+          <!-- Grade Filter Buttons -->
+          <div class="filter-group">
+            <button class="filter-btn active" onclick="setArchiveFilter('all')" id="filter-all">전체</button>
+            <button class="filter-btn" onclick="setArchiveFilter('1급')" id="filter-1급">1급</button>
+            <button class="filter-btn" onclick="setArchiveFilter('2급')" id="filter-2급">2급</button>
+          </div>
+          <button class="btn btn-primary admin-only" id="btnNewArchive" onclick="openArchiveModal()"
+            style="display: none; background-color: var(--theme-primary); box-shadow: 0 4px 14px rgba(var(--theme-primary-rgb), 0.3);">
+            <i class="fas fa-plus"></i> 새 실습자료 등록
+          </button>
+        </div>
+      </div>
+
+      <!-- Table View of Archives -->
+      <div class="archive-list">
+        <div class="table-responsive">
+          <table class="archive-table">
+            <thead>
+              <tr>
+                <th style="width: 70px; white-space: nowrap; text-align: center;">번호</th>
+                <th>실습 자료 제목 및 요약</th>
+                <th style="width: 140px;">파일 형식</th>
+                <th style="width: 120px;">등록일</th>
+                <th class="admin-only" style="width: 120px; display: none;">관리</th>
+                <th style="width: 140px; text-align: center; white-space: nowrap;">다운로드</th>
+              </tr>
+            </thead>
+            <tbody id="archiveTableBody">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+        <div id="emptyState" class="empty-state" style="display: none;">
+          <i class="fas fa-file-archive"></i>
+          <p>등록된 실기 실습 자료가 없습니다.</p>
+        </div>
+        <div class="pagination-container" id="paginationContainer"></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Archive Write/Edit Modal -->
+  <div class="modal-backdrop" id="archiveModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modalTitle"><i class="fas fa-file-upload"></i> 실기 자료 등록/수정</h3>
+        <button class="btn-close-modal" onclick="closeArchiveModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="archiveId">
+        <div class="form-group">
+          <label class="form-label" for="archiveTitle">실습 자료 제목</label>
+          <input type="text" id="archiveTitle" class="form-input" placeholder="예: [컴활 1급 실기] 엑셀 스프레드시트 기출 종합 예제">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="archiveDesc">자료 설명 및 요구조건</label>
+          <textarea id="archiveDesc" class="form-input" placeholder="엑셀 버전 안내 또는 실습 시 주의사항 등을 적어주세요."></textarea>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label" for="archiveGrade" style="font-weight:700;">자격증 급수 구분 *</label>
+            <select id="archiveGrade" class="form-input" style="background:#fff;">
+              <option value="1급">1급</option>
+              <option value="2급">2급</option>
+              <option value="공통">공통 (1/2급)</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label" for="archiveFormat" style="font-weight:700;">파일 형식 (확장자)</label>
+            <input type="text" id="archiveFormat" class="form-input" placeholder="예: XLSX, ZIP, PDF (자동 감지)" style="background:#fff;">
+          </div>
+        </div>
+
+        <div class="form-group" style="background:#f1f5f9; padding:12px 14px; border-radius:8px; border:1px solid #cbd5e1; margin-bottom:12px;">
+          <label style="display:inline-flex; align-items:center; gap:8px; cursor:pointer; font-weight:700; color:#334155; font-size:13px; user-select:none;">
+            <input type="checkbox" id="archiveHasVideo" style="width:16px; height:16px; cursor:pointer;">
+            <span><i class="fas fa-play-circle" style="color:#6366f1;"></i> 동영상 강좌 연계 자료 (영상연계 표시)</span>
+          </label>
+        </div>
+
+        <div class="form-group"
+          style="background-color: var(--neutral-50); padding: 16px; border-radius: var(--radius-md); border: 1px dashed var(--neutral-300);">
+          <label class="form-label" style="display:flex; align-items:center; gap:6px; font-weight:700;">
+            <i class="fas fa-paperclip" style="color:var(--theme-primary);"></i> 실습 파일 첨부 방식 선택 (직접 업로드 또는 구글 드라이브)
+          </label>
+
+          <div style="margin-bottom: 12px;">
+            <label class="form-label" style="font-size:12px; margin-bottom:4px; color:var(--neutral-700);">방법 A: 컴퓨터 파일 직접 선택 (업로드)</label>
+            <input type="file" id="archiveFile" class="form-input" onchange="handleFileSelected(this)" style="background:#fff;">
+          </div>
+
+          <div>
+            <label class="form-label" style="font-size:12px; margin-bottom:4px; color:var(--neutral-700);"><i class="fab fa-google-drive" style="color:#34a853;"></i> 방법 B: 구글 드라이브 (또는 외부 대용량 공유 URL)</label>
+            <input type="url" id="archiveDriveUrl" class="form-input" placeholder="예: https://drive.google.com/file/d/xxxxxxx/view?usp=sharing" onchange="handleDriveUrlEntered(this)" style="background:#fff;">
+          </div>
+
+          <p class="form-helper" style="margin-top: 10px;">* 파일 업로드 시 파일명과 형식(확장자)이 자동으로 감지되며, 구글 드라이브 선택 시 파일 형식을 자유롭게 입력하실 수 있습니다.</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeArchiveModal()">취소</button>
+        <button class="btn btn-primary" onclick="submitArchiveForm()">저장하기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-top">
+        <div class="footer-info">
+          <div class="footer-logo">
+            <img src="images/OA_master_LOGO.png" alt="OA MASTER Logo">
+            <span class="footer-logo-text">OA MASTER</span>
+          </div>
+          <p class="footer-slogan">"쉬운 기능도 뭉치면 통한다!"</p>
+        </div>
+        <div class="footer-links-grid">
+          <div class="footer-links-col">
+            <h4>필기과정</h4>
+            <ul>
+              <li><a href="written_archive.html">필기 자료실</a></li>
+              <li><a href="written_lectures.html">필기 영상보기</a></li>
+            </ul>
+          </div>
+          <div class="footer-links-col">
+            <h4>실기과정</h4>
+            <ul>
+              <li><a href="practical_archive.html">실기 자료실</a></li>
+              <li><a href="practical_lectures.html">실기 영상보기</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 OA MASTER. All Rights Reserved. Designed for Excellence.</p>
+        <div class="footer-bottom-links">
+          <a href="#" onclick="toggleAdminMode(); return false;"><i class="fas fa-user-shield"></i> 관리자 로그인</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/admin.js"></script>
+
+  <!-- Page Specific Script -->
+  <script>
+    const STORE_KEY = "practical_archive";
+    let currentGradeFilter = 'all';
+    let currentPage = 1;
+    const ITEMS_PER_PAGE = 5;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderArchiveTable();
+
+      // Listen for custom trigger to reload when admin login completes
+      window.addEventListener('adminStateChanged', renderArchiveTable);
+
+      // Automatically open detail modal if archiveId exists in query parameters
+      const urlParams = new URLSearchParams(window.location.search);
+      const archiveId = urlParams.get('archiveId');
+      if (archiveId) {
+        setTimeout(() => {
+          showArchiveDetail(archiveId);
+        }, 300);
+      }
+    });
+
+    function setArchiveFilter(grade) {
+      currentGradeFilter = grade;
+      currentPage = 1;
+
+      document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+      const activeBtn = document.getElementById(`filter-${grade}`);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      renderArchiveTable();
+    }
+
+    // 1. Render data to the table
+    function renderArchiveTable() {
+      const allData = window.DB.getAll(STORE_KEY);
+      const tbody = document.getElementById('archiveTableBody');
+      const emptyState = document.getElementById('emptyState');
+      const paginationContainer = document.getElementById('paginationContainer');
+      const is_admin = window.isAdmin();
+
+      // Filter by currentGradeFilter
+      const data = allData.filter(item => {
+        if (currentGradeFilter === 'all') return true;
+        const itemGrade = item.grade || (item.title && item.title.includes('2급') ? '2급' : (item.title && item.title.includes('공단') ? '공통' : '1급'));
+        if (itemGrade === '공통') return true;
+        return itemGrade === currentGradeFilter;
+      });
+
+      tbody.innerHTML = '';
+
+      if (data.length === 0) {
+        emptyState.style.display = 'block';
+        if (paginationContainer) paginationContainer.innerHTML = '';
+        return;
+      }
+      emptyState.style.display = 'none';
+
+      // Calculate Pagination Slicing
+      const totalPages = Math.ceil(data.length / ITEMS_PER_PAGE);
+      if (currentPage > totalPages) currentPage = totalPages;
+      if (currentPage < 1) currentPage = 1;
+
+      const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+      const pageItems = data.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+
+      pageItems.forEach((item, index) => {
+        const globalIndex = startIndex + index;
+        const row = document.createElement('tr');
+
+        let formatDisplay = "";
+        const fmt = (item.fileFormat || (item.fileName && item.fileName.includes('.') ? item.fileName.substring(item.fileName.lastIndexOf('.')).replace('.', '') : 'XLSX')).toUpperCase();
+
+        let icon = '<i class="far fa-file-excel" style="margin-right:5px; color:#16a34a;"></i>';
+        if (fmt.includes('ZIP') || fmt.includes('7Z') || fmt.includes('RAR')) {
+          icon = '<i class="far fa-file-archive" style="margin-right:5px; color:#ea580c;"></i>';
+        } else if (fmt.includes('PDF')) {
+          icon = '<i class="far fa-file-pdf" style="margin-right:5px; color:#dc2626;"></i>';
+        } else if (fmt.includes('XLS') || fmt.includes('CSV')) {
+          icon = '<i class="far fa-file-excel" style="margin-right:5px; color:#16a34a;"></i>';
+        } else if (fmt.includes('HWP') || fmt.includes('DOC') || fmt.includes('HWPX')) {
+          icon = '<i class="far fa-file-word" style="margin-right:5px; color:#2563eb;"></i>';
+        } else if (item.fileDriveUrl) {
+          icon = '<i class="fab fa-google-drive" style="margin-right:5px; color:#34a853;"></i>';
+        }
+
+        formatDisplay = `<span style="font-size:13px; font-weight:600; color:var(--neutral-800); font-family:var(--font-accent);">${icon}${fmt}</span>`;
+
+        const grade = item.grade || (item.title && item.title.includes('2급') ? '2급' : (item.title && item.title.includes('공단') ? '공통' : '1급'));
+
+        let gradeStyle = 'background:rgba(14,73,135,0.1); color:#0e4987; border:1px solid rgba(14,73,135,0.3);';
+        if (grade === '2급') {
+          gradeStyle = 'background:rgba(13,148,136,0.1); color:#0d9488; border:1px solid rgba(13,148,136,0.3);';
+        } else if (grade === '공통') {
+          gradeStyle = 'background:rgba(100,116,139,0.1); color:#475569; border:1px solid rgba(100,116,139,0.3);';
+        }
+        const gradeBadge = `<span style="font-size:11px; font-weight:700; padding:2px 7px; border-radius:12px; font-family:var(--font-accent); ${gradeStyle}" title="자격증 급수: ${grade}">${grade}</span>`;
+
+        row.innerHTML = `
+          <td style="text-align: center; white-space: nowrap;">${globalIndex + 1}</td>
+          <td>
+            <div style="display:flex; align-items:center; flex-wrap:wrap; gap:6px;">
+              ${gradeBadge}
+              ${item.hasVideoLink ? `<span style="display:inline-flex; align-items:center; gap:4px; font-size:11px; font-weight:700; color:#6366f1; background:rgba(99,102,241,0.12); border:1px solid rgba(99,102,241,0.3); padding:2px 7px; border-radius:12px;" title="동영상 강의와 연계된 학습 자료입니다."><i class="fas fa-play-circle" style="color:#6366f1;"></i> 영상연계</span>` : ''}
+              <span class="archive-title-cell" onclick="showArchiveDetail('${item.id}')">${item.title}</span>
+            </div>
+            <div style="font-size:12px; color:var(--neutral-500); margin-top:4px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; text-overflow:ellipsis; line-height:1.4;" title="${item.description}">${item.description}</div>
+          </td>
+          <td>${formatDisplay}</td>
+          <td style="font-family:var(--font-accent); font-size:13px;">${item.date}</td>
+          <td class="admin-only" style="${is_admin ? '' : 'display:none;'}">
+            <div class="action-buttons">
+              <button class="btn-icon btn-move" onclick="moveArchiveUp('${item.id}')" title="위로" ${globalIndex === 0 ? 'disabled style="opacity:0.3; cursor:not-allowed;"' : ''}><i class="fas fa-arrow-up"></i></button>
+              <button class="btn-icon btn-move" onclick="moveArchiveDown('${item.id}')" title="아래로" ${globalIndex === allData.length - 1 ? 'disabled style="opacity:0.3; cursor:not-allowed;"' : ''}><i class="fas fa-arrow-down"></i></button>
+              <button class="btn-icon btn-edit" onclick="openArchiveModal('${item.id}')" title="수정"><i class="fas fa-edit"></i></button>
+              <button class="btn-icon btn-delete" onclick="deleteArchive('${item.id}')" title="삭제"><i class="fas fa-trash-alt"></i></button>
+            </div>
+          </td>
+          <td style="text-align: center; white-space: nowrap;">
+            <a href="#" class="download-link" onclick="downloadVirtualFile(event, '${item.fileName}', '${item.title}', '${item.id}')">
+              <i class="fas fa-download"></i> 다운로드
+            </a>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+
+      renderPagination(totalPages);
+      if (window.updateAdminUI) window.updateAdminUI();
+    }
+
+    function renderPagination(totalPages) {
+      const container = document.getElementById('paginationContainer');
+      if (!container) return;
+
+      if (totalPages <= 1) {
+        container.innerHTML = '';
+        return;
+      }
+
+      let html = `<button class="pagination-btn" onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}><i class="fas fa-chevron-left"></i></button>`;
+
+      for (let p = 1; p <= totalPages; p++) {
+        html += `<button class="pagination-btn ${p === currentPage ? 'active' : ''}" onclick="goToPage(${p})">${p}</button>`;
+      }
+
+      html += `<button class="pagination-btn" onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}><i class="fas fa-chevron-right"></i></button>`;
+
+      container.innerHTML = html;
+    }
+
+    function goToPage(page) {
+      currentPage = page;
+      renderArchiveTable();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // 2. File Select Handler (parses metadata)
+    function handleFileSelected(input) {
+      const file = input.files[0];
+      if (!file) return;
+
+      window.detectedFileName = file.name;
+
+      // Calculate formatted size
+      let sizeStr = "";
+      if (file.size > 1024 * 1024) {
+        sizeStr = (file.size / (1024 * 1024)).toFixed(1) + " MB";
+      } else {
+        sizeStr = (file.size / 1024).toFixed(0) + " KB";
+      }
+      window.detectedFileSize = sizeStr;
+
+      // Auto detect extension/format
+      const ext = file.name.includes('.') ? file.name.substring(file.name.lastIndexOf('.')).toUpperCase().replace('.', '') : 'XLSX';
+      const fmtInput = document.getElementById('archiveFormat');
+      if (fmtInput) fmtInput.value = ext;
+
+      // Reset Google Drive URL if local file is selected
+      const driveInput = document.getElementById('archiveDriveUrl');
+      if (driveInput) driveInput.value = '';
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        window.selectedArchiveFileData = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function handleDriveUrlEntered(input) {
+      const driveUrl = input.value.trim();
+      if (!driveUrl) return;
+
+      // Reset local file input
+      const fileInput = document.getElementById('archiveFile');
+      if (fileInput) fileInput.value = '';
+      window.selectedArchiveFileData = null;
+      window.detectedFileName = "구글드라이브_실습자료.zip";
+      window.detectedFileSize = "Google Drive";
+
+      const fmtInput = document.getElementById('archiveFormat');
+      if (fmtInput && !fmtInput.value.trim()) {
+        fmtInput.value = "ZIP";
+      }
+    }
+
+    // 3. Open Write/Edit Modal
+    function openArchiveModal(id = null) {
+      const modal = document.getElementById('archiveModal');
+      const isEdit = id !== null;
+
+      document.getElementById('modalTitle').innerHTML = isEdit ?
+        '<i class="fas fa-edit"></i> 실기 자료 수정' :
+        '<i class="fas fa-file-upload"></i> 신규 실기 자료 등록';
+
+      // Reset form
+      window.selectedArchiveFileData = null;
+      window.detectedFileName = null;
+      window.detectedFileSize = null;
+      document.getElementById('archiveId').value = id || '';
+      document.getElementById('archiveTitle').value = '';
+      document.getElementById('archiveDesc').value = '';
+      document.getElementById('archiveFile').value = '';
+      const driveUrlEl = document.getElementById('archiveDriveUrl');
+      if (driveUrlEl) driveUrlEl.value = '';
+      const hasVideoEl = document.getElementById('archiveHasVideo');
+      if (hasVideoEl) hasVideoEl.checked = false;
+      const fmtEl = document.getElementById('archiveFormat');
+      if (fmtEl) fmtEl.value = '';
+      const gradeEl = document.getElementById('archiveGrade');
+      if (gradeEl) gradeEl.value = '1급';
+
+      if (isEdit) {
+        const item = window.DB.getById(STORE_KEY, id);
+        if (item) {
+          document.getElementById('archiveTitle').value = item.title;
+          document.getElementById('archiveDesc').value = item.description;
+          if (driveUrlEl) driveUrlEl.value = item.fileDriveUrl || '';
+          if (hasVideoEl) hasVideoEl.checked = !!item.hasVideoLink;
+          if (fmtEl) fmtEl.value = item.fileFormat || (item.fileName && item.fileName.includes('.') ? item.fileName.substring(item.fileName.lastIndexOf('.')).toUpperCase().replace('.', '') : 'XLSX');
+          if (gradeEl) gradeEl.value = item.grade || (item.title && item.title.includes('2급') ? '2급' : (item.title && item.title.includes('공단') ? '공통' : '1급'));
+          if (item.fileData) window.selectedArchiveFileData = item.fileData;
+          window.detectedFileName = item.fileName;
+          window.detectedFileSize = item.fileSize;
+        }
+      }
+
+      modal.classList.add('open');
+    }
+
+    function closeArchiveModal() {
+      document.getElementById('archiveModal').classList.remove('open');
+    }
+
+    // 4. Form Submit
+    function submitArchiveForm() {
+      const id = document.getElementById('archiveId').value;
+      const title = document.getElementById('archiveTitle').value.trim();
+      const description = document.getElementById('archiveDesc').value.trim();
+      const fileDriveUrl = document.getElementById('archiveDriveUrl') ? document.getElementById('archiveDriveUrl').value.trim() : '';
+      const hasVideoLink = document.getElementById('archiveHasVideo') ? document.getElementById('archiveHasVideo').checked : false;
+      const fileFormat = document.getElementById('archiveFormat') ? document.getElementById('archiveFormat').value.trim().toUpperCase() : '';
+      const grade = document.getElementById('archiveGrade') ? document.getElementById('archiveGrade').value : '1급';
+
+      let existingItem = id ? window.DB.getById(STORE_KEY, id) : null;
+
+      let fileName = window.detectedFileName || (existingItem ? existingItem.fileName : '');
+      let fileSize = window.detectedFileSize || (existingItem ? existingItem.fileSize : '');
+
+      if (fileDriveUrl && (!fileName || fileName === '실습자료.zip')) {
+        fileName = '구글드라이브_실습자료.zip';
+        fileSize = 'Google Drive';
+      }
+
+      if (!title || !description) {
+        showToast('자료 제목과 설명(요구조건)을 입력해주세요.', 'error');
+        return;
+      }
+
+      if (!fileName && !fileDriveUrl && !id) {
+        showToast('실습 파일을 선택하거나 구글 드라이브 링크를 입력해주세요.', 'error');
+        return;
+      }
+
+      const item = {
+        title,
+        description,
+        grade,
+        hasVideoLink,
+        fileFormat: fileFormat || (fileName && fileName.includes('.') ? fileName.substring(fileName.lastIndexOf('.')).toUpperCase().replace('.', '') : 'XLSX'),
+        fileName: fileName || '실습자료.zip',
+        fileSize: fileSize || '1.5 MB',
+        fileDriveUrl: fileDriveUrl || (existingItem ? existingItem.fileDriveUrl : null)
+      };
+
+      if (window.selectedArchiveFileData) {
+        item.fileData = window.selectedArchiveFileData;
+      } else if (existingItem && existingItem.fileData && !fileDriveUrl) {
+        item.fileData = existingItem.fileData;
+      }
+
+      if (id) item.id = id;
+
+      // Save locally
+      const savedItem = window.DB.save(STORE_KEY, item);
+
+      // Send EmailJS Notice
+      const actionText = id ? "실기 자료 수정" : "실기 자료 신규 등록";
+      const emailMsg = `자료 제목: ${title}\n요구사항: ${description}\n형식: ${item.fileFormat}\n수행자: 관리자`;
+
+      window.sendAdminEmailNotification(actionText, title, emailMsg)
+        .then(() => {
+          showToast(id ? '실기 자료가 수정되었습니다.' : '새 실기 실습 자료가 등록되었습니다.', 'success');
+          closeArchiveModal();
+          renderArchiveTable();
+        });
+    }
+
+    // 5. Delete Item
+    function deleteArchive(id) {
+      if (!confirm('정말로 이 실기 실습 자료를 삭제하시겠습니까?')) return;
+
+      const item = window.DB.getById(STORE_KEY, id);
+      const title = item ? item.title : '알 수 없음';
+
+      window.DB.delete(STORE_KEY, id);
+
+      // Send EmailJS Notice
+      const emailMsg = `삭제된 자료: ${title}\n수행자: 관리자`;
+      window.sendAdminEmailNotification("실기 자료 삭제", title, emailMsg)
+        .then(() => {
+          showToast('자료가 삭제되었습니다.', 'success');
+          renderArchiveTable();
+        });
+    }
+
+    // 6. File Download Processing
+    function downloadVirtualFile(event, fileName, fileTitle, itemId) {
+      event.preventDefault();
+
+      const item = itemId ? window.DB.getById(STORE_KEY, itemId) : null;
+      if (item && item.fileDriveUrl) {
+        let downloadUrl = null;
+        const url = item.fileDriveUrl;
+        
+        let fileId = null;
+        let match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+        if (match && match[1]) {
+          fileId = match[1];
+        } else {
+          match = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+          if (match && match[1]) {
+            fileId = match[1];
+          }
+        }
+
+        if (fileId) {
+          const ext = fileName.includes('.') ? fileName.substring(fileName.lastIndexOf('.')).toLowerCase() : '';
+          if (url.includes('spreadsheets') || ext === '.xlsx' || ext === '.xlsm') {
+            const formatType = (ext === '.xlsm') ? 'xlsm' : 'xlsx';
+            downloadUrl = `https://docs.google.com/spreadsheets/d/${fileId}/export?format=${formatType}`;
+          } else {
+            downloadUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
+          }
+        } else if (url.includes('drive.google.com/uc') || url.includes('docs.google.com/uc')) {
+          downloadUrl = url;
+        }
+
+        if (downloadUrl) {
+          const a = document.createElement('a');
+          a.href = downloadUrl;
+          a.target = '_blank';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          showToast(`${fileName} 파일 다운로드를 시작합니다.`, 'success');
+        } else {
+          window.open(item.fileDriveUrl, '_blank');
+          showToast('🔗 구글 드라이브 공유 링크로 이동합니다.', 'info');
+        }
+        return;
+      }
+
+      if (item && item.fileData) {
+        const a = document.createElement('a');
+        a.href = item.fileData;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        showToast(`${fileName} 파일 다운로드가 완료되었습니다.`, 'success');
+        return;
+      }
+
+      const ext = fileName.includes('.') ? fileName.substring(fileName.lastIndexOf('.')).toLowerCase() : '.zip';
+      let mimeType = 'application/octet-stream';
+      if (ext === '.zip') mimeType = 'application/zip';
+      else if (ext === '.pdf') mimeType = 'application/pdf';
+
+      const dummyContent = `==================================================\nOA MASTER - ${fileTitle}\n==================================================\n\n파일명: ${fileName}\n다운로드 일시: ${new Date().toLocaleString()}\n\n※ 본 파일은 OA MASTER에서 제공하는 실습 자료 샘플입니다.`;
+
+      const blob = new Blob([dummyContent], { type: mimeType });
+      const downloadUrl = URL.createObjectURL(blob);
+
+      const a = document.createElement('a');
+      a.href = downloadUrl;
+      a.download = fileName;
+
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(downloadUrl), 1000);
+
+      showToast(`${fileName} 파일 다운로드가 완료되었습니다.`, 'success');
+    }
+
+    // 7. Show Detail Modal View (for general users)
+    function showArchiveDetail(id) {
+      const item = window.DB.getById(STORE_KEY, id);
+      if (!item) return;
+
+      const modalHTML = `
+        <div class="modal-backdrop" id="detailModal">
+          <div class="modal-content">
+            <div class="modal-header" style="border-bottom: 2px solid var(--theme-primary);">
+              <h3><i class="far fa-file-excel"></i> 실기 자료 상세 보기</h3>
+              <button class="btn-close-modal" onclick="closeAdminModal('detailModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+              <h2 style="font-size: 20px; color: var(--neutral-900); margin-bottom: 12px;">${item.title}</h2>
+              <div style="font-size: 13px; color: var(--neutral-400); margin-bottom: 20px; display:flex; gap:16px;">
+                <span><i class="far fa-calendar"></i> 등록일: ${item.date}</span>
+                <span><i class="far fa-user"></i> 작성자: ${item.author}</span>
+              </div>
+              <div style="background-color: var(--neutral-50); padding: 20px; border-radius: var(--radius-md); border:1px solid var(--border-color); margin-bottom: 20px; white-space:pre-line; color: var(--neutral-700);">
+                ${item.description}
+              </div>
+              <div style="display:flex; justify-content:space-between; align-items:center; background-color:rgba(var(--theme-primary-rgb), 0.03); padding: 12px 16px; border-radius: var(--radius-sm);">
+                <span style="font-size: 13px; font-weight:500; color:var(--neutral-600);"><i class="fas fa-paperclip"></i> ${item.fileName} (${item.fileSize})</span>
+                <button class="btn btn-primary" onclick="downloadVirtualFile(event, '${item.fileName}', '${item.title}', '${item.id}');" style="padding:8px 16px; font-size:13px; background-color:var(--theme-primary);"><i class="fas fa-download"></i> 받기</button>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-secondary" onclick="closeAdminModal('detailModal')">닫기</button>
+            </div>
+          </div>
+        </div>
+      `;
+
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = modalHTML;
+      document.body.appendChild(tempDiv.firstElementChild);
+
+      setTimeout(() => {
+        document.getElementById('detailModal').classList.add('open');
+      }, 50);
+    }
+
+    function moveArchiveUp(id) {
+      if (window.DB.moveUp(STORE_KEY, id)) {
+        renderArchiveTable();
+        showToast('게시물 순서가 변경되었습니다.', 'success');
+      }
+    }
+
+    function moveArchiveDown(id) {
+      if (window.DB.moveDown(STORE_KEY, id)) {
+        renderArchiveTable();
+        showToast('게시물 순서가 변경되었습니다.', 'success');
+      }
+    }
+  </script>
+
+  <!-- 🔒 Auth Guard & 로그인 사용자 상태 표시 -->
+  <script type="module">
+    import { onAuthChange, logout } from './js/firebase-config.js';
+    onAuthChange((user) => {
+      const is_admin = (typeof isAdmin === 'function' && isAdmin()) || (localStorage.getItem('isAdminActive') === 'true');
+      if (!user && !is_admin) {
+        alert('🔒 회원가입 및 로그인이 필요한 서비스입니다.');
+        window.location.href = 'index.html?auth=required';
+      } else if (window.renderHeaderUserNav) {
+        window.renderHeaderUserNav(user);
+      }
+    });
+  </script>
+</body>
+
+</html>

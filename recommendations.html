@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>추천 사이트 - OA MASTER | 사무자동화 & 컴퓨터활용능력 자격증</title>
+  <meta name="description" content="사무자동화 및 컴퓨터활용능력 자격증 시험 관련 공식 원서 접수처, 수험생 학습 커뮤니티, 전자 기출문제 풀이 추천 사이트 모음입니다. 쉬운 기능도 뭉치면 통한다!">
+  <!-- Google Fonts & FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Favicon -->
+  <link rel="icon" href="images/OA_master_LOGO.png" type="image/png">
+  <!-- EmailJS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+</head>
+
+<body class="theme-recommend">
+
+  <!-- Header -->
+  <header>
+    <div class="nav-container">
+      <a href="index.html" class="logo-group">
+        <img src="images/OA_master_LOGO.png" alt="OA MASTER Logo">
+        <div class="logo-text">
+          OA MASTER
+          <span class="logo-subtext">쉬운 기능도 뭉치면 통한다!</span>
+        </div>
+      </a>
+
+      <!-- Desktop Links -->
+      <nav class="nav-links">
+        <div class="nav-item">
+          <a href="written_archive.html" class="nav-link"><i class="fas fa-book"></i> 필기과정 <i
+              class="fas fa-chevron-down" style="font-size:10px;"></i></a>
+          <div class="dropdown-menu">
+            <a href="written_archive.html" class="dropdown-link"><i class="fas fa-folder-open"></i> 자료실</a>
+            <a href="written_lectures.html" class="dropdown-link"><i class="fas fa-video"></i> 영상보기</a>
+          </div>
+        </div>
+        <div class="nav-item">
+          <a href="practical_archive.html" class="nav-link"><i class="fas fa-laptop-code"></i> 실기과정 <i
+              class="fas fa-chevron-down" style="font-size:10px;"></i></a>
+          <div class="dropdown-menu">
+            <a href="practical_archive.html" class="dropdown-link"><i class="fas fa-folder-open"></i> 자료실</a>
+            <a href="practical_lectures.html" class="dropdown-link"><i class="fas fa-video"></i> 영상보기</a>
+          </div>
+        </div>
+        <div class="nav-item active">
+          <a href="recommendations.html" class="nav-link"><i class="fas fa-external-link-alt"></i> 추천 사이트</a>
+        </div>
+      </nav>
+
+      <div class="nav-cta">
+        <div id="userNavArea" style="display:inline-block; margin-right:8px;">
+          <button id="openAuthBtn" class="btn-admin-mode"
+            onclick="window.location.href='index.html?auth=required'; return false;"
+            style="background:var(--theme-written); color:#fff; border:none; padding:6px 14px; border-radius:6px; cursor:pointer; font-weight:600;">
+            <i class="fas fa-user"></i> 로그인 / 회원가입
+          </button>
+        </div>
+        <button class="mobile-toggle">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Menu Drawer -->
+  <div class="mobile-nav-overlay"></div>
+  <div class="mobile-nav-drawer">
+    <div class="mobile-nav-header">
+      <div class="logo-text" style="color: var(--logo-color);">OA MASTER</div>
+      <button class="btn-close-mobile">&times;</button>
+    </div>
+    <div class="mobile-nav-list">
+      <div class="mobile-nav-group-title">필기과정</div>
+      <a href="written_archive.html" class="mobile-nav-link"><i class="fas fa-folder-open"></i> 필기 자료실</a>
+      <a href="written_lectures.html" class="mobile-nav-link"><i class="fas fa-video"></i> 필기 영상강의</a>
+
+      <div class="mobile-nav-group-title">실기과정</div>
+      <a href="practical_archive.html" class="mobile-nav-link"><i class="fas fa-folder-open"></i> 실기 자료실</a>
+      <a href="practical_lectures.html" class="mobile-nav-link"><i class="fas fa-video"></i> 실기 영상강의</a>
+
+      <div class="mobile-nav-group-title">추천 정보</div>
+      <a href="recommendations.html" class="mobile-nav-link"><i class="fas fa-external-link-alt"></i> 추천 사이트</a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main>
+    <div class="content-container">
+      <div class="page-header">
+        <div class="page-title-group">
+          <h2><i class="fas fa-external-link-alt"></i> 추천 사이트 목록</h2>
+          <p>수험 정보 확인, 원서 접수, 그리고 자격증 커뮤니티 등 합격 가능성을 한층 높여줄 사이트 컬렉션입니다.</p>
+        </div>
+        <button class="btn btn-primary admin-only" id="btnNewSite" onclick="openSiteModal()"
+          style="display: none; background-color: var(--theme-primary); box-shadow: 0 4px 14px rgba(var(--theme-primary-rgb), 0.3);">
+          <i class="fas fa-plus"></i> 새 추천 사이트 등록
+        </button>
+      </div>
+
+      <!-- Recommendation Cards Grid -->
+      <div class="grid" id="sitesGrid">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <div id="emptyState" class="empty-state" style="display: none;">
+        <i class="fas fa-link"></i>
+        <p>등록된 추천 사이트가 없습니다.</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Site Write/Edit Modal -->
+  <div class="modal-backdrop" id="siteModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modalTitle"><i class="fas fa-link"></i> 추천 사이트 등록/수정</h3>
+        <button class="btn-close-modal" onclick="closeSiteModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="siteId">
+        <div class="form-group">
+          <label class="form-label" for="siteTitle">사이트 이름</label>
+          <input type="text" id="siteTitle" class="form-input" placeholder="예: 대한상공회의소 자격평가사업단">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="siteUrl">사이트 URL (링크 주소)</label>
+          <input type="url" id="siteUrl" class="form-input" placeholder="예: https://license.korcham.net">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="siteDesc">사이트 소개 및 활용 방법</label>
+          <textarea id="siteDesc" class="form-input"
+            placeholder="수험생들이 이 사이트에서 어떤 정보나 서비스를 유용하게 얻을 수 있는지 간략히 설명하세요."></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="siteCategory">카테고리 구분</label>
+          <select id="siteCategory" class="form-input">
+            <option value="공식 접수처">공식 접수처</option>
+            <option value="학습 커뮤니티">학습 커뮤니티</option>
+            <option value="인터넷 강의">인터넷 강의</option>
+            <option value="무료 기출풀이">무료 기출풀이</option>
+            <option value="기타 자료실">기타 자료실</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="siteTag">축약 태그</label>
+          <input type="text" id="siteTag" class="form-input" placeholder="예: 상공회의소 (카드의 대표 표식)">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeSiteModal()">취소</button>
+        <button class="btn btn-primary" onclick="submitSiteForm()"
+          style="background-color: var(--theme-primary);">저장하기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-container">
+      <div class="footer-top">
+        <div class="footer-info">
+          <div class="footer-logo">
+            <img src="images/OA_master_LOGO.png" alt="OA MASTER Logo">
+            <span class="footer-logo-text">OA MASTER</span>
+          </div>
+          <p class="footer-slogan">"쉬운 기능도 뭉치면 통한다!"</p>
+        </div>
+        <div class="footer-links-grid">
+          <div class="footer-links-col">
+            <h4>필기과정</h4>
+            <ul>
+              <li><a href="written_archive.html">필기 자료실</a></li>
+              <li><a href="written_lectures.html">필기 영상보기</a></li>
+            </ul>
+          </div>
+          <div class="footer-links-col">
+            <h4>실기과정</h4>
+            <ul>
+              <li><a href="practical_archive.html">실기 자료실</a></li>
+              <li><a href="practical_lectures.html">실기 영상보기</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 OA MASTER. All Rights Reserved. Designed for Excellence.</p>
+        <div class="footer-bottom-links">
+          <a href="#" onclick="toggleAdminMode(); return false;"><i class="fas fa-user-shield"></i> 관리자 로그인</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/admin.js"></script>
+
+  <!-- Page Specific Script -->
+  <script>
+    const STORE_KEY = "recommend_sites";
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderSitesGrid();
+      window.addEventListener('adminStateChanged', renderSitesGrid);
+    });
+
+    // 1. Render recommendation grid
+    function renderSitesGrid() {
+      const data = window.DB.getAll(STORE_KEY);
+      const grid = document.getElementById('sitesGrid');
+      const emptyState = document.getElementById('emptyState');
+      const is_admin = window.isAdmin();
+
+      grid.innerHTML = '';
+
+      if (data.length === 0) {
+        emptyState.style.display = 'block';
+        return;
+      }
+      emptyState.style.display = 'none';
+
+      data.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.className = "card recommend-card";
+
+        card.innerHTML = `
+          <div class="card-header" style="padding-bottom: 8px;">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+              <span class="card-badge" style="background-color:rgba(129,41,64,0.1); color:var(--theme-primary);">${item.category}</span>
+              
+              <div class="admin-only" style="display:${is_admin ? 'flex' : 'none'}; gap:4px; margin-top:-6px;">
+                <button class="btn-icon btn-move" onclick="moveSiteUp('${item.id}')" title="위로" style="width:26px; height:26px; font-size:11px;" ${index === 0 ? 'disabled style="opacity:0.3; cursor:not-allowed;"' : ''}><i class="fas fa-arrow-up"></i></button>
+                <button class="btn-icon btn-move" onclick="moveSiteDown('${item.id}')" title="아래로" style="width:26px; height:26px; font-size:11px;" ${index === data.length - 1 ? 'disabled style="opacity:0.3; cursor:not-allowed;"' : ''}><i class="fas fa-arrow-down"></i></button>
+                <button class="btn-icon btn-edit" onclick="openSiteModal('${item.id}')" title="수정" style="width:26px; height:26px; font-size:11px;"><i class="fas fa-edit"></i></button>
+                <button class="btn-icon btn-delete" onclick="deleteSite('${item.id}')" title="삭제" style="width:26px; height:26px; font-size:11px;"><i class="fas fa-trash-alt"></i></button>
+              </div>
+            </div>
+            <h3 class="card-title" style="margin-top: 6px;">${item.title}</h3>
+          </div>
+          <div class="card-body">
+            <p>${item.description}</p>
+          </div>
+          <div class="card-footer" style="background-color: var(--neutral-50);">
+            <span style="font-weight:600; color:var(--theme-recommend); font-family:var(--font-primary); font-size:12px;"># ${item.tag || '링크'}</span>
+            <a href="${item.siteUrl}" target="_blank" class="recommend-link" style="margin-top:0;">
+              바로가기 <i class="fas fa-external-link-alt" style="font-size:11px;"></i>
+            </a>
+          </div>
+        `;
+
+        grid.appendChild(card);
+      });
+      if (window.updateAdminUI) window.updateAdminUI();
+    }
+
+    // 2. Open Site Modal
+    function openSiteModal(id = null) {
+      const modal = document.getElementById('siteModal');
+      const isEdit = id !== null;
+
+      document.getElementById('modalTitle').innerHTML = isEdit ?
+        '<i class="fas fa-edit"></i> 추천 사이트 정보 수정' :
+        '<i class="fas fa-plus"></i> 신규 추천 사이트 추가';
+
+      document.getElementById('siteId').value = id || '';
+      document.getElementById('siteTitle').value = '';
+      document.getElementById('siteUrl').value = '';
+      document.getElementById('siteDesc').value = '';
+      document.getElementById('siteCategory').value = '공식 접수처';
+      document.getElementById('siteTag').value = '';
+
+      if (isEdit) {
+        const item = window.DB.getById(STORE_KEY, id);
+        if (item) {
+          document.getElementById('siteTitle').value = item.title;
+          document.getElementById('siteUrl').value = item.siteUrl;
+          document.getElementById('siteDesc').value = item.description;
+          document.getElementById('siteCategory').value = item.category;
+          document.getElementById('siteTag').value = item.tag || '';
+        }
+      }
+
+      modal.classList.add('open');
+    }
+
+    function closeSiteModal() {
+      document.getElementById('siteModal').classList.remove('open');
+    }
+
+    // 3. Form Submit
+    function submitSiteForm() {
+      const id = document.getElementById('siteId').value;
+      const title = document.getElementById('siteTitle').value;
+      const siteUrl = document.getElementById('siteUrl').value;
+      const description = document.getElementById('siteDesc').value;
+      const category = document.getElementById('siteCategory').value;
+      const tag = document.getElementById('siteTag').value;
+
+      if (!title || !siteUrl || !description || !tag) {
+        showToast('모든 필수 항목을 기입해 주십시오.', 'error');
+        return;
+      }
+
+      const item = {
+        title,
+        siteUrl,
+        description,
+        category,
+        tag
+      };
+
+      if (id) item.id = id;
+
+      const savedItem = window.DB.save(STORE_KEY, item);
+
+      // EmailJS Alert
+      const actionText = id ? "추천 사이트 수정" : "추천 사이트 등록";
+      const emailMsg = `사이트명: ${title}\nURL: ${siteUrl}\n상세: ${description}\n카테고리: ${category}\n수행자: 관리자`;
+
+      window.sendAdminEmailNotification(actionText, title, emailMsg)
+        .then(() => {
+          showToast(id ? '추천 사이트 정보가 변경되었습니다.' : '새 추천 사이트가 등록되었습니다.', 'success');
+          closeSiteModal();
+          renderSitesGrid();
+        });
+    }
+
+    // 4. Delete Site
+    function deleteSite(id) {
+      if (!confirm('정말로 이 추천 사이트를 목록에서 제거하시겠습니까?')) return;
+
+      const item = window.DB.getById(STORE_KEY, id);
+      const title = item ? item.title : '알 수 없음';
+
+      window.DB.delete(STORE_KEY, id);
+
+      // EmailJS Alert
+      const emailMsg = `삭제 대상 사이트: ${title}\n수행자: 관리자`;
+      window.sendAdminEmailNotification("추천 사이트 삭제", title, emailMsg)
+        .then(() => {
+          showToast('추천 사이트가 정상적으로 삭제되었습니다.', 'success');
+          renderSitesGrid();
+        });
+    }
+
+    function moveSiteUp(id) {
+      if (window.DB.moveUp(STORE_KEY, id)) {
+        renderSitesGrid();
+        showToast('사이트 순서가 변경되었습니다.', 'success');
+      }
+    }
+
+    function moveSiteDown(id) {
+      if (window.DB.moveDown(STORE_KEY, id)) {
+        renderSitesGrid();
+        showToast('사이트 순서가 변경되었습니다.', 'success');
+      }
+    }
+  </script>
+
+  <!-- 🔒 Auth Guard & 로그인 사용자 상태 표시 -->
+  <script type="module">
+    import { onAuthChange, logout } from './js/firebase-config.js';
+    onAuthChange((user) => {
+      const is_admin = (typeof isAdmin === 'function' && isAdmin()) || (localStorage.getItem('isAdminActive') === 'true');
+      if (!user && !is_admin) {
+        alert('🔒 회원가입 및 로그인이 필요한 서비스입니다.');
+        window.location.href = 'index.html?auth=required';
+      } else if (window.renderHeaderUserNav) {
+        window.renderHeaderUserNav(user);
+      }
+    });
+  </script>
+</body>
+
+</html>

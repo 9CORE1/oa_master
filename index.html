@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OA MASTER - 사무자동화 및 컴퓨터활용능력 자격증</title>
+  <meta name="description" content="사무자동화 및 컴퓨터활용능력 자격증 단기 합격을 위한 최적의 학습 플랫폼 OA MASTER. 쉬운 기능도 뭉치면 통합니다!">
+  <!-- Google Fonts & FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Favicon -->
+  <link rel="icon" href="images/OA_master_LOGO.png" type="image/png">
+  <!-- EmailJS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/admin.js"></script>
+</head>
+
+<body class="theme-written">
+
+  <!-- Header -->
+  <header>
+    <div class="nav-container">
+      <a href="index.html" class="logo-group">
+        <img src="images/OA_master_LOGO.png" alt="OA MASTER Logo">
+        <div class="logo-text">
+          OA MASTER
+          <span class="logo-subtext">쉬운 기능도 뭉치면 통한다!</span>
+        </div>
+      </a>
+
+      <!-- Desktop Links -->
+      <nav class="nav-links">
+        <div class="nav-item">
+          <a href="written_archive.html" class="nav-link"><i class="fas fa-book"></i> 필기과정 <i
+              class="fas fa-chevron-down" style="font-size:10px;"></i></a>
+          <div class="dropdown-menu">
+            <a href="written_archive.html" class="dropdown-link"><i class="fas fa-folder-open"></i> 자료실</a>
+            <a href="written_lectures.html" class="dropdown-link"><i class="fas fa-video"></i> 영상보기</a>
+          </div>
+        </div>
+        <div class="nav-item">
+          <a href="practical_archive.html" class="nav-link"><i class="fas fa-laptop-code"></i> 실기과정 <i
+              class="fas fa-chevron-down" style="font-size:10px;"></i></a>
+          <div class="dropdown-menu">
+            <a href="practical_archive.html" class="dropdown-link"><i class="fas fa-folder-open"></i> 자료실</a>
+            <a href="practical_lectures.html" class="dropdown-link"><i class="fas fa-video"></i> 영상보기</a>
+          </div>
+        </div>
+        <div class="nav-item">
+          <a href="recommendations.html" class="nav-link"><i class="fas fa-external-link-alt"></i> 추천 사이트</a>
+        </div>
+      </nav>
+
+      <div class="nav-cta">
+        <!-- 🔹 동적으로 로그인 버튼 또는 프로필이 들어갈 영역 -->
+        <div id="userNavArea" style="display:inline-block; margin-right:8px;">
+          <button id="openAuthBtn" class="btn-admin-mode"
+            onclick="document.getElementById('authModal').style.display='flex'; return false;"
+            style="background:var(--theme-written); color:#fff; border:none; padding:6px 14px; border-radius:6px; cursor:pointer; font-weight:600;">
+            <i class="fas fa-user"></i> 로그인 / 회원가입
+          </button>
+        </div>
+
+        <button class="mobile-toggle">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Menu Drawer -->
+  <div class="mobile-nav-overlay"></div>
+  <div class="mobile-nav-drawer">
+    <div class="mobile-nav-header">
+      <div class="logo-text" style="color: var(--logo-color);">OA MASTER</div>
+      <button class="btn-close-mobile">&times;</button>
+    </div>
+    <div class="mobile-nav-list">
+      <div class="mobile-nav-group-title">필기과정</div>
+      <a href="written_archive.html" class="mobile-nav-link"><i class="fas fa-folder-open"></i> 필기 자료실</a>
+      <a href="written_lectures.html" class="mobile-nav-link"><i class="fas fa-video"></i> 필기 영상강의</a>
+
+      <div class="mobile-nav-group-title">실기과정</div>
+      <a href="practical_archive.html" class="mobile-nav-link"><i class="fas fa-folder-open"></i> 실기 자료실</a>
+      <a href="practical_lectures.html" class="mobile-nav-link"><i class="fas fa-video"></i> 실기 영상강의</a>
+
+      <div class="mobile-nav-group-title">추천 정보</div>
+      <a href="recommendations.html" class="mobile-nav-link"><i class="fas fa-external-link-alt"></i> 추천 사이트</a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main>
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="hero-bg-pattern"></div>
+      <div class="hero-container">
+        <div class="hero-badge">
+          <i class="fas fa-graduation-cap"></i> OA MASTER 자격증 교육 허브
+        </div>
+        <h1 class="hero-title">
+          쉬운 기능도 <span>뭉치면 통한다!</span><br>
+          자격증 취득의 지름길
+        </h1>
+        <p class="hero-description">
+          컴퓨터활용능력 및 사무자동화산업기사 자격증 취득을 원하시나요?<br>
+          엄선된 학습 요약본, 실습 기출문제 파일과 무료 동영상 강의를 오직 OA MASTER에서 경험해 보세요.
+        </p>
+        <div class="hero-actions">
+          <a href="written_archive.html" class="btn btn-primary">필기과정 학습하기</a>
+          <a href="practical_archive.html" class="btn btn-secondary">실기과정 실습하기</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Features Grid -->
+    <div class="content-container" style="padding-top: 40px;">
+      <div class="grid">
+        <!-- Card 1: Written Course -->
+        <div class="card" style="border-top: 4px solid var(--theme-written);">
+          <div class="card-header">
+            <span class="card-badge card-badge-written">Written Exam</span>
+            <h3 class="card-title">필기 과정</h3>
+          </div>
+          <div class="card-body">
+            <p style="margin-bottom: 16px;">자격증 합격의 첫 단계! 개념 구조를 한눈에 파악하는 필기 마스터 코스입니다. 핵심 요약 자료와 최신 기출 강의로 이론을 탄탄하게
+              다집니다.</p>
+            <ul style="display: flex; flex-direction: column; gap: 8px; font-size: 13px;">
+              <li><i class="fas fa-check" style="color:var(--theme-written); margin-right:6px;"></i> 컴퓨터 일반 및 스프레드시트 기출
+                정리</li>
+              <li><i class="fas fa-check" style="color:var(--theme-written); margin-right:6px;"></i> 다운로드 가능한 PDF 필기
+                핵심요약집</li>
+              <li><i class="fas fa-check" style="color:var(--theme-written); margin-right:6px;"></i> 이해하기 쉬운 무료 동영상 개념
+                특강</li>
+            </ul>
+          </div>
+          <div class="card-footer">
+            <span style="font-weight:600; color:var(--theme-written);">이론 및 문제 풀이</span>
+            <div class="action-buttons">
+              <a href="written_archive.html" class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;"><i
+                  class="fas fa-folder-open"></i> 자료실</a>
+              <a href="written_lectures.html" class="btn btn-primary"
+                style="padding: 6px 12px; font-size: 12px; background-color: var(--theme-written);"><i
+                  class="fas fa-play"></i> 강의</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2: Practical Course -->
+        <div class="card" style="border-top: 4px solid var(--theme-practical);">
+          <div class="card-header">
+            <span class="card-badge card-badge-practical">Practical Exam</span>
+            <h3 class="card-title">실기 과정</h3>
+          </div>
+          <div class="card-body">
+            <p style="margin-bottom: 16px;">합격을 결정짓는 실전 훈련! 엑셀(스프레드시트)과 액세스(데이터베이스), 파워포인트를 직접 실습할 수 있도록 설계된 체계적 강좌군입니다.
+            </p>
+            <ul style="display: flex; flex-direction: column; gap: 8px; font-size: 13px;">
+              <li><i class="fas fa-check" style="color:var(--theme-practical); margin-right:6px;"></i> 엑셀 함수 및 배열수식 집중
+                트레이닝</li>
+              <li><i class="fas fa-check" style="color:var(--theme-practical); margin-right:6px;"></i> 공단 배포 정식 실습 예제 및
+                답안 템플릿</li>
+              <li><i class="fas fa-check" style="color:var(--theme-practical); margin-right:6px;"></i> 화면 밖으로 새어 나가지 않는
+                실전 해설 강의</li>
+            </ul>
+          </div>
+          <div class="card-footer">
+            <span style="font-weight:600; color:var(--theme-practical);">엑셀 / 데이터베이스 / PPT</span>
+            <div class="action-buttons">
+              <a href="practical_archive.html" class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;"><i
+                  class="fas fa-folder-open"></i> 자료실</a>
+              <a href="practical_lectures.html" class="btn btn-primary"
+                style="padding: 6px 12px; font-size: 12px; background-color: var(--theme-practical);"><i
+                  class="fas fa-play"></i> 강의</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3: Recommendations -->
+        <div class="card" style="border-top: 4px solid var(--theme-recommend);">
+          <div class="card-header">
+            <span class="card-badge"
+              style="background-color:rgba(129,41,64,0.1); color:var(--theme-recommend);">External Links</span>
+            <h3 class="card-title">추천 사이트</h3>
+          </div>
+          <div class="card-body">
+            <p style="margin-bottom: 16px;">원서 접수부터 수험생 커뮤니티, 전자 기출문제 풀이(CBT) 플랫폼까지 자격증 취득 여정에 큰 도움이 될 공신력 높은 외부 자원을
+              선별했습니다.</p>
+            <ul style="display: flex; flex-direction: column; gap: 8px; font-size: 13px;">
+              <li><i class="fas fa-check" style="color:var(--theme-recommend); margin-right:6px;"></i> 상공회의소 및 한국산업인력공단
+                공식 접수처</li>
+              <li><i class="fas fa-check" style="color:var(--theme-recommend); margin-right:6px;"></i> 자격증 최신 소식 및 수기 공유
+                커뮤니티</li>
+              <li><i class="fas fa-check" style="color:var(--theme-recommend); margin-right:6px;"></i> 무료 모의고사 자가 채점 시스템
+                링크</li>
+            </ul>
+          </div>
+          <div class="card-footer">
+            <span style="font-weight:600; color:var(--theme-recommend);">유용한 사이트 목록</span>
+            <a href="recommendations.html" class="btn btn-primary"
+              style="padding: 6px 12px; font-size: 12px; background-color: var(--theme-recommend);"><i
+                class="fas fa-arrow-right"></i> 이동하기</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-container">
+      <div class="footer-top">
+        <div class="footer-info">
+          <div class="footer-logo">
+            <img src="images/OA_master_LOGO.png" alt="OA MASTER Logo">
+            <span class="footer-logo-text">OA MASTER</span>
+          </div>
+          <p class="footer-slogan">"쉬운 기능도 뭉치면 통한다!"</p>
+          <p style="font-size:13px; color: var(--neutral-500);">
+            OA MASTER는 컴퓨터활용능력 1급/2급 및 사무자동화산업기사 자격증 취득에 최적화된 고품질 교육 콘텐츠를 서비스합니다.
+          </p>
+        </div>
+
+        <div class="footer-links-grid">
+          <div class="footer-links-col">
+            <h4>필기과정</h4>
+            <ul>
+              <li><a href="written_archive.html">필기 자료실</a></li>
+              <li><a href="written_lectures.html">필기 영상보기</a></li>
+            </ul>
+          </div>
+          <div class="footer-links-col">
+            <h4>실기과정</h4>
+            <ul>
+              <li><a href="practical_archive.html">실기 자료실</a></li>
+              <li><a href="practical_lectures.html">실기 영상보기</a></li>
+            </ul>
+          </div>
+          <div class="footer-links-col">
+            <h4>추천 사이트</h4>
+            <ul>
+              <li><a href="recommendations.html">외부 유용 링크</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 OA MASTER. All Rights Reserved. Designed for Excellence.</p>
+        <div class="footer-bottom-links">
+          <a href="#" onclick="toggleAdminMode(); return false;"><i class="fas fa-user-shield"></i> 관리자 로그인</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- 🔹 로그인 및 Google 소셜 로그인 모달 팝업 -->
+  <div id="authModal" class="modal"
+    style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:999999; justify-content:center; align-items:center;">
+    <div class="modal-content"
+      style="background:#fff; padding:30px; border-radius:12px; max-width:400px; width:90%; position:relative; text-align:center;">
+      <span id="closeAuthModal" onclick="document.getElementById('authModal').style.display='none';"
+        style="position:absolute; right:15px; top:10px; font-size:24px; cursor:pointer;">&times;</span>
+
+      <h2 id="modalTitle" style="margin-bottom:20px;">로그인</h2>
+
+      <!-- 이메일 로그인/회원가입 폼 -->
+      <form id="authForm" style="display:flex; flex-direction:column; gap:10px;">
+        <input type="text" id="authName" placeholder="성명 (실명 입력)" style="padding:10px; border:1px solid #ccc; border-radius:6px; display:none;">
+        <input type="email" id="authEmail" placeholder="이메일 주소" required style="padding:10px; border:1px solid #ccc; border-radius:6px;">
+        <input type="password" id="authPassword" placeholder="비밀번호" required style="padding:10px; border:1px solid #ccc; border-radius:6px;">
+        <button type="submit" id="authSubmitBtn" style="padding:10px; background:var(--theme-written); color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:bold;">로그인</button>
+      </form>
+
+      <div style="margin:15px 0; font-size:14px; color:#666;">또는</div>
+
+      <!-- Google 로그인 버튼 -->
+      <button type="button" id="googleLoginBtn"
+        style="width:100%; padding:10px; background:#fff; border:1px solid #ddd; border-radius:6px; cursor:pointer; font-weight:bold; display:flex; align-items:center; justify-content:center; gap:8px;">
+        <i class="fab fa-google" style="color:#ea4335;"></i> Google 계정으로 계속하기
+      </button>
+
+      <!-- 모드 전환 -->
+      <div style="margin-top:15px; font-size:14px;">
+        <span id="toggleText">계정이 없으신가요?</span>
+        <a href="#" id="toggleAuthMode" style="color:var(--theme-written); font-weight:bold; margin-left:5px;">회원가입</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🔹 관리자 이메일 인증 모달 팝업 (독립 최상위 모달) -->
+  <div id="adminAuthModal" class="modal"
+    style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:9999999; justify-content:center; align-items:center;">
+    <div class="modal-content"
+      style="background:#fff; padding:30px; border-radius:12px; max-width:440px; width:90%; position:relative; text-align:left; box-shadow:0 20px 25px -5px rgba(0,0,0,0.3);">
+      <span id="closeAdminAuthModal" onclick="document.getElementById('adminAuthModal').style.display='none';"
+        style="position:absolute; right:15px; top:10px; font-size:24px; cursor:pointer; color:#64748b;">&times;</span>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid #eee; padding-bottom:12px;">
+        <h3 style="margin:0; font-size:18px; color:#1e293b;"><i class="fas fa-lock" style="color:var(--theme-written, #0e4987);"></i> 관리자 이메일 인증</h3>
+      </div>
+
+      <div class="modal-body">
+        <div id="adminEmailInputGroup">
+          <label for="adminLoginEmail" style="display:block; font-weight:bold; margin-bottom:6px; font-size:14px; color:#334155;">관리자 이메일 주소</label>
+          <input type="email" id="adminLoginEmail" placeholder="이메일 주소를 입력하세요" style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; font-size:14px;">
+          <p style="font-size:12px; color:#64748b; margin-top:6px;">설정된 관리자 이메일 주소와 동일해야 인증번호가 발송됩니다.</p>
+        </div>
+
+        <div id="adminCodeGroup" style="display:none; margin-top:15px;">
+          <label for="adminVerifyCodeInput" style="display:block; font-weight:bold; margin-bottom:6px; font-size:14px; color:#334155;">인증번호 (6자리)</label>
+          <input type="text" id="adminVerifyCodeInput" placeholder="인증번호 6자리를 입력하세요" maxlength="6" style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; font-size:14px;">
+          <p style="color:#10b981; font-weight:500; font-size:12px; margin-top:6px;">이메일로 발송된 6자리 인증번호를 입력하십시오.</p>
+        </div>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:24px;">
+        <button type="button" onclick="document.getElementById('adminAuthModal').style.display='none';" style="padding:8px 16px; background:#e2e8f0; border:none; border-radius:6px; cursor:pointer; font-weight:600; color:#475569;">취소</button>
+        <button type="button" id="btnAdminRequestCode" onclick="window.requestVerificationCode();" style="padding:8px 16px; background:var(--theme-written, #0e4987); color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:bold;">인증번호 전송</button>
+        <button type="button" id="btnAdminVerifyCode" onclick="window.verifyAdminCode();" style="display:none; padding:8px 16px; background:#10b981; color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:bold;">인증 완료</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🔹 마이 페이지 (My Page) 모달 팝업 -->
+  <div id="myPageModal" class="modal"
+    style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:9999; justify-content:center; align-items:center;">
+    <div class="modal-content"
+      style="background:#fff; padding:30px; border-radius:12px; max-width:460px; width:90%; position:relative; text-align:left;">
+      <span id="closeMyPageModal"
+        style="position:absolute; right:15px; top:10px; font-size:24px; cursor:pointer;">&times;</span>
+
+      <div style="text-align:center; margin-bottom:20px;">
+        <div style="position:relative; display:inline-block; margin-bottom:6px;">
+          <img id="myProfileAvatarImg" src="images/OA_master_LOGO.png" alt="프로필 사진"
+            style="width:76px; height:76px; border-radius:50%; object-fit:cover; border:3px solid var(--theme-written); background:#f1f5f9;">
+          <label for="profilePhotoInput"
+            style="position:absolute; bottom:0; right:0; background:var(--theme-written); color:#fff; border-radius:50%; width:28px; height:28px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:12px; border:2px solid #fff;"
+            title="사진 선택">
+            <i class="fas fa-camera"></i>
+          </label>
+          <input type="file" id="profilePhotoInput" accept="image/*" style="display:none;">
+        </div>
+        <div>
+          <button type="button" id="saveProfilePhotoBtn"
+            style="padding:4px 12px; background:var(--theme-written); color:#fff; border:none; border-radius:14px; font-size:11px; cursor:pointer; font-weight:bold;">
+            <i class="fas fa-upload"></i> 사진 저장
+          </button>
+        </div>
+        <h2 style="font-size:20px; color:#111; margin:8px 0 0 0;">마이 페이지</h2>
+        <p style="font-size:12px; color:#666; margin-top:2px;">계정 프로필 정보를 개별 설정하세요</p>
+      </div>
+
+      <div
+        style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:16px; margin-bottom:20px; font-size:14px; display:flex; flex-direction:column; gap:12px;">
+        <!-- 1. 닉네임 수정 항목 -->
+        <div
+          style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #edf2f7; padding-bottom:10px;">
+          <span style="color:#64748b; font-weight:600;"><i class="fas fa-user-circle"></i> 닉네임 / 성명</span>
+          <div style="display:flex; gap:6px; align-items:center;">
+            <input type="text" id="editProfileNameInput" placeholder="닉네임 입력"
+              style="padding:6px 10px; border:1px solid #cbd5e1; border-radius:6px; font-size:13px; width:130px;">
+            <button id="saveProfileNameBtn"
+              style="padding:6px 10px; background:var(--theme-written); color:#fff; border:none; border-radius:6px; font-size:12px; cursor:pointer; font-weight:bold;">
+              저장
+            </button>
+          </div>
+        </div>
+
+        <!-- 2. 학교/소속명 수정 항목 -->
+        <div
+          style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #edf2f7; padding-bottom:10px;">
+          <span style="color:#64748b; font-weight:600;"><i class="fas fa-graduation-cap"></i> 학교명 / 소속명</span>
+          <div style="display:flex; gap:6px; align-items:center;">
+            <input type="text" id="editSchoolNameInput" placeholder="학교/소속 입력"
+              style="padding:6px 10px; border:1px solid #cbd5e1; border-radius:6px; font-size:13px; width:130px;">
+            <button id="saveSchoolNameBtn"
+              style="padding:6px 10px; background:var(--theme-written); color:#fff; border:none; border-radius:6px; font-size:12px; cursor:pointer; font-weight:bold;">
+              저장
+            </button>
+          </div>
+        </div>
+
+        <!-- 계정 정보 -->
+        <div style="display:flex; justify-content:space-between; border-bottom:1px solid #edf2f7; padding-bottom:8px;">
+          <span style="color:#64748b; font-weight:600;"><i class="fas fa-envelope"></i> 이메일 주소</span>
+          <span id="myProfileEmail" style="font-weight:bold; color:#0f172a;">-</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; border-bottom:1px solid #edf2f7; padding-bottom:8px;">
+          <span style="color:#64748b; font-weight:600;"><i class="fas fa-key"></i> 로그인 방식</span>
+          <span id="myProfileProvider" style="font-weight:bold; color:#0f172a;">-</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; border-bottom:1px solid #edf2f7; padding-bottom:8px;">
+          <span style="color:#64748b; font-weight:600;"><i class="fas fa-user-tag"></i> 회원 등급</span>
+          <span id="myProfileRole" style="font-weight:bold; color:#0f172a;">User (회원)</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; border-bottom:1px solid #edf2f7; padding-bottom:8px;">
+          <span style="color:#64748b; font-weight:600;"><i class="fas fa-calendar-check"></i> 가입 일자</span>
+          <span id="myProfileCreated" style="font-size:13px; color:#334155;">-</span>
+        </div>
+        <div style="display:flex; justify-content:space-between;">
+          <span style="color:#64748b; font-weight:600;"><i class="fas fa-id-badge"></i> 회원 고유 UID</span>
+          <span id="myProfileUid" style="font-size:11px; color:#64748b; font-family:monospace;">-</span>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:10px;">
+        <button id="myPageSaveAllBtn"
+          style="flex:2; padding:10px; background:var(--theme-written, #0e4987); color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:bold; font-size:14px;">
+          <i class="fas fa-save"></i> 저장
+        </button>
+        <button id="myPageLogoutBtn" onclick="if(window.handleGlobalLogout){window.handleGlobalLogout();} return false;"
+          style="flex:1; padding:10px; background:var(--theme-recommend, #e11d48); color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:bold; font-size:14px;">
+          <i class="fas fa-sign-out-alt"></i> 로그아웃
+        </button>
+        <button id="myPageCloseBtn"
+          style="flex:1; padding:10px; background:#e2e8f0; color:#334155; border:none; border-radius:6px; cursor:pointer; font-weight:bold; font-size:14px;">
+          닫기
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🔹 Firebase 연동 및 이벤트 스크립트 -->
+  <script type="module">
+    import {
+      signInWithEmail,
+      signUpWithEmail,
+      signInWithGoogle,
+      logout,
+      onAuthChange,
+      updateUserProfile,
+      saveUserDataToFirestore,
+      getUserDataFromFirestore
+    } from './js/firebase-config.js';
+
+    let isSignUp = false;
+    let currentUser = null;
+    let selectedPhotoDataUrl = null;
+
+    // ⚡ 전역 팝업 모달 상호 배제 닫기 헬퍼 함수 (모달 중첩 겹침 완전 방지)
+    const closeAllModals = () => {
+      const authModal = document.getElementById('authModal');
+      const myPageModal = document.getElementById('myPageModal');
+      const adminAuthModal = document.getElementById('adminAuthModal');
+
+      if (authModal) authModal.style.display = 'none';
+      if (myPageModal) myPageModal.style.display = 'none';
+      if (adminAuthModal) adminAuthModal.style.display = 'none';
+    };
+
+    window.closeAllModals = closeAllModals;
+
+    // ⚡ 마이페이지 오픈 전용 헬퍼 함수 (클릭 즉시 0초 모달 오픈 후 비동기 데이터 로드)
+    const openMyPageModal = async () => {
+      closeAllModals();
+      const myPageModal = document.getElementById('myPageModal');
+      if (!myPageModal) return;
+
+      // ⚡ 1. 클릭 즉시 팝업 창 0초 오픈
+      myPageModal.style.display = 'flex';
+
+      const user = currentUser || {
+        displayName: localStorage.getItem('userDisplayName') || '회원',
+        email: localStorage.getItem('userEmail') || '이메일 정보 없음',
+        photoURL: localStorage.getItem('userPhotoURL') || null,
+        uid: localStorage.getItem('userUid') || null
+      };
+
+      const displayName = user.displayName || (user.email ? user.email.split('@')[0] : '회원');
+      const savedPhoto = user.photoURL || localStorage.getItem('userPhotoURL') || null;
+      const editProfileNameInput = document.getElementById('editProfileNameInput');
+      const editSchoolNameInput = document.getElementById('editSchoolNameInput');
+      const myProfileAvatarImg = document.getElementById('myProfileAvatarImg');
+
+      // ⚡ 2. 기본 정보 및 사진 즉시 표시
+      if (editProfileNameInput) editProfileNameInput.value = displayName;
+      if (myProfileAvatarImg) {
+        myProfileAvatarImg.src = savedPhoto || 'images/OA_master_LOGO.png';
+      }
+      selectedPhotoDataUrl = savedPhoto;
+
+      const elEmail = document.getElementById('myProfileEmail');
+      if (elEmail) elEmail.textContent = user.email || '이메일 정보 없음';
+
+      const providerId = user.providerData && user.providerData[0] ? user.providerData[0].providerId : '';
+      const elProvider = document.getElementById('myProfileProvider');
+      if (elProvider) {
+        elProvider.innerHTML = providerId.includes('google')
+          ? '<span style="color:#ea4335;"><i class="fab fa-google"></i> Google 소셜 로그인</span>'
+          : '<span style="color:var(--theme-written);"><i class="fas fa-envelope"></i> 이메일 / 비밀번호</span>';
+      }
+
+      const userEmailStr = (user.email || '').toLowerCase().trim();
+      const userRole = (userEmailStr === 'teacha99@gmail.com')
+        ? 'Host'
+        : (localStorage.getItem('userRole') || 'User');
+      const elRole = document.getElementById('myProfileRole');
+      if (elRole) {
+        if (userRole === 'Host') {
+          elRole.innerHTML = '<span style="color:#b91c1c; font-weight:bold; background:rgba(239,68,68,0.12); padding:3px 8px; border-radius:12px; font-size:12px; display:inline-flex; align-items:center; gap:4px;"><i class="fas fa-crown" style="color:#f59e0b;"></i> Host (관리자)</span>';
+        } else if (userRole === 'Manager') {
+          elRole.innerHTML = '<span style="color:#0369a1; font-weight:bold; background:rgba(14,165,233,0.12); padding:3px 8px; border-radius:12px; font-size:12px; display:inline-flex; align-items:center; gap:4px;"><i class="fas fa-user-shield" style="color:#0284c7;"></i> Manager (매니저)</span>';
+        } else {
+          elRole.innerHTML = '<span style="color:#475569; font-weight:bold; background:rgba(100,116,139,0.12); padding:3px 8px; border-radius:12px; font-size:12px; display:inline-flex; align-items:center; gap:4px;"><i class="fas fa-user" style="color:#64748b;"></i> User (회원)</span>';
+        }
+      }
+
+      const createdDate = user.metadata && user.metadata.creationTime
+        ? new Date(user.metadata.creationTime).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })
+        : '정보 없음';
+      const elCreated = document.getElementById('myProfileCreated');
+      if (elCreated) elCreated.textContent = createdDate;
+
+      const elUid = document.getElementById('myProfileUid');
+      if (elUid) elUid.textContent = user.uid || '-';
+
+      // ⚡ 3. 비동기 소속/학교, 닉네임 및 클라우드 프로필 사진 백그라운드 로드 & 화면 갱신
+      const targetUid = (user && user.uid) || localStorage.getItem('userUid');
+      if (targetUid) {
+        try {
+          const fsRes = await getUserDataFromFirestore(targetUid);
+          if (fsRes && fsRes.success && fsRes.data) {
+            if (fsRes.data.schoolName && editSchoolNameInput) {
+              editSchoolNameInput.value = fsRes.data.schoolName;
+              localStorage.setItem(`user_school_${targetUid}`, fsRes.data.schoolName);
+            }
+            if (fsRes.data.displayName && editProfileNameInput) {
+              editProfileNameInput.value = fsRes.data.displayName;
+              localStorage.setItem('userDisplayName', fsRes.data.displayName);
+            }
+            if (fsRes.data.photoURL) {
+              localStorage.setItem('userPhotoURL', fsRes.data.photoURL);
+              if (myProfileAvatarImg) myProfileAvatarImg.src = fsRes.data.photoURL;
+              selectedPhotoDataUrl = fsRes.data.photoURL;
+            }
+            renderHeaderUserNav({
+              displayName: fsRes.data.displayName || displayName,
+              photoURL: fsRes.data.photoURL || savedPhoto,
+              email: user.email || localStorage.getItem('userEmail') || '',
+              uid: targetUid
+            });
+          }
+        } catch (err) {
+          if (editSchoolNameInput) {
+            editSchoolNameInput.value = localStorage.getItem(`user_school_${targetUid}`) || '';
+          }
+        }
+      }
+    };
+
+    window.openMyPageModal = openMyPageModal;
+
+    // ⚡ 전역 스마트 모달 오픈 창 등록 (로그인 상태 시 마이페이지 모달, 비로그인 시 로그인 모달)
+    window.openAuthModal = () => {
+      closeAllModals();
+      const isUserLoggedIn = (currentUser !== null) || (localStorage.getItem('isLoggedIn') === 'true');
+      if (isUserLoggedIn) {
+        openMyPageModal();
+      } else {
+        const authModal = document.getElementById('authModal');
+        if (authModal) authModal.style.display = 'flex';
+      }
+    };
+
+    const syncUserToFirestore = async (user) => {
+      if (!user) return;
+      const createdDate = user.metadata && user.metadata.creationTime
+        ? new Date(user.metadata.creationTime).toISOString()
+        : new Date().toISOString();
+
+      const providerId = user.providerData && user.providerData[0]
+        ? user.providerData[0].providerId
+        : 'password';
+
+      const cachedPhoto = localStorage.getItem('userPhotoURL') || null;
+      const cachedSchool = localStorage.getItem(`user_school_${user.uid}`) || '';
+
+      await saveUserDataToFirestore(user.uid, {
+        uid: user.uid,                                                                   // 1. 회원 고유 UID
+        email: user.email || '',                                                         // 2. 이메일 주소
+        displayName: user.displayName || (user.email ? user.email.split('@')[0] : '회원'),    // 3. 닉네임/성명
+        photoURL: user.photoURL || cachedPhoto || null,                                  // 4. 프로필 사진 (.jpg)
+        schoolName: cachedSchool,                                                        // 5. 학교명/소속명
+        provider: providerId,                                                            // 6. 로그인 방식
+        createdAt: createdDate                                                           // 7. 가입 일자
+      });
+    };
+
+    const convertAndCompressToJpg = (file, targetSize = 200) => {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = targetSize;
+            canvas.height = targetSize;
+            const ctx = canvas.getContext('2d');
+
+            // ⚡ 1:1 정사각형 중앙 크롭 (Center Square Crop)
+            const minDim = Math.min(img.width, img.height);
+            const sx = (img.width - minDim) / 2;
+            const sy = (img.height - minDim) / 2;
+
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, targetSize, targetSize);
+            ctx.drawImage(img, sx, sy, minDim, minDim, 0, 0, targetSize, targetSize);
+            resolve(canvas.toDataURL('image/jpeg', 0.8));
+          };
+          img.onerror = reject;
+          img.src = e.target.result;
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    };
+
+    const renderHeaderUserNav = (user) => {
+      currentUser = user;
+      const userNav = document.getElementById('userNavArea');
+      if (!userNav) return;
+
+      const is_admin = (typeof isAdmin === 'function' && isAdmin()) || (localStorage.getItem('isAdminActive') === 'true');
+
+      if (is_admin) {
+        userNav.innerHTML = `
+          <div style="display:inline-flex; align-items:center; gap:8px; background:rgba(234,88,12,0.08); padding:4px 10px 4px 12px; border-radius:24px; border:1px solid rgba(234,88,12,0.3);">
+            <span style="font-size:13px; font-weight:bold; color:#c2410c; display:inline-flex; align-items:center; gap:5px;">
+              <i class="fas fa-user-shield" style="color:#ea580c;"></i> 관리자모드
+            </span>
+            <button id="headerJsonUpdateBtn" onclick="if(window.updateJSONData){window.updateJSONData();} return false;" style="background:#0284c7; color:#fff; border:none; padding:5px 12px; border-radius:16px; font-size:12px; font-weight:bold; cursor:pointer; transition:opacity 0.2s;" title="수정한 데이터를 GitHub 서버 소스코드로 자동 커밋 및 업데이트">
+              <i class="fas fa-file-export"></i> JSON 업데이트
+            </button>
+            <button id="headerGithubSettingsBtn" onclick="if(window.showGithubSettingsModal){window.showGithubSettingsModal();} return false;" style="background:#475569; color:#fff; border:none; padding:5px 12px; border-radius:16px; font-size:12px; font-weight:bold; cursor:pointer; transition:opacity 0.2s;" title="GitHub 저장소 연동 설정">
+              <i class="fab fa-github"></i> GitHub 설정
+            </button>
+            <button id="adminLogoutBtn" onclick="window.toggleAdminMode(); return false;" style="background:var(--theme-recommend, #e11d48); color:#fff; border:none; padding:5px 12px; border-radius:16px; font-size:12px; font-weight:bold; cursor:pointer; transition:opacity 0.2s;" title="관리자 모드 해제 및 로그아웃">
+              <i class="fas fa-sign-out-alt"></i> 로그아웃
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      if (user) {
+        try {
+          const displayName = user.displayName || (user.email ? user.email.split('@')[0] : '회원');
+          const photoUrl = (user && user.photoURL) || localStorage.getItem('userPhotoURL') || null;
+          const avatarIcon = photoUrl
+            ? `<img src="${photoUrl}" style="width:24px; height:24px; border-radius:50%; object-fit:cover; flex-shrink:0;">`
+            : `<i class="fas fa-user-circle" style="color:var(--theme-written); font-size:18px;"></i>`;
+
+          userNav.innerHTML = `
+            <div style="display:inline-flex; align-items:center; gap:10px; background:rgba(14,73,135,0.06); padding:4px 8px 4px 12px; border-radius:24px; border:1px solid rgba(14,73,135,0.2);">
+              <a href="javascript:void(0)" id="myPageBtn" onclick="window.openMyPageModal(); return false;" style="font-size:13px; font-weight:bold; color:var(--neutral-900); text-decoration:none; display:inline-flex; align-items:center; gap:6px; cursor:pointer;" title="마이페이지">
+                ${avatarIcon}
+                <span>${displayName}님</span>
+              </a>
+              <button id="logoutBtn" onclick="if(window.handleGlobalLogout){window.handleGlobalLogout();} return false;" style="background:var(--theme-recommend); color:#fff; border:none; padding:5px 12px; border-radius:16px; font-size:12px; font-weight:bold; cursor:pointer; transition:opacity 0.2s;">로그아웃</button>
+            </div>
+          `;
+
+          const logoutBtn = document.getElementById('logoutBtn');
+          if (logoutBtn) {
+            logoutBtn.onclick = (e) => {
+              if (e) e.preventDefault();
+              if (window.handleGlobalLogout) {
+                window.handleGlobalLogout();
+              } else {
+                logout().then(() => {
+                  renderHeaderUserNav(null);
+                  alert('로그아웃 되었습니다.');
+                });
+              }
+            };
+          }
+        } catch (err) {
+          console.error('renderHeaderUserNav error:', err);
+        }
+      } else {
+        userNav.innerHTML = `
+          <button id="openAuthBtn" class="btn-admin-mode" onclick="window.openAuthModal(); return false;" style="background:var(--theme-written); color:#fff; border:none; padding:6px 14px; border-radius:6px; cursor:pointer; font-weight:600;"><i class="fas fa-user"></i> 로그인 / 회원가입</button>
+        `;
+      }
+    };
+
+    window.renderHeaderUserNav = renderHeaderUserNav;
+
+    // ⚡ 0초 반응: 로컬 세션 확인 및 즉시 헤더 렌더링
+    if (localStorage.getItem('isLoggedIn') === 'true') {
+      const cachedName = localStorage.getItem('userDisplayName') || '회원';
+      const cachedPhoto = localStorage.getItem('userPhotoURL') || null;
+      const cachedEmail = (localStorage.getItem('userEmail') || '').toLowerCase().trim();
+      if (cachedEmail === 'teacha99@gmail.com') {
+        localStorage.setItem('isAdminActive', 'true');
+      }
+      renderHeaderUserNav({
+        displayName: cachedName,
+        photoURL: cachedPhoto,
+        email: cachedEmail
+      });
+      if (window.updateAdminUI) window.updateAdminUI();
+    }
+
+    // ⚡ 파이어베이스 실시간 인증 감지기 탑레벨 등록 및 동기화 (새 기기 로그인 시 클라우드 마이페이지 데이터 자동복원)
+    onAuthChange(async (user) => {
+      console.log('Firebase Auth State Changed:', user ? user.email : 'No User');
+      if (user && user.uid) {
+        localStorage.setItem('userUid', user.uid);
+        try {
+          const fsRes = await getUserDataFromFirestore(user.uid);
+          if (fsRes && fsRes.success && fsRes.data) {
+            if (fsRes.data.schoolName) {
+              localStorage.setItem(`user_school_${user.uid}`, fsRes.data.schoolName);
+            }
+            if (fsRes.data.photoURL) {
+              localStorage.setItem('userPhotoURL', fsRes.data.photoURL);
+            }
+            if (fsRes.data.displayName) {
+              localStorage.setItem('userDisplayName', fsRes.data.displayName);
+            }
+          }
+        } catch (err) {
+          console.warn('Firestore profile sync warning:', err);
+        }
+      }
+      renderHeaderUserNav(user);
+      if (window.updateAdminUI) window.updateAdminUI();
+      if (user) {
+        const modal = document.getElementById('authModal');
+        if (modal) modal.style.display = 'none';
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const authModal = document.getElementById('authModal');
+      const myPageModal = document.getElementById('myPageModal');
+      const closeBtn = document.getElementById('closeAuthModal');
+      const closeMyPageModal = document.getElementById('closeMyPageModal');
+      const myPageCloseBtn = document.getElementById('myPageCloseBtn');
+      const myPageLogoutBtn = document.getElementById('myPageLogoutBtn');
+      const saveProfileNameBtn = document.getElementById('saveProfileNameBtn');
+      const saveSchoolNameBtn = document.getElementById('saveSchoolNameBtn');
+      const saveProfilePhotoBtn = document.getElementById('saveProfilePhotoBtn');
+      const editProfileNameInput = document.getElementById('editProfileNameInput');
+      const editSchoolNameInput = document.getElementById('editSchoolNameInput');
+      const profilePhotoInput = document.getElementById('profilePhotoInput');
+      const myProfileAvatarImg = document.getElementById('myProfileAvatarImg');
+
+      const authForm = document.getElementById('authForm');
+      const authSubmitBtn = document.getElementById('authSubmitBtn');
+      const googleBtn = document.getElementById('googleLoginBtn');
+      const toggleAuthMode = document.getElementById('toggleAuthMode');
+      const modalTitle = document.getElementById('modalTitle');
+      const toggleText = document.getElementById('toggleText');
+
+      // 마이페이지 버튼 전역 클릭 위임 (100% 마이페이지 모달 오픈)
+      document.addEventListener('click', (e) => {
+        const btn = e.target.closest('#myPageBtn');
+        if (btn) {
+          e.preventDefault();
+          openMyPageModal();
+        }
+      });
+
+      // 마이페이지 닫기 및 로그아웃
+      if (closeMyPageModal) closeMyPageModal.onclick = () => myPageModal.style.display = 'none';
+      if (myPageCloseBtn) myPageCloseBtn.onclick = () => myPageModal.style.display = 'none';
+      if (myPageLogoutBtn) {
+        myPageLogoutBtn.onclick = (e) => {
+          if (e) e.preventDefault();
+          if (window.handleGlobalLogout) {
+            window.handleGlobalLogout();
+          } else {
+            logout().then(() => {
+              myPageModal.style.display = 'none';
+              renderHeaderUserNav(null);
+              alert('로그아웃 되었습니다.');
+            });
+          }
+        };
+      }
+      const myPageSaveAllBtn = document.getElementById('myPageSaveAllBtn');
+      if (myPageSaveAllBtn) {
+        myPageSaveAllBtn.onclick = async (e) => {
+          if (e) e.preventDefault();
+          const targetUid = (currentUser && currentUser.uid) || localStorage.getItem('userUid');
+          if (!targetUid) {
+            alert('로그인 유저 정보를 확인할 수 없어 저장에 실패했습니다.');
+            return;
+          }
+
+          const originalText = myPageSaveAllBtn.innerHTML;
+          myPageSaveAllBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 저장 중...';
+          myPageSaveAllBtn.disabled = true;
+
+          try {
+            const newName = editProfileNameInput ? editProfileNameInput.value.trim() : '';
+            const schoolName = editSchoolNameInput ? editSchoolNameInput.value.trim() : '';
+
+            const updateData = {};
+            if (newName) updateData.displayName = newName;
+            if (schoolName) updateData.schoolName = schoolName;
+            if (selectedPhotoDataUrl) updateData.photoURL = selectedPhotoDataUrl;
+
+            if (newName || selectedPhotoDataUrl) {
+              await updateUserProfile(newName || undefined, selectedPhotoDataUrl || undefined);
+            }
+
+            if (newName) localStorage.setItem('userDisplayName', newName);
+            if (schoolName) localStorage.setItem(`user_school_${targetUid}`, schoolName);
+            if (selectedPhotoDataUrl) localStorage.setItem('userPhotoURL', selectedPhotoDataUrl);
+
+            await saveUserDataToFirestore(targetUid, updateData);
+
+            if (currentUser) {
+              if (newName) currentUser.displayName = newName;
+              if (selectedPhotoDataUrl) currentUser.photoURL = selectedPhotoDataUrl;
+            }
+            renderHeaderUserNav(currentUser || {
+              displayName: newName || localStorage.getItem('userDisplayName') || '회원',
+              photoURL: selectedPhotoDataUrl || localStorage.getItem('userPhotoURL') || null,
+              email: localStorage.getItem('userEmail') || ''
+            });
+
+            alert('🎉 마이페이지 모든 변경사항이 클라우드 서버(Firestore)에 성황리에 성공적으로 저장되었습니다!');
+            if (myPageModal) myPageModal.style.display = 'none';
+          } catch (err) {
+            console.error('마이페이지 전체 저장 오류:', err);
+            alert('저장 중 오류가 발생했습니다: ' + (err.message || err));
+          } finally {
+            myPageSaveAllBtn.innerHTML = originalText;
+            myPageSaveAllBtn.disabled = false;
+          }
+        };
+      }
+
+      // 프로필 이미지 선택 핸들러
+      if (profilePhotoInput) {
+        profilePhotoInput.onchange = async (e) => {
+          const file = e.target.files[0];
+          if (file) {
+            try {
+              const jpgDataUrl = await convertAndCompressToJpg(file, 200);
+              selectedPhotoDataUrl = jpgDataUrl;
+              if (myProfileAvatarImg) myProfileAvatarImg.src = selectedPhotoDataUrl;
+            } catch (err) {
+              console.error('.jpg 변환 오류:', err);
+              alert('이미지 파일 변환 중 오류가 발생했습니다.');
+            }
+          }
+        };
+      }
+
+      // 프로필 사진 저장
+      if (saveProfilePhotoBtn) {
+        saveProfilePhotoBtn.onclick = async (e) => {
+          if (e) e.preventDefault();
+          if (!selectedPhotoDataUrl) {
+            alert('📷 카메라 아이콘 버튼을 눌러 변경할 사진을 먼저 선택해 주세요.');
+            return;
+          }
+
+          const originalText = saveProfilePhotoBtn.innerHTML;
+          saveProfilePhotoBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 저장 중...';
+          saveProfilePhotoBtn.disabled = true;
+
+          try {
+            await updateUserProfile(undefined, selectedPhotoDataUrl);
+            const targetUid = (currentUser && currentUser.uid) || localStorage.getItem('userUid');
+            if (targetUid) {
+              if (currentUser) currentUser.photoURL = selectedPhotoDataUrl;
+              localStorage.setItem('userPhotoURL', selectedPhotoDataUrl);
+              await saveUserDataToFirestore(targetUid, { photoURL: selectedPhotoDataUrl });
+              renderHeaderUserNav(currentUser || {
+                displayName: localStorage.getItem('userDisplayName') || '회원',
+                photoURL: selectedPhotoDataUrl,
+                email: localStorage.getItem('userEmail') || ''
+              });
+            }
+            alert('📷 프로필 사진이 성공적으로 저장되었습니다!');
+          } catch (err) {
+            console.error('프로필 사진 저장 오류:', err);
+            alert('사진 저장 중 오류가 발생했습니다: ' + (err.message || err));
+          } finally {
+            saveProfilePhotoBtn.innerHTML = originalText;
+            saveProfilePhotoBtn.disabled = false;
+          }
+        };
+      }
+
+      // 닉네임 저장
+      if (saveProfileNameBtn) {
+        saveProfileNameBtn.onclick = async () => {
+          const newName = editProfileNameInput ? editProfileNameInput.value.trim() : '';
+          if (!newName) {
+            alert('수정할 닉네임을 입력해 주세요.');
+            return;
+          }
+          const res = await updateUserProfile(newName, undefined);
+          if (res.success) {
+            const targetUid = (currentUser && currentUser.uid) || localStorage.getItem('userUid');
+            if (targetUid) {
+              if (currentUser) currentUser.displayName = newName;
+              localStorage.setItem('userDisplayName', newName);
+              await saveUserDataToFirestore(targetUid, { displayName: newName });
+              renderHeaderUserNav(currentUser || {
+                displayName: newName,
+                photoURL: localStorage.getItem('userPhotoURL') || null,
+                email: localStorage.getItem('userEmail') || ''
+              });
+            }
+            alert('닉네임이 클라우드 서버(Firestore)에 성공적으로 저장되었습니다!');
+          } else {
+            alert('닉네임 저장 실패: ' + res.error);
+          }
+        };
+      }
+
+      // 학교/소속명 저장
+      if (saveSchoolNameBtn) {
+        saveSchoolNameBtn.onclick = async () => {
+          const schoolName = editSchoolNameInput ? editSchoolNameInput.value.trim() : '';
+          if (!schoolName) {
+            alert('저장할 학교명/소속명을 입력해 주세요.');
+            return;
+          }
+          const targetUid = (currentUser && currentUser.uid) || localStorage.getItem('userUid');
+          if (targetUid) {
+            localStorage.setItem(`user_school_${targetUid}`, schoolName);
+            await saveUserDataToFirestore(targetUid, { schoolName: schoolName });
+            alert('학교명/소속명이 클라우드 서버(Firestore)에 성공적으로 저장되었습니다!');
+          } else {
+            alert('로그인 유저 정보를 확인할 수 없어 저장에 실패했습니다.');
+          }
+        };
+      }
+
+      // 비로그인 사용자 접근 제한 (보호 링크 클릭 시 이동 차단)
+      const protectedServiceLinks = [
+        'written_archive.html',
+        'written_lectures.html',
+        'practical_archive.html',
+        'practical_lectures.html',
+        'recommendations.html'
+      ];
+
+      document.addEventListener('click', (e) => {
+        const link = e.target.closest('a, button');
+        if (!link) return;
+        if (link.closest('#adminAuthModal')) return;
+        if (link.id === 'openAuthBtn' || link.id === 'myPageBtn' || link.id === 'closeAuthModal' || link.id === 'closeMyPageModal' || link.id === 'footerAdminLoginBtn' || link.id === 'closeAdminAuthModal') return;
+
+        const href = link.getAttribute('href') || link.getAttribute('onclick') || '';
+        if (protectedServiceLinks.some(page => href.includes(page))) {
+          const isUserLoggedIn = (currentUser !== null) ||
+            (localStorage.getItem('isLoggedIn') === 'true') ||
+            (typeof isAdmin === 'function' && isAdmin()) ||
+            (localStorage.getItem('isAdminActive') === 'true');
+          if (!isUserLoggedIn) {
+            e.preventDefault();
+            e.stopPropagation();
+            alert('🔒 회원가입 및 로그인을 해야 해당 서비스를 이용하실 수 있습니다.');
+            if (authModal) authModal.style.display = 'flex';
+          }
+        }
+      }, true);
+
+      // 모달 닫기
+      if (closeBtn) closeBtn.onclick = () => authModal.style.display = 'none';
+
+      // 로그인/회원가입 모드 전환
+      if (toggleAuthMode) {
+        toggleAuthMode.onclick = (e) => {
+          e.preventDefault();
+          isSignUp = !isSignUp;
+          modalTitle.textContent = isSignUp ? '회원가입' : '로그인';
+          if (authSubmitBtn) authSubmitBtn.textContent = isSignUp ? '회원가입하기' : '로그인';
+          toggleText.textContent = isSignUp ? '이미 계정이 있으신가요?' : '계정이 없으신가요?';
+          toggleAuthMode.textContent = isSignUp ? '로그인' : '회원가입';
+
+          const nameInput = document.getElementById('authName');
+          if (nameInput) {
+            nameInput.style.display = isSignUp ? 'block' : 'none';
+            nameInput.required = isSignUp;
+            if (isSignUp) setTimeout(() => nameInput.focus(), 100);
+          }
+        };
+      }
+
+      // 구글 로그인 핸들러 (연속 클릭 방지 및 싱글턴 처리)
+      if (googleBtn) {
+        googleBtn.onclick = async (e) => {
+          if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+
+          if (googleBtn.disabled) return;
+          googleBtn.disabled = true;
+          const originalContent = googleBtn.innerHTML;
+          googleBtn.innerHTML = '<i class="fas fa-spinner fa-spin" style="color:#ea4335;"></i> Google 연결 중...';
+
+          try {
+            const res = await signInWithGoogle();
+            if (res.success) {
+              if (!res.isRedirecting && res.user) {
+                await syncUserToFirestore(res.user);
+                renderHeaderUserNav(res.user);
+                const targetModal = document.getElementById('authModal');
+                if (targetModal) targetModal.style.display = 'none';
+                alert(`🎉 ${res.user.displayName || res.user.email}님 환영합니다!`);
+              }
+            } else {
+              if (!res.isCancelled && res.error && !res.error.includes('auth/cancelled-popup-request') && !res.error.includes('popup-closed-by-user')) {
+                alert('Google 로그인 안내: ' + res.error);
+              }
+            }
+          } catch (err) {
+            console.error('Google 로그인 처리 오류:', err);
+          } finally {
+            googleBtn.disabled = false;
+            googleBtn.innerHTML = originalContent;
+          }
+        };
+      }
+
+      // ⚡ 이메일 로그인/회원가입 제출 통합 핸들러 (100% 작동 보장)
+      const handleEmailAuth = async (e) => {
+        if (e) e.preventDefault();
+        const nameInput = document.getElementById('authName');
+        const emailInput = document.getElementById('authEmail');
+        const passwordInput = document.getElementById('authPassword');
+
+        if (!emailInput || !passwordInput) return;
+        const name = nameInput ? nameInput.value.trim() : '';
+        const email = emailInput.value.trim();
+        const password = passwordInput.value.trim();
+
+        if (isSignUp && !name) {
+          alert('성명(실명)을 입력해 주세요.');
+          if (nameInput) nameInput.focus();
+          return;
+        }
+
+        if (!email || !password) {
+          alert('이메일과 비밀번호를 모두 입력해 주세요.');
+          return;
+        }
+
+        try {
+          const res = isSignUp
+            ? await signUpWithEmail(email, password)
+            : await signInWithEmail(email, password);
+
+          if (res.success) {
+            if (isSignUp && name) {
+              await updateUserProfile(name, undefined);
+              res.user.displayName = name;
+              localStorage.setItem('userDisplayName', name);
+            }
+            await syncUserToFirestore(res.user);
+            renderHeaderUserNav(res.user);
+            const targetModal = document.getElementById('authModal');
+            if (targetModal) targetModal.style.display = 'none';
+            alert(isSignUp ? '회원가입이 성공적으로 완료되었습니다!' : '로그인 성공!');
+          } else {
+            alert('오류: ' + res.error);
+          }
+        } catch (err) {
+          console.error('로그인/회원가입 처리 중 오류 발생:', err);
+          alert('처리 중 오류가 발생했습니다: ' + (err.message || err));
+        }
+      };
+
+      if (authForm) authForm.onsubmit = handleEmailAuth;
+      if (authSubmitBtn) authSubmitBtn.onclick = handleEmailAuth;
+    });
+  </script>
+</body>
+
+</html>
