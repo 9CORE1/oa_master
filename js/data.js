@@ -112,6 +112,19 @@ const DEFAULT_PRACTICAL_ARCHIVE = [
     "author": "관리자"
   },
   {
+    "title": "셀 참조방식의 이해",
+    "description": "절대참조\n상대참조\n혼합참조",
+    "grade": "공통",
+    "hasVideoLink": false,
+    "fileFormat": "XLSX",
+    "fileName": "구글드라이브_실습자료.zip",
+    "fileSize": "Google Drive",
+    "fileDriveUrl": "https://docs.google.com/spreadsheets/d/1Eoo0nXjpZ0iLr9bp0kT6wnKExBtJp98B/edit?usp=drive_link&ouid=110810627928172311649&rtpof=true&sd=true",
+    "id": "pr-1785218613692",
+    "date": "2026-07-28",
+    "author": "관리자"
+  },
+  {
     "title": "[수업중] 성적처리하면서 함수 익히기",
     "description": "엑셀 함수를 한번에 정리해 봅시다!!\n\n성적처리하면서 함수 익히기",
     "grade": "2급",
