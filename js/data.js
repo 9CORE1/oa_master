@@ -53,7 +53,7 @@ const DEFAULT_WRITTEN_ARCHIVE = [
     "author": "관리자"
   },
   {
-    "title": "컴활1급_필기_핵심요약집_2026(용어위주로)",
+    "title": "컴활1급_필기_핵심요약집_2026(용어위주)",
     "description": "컴활1급_필기_핵심요약집_2026",
     "grade": "1급",
     "hasVideoLink": false,
