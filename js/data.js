@@ -158,7 +158,7 @@ const DEFAULT_PRACTICAL_ARCHIVE = [
     "fileFormat": "ZIP",
     "fileName": "구글드라이브_실습자료.zip",
     "fileSize": "Google Drive",
-    "fileDriveUrl": "https://drive.google.com/file/d/1-yxX50X1r5E8qD2ehkhtegCYoq-kPlPU/view?usp=sharing",
+    "fileDriveUrl": "https://drive.google.com/file/d/1icZhkO-0pL7bKH7rRJ__ZiZY_-y2_T-3/view?usp=sharing",
     "id": "pr-1785291029474",
     "date": "2026-07-29",
     "author": "관리자"
