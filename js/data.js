@@ -151,6 +151,19 @@ const DEFAULT_PRACTICAL_ARCHIVE = [
     "author": "관리자"
   },
   {
+    "title": "(수업중)상시 기출문제 2개",
+    "description": "2025년 상시01 컴퓨터활용능력 2급 (암호 : 1054@8)\n- 별책부록 124페이지\n2025년 상시02 컴퓨터활용능력 2급 (암호 : 7%2280)\n- 별책부록 133페이지",
+    "grade": "2급",
+    "hasVideoLink": false,
+    "fileFormat": "ZIP",
+    "fileName": "구글드라이브_실습자료.zip",
+    "fileSize": "Google Drive",
+    "fileDriveUrl": "https://drive.google.com/file/d/1-yxX50X1r5E8qD2ehkhtegCYoq-kPlPU/view?usp=sharing",
+    "id": "pr-1785291029474",
+    "date": "2026-07-29",
+    "author": "관리자"
+  },
+  {
     "title": "[수업중] 성적처리하면서 함수 익히기",
     "description": "엑셀 함수를 한번에 정리해 봅시다!!\n\n성적처리하면서 함수 익히기",
     "grade": "2급",
