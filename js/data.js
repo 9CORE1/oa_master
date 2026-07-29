@@ -40,14 +40,27 @@ const DEFAULT_WRITTEN_ARCHIVE = [
     "fileDriveUrl": "https://drive.google.com/file/d/1OSgfBOvPZaoA2AniymfBpNJ8_DWM2eIj/view?usp=sharing"
   },
   {
-    "title": "컴활1급_필기_핵심요약집_2026",
+    "title": "컴활1급필기_핵심_요약 2025(내용충분)",
+    "description": "영진닷컴",
+    "grade": "1급",
+    "hasVideoLink": false,
+    "fileFormat": "PDF",
+    "fileName": "구글드라이브_공유자료.zip",
+    "fileSize": "Google Drive",
+    "fileDriveUrl": "https://drive.google.com/file/d/1fuoI34DWHJEVEKBuCkoQw1Q44VAUq1TC/view?usp=drive_link",
+    "id": "wr-1785286508982",
+    "date": "2026-07-29",
+    "author": "관리자"
+  },
+  {
+    "title": "컴활1급_필기_핵심요약집_2026(용어위주로)",
     "description": "컴활1급_필기_핵심요약집_2026",
     "grade": "1급",
     "hasVideoLink": false,
     "fileFormat": "PDF",
     "fileName": "구글드라이브_공유자료.zip",
     "fileSize": "Google Drive",
-    "fileDriveUrl": "https://drive.google.com/file/d/1fuoI34DWHJEVEKBuCkoQw1Q44VAUq1TC/view?usp=sharing",
+    "fileDriveUrl": "https://drive.google.com/file/d/1Nm5nhtjCKPyT6zoLqlsBaoKw857zCG6_/view?usp=sharing",
     "id": "wr-1785285659807",
     "date": "2026-07-29",
     "author": "관리자"
