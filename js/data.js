@@ -38,6 +38,19 @@ const DEFAULT_WRITTEN_ARCHIVE = [
     "hasVideoLink": false,
     "fileFormat": "PDF",
     "fileDriveUrl": "https://drive.google.com/file/d/1OSgfBOvPZaoA2AniymfBpNJ8_DWM2eIj/view?usp=sharing"
+  },
+  {
+    "title": "컴활1급_필기_핵심요약집_2026",
+    "description": "컴활1급_필기_핵심요약집_2026",
+    "grade": "1급",
+    "hasVideoLink": false,
+    "fileFormat": "PDF",
+    "fileName": "구글드라이브_공유자료.zip",
+    "fileSize": "Google Drive",
+    "fileDriveUrl": "https://drive.google.com/file/d/1fuoI34DWHJEVEKBuCkoQw1Q44VAUq1TC/view?usp=sharing",
+    "id": "wr-1785285659807",
+    "date": "2026-07-29",
+    "author": "관리자"
   }
 ];
 
