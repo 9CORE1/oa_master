@@ -1102,6 +1102,7 @@
               <img src="${photo}" class="user-avatar-img" alt="avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=0e4987&color=fff'">
               <div>
                 <div style="font-weight:700; color:var(--neutral-900); font-size:14px;">${name}</div>
+                <div style="font-size:11px; color:var(--neutral-500); font-family:monospace;" title="회원 고유 UID: ${escapeHtml(u.id)}">UID: ${escapeHtml(String(u.id || '').slice(0, 8))}</div>
               </div>
             </div>
           </td>

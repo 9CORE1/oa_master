@@ -1763,10 +1763,7 @@
         window.history.replaceState({}, '', window.location.pathname);
       } else if (authParams.get('auth') === 'pending') {
         sessionStorage.removeItem('oaWaitingModalDismissed');
-        const pendingStatus = localStorage.getItem('userApprovalStatus') || 'pending';
-        if (localStorage.getItem('isLoggedIn') === 'true' && pendingStatus !== 'approved') {
-          openApprovalWaitingModal(currentUser, pendingStatus);
-        }
+        // onAuthChange가 서버 최신 승인 상태를 확정한 뒤 대기창 표시 여부를 결정하므로 여기서 성급히 열어 깜빡임을 유발하지 않습니다.
         window.history.replaceState({}, '', window.location.pathname);
       } else if (authParams.get('auth') === 'required') {
         const isLogged = (currentUser !== null) ||
