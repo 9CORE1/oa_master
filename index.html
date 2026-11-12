@@ -1241,7 +1241,7 @@
     }
 
     // ⚡ 파이어베이스 실시간 인증 감지기 탑레벨 등록 및 동기화 (새 기기 로그인 시 클라우드 마이페이지 데이터 자동복원)
-    onAuthChange(async (user) => {
+    onAuthChange(async (user, authMeta = null) => {
       console.log('Firebase Auth State Changed:', user ? user.email : 'No User');
       if (user && user.uid) {
         localStorage.setItem('userUid', user.uid);
@@ -1281,7 +1281,11 @@
         if (modal) modal.style.display = 'none';
 
         const isAdminSession = (typeof isAdmin === 'function' && isAdmin()) || (localStorage.getItem('isAdminActive') === 'true');
-        const currentApprovalStatus = localStorage.getItem('userApprovalStatus') || 'pending';
+        const diag = (authMeta && authMeta.diag) || window.__oaAuthDiag || null;
+        const currentApprovalStatus = (authMeta && authMeta.approvalStatus) ||
+          (diag && (diag.approvalStatus || diag.fsApprovalStatus)) ||
+          localStorage.getItem('userApprovalStatus') ||
+          'pending';
         const celebrationModal = document.getElementById('signupCelebrationModal');
         const waitingModal = document.getElementById('approvalWaitingModal');
         const alreadyCompletedApprovalModal = hasCompletedFirstApprovalModal(user.uid);
