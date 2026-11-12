@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="css/ai-office.css">
   <link rel="icon" href="images/OA_master_LOGO.png" type="image/png">
   <script src="js/data.js"></script>
-  <script src="js/admin.js?v=20261112e"></script>
+  <script src="js/admin.js?v=20261112f"></script>
 </head>
 
 <body class="theme-written" data-ai-day="day2">
@@ -262,10 +262,10 @@
     </div>
   </footer>
 
-  <script src="js/main.js?v=20261112e"></script>
+  <script src="js/main.js?v=20261112f"></script>
   <script src="js/ai-office.js?v=20261112c"></script>
   <script type="module">
-    import { onAuthChange } from './js/firebase-config.js?v=20261112e';
+    import { onAuthChange } from './js/firebase-config.js?v=20261112f';
     onAuthChange((user, authMeta = null) => {
       const is_admin = (typeof isAdmin === 'function' && isAdmin()) || (localStorage.getItem('isAdminActive') === 'true');
       const diag = (authMeta && authMeta.diag) || window.__oaAuthDiag || null;

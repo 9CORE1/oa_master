@@ -318,8 +318,8 @@
 
   <!-- Scripts -->
   <script src="js/data.js"></script>
-  <script src="js/main.js?v=20261112e"></script>
-  <script src="js/admin.js?v=20261112e"></script>
+  <script src="js/main.js?v=20261112f"></script>
+  <script src="js/admin.js?v=20261112f"></script>
 
   <!-- Custom YouTube Player & Playlist Logic -->
   <script>
@@ -902,7 +902,7 @@
 
   <!-- 🔒 Auth Guard & 로그인 사용자 상태 표시 -->
   <script type="module">
-    import { onAuthChange, logout } from './js/firebase-config.js?v=20261112e';
+    import { onAuthChange, logout } from './js/firebase-config.js?v=20261112f';
     onAuthChange((user, authMeta = null) => {
       const is_admin = (typeof isAdmin === 'function' && isAdmin()) || (localStorage.getItem('isAdminActive') === 'true');
       const diag = (authMeta && authMeta.diag) || window.__oaAuthDiag || null;
