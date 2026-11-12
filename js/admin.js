@@ -317,15 +317,19 @@ function updateAdminUI() {
 
   // Update footer bottom links dynamically
   const footerBottomLinksArr = document.querySelectorAll('.footer-bottom-links');
+  const contactLinkHtml = `<a href="#" onclick="if(window.copyContactEmail){window.copyContactEmail();} return false;" title="클릭 시 문의 메일 주소(jjung9935@naver.com) 복사"><i class="fas fa-envelope"></i> 문의하기</a>`;
   footerBottomLinksArr.forEach(container => {
     if (is_admin) {
       container.innerHTML = `
+        ${contactLinkHtml}
+        <span style="color:var(--neutral-700);">|</span>
         <a href="admin_users.html"><i class="fas fa-users-cog"></i> 회원 관리</a>
         <span style="color:var(--neutral-700);">|</span>
         <a href="#" onclick="if(window.handleGlobalLogout){window.handleGlobalLogout();}else{toggleAdminMode();} return false;"><i class="fas fa-sign-out-alt"></i> 관리자 로그아웃</a>
       `;
     } else {
       container.innerHTML = `
+        ${contactLinkHtml}
         <a href="#" onclick="toggleAdminMode(); return false;"><i class="fas fa-user-shield"></i> 관리자 로그인</a>
       `;
     }
