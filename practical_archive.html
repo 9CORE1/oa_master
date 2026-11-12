@@ -766,7 +766,7 @@
 
   <!-- 🔒 Auth Guard & 로그인 사용자 상태 표시 -->
   <script type="module">
-    import { onAuthChange, logout } from './js/firebase-config.js?v=20261112c';
+    import { onAuthChange, logout } from './js/firebase-config.js?v=20261112d';
     onAuthChange((user) => {
       const is_admin = (typeof isAdmin === 'function' && isAdmin()) || (localStorage.getItem('isAdminActive') === 'true');
       const approvalStatus = localStorage.getItem('userApprovalStatus') || 'pending';
@@ -777,7 +777,7 @@
         const diag = window.__oaAuthDiag || null;
         const diagSuffix = (diag && diag.fsReadError)
           ? `\n\n[진단 정보] 서버 상태 조회 오류(${diag.fsReadErrorCode || 'unknown'})`
-          : (diag && diag.email ? `\n(계정: ${diag.email}, UID: ${(diag.uid || '').slice(0, 8)}, 상태: ${approvalStatus}${diag.fsDocNotFound ? ', 서버문서없음' : ''})` : '');
+          : (diag && diag.email ? `\n(계정: ${diag.email}, UID: ${(diag.uid || '').slice(0, 8)}, 상태: ${approvalStatus}, 서버값: ${diag.fsApprovalStatus || '없음'}${diag.fsFromCache ? ', 캐시조회' : ''}${diag.fsServerError ? ', 폴백:' + diag.fsServerError : ''}${diag.fsDocNotFound ? ', 서버문서없음' : ''})` : '');
         const msg = approvalStatus === 'rejected'
           ? `⛔ 현재 계정은 관리자 승인 보류 상태입니다.\n이용 관련 사항은 관리자에게 문의해 주세요.${diagSuffix}`
           : `⏳ 관리자 승인 대기 중인 계정입니다.\n관리자 승인 완료 후 세부 페이지를 이용하실 수 있습니다.${diagSuffix}`;

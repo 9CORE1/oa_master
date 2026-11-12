@@ -222,16 +222,22 @@ export function onAuthChange(callback) {
             let fsReadError = false;
             let fsReadErrorCode = '';
             let fsDocNotFound = false;
+            let fsFromCache = false;
+            let fsServerError = '';
 
             try {
                 const fsRes = await getUserDataFromFirestore(user.uid, { preferServer: true });
                 if (fsRes && fsRes.success && fsRes.data) {
                     fsData = fsRes.data;
+                    fsFromCache = Boolean(fsRes.fromCache);
+                    fsServerError = fsRes.serverFallbackError || '';
                     if (fsData.role) {
                         role = fsData.role;
                     }
                 } else if (fsRes && fsRes.notFound) {
                     fsDocNotFound = true;
+                    fsFromCache = Boolean(fsRes.fromCache);
+                    fsServerError = fsRes.serverFallbackError || '';
                 } else {
                     fsReadError = true;
                     fsReadErrorCode = (fsRes && fsRes.errorCode) || (fsRes && fsRes.error) || 'unknown';
@@ -242,7 +248,7 @@ export function onAuthChange(callback) {
                 console.warn("Role/approval fetch error:", e);
             }
 
-            if (fsReadError && localStorage.getItem('userUid') === user.uid) {
+            if ((fsReadError || fsFromCache) && localStorage.getItem('userUid') === user.uid) {
                 const cachedRole = localStorage.getItem('userRole');
                 if (cachedRole) role = cachedRole;
             }
@@ -258,7 +264,7 @@ export function onAuthChange(callback) {
             }
 
             let approvalStatus = resolveApprovalStatus(user, { ...(fsData || {}), role });
-            if (fsReadError && localStorage.getItem('userUid') === user.uid) {
+            if ((fsReadError || fsFromCache) && localStorage.getItem('userUid') === user.uid) {
                 const cachedStatus = localStorage.getItem('userApprovalStatus');
                 if (cachedStatus === 'approved' || cachedStatus === 'rejected') {
                     approvalStatus = cachedStatus;
@@ -279,6 +285,8 @@ export function onAuthChange(callback) {
                 fsReadError,
                 fsReadErrorCode,
                 fsDocNotFound,
+                fsFromCache,
+                fsServerError,
                 fsApprovalStatus: (fsData && fsData.approvalStatus) || null
             };
             window.__oaAuthDiag = authDiag;
@@ -429,21 +437,29 @@ export async function getUserDataFromFirestore(uid, options = {}) {
     try {
         const userRef = doc(db, "users", uid);
         let snap = null;
+        let serverFallbackError = '';
         if (preferServer) {
             try {
                 snap = await getDocFromServer(userRef);
-            } catch (serverErr) {
-                console.warn("Firestore 서버 직접 조회 폴백:", serverErr);
-                snap = await getDoc(userRef);
+            } catch (firstErr) {
+                try {
+                    await new Promise((resolve) => setTimeout(resolve, 250));
+                    snap = await getDocFromServer(userRef);
+                } catch (serverErr) {
+                    serverFallbackError = (serverErr && (serverErr.code || serverErr.message)) || 'server-unavailable';
+                    console.warn("Firestore 서버 직접 조회 폴백:", serverErr);
+                    snap = await getDoc(userRef);
+                }
             }
         } else {
             snap = await getDoc(userRef);
         }
 
+        const fromCache = Boolean(snap && snap.metadata && snap.metadata.fromCache);
         if (snap && snap.exists()) {
-            return { success: true, data: snap.data() };
+            return { success: true, data: snap.data(), fromCache, serverFallbackError };
         }
-        return { success: false, notFound: true, error: "데이터 없음" };
+        return { success: false, notFound: true, fromCache, serverFallbackError, error: "데이터 없음" };
     } catch (error) {
         console.error("Firestore 조회 실패:", error);
         return { success: false, isError: true, errorCode: (error && error.code) || '', error: error.message };

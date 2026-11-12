@@ -613,7 +613,7 @@
       saveUserDataToFirestore,
       getUserDataFromFirestore,
       resolveApprovalStatus
-    } from './js/firebase-config.js?v=20261112c';
+    } from './js/firebase-config.js?v=20261112d';
 
     let isSignUp = false;
     let currentUser = null;
@@ -1743,8 +1743,11 @@
         }
       };
 
-      if (authForm) authForm.onsubmit = handleEmailAuth;
-      if (authSubmitBtn) authSubmitBtn.onclick = handleEmailAuth;
+      if (authForm) {
+        authForm.onsubmit = handleEmailAuth;
+      } else if (authSubmitBtn) {
+        authSubmitBtn.onclick = handleEmailAuth;
+      }
 
       // 비로그인/승인대기 리다이렉트, 마이페이지, 관리자 로그인 요청 처리
       const authParams = new URLSearchParams(window.location.search);
