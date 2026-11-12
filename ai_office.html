@@ -49,8 +49,9 @@
           <a href="ai_office.html" class="nav-link"><i class="fas fa-magic"></i> AI <span class="collab-x"
               title="콜라보">&times;</span> OA 콜라보 <i class="fas fa-chevron-down" style="font-size:10px;"></i></a>
           <div class="dropdown-menu" style="min-width: 230px;">
-            <div class="dropdown-group-title">AI와 오피스의 3일 협업</div>
-            <a href="ai_office.html" class="dropdown-link"><i class="fas fa-th-large"></i> 3일 과정 통합 허브</a>
+            <a href="ai_office.html" class="dropdown-link"><i class="fas fa-th-large"></i> 콜라보 통합 허브</a>
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-group-title">3일 과정</div>
             <a href="ai_office_day1.html" class="dropdown-link"><i class="fas fa-table"></i> 1일차 · Excel × AI</a>
             <a href="ai_office_day2.html" class="dropdown-link"><i class="fas fa-file-word"></i> 2일차 · Docs/Word × AI</a>
             <a href="ai_office_day3.html" class="dropdown-link"><i class="fas fa-desktop"></i> 3일차 · PPT/Slides × AI</a>
@@ -328,6 +329,9 @@
     onAuthChange((user) => {
       if (window.renderHeaderUserNav) {
         window.renderHeaderUserNav(user);
+      }
+      if (window.notifyAuthReady) {
+        window.notifyAuthReady(user);
       }
     });
   </script>

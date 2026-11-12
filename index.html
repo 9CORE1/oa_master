@@ -51,14 +51,13 @@
           <a href="ai_office.html" class="nav-link"><i class="fas fa-magic"></i> AI <span class="collab-x"
               title="콜라보">&times;</span> OA 콜라보 <i class="fas fa-chevron-down" style="font-size:10px;"></i></a>
           <div class="dropdown-menu" style="min-width: 230px;">
-            <div class="dropdown-group-title">AI와 오피스의 3일 협업</div>
-            <a href="ai_office.html" class="dropdown-link"><i class="fas fa-th-large"></i> 3일 과정 통합 허브</a>
-            <a href="ai_office_day1.html" class="dropdown-link"><i class="fas fa-table"></i> 1일차 · Excel
-              × AI</a>
-            <a href="ai_office_day2.html" class="dropdown-link"><i class="fas fa-file-word"></i> 2일차 ·
-              Docs/Word × AI</a>
-            <a href="ai_office_day3.html" class="dropdown-link"><i class="fas fa-desktop"></i> 3일차 ·
-              PPT/Slides × AI</a>
+            <a href="ai_office.html" class="dropdown-link"><i class="fas fa-th-large"></i> 콜라보 통합 허브</a>
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-group-title">3일 과정</div>
+            <a href="ai_office_day1.html" class="dropdown-link"><i class="fas fa-table"></i> 1일차 · Excel × AI</a>
+            <a href="ai_office_day2.html" class="dropdown-link"><i class="fas fa-file-word"></i> 2일차 · Docs/Word ×
+              AI</a>
+            <a href="ai_office_day3.html" class="dropdown-link"><i class="fas fa-desktop"></i> 3일차 · PPT/Slides × AI</a>
             <div class="dropdown-divider"></div>
             <a href="AI리터러시진단안내_참고자료.pdf" target="_blank" class="dropdown-link"><i class="fas fa-chart-pie"></i> AI 리터러시
               진단 PDF</a>
@@ -519,7 +518,8 @@
       onAuthChange,
       updateUserProfile,
       saveUserDataToFirestore,
-      getUserDataFromFirestore
+      getUserDataFromFirestore,
+      resolveApprovalStatus
     } from './js/firebase-config.js';
 
     let isSignUp = false;
@@ -585,12 +585,21 @@
         : (localStorage.getItem('userRole') || 'User');
       const elRole = document.getElementById('myProfileRole');
       if (elRole) {
+        const approvalStatus = (userRole === 'Host' || userRole === 'Manager')
+          ? 'approved'
+          : (localStorage.getItem('userApprovalStatus') || 'pending');
+        const approvalHtml = approvalStatus === 'approved'
+          ? '<span style="color:#15803d; font-weight:bold; background:rgba(34,197,94,0.12); padding:3px 8px; border-radius:12px; font-size:12px; display:inline-flex; align-items:center; gap:4px; margin-left:6px;"><i class="fas fa-check-circle"></i> 승인 완료</span>'
+          : (approvalStatus === 'rejected'
+            ? '<span style="color:#b91c1c; font-weight:bold; background:rgba(239,68,68,0.12); padding:3px 8px; border-radius:12px; font-size:12px; display:inline-flex; align-items:center; gap:4px; margin-left:6px;"><i class="fas fa-ban"></i> 승인 보류</span>'
+            : '<span style="color:#b45309; font-weight:bold; background:rgba(245,158,11,0.16); padding:3px 8px; border-radius:12px; font-size:12px; display:inline-flex; align-items:center; gap:4px; margin-left:6px;"><i class="fas fa-clock"></i> 승인 대기 중</span>');
+
         if (userRole === 'Host') {
-          elRole.innerHTML = '<span style="color:#b91c1c; font-weight:bold; background:rgba(239,68,68,0.12); padding:3px 8px; border-radius:12px; font-size:12px; display:inline-flex; align-items:center; gap:4px;"><i class="fas fa-crown" style="color:#f59e0b;"></i> Host (관리자)</span>';
+          elRole.innerHTML = '<span style="color:#b91c1c; font-weight:bold; background:rgba(239,68,68,0.12); padding:3px 8px; border-radius:12px; font-size:12px; display:inline-flex; align-items:center; gap:4px;"><i class="fas fa-crown" style="color:#f59e0b;"></i> Host (관리자)</span>' + approvalHtml;
         } else if (userRole === 'Manager') {
-          elRole.innerHTML = '<span style="color:#0369a1; font-weight:bold; background:rgba(14,165,233,0.12); padding:3px 8px; border-radius:12px; font-size:12px; display:inline-flex; align-items:center; gap:4px;"><i class="fas fa-user-shield" style="color:#0284c7;"></i> Manager (매니저)</span>';
+          elRole.innerHTML = '<span style="color:#0369a1; font-weight:bold; background:rgba(14,165,233,0.12); padding:3px 8px; border-radius:12px; font-size:12px; display:inline-flex; align-items:center; gap:4px;"><i class="fas fa-user-shield" style="color:#0284c7;"></i> Manager (매니저)</span>' + approvalHtml;
         } else {
-          elRole.innerHTML = '<span style="color:#475569; font-weight:bold; background:rgba(100,116,139,0.12); padding:3px 8px; border-radius:12px; font-size:12px; display:inline-flex; align-items:center; gap:4px;"><i class="fas fa-user" style="color:#64748b;"></i> User (회원)</span>';
+          elRole.innerHTML = '<span style="color:#475569; font-weight:bold; background:rgba(100,116,139,0.12); padding:3px 8px; border-radius:12px; font-size:12px; display:inline-flex; align-items:center; gap:4px;"><i class="fas fa-user" style="color:#64748b;"></i> User (회원)</span>' + approvalHtml;
         }
       }
 
@@ -664,15 +673,38 @@
       const cachedPhoto = localStorage.getItem('userPhotoURL') || null;
       const cachedSchool = localStorage.getItem(`user_school_${user.uid}`) || '';
 
-      await saveUserDataToFirestore(user.uid, {
+      let existingData = null;
+      try {
+        const existingRes = await getUserDataFromFirestore(user.uid);
+        if (existingRes && existingRes.success && existingRes.data) {
+          existingData = existingRes.data;
+        }
+      } catch (err) {
+        console.warn('Existing user lookup warning:', err);
+      }
+
+      const approvalStatus = resolveApprovalStatus(user, existingData);
+      localStorage.setItem('userApprovalStatus', approvalStatus);
+
+      const payload = {
         uid: user.uid,                                                                   // 1. 회원 고유 UID
         email: user.email || '',                                                         // 2. 이메일 주소
         displayName: user.displayName || (user.email ? user.email.split('@')[0] : '회원'),    // 3. 닉네임/성명
         photoURL: user.photoURL || cachedPhoto || null,                                  // 4. 프로필 사진 (.jpg)
         schoolName: cachedSchool,                                                        // 5. 학교명/소속명
         provider: providerId,                                                            // 6. 로그인 방식
-        createdAt: createdDate                                                           // 7. 가입 일자
-      });
+        createdAt: (existingData && existingData.createdAt) || createdDate               // 7. 가입 일자
+      };
+
+      if (!existingData || !existingData.approvalStatus) {
+        payload.approvalStatus = approvalStatus;
+        if (approvalStatus === 'approved') {
+          payload.approvedAt = (existingData && existingData.approvedAt) || new Date().toISOString();
+        }
+      }
+
+      await saveUserDataToFirestore(user.uid, payload);
+      return approvalStatus;
     };
 
     const convertAndCompressToJpg = (file, targetSize = 200) => {
@@ -717,6 +749,9 @@
             <span style="font-size:13px; font-weight:bold; color:#c2410c; display:inline-flex; align-items:center; gap:5px;">
               <i class="fas fa-user-shield" style="color:#ea580c;"></i> 관리자모드
             </span>
+            <button id="headerAdminUsersBtn" onclick="window.location.href='admin_users.html'; return false;" style="background:#0f766e; color:#fff; border:none; padding:5px 12px; border-radius:16px; font-size:12px; font-weight:bold; cursor:pointer; transition:opacity 0.2s;" title="회원 관리 대시보드로 이동">
+              <i class="fas fa-users-cog"></i> 회원 관리
+            </button>
             <button id="headerJsonUpdateBtn" onclick="if(window.updateJSONData){window.updateJSONData();} return false;" style="background:#0284c7; color:#fff; border:none; padding:5px 12px; border-radius:16px; font-size:12px; font-weight:bold; cursor:pointer; transition:opacity 0.2s;" title="수정한 데이터를 GitHub 서버 소스코드로 자동 커밋 및 업데이트">
               <i class="fas fa-file-export"></i> JSON 업데이트
             </button>
@@ -735,16 +770,23 @@
         try {
           const displayName = user.displayName || (user.email ? user.email.split('@')[0] : '회원');
           const photoUrl = (user && user.photoURL) || localStorage.getItem('userPhotoURL') || null;
+          const approvalStatus = localStorage.getItem('userApprovalStatus') || 'approved';
+          const approvalBadge = approvalStatus === 'pending'
+            ? `<span style="font-size:11px; font-weight:700; color:#b45309; background:rgba(245,158,11,0.16); padding:2px 8px; border-radius:10px; white-space:nowrap;">승인대기</span>`
+            : (approvalStatus === 'rejected'
+              ? `<span style="font-size:11px; font-weight:700; color:#b91c1c; background:rgba(239,68,68,0.12); padding:2px 8px; border-radius:10px; white-space:nowrap;">승인보류</span>`
+              : '');
           const avatarIcon = photoUrl
             ? `<img src="${photoUrl}" style="width:24px; height:24px; border-radius:50%; object-fit:cover; flex-shrink:0;">`
             : `<i class="fas fa-user-circle" style="color:var(--theme-written); font-size:18px;"></i>`;
 
           userNav.innerHTML = `
-            <div style="display:inline-flex; align-items:center; gap:10px; background:rgba(14,73,135,0.06); padding:4px 8px 4px 12px; border-radius:24px; border:1px solid rgba(14,73,135,0.2);">
+            <div style="display:inline-flex; align-items:center; gap:8px; background:rgba(14,73,135,0.06); padding:4px 8px 4px 12px; border-radius:24px; border:1px solid rgba(14,73,135,0.2);">
               <a href="javascript:void(0)" id="myPageBtn" onclick="window.openMyPageModal(); return false;" style="font-size:13px; font-weight:bold; color:var(--neutral-900); text-decoration:none; display:inline-flex; align-items:center; gap:6px; cursor:pointer;" title="마이페이지">
                 ${avatarIcon}
                 <span>${displayName}님</span>
               </a>
+              ${approvalBadge}
               <button id="logoutBtn" onclick="if(window.handleGlobalLogout){window.handleGlobalLogout();} return false;" style="background:var(--theme-recommend); color:#fff; border:none; padding:5px 12px; border-radius:16px; font-size:12px; font-weight:bold; cursor:pointer; transition:opacity 0.2s;">로그아웃</button>
             </div>
           `;
@@ -775,19 +817,19 @@
 
     window.renderHeaderUserNav = renderHeaderUserNav;
 
-    // ⚡ 0초 반응: 로컬 세션 확인 및 즉시 헤더 렌더링
-    if (localStorage.getItem('isLoggedIn') === 'true') {
+    // ⚡ 0초 반응: 로컬 세션 또는 관리자 세션 확인 및 즉시 헤더 렌더링
+    if (localStorage.getItem('isLoggedIn') === 'true' || localStorage.getItem('isAdminActive') === 'true') {
       const cachedName = localStorage.getItem('userDisplayName') || '회원';
       const cachedPhoto = localStorage.getItem('userPhotoURL') || null;
       const cachedEmail = (localStorage.getItem('userEmail') || '').toLowerCase().trim();
       if (cachedEmail === 'teacha99@gmail.com') {
         localStorage.setItem('isAdminActive', 'true');
       }
-      renderHeaderUserNav({
+      renderHeaderUserNav(localStorage.getItem('isLoggedIn') === 'true' ? {
         displayName: cachedName,
         photoURL: cachedPhoto,
         email: cachedEmail
-      });
+      } : null);
       if (window.updateAdminUI) window.updateAdminUI();
     }
 
@@ -814,6 +856,7 @@
         }
       }
       renderHeaderUserNav(user);
+      if (window.notifyAuthReady) window.notifyAuthReady(user);
       if (window.updateAdminUI) window.updateAdminUI();
       if (user) {
         const modal = document.getElementById('authModal');
@@ -1025,13 +1068,15 @@
         };
       }
 
-      // 비로그인 사용자 접근 제한 (보호 링크 클릭 시 이동 차단)
+      // 비로그인 사용자 접근 제한 (회원 전용 학습 자료/영상/세부 과정 링크 클릭 시 이동 차단)
       const protectedServiceLinks = [
         'written_archive.html',
         'written_lectures.html',
         'practical_archive.html',
         'practical_lectures.html',
-        'recommendations.html'
+        'ai_office_day1.html',
+        'ai_office_day2.html',
+        'ai_office_day3.html'
       ];
 
       document.addEventListener('click', (e) => {
@@ -1042,15 +1087,25 @@
 
         const href = link.getAttribute('href') || link.getAttribute('onclick') || '';
         if (protectedServiceLinks.some(page => href.includes(page))) {
-          const isUserLoggedIn = (currentUser !== null) ||
-            (localStorage.getItem('isLoggedIn') === 'true') ||
-            (typeof isAdmin === 'function' && isAdmin()) ||
+          const isAdminSession = (typeof isAdmin === 'function' && isAdmin()) ||
             (localStorage.getItem('isAdminActive') === 'true');
-          if (!isUserLoggedIn) {
+          const isUserLoggedIn = (currentUser !== null) ||
+            (localStorage.getItem('isLoggedIn') === 'true');
+          const approvalStatus = localStorage.getItem('userApprovalStatus') || 'pending';
+
+          if (!isAdminSession && !isUserLoggedIn) {
             e.preventDefault();
             e.stopPropagation();
             alert('🔒 회원가입 및 로그인을 해야 해당 서비스를 이용하실 수 있습니다.');
             if (authModal) authModal.style.display = 'flex';
+          } else if (!isAdminSession && approvalStatus !== 'approved') {
+            e.preventDefault();
+            e.stopPropagation();
+            if (typeof window.requireMemberLogin === 'function') {
+              window.requireMemberLogin();
+            } else {
+              alert('⏳ 관리자 승인 대기 중인 계정입니다. 관리자 승인 후 이용하실 수 있습니다.');
+            }
           }
         }
       }, true);
@@ -1094,11 +1149,15 @@
             const res = await signInWithGoogle();
             if (res.success) {
               if (!res.isRedirecting && res.user) {
-                await syncUserToFirestore(res.user);
+                const approvalStatus = await syncUserToFirestore(res.user);
                 renderHeaderUserNav(res.user);
                 const targetModal = document.getElementById('authModal');
                 if (targetModal) targetModal.style.display = 'none';
-                alert(`🎉 ${res.user.displayName || res.user.email}님 환영합니다!`);
+                if (approvalStatus === 'approved') {
+                  alert(`🎉 ${res.user.displayName || res.user.email}님 환영합니다!`);
+                } else {
+                  alert(`🎉 ${res.user.displayName || res.user.email}님 환영합니다!\n\n⏳ 현재 관리자 승인 대기 상태입니다.\n관리자 승인 완료 후 즉시 모든 세부 학습 콘텐츠를 이용하실 수 있습니다.`);
+                }
               }
             } else {
               if (!res.isCancelled && res.error && !res.error.includes('auth/cancelled-popup-request') && !res.error.includes('popup-closed-by-user')) {
@@ -1148,11 +1207,15 @@
               res.user.displayName = name;
               localStorage.setItem('userDisplayName', name);
             }
-            await syncUserToFirestore(res.user);
+            const approvalStatus = await syncUserToFirestore(res.user);
             renderHeaderUserNav(res.user);
             const targetModal = document.getElementById('authModal');
             if (targetModal) targetModal.style.display = 'none';
-            alert(isSignUp ? '회원가입이 성공적으로 완료되었습니다!' : '로그인 성공!');
+            if (approvalStatus === 'approved') {
+              alert(isSignUp ? '회원가입이 성공적으로 완료되었습니다!' : '로그인 성공!');
+            } else {
+              alert((isSignUp ? '🎉 회원가입이 완료되었습니다!' : '로그인되었습니다.') + '\n\n⏳ 현재 관리자 승인 대기 상태입니다.\n관리자 승인 완료 후 즉시 모든 세부 콘텐츠를 이용하실 수 있습니다.');
+            }
           } else {
             alert('오류: ' + res.error);
           }
@@ -1165,9 +1228,27 @@
       if (authForm) authForm.onsubmit = handleEmailAuth;
       if (authSubmitBtn) authSubmitBtn.onclick = handleEmailAuth;
 
-      // 비로그인 리다이렉트(?auth=required) 시 로그인 모달 자동 표시
+      // 비로그인/승인대기 리다이렉트, 마이페이지, 관리자 로그인 요청 처리
       const authParams = new URLSearchParams(window.location.search);
-      if (authParams.get('auth') === 'required') {
+      if (authParams.get('admin') === 'login') {
+        const isAlreadyAdmin = (typeof isAdmin === 'function' && isAdmin()) || (localStorage.getItem('isAdminActive') === 'true');
+        if (!isAlreadyAdmin && typeof window.openAdminAuthModalDirectly === 'function') {
+          window.openAdminAuthModalDirectly();
+        }
+        window.history.replaceState({}, '', window.location.pathname);
+      } else if (authParams.get('mypage') === '1') {
+        if ((currentUser !== null) || (localStorage.getItem('isLoggedIn') === 'true')) {
+          openMyPageModal();
+        } else if (authModal) {
+          authModal.style.display = 'flex';
+        }
+        window.history.replaceState({}, '', window.location.pathname);
+      } else if (authParams.get('auth') === 'pending') {
+        if (typeof window.showToast === 'function') {
+          window.showToast('⏳ 관리자 승인 완료 후 세부 페이지를 이용하실 수 있습니다.', 'warning');
+        }
+        window.history.replaceState({}, '', window.location.pathname);
+      } else if (authParams.get('auth') === 'required') {
         const isLogged = (currentUser !== null) ||
           (localStorage.getItem('isLoggedIn') === 'true') ||
           (typeof isAdmin === 'function' && isAdmin());

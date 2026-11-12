@@ -50,8 +50,9 @@
           <a href="ai_office.html" class="nav-link"><i class="fas fa-magic"></i> AI <span class="collab-x"
               title="콜라보">&times;</span> OA 콜라보 <i class="fas fa-chevron-down" style="font-size:10px;"></i></a>
           <div class="dropdown-menu" style="min-width: 230px;">
-            <div class="dropdown-group-title">AI와 오피스의 3일 협업</div>
-            <a href="ai_office.html" class="dropdown-link"><i class="fas fa-th-large"></i> 3일 과정 통합 허브</a>
+            <a href="ai_office.html" class="dropdown-link"><i class="fas fa-th-large"></i> 콜라보 통합 허브</a>
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-group-title">3일 과정</div>
             <a href="ai_office_day1.html" class="dropdown-link"><i class="fas fa-table"></i> 1일차 · Excel × AI</a>
             <a href="ai_office_day2.html" class="dropdown-link"><i class="fas fa-file-word"></i> 2일차 · Docs/Word ×
               AI</a>
@@ -124,9 +125,6 @@
           <button type="button" data-hero-cat="인터넷 강의" onclick="filterCategory('인터넷 강의', true)"><i
               class="fas fa-play-circle"></i> 인터넷 강의</button>
         </div>
-        <div class="ai-hero-badge">
-          <i class="fas fa-external-link-alt"></i> OA MASTER 추천 사이트 허브 | 시험 접수 · CBT 기출 · 수험 커뮤니티 · AI 도구
-        </div>
         <h1 class="ai-hero-title">시험 접수부터 무료 CBT·수험 커뮤니티까지<br>합격 필수 추천 사이트 허브</h1>
         <p class="ai-hero-desc">
           컴퓨터활용능력과 사무자동화산업기사 자격증 원서 접수, 무료 전자문제집 CBT 훈련,
@@ -138,9 +136,6 @@
           </a>
           <a href="cert_course.html" class="btn-hero-outline">
             <i class="fas fa-graduation-cap"></i> 컴활 자격과정 통합 허브
-          </a>
-          <a href="ai_office.html" class="btn-hero-outline">
-            <i class="fas fa-magic"></i> AI × OA 콜라보 3일 과정
           </a>
         </div>
       </div>
@@ -186,28 +181,29 @@
 
         <article class="tool-card teal">
           <span class="tool-pill">출판사 자료 · 질문 소통</span>
-          <h3>수험 커뮤니티 · 인강</h3>
+          <h3>수험 커뮤니티</h3>
           <ul>
-            <li>시나공·이기적 출판사 수험생 지원센터 및 무료 요약 PDF 자료 확인</li>
-            <li>차쌤의 통하는 클라스 네이버 카페·유동균 유튜브 등 검증된 강의 채널 연계</li>
-            <li>최신 출제 경향과 시험장 팁·합격 수기 빠르게 탐색</li>
+            <li>시나공 수험생 지원센터의 무료 요약 PDF 자료 및 기출 해설 확인</li>
+            <li>차쌤의 통하는 클라스 네이버 카페에서 최신 시험 후기·질문 소통</li>
+            <li>독학 중 막히는 문제와 시험장 유의사항 빠르게 탐색</li>
           </ul>
           <div class="session-link-bar">
             <a href="#sitesSection" onclick="filterCategory('학습 커뮤니티', true); return false;"><i
-                class="fas fa-filter"></i> 커뮤니티 · 인강 보기</a>
+                class="fas fa-filter"></i> 학습 커뮤니티 보기</a>
           </div>
         </article>
 
         <article class="tool-card wine">
-          <span class="tool-pill">대학생 · 실무 연계</span>
-          <h3>AI · 오피스 무료 도구</h3>
+          <span class="tool-pill">무료 강의 · 유튜브 해설</span>
+          <h3>인터넷 강의 · 유튜브</h3>
           <ul>
-            <li>학교 웹메일(`.ac.kr`) 기반 MS Office 365 무료 정품 설치·웹 활용</li>
-            <li>Gemini 학생 프로모션 · NotebookLM · ChatGPT 무료 조합 활용법 연계</li>
-            <li>자격증 학습 이후 과제·보고서·발표 실무로 자연스럽게 확장</li>
+            <li>영진닷컴 이기적 무료 동영상 자료실 및 교재 연계 혜택 확인</li>
+            <li>유동균 컴활 인강 유튜브 등 대표 실기·필기 무료 해설 채널 탐색</li>
+            <li>OA MASTER 필기·실기 영상강의와 함께 부족한 파트 집중 보충</li>
           </ul>
           <div class="session-link-bar">
-            <a href="ai_office.html"><i class="fas fa-magic"></i> AI × OA 콜라보 가이드</a>
+            <a href="#sitesSection" onclick="filterCategory('인터넷 강의', true); return false;"><i
+                class="fas fa-filter"></i> 인터넷 강의만 보기</a>
           </div>
         </article>
       </div>
@@ -238,8 +234,6 @@
             커뮤니티</button>
           <button type="button" class="day-tab recommend-tab" data-cat="인터넷 강의" onclick="filterCategory('인터넷 강의')">인터넷
             강의</button>
-          <button type="button" class="day-tab recommend-tab" data-cat="AI · 오피스 무료 도구"
-            onclick="filterCategory('AI · 오피스 무료 도구')">AI · 오피스 도구</button>
         </div>
       </div>
 
@@ -254,36 +248,27 @@
       </div>
     </section>
 
-    <!-- Section 3: 컴활 · AI × OA 허브 연계 배너 -->
+    <!-- Section 3: 컴활 자격과정 학습 연계 배너 -->
     <section class="ai-section last">
-      <div class="literacy-box">
+      <div class="literacy-box" style="grid-template-columns: 1fr;">
         <div>
-          <span class="card-badge"
-            style="background-color:rgba(129,41,64,0.1); color:var(--theme-recommend); margin-bottom: 10px;">OA MASTER
-            학습 연계</span>
-          <h2 style="font-size: 22px; color: var(--neutral-900); margin-bottom: 8px;">시험 접수 전, 핵심 자료실과 AI 실무 허브도 함께
-            확인하세요</h2>
+          <h2 style="font-size: 22px; color: var(--neutral-900); margin-bottom: 8px;">시험 접수와 CBT 기출 훈련 후, 핵심 자료실·영상강의로
+            마무리하세요</h2>
           <p style="font-size: 14px; color: var(--neutral-700); line-height: 1.65;">
-            외부 CBT 기출 훈련과 함께 OA MASTER의 필기 요약 PDF·실기 연습예제, 그리고 대학생 AI 활용 3일 과정을 병행하면
-            자격증 취득부터 대학 과제·예비직장인 실무 문서 작성까지 한 번에 대비할 수 있습니다.
+            추천 사이트에서 원서 접수와 CBT 모의고사를 진행한 뒤, OA MASTER의 컴활 1·2급 필기 요약 PDF와 실기 연습예제·풀이 영상을 병행하면
+            시험 직전 감점 포인트를 빈틈없이 점검할 수 있습니다.
           </p>
           <div class="ai-hero-actions" style="margin-top: 16px;">
             <a href="cert_course.html" class="btn btn-primary" style="background-color: var(--theme-written);">
               <i class="fas fa-graduation-cap"></i> 컴활 자격과정 통합 허브
             </a>
-            <a href="ai_office.html" class="btn btn-primary" style="background-color: var(--theme-practical);">
-              <i class="fas fa-magic"></i> AI × OA 콜라보 3일 과정
+            <a href="written_archive.html" class="btn btn-secondary">
+              <i class="fas fa-folder-open"></i> 필기 자료실 (회원 전용)
             </a>
-            <a href="AI리터러시진단안내_참고자료.pdf" target="_blank" class="btn btn-secondary">
-              <i class="fas fa-file-pdf"></i> AI 리터러시 진단 PDF
+            <a href="practical_archive.html" class="btn btn-secondary">
+              <i class="fas fa-laptop-code"></i> 실기 자료실 (회원 전용)
             </a>
           </div>
-        </div>
-
-        <div class="literacy-qr-card">
-          <img src="images/qrcode-chassem.jpg" alt="대학생 AI 리터러시 진단 QR 코드">
-          <span>AI 리터러시 진단 QR</span>
-          <small style="color: var(--neutral-500); font-size: 11px;">모바일 스캔으로 진단 페이지 접속</small>
         </div>
       </div>
     </section>
@@ -407,6 +392,7 @@
       }
       renderSitesGrid();
       window.addEventListener('adminStateChanged', renderSitesGrid);
+      window.addEventListener('oaAuthReady', renderSitesGrid);
     });
 
     /**
@@ -428,6 +414,12 @@
      * @param {boolean} shouldScroll - 목록 영역으로 스크롤 이동 여부
      */
     function filterCategory(category, shouldScroll = false) {
+      if (window.isMemberAuthenticated && !window.isMemberAuthenticated()) {
+        if (window.requireMemberLogin) {
+          window.requireMemberLogin('🔒 회원가입 및 로그인 후 카테고리 필터와 추천 사이트 목록을 이용하실 수 있습니다.');
+        }
+        return;
+      }
       currentCategoryFilter = category || 'all';
       syncCategoryButtons(currentCategoryFilter);
       renderSitesGrid();
@@ -437,15 +429,31 @@
       }
     }
 
-    // 1. Render recommendation grid
+    // 1. 추천 사이트 그리드 렌더링
     function renderSitesGrid() {
+      const grid = document.getElementById('sitesGrid');
+      const emptyState = document.getElementById('emptyState');
+
+      if (!window.isMemberAuthenticated || !window.isMemberAuthenticated()) {
+        if (emptyState) emptyState.style.display = 'none';
+        grid.style.display = 'block';
+        if (window.renderMemberGateBox) {
+          window.renderMemberGateBox(grid, {
+            title: '회원가입 및 로그인 후 엄선된 추천 사이트 목록과 바로가기를 이용할 수 있습니다',
+            description: '목적별 추천 사이트 안내는 누구나 열람 가능하며, 실제 외부 사이트 링크와 카테고리 필터 기능은 로그인 회원에게 제공됩니다.',
+            buttonLabel: '회원가입 / 로그인하고 사이트 보기',
+            theme: 'recommend'
+          });
+        }
+        return;
+      }
+
+      grid.style.display = '';
       const allData = window.DB.getAll(STORE_KEY);
       const data = currentCategoryFilter === 'all'
         ? allData
         : allData.filter((item) => item.category === currentCategoryFilter);
 
-      const grid = document.getElementById('sitesGrid');
-      const emptyState = document.getElementById('emptyState');
       const is_admin = window.isAdmin();
 
       grid.innerHTML = '';
@@ -601,6 +609,9 @@
     onAuthChange((user) => {
       if (window.renderHeaderUserNav) {
         window.renderHeaderUserNav(user);
+      }
+      if (window.notifyAuthReady) {
+        window.notifyAuthReady(user);
       }
     });
   </script>

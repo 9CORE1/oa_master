@@ -264,6 +264,19 @@ function renderCurriculum(filterDay = 'all') {
   if (!container) return;
 
   const isDedicatedDayPage = Boolean(document.body.dataset.aiDay);
+  const isAuth = typeof window.isMemberAuthenticated === 'function' && window.isMemberAuthenticated();
+  if (!isDedicatedDayPage && !isAuth) {
+    if (typeof window.renderMemberGateBox === 'function') {
+      window.renderMemberGateBox(container, {
+        title: '회원가입 및 로그인 후 3일 12교시 세부 커리큘럼과 일차별 전용 페이지를 확인할 수 있습니다',
+        description: '허브 페이지에서 4대 무료 AI 도구와 과정 개요를 확인하신 뒤, 로그인하시면 1~3일차 세부 교시 내용과 연계 실습 페이지를 이용하실 수 있습니다.',
+        buttonLabel: '회원가입 / 로그인하고 커리큘럼 보기',
+        theme: 'written'
+      });
+    }
+    return;
+  }
+
   const targetDays = filterDay === 'all'
     ? CURRICULUM_DAYS
     : CURRICULUM_DAYS.filter((d) => d.day === filterDay);
@@ -273,8 +286,8 @@ function renderCurriculum(filterDay = 'all') {
       <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:12px;">
         <h3 style="font-size: 18px; color: var(--neutral-900); margin: 0;">${dayObj.label}</h3>
         ${!isDedicatedDayPage && dayObj.detailHref
-          ? `<a href="${dayObj.detailHref}" class="day-detail-link">${dayObj.dayNum}일차 전용 페이지 <i class="fas fa-arrow-right"></i></a>`
-          : ''}
+      ? `<a href="${dayObj.detailHref}" class="day-detail-link">${dayObj.dayNum}일차 전용 페이지 <i class="fas fa-arrow-right"></i></a>`
+      : ''}
       </div>
       <div class="day-grid">
         ${dayObj.sessions.map((s) => `
@@ -305,6 +318,23 @@ function renderCurriculum(filterDay = 'all') {
 function renderPrompts(category = 'all') {
   const grid = document.getElementById('promptGrid');
   if (!grid) return;
+
+  const isDedicatedDayPage = Boolean(document.body.dataset.aiDay);
+  const isAuth = typeof window.isMemberAuthenticated === 'function' && window.isMemberAuthenticated();
+  if (!isDedicatedDayPage && !isAuth) {
+    grid.style.display = 'block';
+    if (typeof window.renderMemberGateBox === 'function') {
+      window.renderMemberGateBox(grid, {
+        title: '회원가입 및 로그인 후 실전 AI 프롬프트 12종과 원클릭 복사 기능을 사용할 수 있습니다',
+        description: '엑셀 수식 질문, 오류 진단, 보고서 목차·문체 교정, 발표 대본·예상 Q&A 프롬프트 전체를 로그인 후 바로 복사해 사용하세요.',
+        buttonLabel: '회원가입 / 로그인하고 프롬프트 복사하기',
+        theme: 'written'
+      });
+    }
+    return;
+  }
+
+  grid.style.display = '';
 
   const items = category === 'all'
     ? PROMPT_ITEMS
@@ -376,8 +406,13 @@ function getInitialDayFromContext() {
   return 'all';
 }
 
+let activeAiDay = 'all';
+let activePromptCat = 'all';
+
 document.addEventListener('DOMContentLoaded', () => {
   const initialDay = getInitialDayFromContext();
+  activeAiDay = initialDay;
+  activePromptCat = initialDay;
 
   document.querySelectorAll('.day-tab').forEach((t) => {
     t.classList.toggle('active', t.getAttribute('data-day') === initialDay);
@@ -386,23 +421,44 @@ document.addEventListener('DOMContentLoaded', () => {
     b.classList.toggle('active', b.getAttribute('data-cat') === initialDay);
   });
 
-  renderCurriculum(initialDay);
-  renderPrompts(initialDay);
+  renderCurriculum(activeAiDay);
+  renderPrompts(activePromptCat);
+
+  const guardTabClick = (msg) => {
+    const isDedicatedDayPage = Boolean(document.body.dataset.aiDay);
+    const isAuth = typeof window.isMemberAuthenticated === 'function' && window.isMemberAuthenticated();
+    if (!isDedicatedDayPage && !isAuth) {
+      if (typeof window.requireMemberLogin === 'function') {
+        window.requireMemberLogin(msg);
+      }
+      return false;
+    }
+    return true;
+  };
 
   document.querySelectorAll('.day-tab').forEach((tab) => {
     tab.addEventListener('click', () => {
+      if (!guardTabClick('🔒 회원가입 및 로그인 후 일차별 세부 커리큘럼 필터를 이용하실 수 있습니다.')) return;
       document.querySelectorAll('.day-tab').forEach((t) => t.classList.remove('active'));
       tab.classList.add('active');
-      renderCurriculum(tab.getAttribute('data-day') || 'all');
+      activeAiDay = tab.getAttribute('data-day') || 'all';
+      renderCurriculum(activeAiDay);
     });
   });
 
   document.querySelectorAll('.prompt-filter-btn').forEach((btn) => {
     btn.addEventListener('click', () => {
+      if (!guardTabClick('🔒 회원가입 및 로그인 후 프롬프트 라이브러리 필터와 복사 기능을 이용하실 수 있습니다.')) return;
       document.querySelectorAll('.prompt-filter-btn').forEach((b) => b.classList.remove('active'));
       btn.classList.add('active');
-      renderPrompts(btn.getAttribute('data-cat') || 'all');
+      activePromptCat = btn.getAttribute('data-cat') || 'all';
+      renderPrompts(activePromptCat);
     });
+  });
+
+  window.addEventListener('oaAuthReady', () => {
+    renderCurriculum(activeAiDay);
+    renderPrompts(activePromptCat);
   });
 });
 

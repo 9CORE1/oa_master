@@ -20,8 +20,10 @@ import {
     doc,
     setDoc,
     getDoc,
+    deleteDoc,
     collection,
-    getDocs
+    getDocs,
+    onSnapshot
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 // 1. Firebase 콘솔 > 프로젝트 설정에서 복사한 firebaseConfig 키값 입력 (Secret Scanning 감지 우회를 위해 Base64 인코딩 적용)
@@ -61,7 +63,7 @@ export async function signUpWithEmail(email, password) {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         return { success: true, user: userCredential.user };
     } catch (error) {
-        return { success: false, error: getAuthErrorMessage(error.code) };
+        return { success: false, error: formatFirebaseAuthError(error) };
     }
 }
 
@@ -71,7 +73,7 @@ export async function signInWithEmail(email, password) {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         return { success: true, user: userCredential.user };
     } catch (error) {
-        return { success: false, error: getAuthErrorMessage(error.code) };
+        return { success: false, error: formatFirebaseAuthError(error) };
     }
 }
 
@@ -101,13 +103,7 @@ export async function signInWithGoogle() {
         }
 
         console.error("Google 로그인 실패 상세:", error.code, error.message);
-        const customMsg = getAuthErrorMessage(error.code);
-        const currentHost = window.location.hostname || 'file://프로토콜';
-        const domainInfo = `(현재 접속 주소: ${currentHost})`;
-        const fullErr = customMsg
-          ? `${customMsg}\n${domainInfo}`
-          : `[오류 코드: ${error.code || '알수없음'}]\n${error.message || '로그인 처리 중 오류가 발생했습니다.'}\n${domainInfo}`;
-        return { success: false, error: fullErr };
+        return { success: false, error: formatFirebaseAuthError(error) };
     }
 }
 
@@ -134,8 +130,46 @@ export async function signInWithGoogleToken(idToken) {
     }
 }
 
+// 관리자 승인 제도 적용 기준 시각 (이 시각 이전 가입 회원은 모두 자동 승인 상태)
+export const APPROVAL_CUTOFF_TIME = Date.parse('2026-11-12T05:25:00.000Z');
+let unsubscribeUserSnapshot = null;
+
+/**
+ * 사용자의 관리자 승인 상태(approved | pending | rejected)를 판별합니다.
+ * 기준 시각 이전의 기존 가입 회원은 모두 approved로 처리하며, 신규 회원은 pending으로 시작합니다.
+ * @param {object|null} user - Firebase Auth 사용자 객체
+ * @param {object|null} existingData - Firestore 사용자 문서 데이터
+ * @returns {string} 'approved' | 'pending' | 'rejected'
+ */
+export function resolveApprovalStatus(user, existingData = null) {
+    const email = ((user && user.email) || (existingData && existingData.email) || '').toLowerCase().trim();
+    const role = (existingData && existingData.role) || 'User';
+
+    if (email === 'teacha99@gmail.com' || role === 'Host' || role === 'Manager') {
+        return 'approved';
+    }
+
+    if (existingData && existingData.approvalStatus) {
+        return existingData.approvalStatus;
+    }
+
+    const creationSource = (user && user.metadata && user.metadata.creationTime) || (existingData && existingData.createdAt) || '';
+    const creationMs = creationSource ? Date.parse(creationSource) : NaN;
+
+    if (!Number.isNaN(creationMs)) {
+        return creationMs < APPROVAL_CUTOFF_TIME ? 'approved' : 'pending';
+    }
+
+    // 생성 시각이 없는 기존 Firestore 문서는 기존 회원으로 간주하여 승인 처리
+    return existingData ? 'approved' : 'pending';
+}
+
 // [기능 4] 로그아웃
 export async function logout() {
+    if (unsubscribeUserSnapshot) {
+        unsubscribeUserSnapshot();
+        unsubscribeUserSnapshot = null;
+    }
     try {
         await signOut(auth);
     } catch (error) {
@@ -147,51 +181,131 @@ export async function logout() {
         localStorage.removeItem('userPhotoURL');
         localStorage.removeItem('userUid');
         localStorage.removeItem('userRole');
+        localStorage.removeItem('userApprovalStatus');
         localStorage.removeItem('isAdminActive');
+        localStorage.removeItem('adminManualAuth');
+        localStorage.removeItem('adminEmail');
     }
     return { success: true };
 }
 
-// [기능 5] 로그인 상태 감지 리스너 (로컬 세션 및 Firestore 프로필 동기화)
+// [기능 5] 로그인 상태 감지 리스너 (로컬 세션, 승인 상태 및 Firestore 실시간 동기화)
 export function onAuthChange(callback) {
     return onAuthStateChanged(auth, async (user) => {
+        if (unsubscribeUserSnapshot) {
+            unsubscribeUserSnapshot();
+            unsubscribeUserSnapshot = null;
+        }
+
         if (user) {
             localStorage.setItem('isLoggedIn', 'true');
             const email = (user.email || '').toLowerCase().trim();
             localStorage.setItem('userEmail', email);
 
             let role = 'User';
+            let fsData = null;
+
+            try {
+                const fsRes = await getUserDataFromFirestore(user.uid);
+                if (fsRes && fsRes.success && fsRes.data) {
+                    fsData = fsRes.data;
+                    if (fsData.role) {
+                        role = fsData.role;
+                    }
+                }
+            } catch (e) {
+                console.warn("Role/approval fetch error:", e);
+            }
+
             if (email === 'teacha99@gmail.com') {
                 role = 'Host';
+            }
+
+            if (role === 'Host' || role === 'Manager' || localStorage.getItem('adminManualAuth') === 'true') {
                 localStorage.setItem('isAdminActive', 'true');
             } else {
-                try {
-                    const fsRes = await getUserDataFromFirestore(user.uid);
-                    if (fsRes && fsRes.success && fsRes.data && fsRes.data.role) {
-                        role = fsRes.data.role;
-                    }
-                } catch (e) {
-                    console.warn("Role fetch error:", e);
-                }
+                localStorage.removeItem('isAdminActive');
             }
 
-            if (role === 'Host' || role === 'Manager') {
-                localStorage.setItem('isAdminActive', 'true');
-            }
+            let approvalStatus = resolveApprovalStatus(user, { ...(fsData || {}), role });
 
             localStorage.setItem('userRole', role);
+            localStorage.setItem('userApprovalStatus', approvalStatus);
             localStorage.setItem('userDisplayName', user.displayName || (user.email ? user.email.split('@')[0] : '회원'));
             if (user.photoURL) localStorage.setItem('userPhotoURL', user.photoURL);
             if (user.uid) localStorage.setItem('userUid', user.uid);
 
-            // Firestore에 프로필 사진, 역할(role) 및 정보 자동 동기화
+            // Firestore에 프로필 사진, 역할(role), 초기 승인 상태 자동 동기화 (기존 approvalStatus는 덮어쓰지 않음)
             const providerId = (user.providerData && user.providerData.length > 0) ? user.providerData[0].providerId : 'password';
-            saveUserDataToFirestore(user.uid, {
+            const syncPayload = {
                 email: user.email || '',
                 displayName: user.displayName || (user.email ? user.email.split('@')[0] : '회원'),
                 photoURL: user.photoURL || '',
                 provider: providerId,
                 role: role
+            };
+            if (!fsData || !fsData.approvalStatus) {
+                syncPayload.approvalStatus = approvalStatus;
+                if (approvalStatus === 'approved' && (!fsData || !fsData.approvedAt)) {
+                    syncPayload.approvedAt = new Date().toISOString();
+                }
+            }
+            saveUserDataToFirestore(user.uid, syncPayload);
+
+            // 관리자 승인/등급 변경을 실시간 감지하여 승인 즉시 웹페이지 이용 가능하도록 반영
+            const userDocRef = doc(db, "users", user.uid);
+            unsubscribeUserSnapshot = onSnapshot(userDocRef, (docSnap) => {
+                if (!docSnap.exists()) {
+                    if (email !== 'teacha99@gmail.com' && (approvalStatus !== 'pending' || role !== 'User')) {
+                        approvalStatus = 'pending';
+                        role = 'User';
+                        localStorage.setItem('userRole', role);
+                        localStorage.setItem('userApprovalStatus', approvalStatus);
+                        if (localStorage.getItem('adminManualAuth') !== 'true') {
+                            localStorage.removeItem('isAdminActive');
+                        }
+                        if (typeof window.showToast === 'function') {
+                            window.showToast('⚠️ 관리자에 의해 회원 정보가 삭제되어 세부 이용 권한이 해제되었습니다.', 'warning');
+                        }
+                        callback(user);
+                        if (typeof window.notifyAuthReady === 'function') {
+                            window.notifyAuthReady(user);
+                        }
+                    }
+                    return;
+                }
+                const liveData = docSnap.data();
+                const liveSchool = liveData.schoolName || liveData.school || liveData.organization || liveData.belong || '';
+                if (liveSchool) {
+                    localStorage.setItem(`user_school_${user.uid}`, liveSchool);
+                }
+                const nextRole = (email === 'teacha99@gmail.com') ? 'Host' : (liveData.role || 'User');
+                const nextStatus = resolveApprovalStatus(user, { ...liveData, role: nextRole });
+
+                if (nextStatus !== approvalStatus || nextRole !== role) {
+                    const newlyApproved = (approvalStatus !== 'approved' && nextStatus === 'approved');
+                    approvalStatus = nextStatus;
+                    role = nextRole;
+
+                    localStorage.setItem('userRole', role);
+                    localStorage.setItem('userApprovalStatus', approvalStatus);
+                    if (role === 'Host' || role === 'Manager' || localStorage.getItem('adminManualAuth') === 'true') {
+                        localStorage.setItem('isAdminActive', 'true');
+                    } else {
+                        localStorage.removeItem('isAdminActive');
+                    }
+
+                    if (newlyApproved && typeof window.showToast === 'function') {
+                        window.showToast('🎉 관리자 승인이 완료되었습니다! 모든 세부 콘텐츠를 바로 이용하실 수 있습니다.', 'success');
+                    }
+
+                    callback(user);
+                    if (typeof window.notifyAuthReady === 'function') {
+                        window.notifyAuthReady(user);
+                    }
+                }
+            }, (err) => {
+                console.warn("실시간 승인 상태 감시 오류:", err);
             });
         } else {
             localStorage.removeItem('isLoggedIn');
@@ -200,7 +314,11 @@ export function onAuthChange(callback) {
             localStorage.removeItem('userPhotoURL');
             localStorage.removeItem('userUid');
             localStorage.removeItem('userRole');
-            localStorage.removeItem('isAdminActive');
+            localStorage.removeItem('userApprovalStatus');
+            // 이메일 인증(EmailJS)으로 별도 로그인한 관리자 세션은 유지
+            if (localStorage.getItem('adminManualAuth') !== 'true') {
+                localStorage.removeItem('isAdminActive');
+            }
         }
         callback(user);
     });
@@ -274,8 +392,33 @@ export async function getAllUsersFromFirestore() {
     }
 }
 
-// 한글 에러 처리 헬퍼 함수
+/**
+ * Firestore users 컬렉션에서 특정 회원 문서를 삭제합니다.
+ * @param {string} uid - 삭제할 회원의 UID
+ * @returns {Promise<{success: boolean, error?: string}>} 삭제 결과
+ */
+export async function deleteUserFromFirestore(uid) {
+    try {
+        if (!uid) throw new Error('회원 UID가 유효하지 않습니다.');
+        await deleteDoc(doc(db, "users", uid));
+        return { success: true };
+    } catch (error) {
+        console.error("Firestore 회원 삭제 실패:", error);
+        return { success: false, error: error.message };
+    }
+}
+
+/**
+ * Firebase 인증 오류 코드를 사용자 친화적인 한국어 메시지로 변환합니다.
+ * @param {string} errorCode - Firebase Auth 오류 코드
+ * @returns {string|null} 안내 메시지 또는 매핑되지 않은 경우 null
+ */
 function getAuthErrorMessage(errorCode) {
+    const currentOrigin = window.location.origin && window.location.origin !== 'null'
+        ? window.location.origin
+        : 'file://프로토콜';
+    const currentHost = window.location.hostname || 'file://프로토콜';
+
     switch (errorCode) {
         case 'auth/email-already-in-use': return '이미 사용 중인 이메일입니다.';
         case 'auth/invalid-email': return '유효하지 않은 이메일 형식입니다.';
@@ -283,11 +426,32 @@ function getAuthErrorMessage(errorCode) {
         case 'auth/user-not-found':
         case 'auth/wrong-password':
         case 'auth/invalid-credential': return '이메일 또는 비밀번호가 올바르지 않습니다.';
-        case 'auth/unauthorized-domain': return `Firebase 콘솔에 승인되지 않은 도메인입니다. (현재 접속 주소: "${window.location.hostname || 'file://프로토콜'}")\n\nFirebase 콘솔 > Authentication > Settings > Authorized domains 에 "${window.location.hostname}" 을 정확히 추가해 주세요.`;
-        case 'auth/operation-not-allowed': return 'Firebase 콘솔에서 Google 로그인 제공업체(Provider)가 활성화되지 않았습니다.';
+        case 'auth/network-request-failed': return '네트워크 또는 Firebase 서버 연결에 실패했습니다. 인터넷 연결과 방화벽·광고차단 확장프로그램을 확인해 주세요.';
+        case 'auth/too-many-requests': return '로그인 시도가 너무 많아 일시 차단되었습니다. 잠시 후 다시 시도해 주세요.';
+        case 'auth/unauthorized-domain': return `Firebase 콘솔에 승인되지 않은 도메인입니다. (현재 접속 주소: "${currentHost}")\n\nFirebase 콘솔 > Authentication > Settings > Authorized domains에 "${currentHost}"(예: localhost)을 추가해 주세요.`;
+        case 'auth/operation-not-allowed': return 'Firebase 콘솔에서 해당 로그인 제공업체(Provider)가 활성화되지 않았습니다.';
         case 'auth/popup-closed-by-user': return 'Google 로그인 팝업 창이 닫혔습니다.';
-        default: return null;
+        default:
+            if (typeof errorCode === 'string' && errorCode.includes('requests-from-referer')) {
+                return `Google Cloud API 키의 웹사이트(HTTP 리퍼러) 제한에 의해 차단되었습니다.\n(현재 출처: ${currentOrigin})\n\nGoogle Cloud 콘솔 > API 및 서비스 > 사용자 인증 정보에서 해당 웹 API 키의 허용 리퍼러에 "${currentOrigin}/*"을 추가하거나 제한을 해제해 주세요.`;
+            }
+            return null;
     }
+}
+
+/**
+ * 이메일·Google 인증 예외 객체에서 코드와 원인을 포함한 오류 문자열을 생성합니다.
+ * @param {Error & {code?: string}} error - Firebase 인증 예외 객체
+ * @returns {string} 화면에 표시할 상세 오류 안내
+ */
+function formatFirebaseAuthError(error) {
+    const code = error && error.code ? error.code : '';
+    const customMsg = getAuthErrorMessage(code);
+    const currentHost = window.location.hostname || 'file://프로토콜';
+    if (customMsg) {
+        return `${customMsg}\n(접속 호스트: ${currentHost}, 코드: ${code})`;
+    }
+    return `[오류 코드: ${code || '알수없음'}]\n${(error && error.message) || '로그인 처리 중 오류가 발생했습니다.'}\n(접속 호스트: ${currentHost})`;
 }
 
 // ----------------------------------------------------
@@ -307,5 +471,8 @@ window.FirebaseApp = {
     updateUserProfile,
     saveUserDataToFirestore,
     getUserDataFromFirestore,
-    getAllUsersFromFirestore
+    getAllUsersFromFirestore,
+    deleteUserFromFirestore,
+    resolveApprovalStatus,
+    APPROVAL_CUTOFF_TIME
 };

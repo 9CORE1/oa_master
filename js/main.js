@@ -1,10 +1,23 @@
 // --- Main UI & Common Interactions Module ---
 
+const PROTECTED_DETAIL_PAGES = [
+  'written_archive.html',
+  'written_lectures.html',
+  'practical_archive.html',
+  'practical_lectures.html',
+  'ai_office_day1.html',
+  'ai_office_day2.html',
+  'ai_office_day3.html'
+];
+
+let verifiedAuthState = null;
+
 document.addEventListener('DOMContentLoaded', () => {
   initTheme();
   initHeaderScroll();
   initMobileNav();
   initToastContainer();
+  initProtectedDetailLinks();
 });
 
 // 1. Initialize theme based on body class or current page name
@@ -112,5 +125,160 @@ function showToast(message, type = 'success') {
   }, 3000);
 }
 
+/**
+ * 현재 사용자가 로그인 세션을 보유하고 있는지(관리자 포함) 확인합니다.
+ * @returns {boolean} 로그인 세션 보유 여부
+ */
+function isMemberLoggedInSession() {
+  const isAdminSession = (typeof window.isAdmin === 'function' && window.isAdmin()) ||
+    (localStorage.getItem('isAdminActive') === 'true');
+  if (isAdminSession) return true;
+  if (verifiedAuthState !== null) return verifiedAuthState;
+  return localStorage.getItem('isLoggedIn') === 'true';
+}
+
+/**
+ * 현재 로그인 회원의 관리자 승인 상태를 반환합니다.
+ * @returns {string} 'approved' | 'pending' | 'rejected'
+ */
+function getMemberApprovalStatus() {
+  const isAdminSession = (typeof window.isAdmin === 'function' && window.isAdmin()) ||
+    (localStorage.getItem('isAdminActive') === 'true');
+  if (isAdminSession) return 'approved';
+  return localStorage.getItem('userApprovalStatus') || 'pending';
+}
+
+/**
+ * 현재 사용자가 승인 완료된 회원 또는 관리자 인증 상태인지 판별합니다.
+ * @returns {boolean} 세부 콘텐츠 접근 권한 보유 여부
+ */
+function isMemberAuthenticated() {
+  const isAdminSession = (typeof window.isAdmin === 'function' && window.isAdmin()) ||
+    (localStorage.getItem('isAdminActive') === 'true');
+  if (isAdminSession) return true;
+  return isMemberLoggedInSession() && getMemberApprovalStatus() === 'approved';
+}
+
+/**
+ * Firebase 인증 상태 변경 결과를 전역에 반영하고 구독자에게 알립니다.
+ * @param {object|null} user - Firebase 사용자 객체 또는 null
+ */
+function notifyAuthReady(user) {
+  verifiedAuthState = Boolean(user);
+  window.dispatchEvent(new CustomEvent('oaAuthReady', {
+    detail: { user, approvalStatus: getMemberApprovalStatus() }
+  }));
+}
+
+/**
+ * 비로그인 또는 관리자 미승인 상태에서 회원 전용 기능/세부 페이지 접근 시 안내합니다.
+ * @param {string} [message] - 비로그인 사용자에게 보여줄 안내 문구
+ */
+function requireMemberLogin(message = '🔒 회원가입 및 로그인 후 이용하실 수 있습니다.') {
+  if (isMemberLoggedInSession()) {
+    const status = getMemberApprovalStatus();
+    if (status === 'rejected') {
+      alert('⛔ 현재 계정은 관리자 승인 보류 상태입니다.\n이용 관련 사항은 관리자에게 문의해 주세요.');
+    } else {
+      alert('⏳ 회원가입 및 로그인은 완료되었으나 현재 관리자 승인 대기 중입니다.\n관리자 승인 완료 후 바로 세부 콘텐츠를 이용하실 수 있습니다.');
+    }
+    return;
+  }
+
+  const authModal = document.getElementById('authModal');
+  alert(message);
+  if (authModal) {
+    authModal.style.display = 'flex';
+  } else {
+    window.location.href = 'index.html?auth=required';
+  }
+}
+
+/**
+ * 지정된 컨테이너에 회원 전용 잠금(비로그인 또는 관리자 승인 대기) 안내 카드를 렌더링합니다.
+ * @param {HTMLElement} container - 잠금 안내를 표시할 DOM 요소
+ * @param {object} [options] - 제목, 설명, 테마 옵션
+ */
+function renderMemberGateBox(container, options = {}) {
+  if (!container) return;
+  const {
+    title = '회원가입 및 로그인 후 세부 내용을 이용할 수 있습니다',
+    description = '허브 페이지에서는 전체 과정과 이용 안내를 자유롭게 열람할 수 있으며, 세부 학습 기능과 상세 콘텐츠는 로그인 회원에게 제공됩니다.',
+    buttonLabel = '회원가입 / 로그인하고 전체 보기',
+    theme = 'written'
+  } = options;
+
+  const extraClass = theme === 'recommend' ? ' recommend-gate' : '';
+
+  if (isMemberLoggedInSession()) {
+    const status = getMemberApprovalStatus();
+    const isRejected = status === 'rejected';
+    const pendingTitle = isRejected
+      ? '관리자 승인 보류 상태입니다'
+      : '관리자 승인 대기 중입니다';
+    const pendingDesc = isRejected
+      ? '현재 계정은 세부 콘텐츠 열람 승인이 보류되어 있습니다. 승인 상태는 마이페이지에서 확인하시거나 관리자에게 문의해 주세요.'
+      : '회원가입 및 로그인이 정상 확인되었습니다. 관리자가 승인하는 즉시(새로고침 없이 자동으로) 모든 세부 콘텐츠와 기능이 열립니다.';
+
+    container.innerHTML = `
+      <div class="member-gate-card${extraClass}">
+        <div class="member-gate-icon"><i class="fas ${isRejected ? 'fa-user-slash' : 'fa-user-clock'}"></i></div>
+        <h3>${pendingTitle}</h3>
+        <p>${pendingDesc}</p>
+        <div class="member-gate-actions">
+          <a href="index.html?mypage=1" class="member-gate-btn">
+            <i class="fas fa-id-card"></i> 마이페이지에서 승인 상태 확인
+          </a>
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = `
+    <div class="member-gate-card${extraClass}">
+      <div class="member-gate-icon"><i class="fas fa-lock"></i></div>
+      <h3>${title}</h3>
+      <p>${description}</p>
+      <div class="member-gate-actions">
+        <a href="index.html?auth=required" class="member-gate-btn">
+          <i class="fas fa-user-check"></i> ${buttonLabel}
+        </a>
+      </div>
+    </div>
+  `;
+}
+
+/**
+ * 서브페이지에서 회원 전용 세부 페이지 링크 클릭 시 비로그인 접근을 선차단합니다.
+ */
+function initProtectedDetailLinks() {
+  const isHome = window.location.pathname.endsWith('/') ||
+    window.location.pathname.endsWith('index.html');
+  if (isHome) return;
+
+  document.addEventListener('click', (e) => {
+    const target = e.target.closest('a, button');
+    if (!target) return;
+    if (target.closest('#adminAuthModal') || target.closest('.member-gate-card')) return;
+
+    const href = target.getAttribute('href') || target.getAttribute('onclick') || '';
+    if (PROTECTED_DETAIL_PAGES.some((page) => href.includes(page))) {
+      if (!isMemberAuthenticated()) {
+        e.preventDefault();
+        e.stopPropagation();
+        requireMemberLogin('🔒 회원가입 및 로그인이 필요한 세부 학습 페이지입니다.');
+      }
+    }
+  }, true);
+}
+
 // Export functions to window scope
 window.showToast = showToast;
+window.PROTECTED_DETAIL_PAGES = PROTECTED_DETAIL_PAGES;
+window.isMemberLoggedInSession = isMemberLoggedInSession;
+window.getMemberApprovalStatus = getMemberApprovalStatus;
+window.isMemberAuthenticated = isMemberAuthenticated;
+window.notifyAuthReady = notifyAuthReady;
+window.requireMemberLogin = requireMemberLogin;
+window.renderMemberGateBox = renderMemberGateBox;

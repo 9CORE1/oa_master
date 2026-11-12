@@ -44,14 +44,19 @@
       padding: 24px 0;
     }
 
+    .nav-container,
+    .footer-container {
+      max-width: 1360px;
+    }
+
     .content-container {
       max-width: 1360px;
-      padding: 30px 20px 60px 20px;
+      padding: 30px 24px 60px 24px;
     }
 
     .table-responsive {
       width: 100%;
-      overflow-x: hidden;
+      overflow-x: auto;
     }
 
     .archive-table {
@@ -141,6 +146,131 @@
       border-radius: 6px;
       border: 1px solid #cbd5e1;
     }
+
+    .bulk-action-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 12px 18px;
+      background: #f8fafc;
+      border-bottom: 1px solid var(--neutral-200);
+    }
+
+    .bulk-action-summary {
+      font-size: 13px;
+      color: var(--neutral-700);
+      font-weight: 600;
+    }
+
+    .bulk-action-buttons {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .btn-bulk {
+      border: none;
+      border-radius: 8px;
+      padding: 7px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: opacity 0.2s ease, transform 0.15s ease;
+    }
+
+    .btn-bulk:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .btn-bulk-approve {
+      background: #16a34a;
+      color: #fff;
+    }
+
+    .btn-bulk-hold {
+      background: #d97706;
+      color: #fff;
+    }
+
+    .btn-bulk-delete {
+      background: #dc2626;
+      color: #fff;
+    }
+
+    .bulk-school-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .bulk-school-input {
+      height: 31px;
+      padding: 0 10px;
+      font-size: 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      background: #fff;
+      color: var(--neutral-800);
+      min-width: 190px;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .bulk-school-input:focus {
+      border-color: var(--theme-primary);
+      box-shadow: 0 0 0 2px rgba(14, 73, 135, 0.12);
+    }
+
+    .btn-bulk-school {
+      background: var(--theme-primary);
+      color: #fff;
+    }
+
+    .approval-inline-select {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 10px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .approval-inline-select.status-approved {
+      color: #15803d;
+      background: rgba(34, 197, 94, 0.14);
+      border-color: rgba(34, 197, 94, 0.35);
+    }
+
+    .approval-inline-select.status-pending {
+      color: #b45309;
+      background: rgba(245, 158, 11, 0.18);
+      border-color: rgba(245, 158, 11, 0.45);
+    }
+
+    .approval-inline-select.status-rejected {
+      color: #b91c1c;
+      background: rgba(239, 68, 68, 0.14);
+      border-color: rgba(239, 68, 68, 0.35);
+    }
+
+    .btn-delete-row {
+      background: rgba(239, 68, 68, 0.12);
+      color: #dc2626;
+    }
+
+    .btn-delete-row:hover {
+      background: #dc2626;
+      color: #fff;
+    }
   </style>
 
   <!-- 🔒 Synchronous Early Auth Guard -->
@@ -193,14 +323,22 @@
         </div>
         <div class="nav-item">
           <a href="ai_office.html" class="nav-link"><i class="fas fa-magic"></i> AI <span class="collab-x"
-              title="콜라보">&times;</span> OA 콜라보</a>
+              title="콜라보">&times;</span> OA 콜라보 <i class="fas fa-chevron-down" style="font-size:10px;"></i></a>
+          <div class="dropdown-menu" style="min-width: 230px;">
+            <a href="ai_office.html" class="dropdown-link"><i class="fas fa-th-large"></i> 콜라보 통합 허브</a>
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-group-title">3일 과정</div>
+            <a href="ai_office_day1.html" class="dropdown-link"><i class="fas fa-table"></i> 1일차 · Excel × AI</a>
+            <a href="ai_office_day2.html" class="dropdown-link"><i class="fas fa-file-word"></i> 2일차 · Docs/Word ×
+              AI</a>
+            <a href="ai_office_day3.html" class="dropdown-link"><i class="fas fa-desktop"></i> 3일차 · PPT/Slides × AI</a>
+            <div class="dropdown-divider"></div>
+            <a href="AI리터러시진단안내_참고자료.pdf" target="_blank" class="dropdown-link"><i class="fas fa-chart-pie"></i> AI 리터러시
+              진단 PDF</a>
+          </div>
         </div>
         <div class="nav-item">
           <a href="recommendations.html" class="nav-link"><i class="fas fa-external-link-alt"></i> 추천 사이트</a>
-        </div>
-        <div class="nav-item active">
-          <a href="admin_users.html" class="nav-link" style="color:var(--theme-primary); font-weight:700;"><i
-              class="fas fa-users-cog"></i> 회원 관리</a>
         </div>
       </nav>
 
@@ -283,6 +421,17 @@
             <i class="fas fa-envelope"></i>
           </div>
         </div>
+
+        <div class="kpi-card" style="cursor:pointer;" onclick="setApprovalFilter('pending')"
+          title="클릭 시 승인 대기 회원만 필터링합니다">
+          <div class="kpi-card-info">
+            <h4>승인 대기 회원</h4>
+            <div id="kpiPending" style="color:#d97706;">0 명</div>
+          </div>
+          <div class="kpi-icon" style="background:rgba(245,158,11,0.14); color:#d97706;">
+            <i class="fas fa-user-clock"></i>
+          </div>
+        </div>
       </div>
 
       <!-- Filter & Search Controls -->
@@ -295,6 +444,17 @@
                 style="color:#34a853;"></i> 구글 회원</button>
             <button class="filter-btn" onclick="setUserFilter('email')" id="ufilter-email"><i class="fas fa-envelope"
                 style="color:#6366f1;"></i> 이메일 회원</button>
+          </div>
+
+          <div class="filter-group">
+            <button class="filter-btn approval-filter-btn active" onclick="setApprovalFilter('all')" id="afilter-all">전체
+              상태</button>
+            <button class="filter-btn approval-filter-btn" onclick="setApprovalFilter('pending')"
+              id="afilter-pending"><i class="fas fa-clock" style="color:#d97706;"></i> 승인 대기</button>
+            <button class="filter-btn approval-filter-btn" onclick="setApprovalFilter('approved')"
+              id="afilter-approved"><i class="fas fa-check-circle" style="color:#16a34a;"></i> 승인 완료</button>
+            <button class="filter-btn approval-filter-btn" onclick="setApprovalFilter('rejected')"
+              id="afilter-rejected"><i class="fas fa-ban" style="color:#dc2626;"></i> 승인 보류</button>
           </div>
 
           <!-- Date Range Filter -->
@@ -323,19 +483,53 @@
 
       <!-- Table View of Members -->
       <div class="archive-list">
+        <div class="bulk-action-bar">
+          <div class="bulk-action-summary">
+            <i class="fas fa-check-square" style="color:var(--theme-primary); margin-right:4px;"></i>
+            선택된 회원: <strong id="selectedUsersCount">0</strong>명
+          </div>
+          <div class="bulk-action-buttons">
+            <div class="bulk-school-group">
+              <input type="text" id="bulkSchoolNameInput" class="bulk-school-input"
+                placeholder="학교명 / 소속명 일괄 입력..."
+                onkeydown="if(event.key==='Enter'){ event.preventDefault(); bulkUpdateSchoolName(); }">
+              <button type="button" id="bulkSchoolApplyBtn" class="btn-bulk btn-bulk-school"
+                onclick="bulkUpdateSchoolName()" disabled>
+                <i class="fas fa-school"></i> 소속 일괄 적용
+              </button>
+            </div>
+            <button type="button" id="bulkApproveBtn" class="btn-bulk btn-bulk-approve"
+              onclick="bulkUpdateApprovalStatus('approved')" disabled>
+              <i class="fas fa-check"></i> 선택 회원 승인
+            </button>
+            <button type="button" id="bulkHoldBtn" class="btn-bulk btn-bulk-hold"
+              onclick="bulkUpdateApprovalStatus('rejected')" disabled>
+              <i class="fas fa-ban"></i> 선택 회원 보류
+            </button>
+            <button type="button" id="bulkDeleteBtn" class="btn-bulk btn-bulk-delete" onclick="deleteSelectedUsers()"
+              disabled>
+              <i class="fas fa-trash-alt"></i> 선택 회원 삭제
+            </button>
+          </div>
+        </div>
         <div class="table-responsive">
           <table class="archive-table">
             <thead>
               <tr>
+                <th style="width: 38px; text-align: center;">
+                  <input type="checkbox" id="selectAllUsersCheckbox" onchange="toggleSelectAllUsers(this.checked)"
+                    title="현재 페이지 전체 선택">
+                </th>
                 <th style="width: 45px; text-align: center;">번호</th>
                 <th style="min-width: 130px;">회원 프로필 / 성명</th>
                 <th style="min-width: 150px;">이메일 주소</th>
-                <th style="width: 105px; text-align: center;">회원 등급</th>
+                <th style="width: 95px; text-align: center;">회원 등급</th>
+                <th style="width: 115px; text-align: center;">승인 상태</th>
                 <th style="min-width: 120px;">학교명 / 소속명</th>
                 <th style="width: 85px; text-align: center;">가입 유형</th>
                 <th style="width: 95px; text-align: center;">가입일시</th>
-                <th style="min-width: 110px;">관리자 메모</th>
-                <th style="width: 55px; text-align: center;">관리</th>
+                <th style="min-width: 100px;">관리자 메모</th>
+                <th style="width: 125px; text-align: center;">관리</th>
               </tr>
             </thead>
             <tbody id="usersTableBody">
@@ -375,6 +569,21 @@
           </select>
         </div>
 
+        <div class="form-group" style="margin-bottom:14px;">
+          <label class="form-label" for="userApprovalSelect" style="font-weight:700;">이용 승인 상태</label>
+          <select id="userApprovalSelect" class="form-input" style="background:#fff;">
+            <option value="approved">승인 완료 (세부 콘텐츠 이용 가능)</option>
+            <option value="pending">승인 대기 (관리자 승인 전 이용 제한)</option>
+            <option value="rejected">승인 보류 (이용 제한)</option>
+          </select>
+        </div>
+
+        <div class="form-group" style="margin-bottom:14px;">
+          <label class="form-label" for="userSchoolNameInput" style="font-weight:700;">학교명 / 소속명</label>
+          <input type="text" id="userSchoolNameInput" class="form-input" style="background:#fff;"
+            placeholder="예: 한국대학교, 서울교육청 등">
+        </div>
+
         <div class="form-group">
           <label class="form-label" for="userMemoText" style="font-weight:700;">특이사항 및 메모 내용</label>
           <textarea id="userMemoText" class="form-input" placeholder="해당 회원의 수강 정보, 가입 목적 또는 문의 내역 등의 특이사항을 기록해 주세요."
@@ -390,7 +599,7 @@
 
   <!-- Footer -->
   <footer>
-    <div class="footer-container" style="gap:0; padding:0 20px;">
+    <div class="footer-container" style="gap:0; padding:0 24px;">
       <div class="footer-bottom" style="border-top:none; padding-top:0;">
         <p style="color:var(--neutral-400);">&copy; 2026 OA MASTER. All Rights Reserved. Designed for Excellence.</p>
         <div class="footer-bottom-links">
@@ -433,12 +642,54 @@
 
   <script>
     let rawUsersList = [];
+    let selectedUserIds = new Set();
     let currentProviderFilter = 'all';
+    let currentApprovalFilter = 'all';
     let currentSearchQuery = '';
     let startDateFilter = '';
     let endDateFilter = '';
     let currentPage = 1;
-    const ITEMS_PER_PAGE = 5;
+    const ITEMS_PER_PAGE = 10;
+
+    function isHostAccount(u) {
+      const email = (u && u.email ? u.email : '').toLowerCase().trim();
+      return email === 'teacha99@gmail.com' || (u && u.role === 'Host');
+    }
+
+    /**
+     * HTML 특수문자를 이스케이프하여 안전하게 렌더링합니다.
+     * @param {string} value - 원본 문자열
+     * @returns {string} 이스케이프된 문자열
+     */
+    function escapeHtml(value) {
+      return String(value || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    /**
+     * 회원 객체에서 학교명/소속명 값을 추출합니다.
+     * @param {Object} u - 회원 데이터 객체
+     * @returns {string} 학교명/소속명 문자열
+     */
+    function getUserSchoolName(u) {
+      if (!u) return '';
+      return String(u.schoolName || u.school || u.organization || u.belong || '').trim();
+    }
+
+    function getUserApprovalStatus(u) {
+      if (window.FirebaseApp && typeof window.FirebaseApp.resolveApprovalStatus === 'function') {
+        return window.FirebaseApp.resolveApprovalStatus(null, u);
+      }
+      const email = (u.email || '').toLowerCase().trim();
+      if (email === 'teacha99@gmail.com' || u.role === 'Host' || u.role === 'Manager') {
+        return 'approved';
+      }
+      return u.approvalStatus || 'approved';
+    }
 
     document.addEventListener('DOMContentLoaded', () => {
       const email = (localStorage.getItem('userEmail') || '').toLowerCase().trim();
@@ -482,6 +733,34 @@
         const res = await window.FirebaseApp.getAllUsersFromFirestore();
         if (res.success) {
           rawUsersList = res.users || [];
+
+          // 승인 상태 필드가 없는 기존 가입 회원은 자동으로 'approved' 상태 부여 및 Firestore 반영
+          const legacySyncTasks = [];
+          rawUsersList.forEach(u => {
+            if (!u.approvalStatus) {
+              const resolved = getUserApprovalStatus(u);
+              u.approvalStatus = resolved;
+              const payload = { approvalStatus: resolved };
+              if (resolved === 'approved') {
+                payload.approvedAt = u.approvedAt || new Date().toISOString();
+              }
+              legacySyncTasks.push(window.FirebaseApp.saveUserDataToFirestore(u.id, payload));
+            }
+          });
+          if (legacySyncTasks.length > 0) {
+            Promise.allSettled(legacySyncTasks).catch(() => { });
+          }
+
+          // 승인 대기 회원을 우선 정렬하고 이후 최신 가입순 정렬
+          rawUsersList.sort((a, b) => {
+            const aPending = getUserApprovalStatus(a) === 'pending' ? 0 : 1;
+            const bPending = getUserApprovalStatus(b) === 'pending' ? 0 : 1;
+            if (aPending !== bPending) return aPending - bPending;
+            const aTime = Date.parse(a.createdAt || a.updatedAt || 0) || 0;
+            const bTime = Date.parse(b.createdAt || b.updatedAt || 0) || 0;
+            return bTime - aTime;
+          });
+
           if (showNotification) {
             const toastFunc = window.showToast || (typeof showToast === 'function' ? showToast : null);
             if (toastFunc) {
@@ -510,6 +789,7 @@
       const total = rawUsersList.length;
       let googleCount = 0;
       let emailCount = 0;
+      let pendingCount = 0;
 
       rawUsersList.forEach(u => {
         if (u.provider === 'google.com' || u.providerId === 'google.com' || (u.photoURL && u.photoURL.includes('googleusercontent'))) {
@@ -517,19 +797,35 @@
         } else {
           emailCount++;
         }
+        if (getUserApprovalStatus(u) === 'pending') {
+          pendingCount++;
+        }
       });
 
       document.getElementById('kpiTotal').innerText = `${total} 명`;
       document.getElementById('kpiGoogle').innerText = `${googleCount} 명`;
       document.getElementById('kpiEmail').innerText = `${emailCount} 명`;
+      const pendingEl = document.getElementById('kpiPending');
+      if (pendingEl) pendingEl.innerText = `${pendingCount} 명`;
     }
 
     function setUserFilter(filter) {
       currentProviderFilter = filter;
       currentPage = 1;
 
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('#ufilter-all, #ufilter-google, #ufilter-email').forEach(b => b.classList.remove('active'));
       const activeBtn = document.getElementById(`ufilter-${filter}`);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      renderUsersTable();
+    }
+
+    function setApprovalFilter(status) {
+      currentApprovalFilter = status;
+      currentPage = 1;
+
+      document.querySelectorAll('.approval-filter-btn').forEach(b => b.classList.remove('active'));
+      const activeBtn = document.getElementById(`afilter-${status}`);
       if (activeBtn) activeBtn.classList.add('active');
 
       renderUsersTable();
@@ -561,18 +857,22 @@
       const tbody = document.getElementById('usersTableBody');
       const emptyState = document.getElementById('emptyUsersState');
 
-      // Filter by provider, search, & date range
+      // Filter by provider, approval status, search, & date range
       const filtered = rawUsersList.filter(u => {
         // Provider filter
         const isGoogle = u.provider === 'google.com' || u.providerId === 'google.com' || (u.photoURL && u.photoURL.includes('googleusercontent'));
         if (currentProviderFilter === 'google' && !isGoogle) return false;
         if (currentProviderFilter === 'email' && isGoogle) return false;
 
+        // Approval status filter
+        const approvalStatus = getUserApprovalStatus(u);
+        if (currentApprovalFilter !== 'all' && approvalStatus !== currentApprovalFilter) return false;
+
         // Search query
         if (currentSearchQuery) {
           const emailStr = (u.email || '').toLowerCase();
           const nameStr = (u.displayName || u.name || '').toLowerCase();
-          const schoolStr = (u.schoolName || u.school || u.organization || u.belong || '').toLowerCase();
+          const schoolStr = getUserSchoolName(u).toLowerCase();
           if (!emailStr.includes(currentSearchQuery) && !nameStr.includes(currentSearchQuery) && !schoolStr.includes(currentSearchQuery)) {
             return false;
           }
@@ -591,6 +891,7 @@
       if (filtered.length === 0) {
         emptyState.style.display = 'block';
         document.getElementById('paginationContainer').innerHTML = '';
+        updateBulkSelectionUI([]);
         return;
       }
       emptyState.style.display = 'none';
@@ -603,9 +904,17 @@
       const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
       const pageItems = filtered.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
+      // 현재 목록에 남아있지 않은 선택 ID 정리
+      const validIds = new Set(rawUsersList.map(u => u.id));
+      Array.from(selectedUserIds).forEach(uid => {
+        if (!validIds.has(uid)) selectedUserIds.delete(uid);
+      });
+
       pageItems.forEach((u, idx) => {
         const globalIdx = startIndex + idx;
         const row = document.createElement('tr');
+        const isHost = isHostAccount(u);
+        const isChecked = !isHost && selectedUserIds.has(u.id);
 
         const isGoogle = u.provider === 'google.com' || u.providerId === 'google.com' || (u.photoURL && u.photoURL.includes('googleusercontent'));
         const providerBadge = isGoogle ?
@@ -633,10 +942,30 @@
         const joinDateStr = u.createdAt ? u.createdAt.split('T')[0] : (u.updatedAt ? u.updatedAt.split('T')[0] : (u.date || '-'));
         const memoStr = u.memo ? `<span class="memo-badge" title="${u.memo}">${u.memo}</span>` : `<span style="color:var(--neutral-400); font-size:12px;">-</span>`;
 
-        const schoolVal = u.schoolName || u.school || u.organization || u.belong || '';
-        const schoolDisplay = schoolVal ? `<span style="font-size:13px; font-weight:600; color:var(--neutral-800);"><i class="fas fa-graduation-cap" style="color:var(--theme-primary); margin-right:4px;"></i>${schoolVal}</span>` : `<span style="color:var(--neutral-400); font-size:12px;">-</span>`;
+        const schoolVal = getUserSchoolName(u);
+        const schoolDisplay = schoolVal ? `<span style="font-size:13px; font-weight:600; color:var(--neutral-800);"><i class="fas fa-graduation-cap" style="color:var(--theme-primary); margin-right:4px;"></i>${escapeHtml(schoolVal)}</span>` : `<span style="color:var(--neutral-400); font-size:12px;">-</span>`;
+
+        const approvalStatus = getUserApprovalStatus(u);
+        const approvalControl = isHost
+          ? `<span style="font-size:11px; font-weight:700; color:#15803d; background:rgba(34,197,94,0.12); padding:3px 8px; border-radius:10px; display:inline-flex; align-items:center; gap:4px;"><i class="fas fa-check-circle"></i> 승인 완료</span>`
+          : `<select class="approval-inline-select status-${approvalStatus}" onchange="updateUserApprovalStatus('${u.id}', this.value, this)" title="클릭하여 회원 승인 상태 변경">
+               <option value="approved" ${approvalStatus === 'approved' ? 'selected' : ''}>승인 완료</option>
+               <option value="pending" ${approvalStatus === 'pending' ? 'selected' : ''}>승인 대기</option>
+               <option value="rejected" ${approvalStatus === 'rejected' ? 'selected' : ''}>승인 보류</option>
+             </select>`;
+
+        const quickApproveBtn = (!isHost && approvalStatus !== 'approved')
+          ? `<button class="btn-icon" onclick="approveUserImmediately('${u.id}')" style="background:#16a34a; color:#fff; width:auto; padding:0 8px; font-size:11px; font-weight:700; gap:3px;" title="즉시 승인 처리"><i class="fas fa-check"></i> 승인</button>`
+          : '';
+
+        const singleDeleteBtn = isHost
+          ? ''
+          : `<button class="btn-icon btn-delete-row" onclick="deleteSingleUser('${u.id}', '${name.replace(/'/g, "\\'")}')" title="회원 삭제"><i class="fas fa-trash-alt"></i></button>`;
 
         row.innerHTML = `
+          <td style="text-align:center; white-space:nowrap;">
+            <input type="checkbox" class="user-row-checkbox" data-uid="${u.id}" ${isHost ? 'disabled title="Host 관리자 계정은 삭제할 수 없습니다."' : ''} ${isChecked ? 'checked' : ''} onchange="toggleUserSelection('${u.id}', this.checked)">
+          </td>
           <td style="text-align:center; white-space:nowrap;">${globalIdx + 1}</td>
           <td style="white-space:nowrap;">
             <div class="user-avatar-cell">
@@ -648,19 +977,25 @@
           </td>
           <td style="font-family:var(--font-accent); font-size:13px; color:var(--neutral-700); white-space:nowrap;">${u.email || '-'}</td>
           <td style="text-align:center; white-space:nowrap;">${roleBadge}</td>
+          <td style="text-align:center; white-space:nowrap;">${approvalControl}</td>
           <td style="white-space:nowrap;">${schoolDisplay}</td>
           <td style="text-align:center; white-space:nowrap;">${providerBadge}</td>
           <td style="text-align:center; font-family:var(--font-accent); font-size:13px; white-space:nowrap;">${joinDateStr}</td>
           <td>${memoStr}</td>
           <td style="text-align:center; white-space:nowrap;">
-            <button class="btn-icon btn-edit" onclick="openMemoModal('${u.id}', '${name.replace(/'/g, "\\'")}', '${(u.email || '').replace(/'/g, "\\'")}', '${(u.memo || '').replace(/'/g, "\\'")}', '${uRole}')" title="회원 정보/등급 수정">
-              <i class="fas fa-user-edit"></i>
-            </button>
+            <div style="display:inline-flex; align-items:center; gap:4px;">
+              ${quickApproveBtn}
+              <button class="btn-icon btn-edit" onclick="openMemoModal('${u.id}', '${name.replace(/'/g, "\\'")}', '${(u.email || '').replace(/'/g, "\\'")}', '${(u.memo || '').replace(/'/g, "\\'")}', '${uRole}', '${approvalStatus}')" title="회원 정보/등급/승인 상태 수정">
+                <i class="fas fa-user-edit"></i>
+              </button>
+              ${singleDeleteBtn}
+            </div>
           </td>
         `;
         tbody.appendChild(row);
       });
 
+      updateBulkSelectionUI(pageItems);
       renderPagination(totalPages);
     }
 
@@ -688,17 +1023,324 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
+    /**
+     * 개별 회원의 선택 체크박스 상태를 갱신합니다.
+     * @param {string} uid - 회원 UID
+     * @param {boolean} checked - 선택 여부
+     */
+    function toggleUserSelection(uid, checked) {
+      if (checked) {
+        selectedUserIds.add(uid);
+      } else {
+        selectedUserIds.delete(uid);
+      }
+      updateBulkSelectionUI();
+    }
+
+    /**
+     * 현재 페이지의 삭제 가능한 모든 회원을 일괄 선택 또는 해제합니다.
+     * @param {boolean} checked - 전체 선택 여부
+     */
+    function toggleSelectAllUsers(checked) {
+      const checkboxes = document.querySelectorAll('.user-row-checkbox:not(:disabled)');
+      checkboxes.forEach((cb) => {
+        cb.checked = checked;
+        const uid = cb.dataset.uid;
+        if (uid) {
+          if (checked) selectedUserIds.add(uid);
+          else selectedUserIds.delete(uid);
+        }
+      });
+      updateBulkSelectionUI();
+    }
+
+    /**
+     * 상단 일괄 작업 바 및 전체 선택 체크박스 UI 상태를 갱신합니다.
+     */
+    function updateBulkSelectionUI() {
+      const countEl = document.getElementById('selectedUsersCount');
+      const schoolApplyBtn = document.getElementById('bulkSchoolApplyBtn');
+      const approveBtn = document.getElementById('bulkApproveBtn');
+      const holdBtn = document.getElementById('bulkHoldBtn');
+      const deleteBtn = document.getElementById('bulkDeleteBtn');
+      const selectAllCb = document.getElementById('selectAllUsersCheckbox');
+
+      const count = selectedUserIds.size;
+      if (countEl) countEl.innerText = String(count);
+      if (schoolApplyBtn) schoolApplyBtn.disabled = count === 0;
+      if (approveBtn) approveBtn.disabled = count === 0;
+      if (holdBtn) holdBtn.disabled = count === 0;
+      if (deleteBtn) deleteBtn.disabled = count === 0;
+
+      if (selectAllCb) {
+        const selectable = Array.from(document.querySelectorAll('.user-row-checkbox:not(:disabled)'));
+        selectAllCb.checked = selectable.length > 0 && selectable.every(cb => cb.checked);
+      }
+    }
+
+    /**
+     * 선택된 회원들의 학교명/소속명을 Firestore에 일괄 병합(merge) 저장합니다.
+     * 기존 회원 문서의 다른 필드는 변경하거나 유실하지 않고 schoolName만 업데이트합니다.
+     */
+    async function bulkUpdateSchoolName() {
+      const uids = Array.from(selectedUserIds);
+      const inputEl = document.getElementById('bulkSchoolNameInput');
+      const applyBtn = document.getElementById('bulkSchoolApplyBtn');
+      const schoolName = inputEl ? inputEl.value.trim() : '';
+
+      if (uids.length === 0) {
+        showToast('학교명/소속명을 적용할 회원을 먼저 선택해 주세요.', 'warning');
+        return;
+      }
+      if (!schoolName) {
+        showToast('일괄 입력할 학교명 또는 소속명을 입력해 주세요.', 'warning');
+        if (inputEl) inputEl.focus();
+        return;
+      }
+      if (!window.FirebaseApp || !window.FirebaseApp.saveUserDataToFirestore) {
+        showToast('Firebase 연결을 확인해 주세요.', 'error');
+        return;
+      }
+
+      const existingCount = uids.filter((uid) => {
+        const target = rawUsersList.find(u => u.id === uid);
+        return Boolean(target && getUserSchoolName(target));
+      }).length;
+
+      const confirmLines = [
+        `선택한 ${uids.length}명의 회원에게 학교명/소속명 '${schoolName}'을(를) 일괄 반영하시겠습니까?`,
+        '',
+        '• 이름, 이메일, 승인 상태, 등급, 메모 등 기존 DB 데이터는 모두 보존됩니다.'
+      ];
+      if (existingCount > 0) {
+        confirmLines.push(`• 이미 학교명/소속명이 등록된 ${existingCount}명의 해당 항목은 새 값으로 변경됩니다.`);
+      }
+      if (!confirm(confirmLines.join('\n'))) return;
+
+      if (applyBtn) applyBtn.disabled = true;
+
+      let successCount = 0;
+      let lastError = '';
+
+      try {
+        for (const uid of uids) {
+          const res = await window.FirebaseApp.saveUserDataToFirestore(uid, { schoolName });
+          if (res.success) {
+            successCount++;
+            const item = rawUsersList.find(u => u.id === uid);
+            if (item) {
+              item.schoolName = schoolName;
+            }
+          } else {
+            lastError = res.error || '알 수 없는 오류';
+          }
+        }
+      } finally {
+        if (applyBtn) applyBtn.disabled = selectedUserIds.size === 0;
+      }
+
+      renderUsersTable();
+
+      if (successCount > 0 && !lastError) {
+        if (inputEl) inputEl.value = '';
+        showToast(`🏫 ${successCount}명의 학교명/소속명이 '${schoolName}'(으)로 저장되었습니다.`, 'success');
+      } else if (successCount > 0 && lastError) {
+        showToast(`${successCount}명 저장 완료, 일부 실패: ${lastError}`, 'warning');
+      } else {
+        showToast('학교명/소속명 일괄 저장 중 오류가 발생했습니다: ' + lastError, 'error');
+      }
+    }
+
+    /**
+     * 관리자 테이블에서 선택한 회원의 승인 상태를 즉시 변경합니다.
+     * @param {string} uid - 대상 회원 UID
+     * @param {string} nextStatus - 'approved' | 'pending' | 'rejected'
+     * @param {HTMLSelectElement|null} selectEl - 인라인 드롭다운 요소
+     */
+    async function updateUserApprovalStatus(uid, nextStatus, selectEl = null) {
+      if (!uid || !window.FirebaseApp || !window.FirebaseApp.saveUserDataToFirestore) return;
+      const item = rawUsersList.find(u => u.id === uid);
+      const prevStatus = item ? getUserApprovalStatus(item) : 'pending';
+
+      const payload = { approvalStatus: nextStatus };
+      if (nextStatus === 'approved') {
+        payload.approvedAt = new Date().toISOString();
+      }
+
+      if (selectEl) {
+        selectEl.disabled = true;
+      }
+
+      const res = await window.FirebaseApp.saveUserDataToFirestore(uid, payload);
+      if (selectEl) {
+        selectEl.disabled = false;
+      }
+
+      if (res.success) {
+        if (item) {
+          item.approvalStatus = nextStatus;
+          if (payload.approvedAt) item.approvedAt = payload.approvedAt;
+        }
+        updateKPICards();
+        renderUsersTable();
+
+        const statusLabel = nextStatus === 'approved'
+          ? '승인 완료'
+          : (nextStatus === 'rejected' ? '승인 보류' : '승인 대기');
+        showToast(`회원 승인 상태가 '${statusLabel}'(으)로 변경되었습니다.`, 'success');
+      } else {
+        if (selectEl) selectEl.value = prevStatus;
+        showToast('승인 상태 변경 중 오류가 발생했습니다: ' + res.error, 'error');
+      }
+    }
+
+    /**
+     * 선택된 회원들의 승인 상태를 일괄 변경합니다.
+     * @param {string} nextStatus - 'approved' | 'rejected'
+     */
+    async function bulkUpdateApprovalStatus(nextStatus) {
+      const uids = Array.from(selectedUserIds);
+      if (uids.length === 0 || !window.FirebaseApp || !window.FirebaseApp.saveUserDataToFirestore) return;
+
+      const label = nextStatus === 'approved' ? '승인 완료' : '승인 보류';
+      if (!confirm(`선택한 ${uids.length}명의 회원을 '${label}' 상태로 변경하시겠습니까?`)) return;
+
+      const approvedAt = nextStatus === 'approved' ? new Date().toISOString() : null;
+      let successCount = 0;
+      let lastError = '';
+
+      for (const uid of uids) {
+        const payload = { approvalStatus: nextStatus };
+        if (approvedAt) payload.approvedAt = approvedAt;
+        const res = await window.FirebaseApp.saveUserDataToFirestore(uid, payload);
+        if (res.success) {
+          successCount++;
+          const item = rawUsersList.find(u => u.id === uid);
+          if (item) {
+            item.approvalStatus = nextStatus;
+            if (approvedAt) item.approvedAt = approvedAt;
+          }
+        } else {
+          lastError = res.error || '알 수 없는 오류';
+        }
+      }
+
+      updateKPICards();
+      renderUsersTable();
+
+      if (successCount > 0) {
+        showToast(`${successCount}명의 회원 상태가 '${label}'(으)로 변경되었습니다.`, 'success');
+      } else {
+        showToast('일괄 변경 중 오류가 발생했습니다: ' + lastError, 'error');
+      }
+    }
+
+    /**
+     * 지정된 UID 목록의 회원 문서를 Firestore에서 삭제합니다.
+     * @param {string[]} uids - 삭제할 회원 UID 배열
+     */
+    async function deleteUsersByIds(uids) {
+      if (!uids || uids.length === 0 || !window.FirebaseApp || !window.FirebaseApp.deleteUserFromFirestore) return;
+
+      let deletedCount = 0;
+      let lastError = '';
+      const deletedSet = new Set();
+
+      for (const uid of uids) {
+        const target = rawUsersList.find(u => u.id === uid);
+        if (target && isHostAccount(target)) continue;
+
+        const res = await window.FirebaseApp.deleteUserFromFirestore(uid);
+        if (res.success) {
+          deletedCount++;
+          deletedSet.add(uid);
+          selectedUserIds.delete(uid);
+        } else {
+          lastError = res.error || '삭제 권한 또는 네트워크 오류';
+        }
+      }
+
+      if (deletedSet.size > 0) {
+        rawUsersList = rawUsersList.filter(u => !deletedSet.has(u.id));
+      }
+
+      updateKPICards();
+      renderUsersTable();
+
+      if (deletedCount > 0 && !lastError) {
+        showToast(`🗑️ ${deletedCount}명의 회원 데이터가 삭제되었습니다.`, 'success');
+      } else if (deletedCount > 0 && lastError) {
+        showToast(`${deletedCount}명 삭제 완료, 일부 실패: ${lastError}`, 'warning');
+      } else {
+        showToast('회원 삭제 실패: ' + (lastError || 'Firestore 삭제 권한을 확인해 주세요.'), 'error');
+      }
+    }
+
+    /**
+     * 선택된 회원들을 확인 후 Firestore에서 삭제합니다.
+     */
+    async function deleteSelectedUsers() {
+      const uids = Array.from(selectedUserIds);
+      if (uids.length === 0) return;
+
+      const confirmed = confirm(
+        `선택한 ${uids.length}명의 회원 데이터를 삭제하시겠습니까?\n\n` +
+        '• Firestore 회원 목록에서 즉시 삭제되며 세부 콘텐츠 이용이 제한됩니다.\n' +
+        '• Firebase Authentication 계정 자체의 영구 삭제는 Firebase 콘솔에서도 함께 처리해 주세요.'
+      );
+      if (!confirmed) return;
+
+      await deleteUsersByIds(uids);
+    }
+
+    /**
+     * 단일 회원 행에서 삭제 버튼을 클릭했을 때 삭제합니다.
+     * @param {string} uid - 삭제할 회원 UID
+     * @param {string} name - 표시용 회원 이름
+     */
+    async function deleteSingleUser(uid, name) {
+      const confirmed = confirm(
+        `'${name}' 회원의 데이터를 삭제하시겠습니까?\n\n` +
+        '• Firestore 회원 목록에서 즉시 삭제되며 세부 콘텐츠 이용이 제한됩니다.\n' +
+        '• Firebase Authentication 계정 자체의 영구 삭제는 Firebase 콘솔에서도 함께 처리해 주세요.'
+      );
+      if (!confirmed) return;
+
+      await deleteUsersByIds([uid]);
+    }
+
+    /**
+     * 승인 대기·보류 회원을 즉시 승인 처리하고 Firestore에 실시간 반영합니다.
+     * @param {string} uid - 승인할 회원의 Firestore UID
+     */
+    async function approveUserImmediately(uid) {
+      await updateUserApprovalStatus(uid, 'approved', null);
+    }
+
     // Modal logic
-    function openMemoModal(uid, name, email, existingMemo, role) {
+    function openMemoModal(uid, name, email, existingMemo, role, approvalStatus = 'approved') {
+      const targetUser = rawUsersList.find(u => u.id === uid);
+      const existingSchool = getUserSchoolName(targetUser);
+
       document.getElementById('memoTargetUid').value = uid;
       document.getElementById('memoTargetName').innerText = name;
       document.getElementById('memoTargetEmail').innerText = email;
       document.getElementById('userMemoText').value = existingMemo || '';
 
+      const schoolInput = document.getElementById('userSchoolNameInput');
+      if (schoolInput) {
+        schoolInput.value = existingSchool;
+        schoolInput.dataset.initialSchool = existingSchool;
+      }
+
       const roleSelect = document.getElementById('userRoleSelect');
       if (roleSelect) {
         const activeRole = (email && email.toLowerCase().trim() === 'teacha99@gmail.com') ? 'Host' : (role || 'User');
         roleSelect.value = activeRole;
+      }
+      const approvalSelect = document.getElementById('userApprovalSelect');
+      if (approvalSelect) {
+        approvalSelect.value = approvalStatus || 'approved';
       }
       document.getElementById('memoModal').classList.add('open');
     }
@@ -712,12 +1354,25 @@
       const memo = document.getElementById('userMemoText').value.trim();
       const roleSelect = document.getElementById('userRoleSelect');
       const role = roleSelect ? roleSelect.value : 'User';
+      const approvalSelect = document.getElementById('userApprovalSelect');
+      const approvalStatus = approvalSelect ? approvalSelect.value : 'approved';
+      const schoolInput = document.getElementById('userSchoolNameInput');
+      const schoolName = schoolInput ? schoolInput.value.trim() : '';
+      const initialSchool = schoolInput ? (schoolInput.dataset.initialSchool || '') : '';
 
       if (!uid) return;
 
-      const res = await window.FirebaseApp.saveUserDataToFirestore(uid, { memo, role });
+      const payload = { memo, role, approvalStatus };
+      if (schoolInput && schoolName !== initialSchool) {
+        payload.schoolName = schoolName;
+      }
+      if (approvalStatus === 'approved') {
+        payload.approvedAt = new Date().toISOString();
+      }
+
+      const res = await window.FirebaseApp.saveUserDataToFirestore(uid, payload);
       if (res.success) {
-        showToast('회원 등급 및 메모가 성공적으로 저장되었습니다.', 'success');
+        showToast('회원 정보, 학교명/소속명, 등급 및 메모가 저장되었습니다.', 'success');
         closeMemoModal();
 
         // Update local memory list & re-render
@@ -725,8 +1380,14 @@
         if (item) {
           item.memo = memo;
           item.role = role;
+          item.approvalStatus = approvalStatus;
+          if (Object.prototype.hasOwnProperty.call(payload, 'schoolName')) {
+            item.schoolName = payload.schoolName;
+          }
+          if (payload.approvedAt) item.approvedAt = payload.approvedAt;
         }
 
+        updateKPICards();
         renderUsersTable();
       } else {
         showToast('저장 중 오류가 발생했습니다: ' + res.error, 'error');

@@ -49,8 +49,9 @@
           <a href="ai_office.html" class="nav-link"><i class="fas fa-magic"></i> AI <span class="collab-x"
               title="콜라보">&times;</span> OA 콜라보 <i class="fas fa-chevron-down" style="font-size:10px;"></i></a>
           <div class="dropdown-menu" style="min-width: 230px;">
-            <div class="dropdown-group-title">AI와 오피스의 3일 협업</div>
-            <a href="ai_office.html" class="dropdown-link"><i class="fas fa-th-large"></i> 3일 과정 통합 허브</a>
+            <a href="ai_office.html" class="dropdown-link"><i class="fas fa-th-large"></i> 콜라보 통합 허브</a>
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-group-title">3일 과정</div>
             <a href="ai_office_day1.html" class="dropdown-link"><i class="fas fa-table"></i> 1일차 · Excel × AI</a>
             <a href="ai_office_day2.html" class="dropdown-link"><i class="fas fa-file-word"></i> 2일차 · Docs/Word × AI</a>
             <a href="ai_office_day3.html" class="dropdown-link"><i class="fas fa-desktop"></i> 3일차 · PPT/Slides × AI</a>
@@ -265,7 +266,15 @@
   <script type="module">
     import { onAuthChange } from './js/firebase-config.js';
     onAuthChange((user) => {
-      if (window.renderHeaderUserNav) {
+      const is_admin = (typeof isAdmin === 'function' && isAdmin()) || (localStorage.getItem('isAdminActive') === 'true');
+      const approvalStatus = localStorage.getItem('userApprovalStatus') || 'pending';
+      if (!user && !is_admin) {
+        alert('🔒 회원가입 및 로그인이 필요한 서비스입니다.');
+        window.location.href = 'index.html?auth=required';
+      } else if (user && !is_admin && approvalStatus !== 'approved') {
+        alert('⏳ 관리자 승인 대기 중인 계정입니다.\n관리자 승인 완료 후 세부 페이지를 이용하실 수 있습니다.');
+        window.location.href = 'index.html?auth=pending';
+      } else if (window.renderHeaderUserNav) {
         window.renderHeaderUserNav(user);
       }
     });

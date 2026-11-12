@@ -619,6 +619,88 @@
   color: #ffffff;
 }
 
+/* 회원 전용 기능/세부 내용 잠금 안내 카드 */
+.member-gate-card {
+  background: linear-gradient(135deg, #f8fafc 0%, #eff6ff 100%);
+  border: 1.5px dashed #93c5fd;
+  border-radius: var(--radius-lg);
+  padding: 32px 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  box-shadow: var(--shadow-sm);
+}
+
+.member-gate-card.recommend-gate {
+  background: linear-gradient(135deg, #fff1f2 0%, #f8fafc 100%);
+  border-color: rgba(129, 41, 64, 0.35);
+}
+
+.member-gate-icon {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: rgba(14, 73, 135, 0.12);
+  color: var(--theme-written);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+
+.member-gate-card.recommend-gate .member-gate-icon {
+  background: rgba(129, 41, 64, 0.12);
+  color: var(--theme-recommend);
+}
+
+.member-gate-card h3 {
+  font-size: 19px;
+  font-weight: 800;
+  color: var(--neutral-900);
+  margin: 0;
+}
+
+.member-gate-card p {
+  font-size: 14px;
+  color: var(--neutral-600);
+  max-width: 600px;
+  line-height: 1.65;
+  margin: 0;
+}
+
+.member-gate-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.member-gate-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 22px;
+  border-radius: var(--radius-md);
+  background: var(--theme-written);
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 700;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.member-gate-btn:hover {
+  transform: translateY(-2px);
+  opacity: 0.94;
+}
+
+.member-gate-card.recommend-gate .member-gate-btn {
+  background: var(--theme-recommend);
+}
+
 @media (max-width: 992px) {
   .tool-grid {
     grid-template-columns: repeat(2, 1fr);

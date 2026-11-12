@@ -56,12 +56,17 @@ function toggleAdminMode(e) {
       return;
     }
     localStorage.removeItem('isAdminActive');
+    localStorage.removeItem('adminManualAuth');
+    localStorage.removeItem('adminEmail');
     localStorage.removeItem('github_settings');
     sessionStorage.removeItem('admin_auth_code');
 
     if (window.showToast) window.showToast('관리자 모드가 해제되었습니다.', 'info');
     alert('🔓 관리자 모드가 성공적으로 해제(로그아웃)되었습니다.');
     updateAdminUI();
+    if (typeof window.renderHeaderUserNav === 'function') {
+      window.renderHeaderUserNav(window.currentUser || null);
+    }
 
     // 회원 관리 페이지(admin_users.html)에서 관리자 로그아웃 시 일반 메인 페이지로 즉시 이동
     if (window.location.pathname.includes('admin_users.html') || window.location.href.includes('admin_users.html')) {
@@ -92,7 +97,7 @@ function showAdminLoginModal() {
     const btnVer = document.getElementById('btnAdminVerifyCode');
     if (btnVer) btnVer.style.display = 'none';
   } else {
-    window.location.href = 'index.html';
+    window.location.href = 'index.html?admin=login';
   }
 }
 
@@ -203,13 +208,21 @@ function verifyAdminCode() {
   const savedCode = sessionStorage.getItem('admin_auth_code');
 
   if (enteredCode === savedCode && savedCode) {
+    const emailInput = document.getElementById('adminLoginEmail') || document.getElementById('loginEmail');
+    const verifiedAdminEmail = emailInput ? emailInput.value.trim().toLowerCase() : '';
     sessionStorage.removeItem('admin_auth_code');
     localStorage.setItem('isAdminActive', 'true');
+    localStorage.setItem('adminManualAuth', 'true');
+    if (verifiedAdminEmail) localStorage.setItem('adminEmail', verifiedAdminEmail);
     alert('🎉 관리자 모드로 성황리에 인증되었습니다!');
     if (window.showToast) window.showToast('관리자 모드로 인증되었습니다!', 'success');
     const modal = document.getElementById('adminAuthModal') || document.getElementById('loginModal');
     if (modal) modal.style.display = 'none';
     updateAdminUI();
+    if (typeof window.renderHeaderUserNav === 'function') {
+      window.renderHeaderUserNav(window.currentUser || null);
+    }
+    window.dispatchEvent(new Event('adminStateChanged'));
     setTimeout(() => window.location.reload(), 600);
   } else {
     alert('❌ 인증번호가 일치하지 않습니다. 다시 확인해 주세요.');
@@ -227,7 +240,7 @@ function updateAdminUI() {
     if (is_admin) {
       adminBtn.classList.add('active');
       adminBtn.innerHTML = '<i class="fas fa-lock-open"></i> 관리자 해제';
-      
+
       // Inject GitHub Settings button into CTA area
       if (!document.getElementById('githubSettingsBtn')) {
         const githubBtn = document.createElement('button');
@@ -239,7 +252,7 @@ function updateAdminUI() {
         githubBtn.onclick = showGithubSettingsModal;
         adminBtn.parentNode.insertBefore(githubBtn, adminBtn);
       }
-      
+
       // Inject Admin Users Manager button into CTA area
       if (!document.getElementById('adminUsersBtn')) {
         const usersBtn = document.createElement('button');
@@ -249,7 +262,7 @@ function updateAdminUI() {
         usersBtn.style.color = 'var(--theme-primary)';
         usersBtn.style.fontWeight = '700';
         usersBtn.innerHTML = '<i class="fas fa-users-cog"></i> 회원 관리';
-        usersBtn.onclick = function() { window.location.href = 'admin_users.html'; };
+        usersBtn.onclick = function () { window.location.href = 'admin_users.html'; };
         adminBtn.parentNode.insertBefore(usersBtn, adminBtn);
       }
 
@@ -270,10 +283,10 @@ function updateAdminUI() {
 
       const usersBtn = document.getElementById('adminUsersBtn');
       if (usersBtn) usersBtn.remove();
-      
+
       const githubBtn = document.getElementById('githubSettingsBtn');
       if (githubBtn) githubBtn.remove();
-      
+
       const jsonBtn = document.getElementById('jsonUpdateBtn');
       if (jsonBtn) jsonBtn.remove();
 
@@ -283,7 +296,7 @@ function updateAdminUI() {
       }
     }
   }
-  
+
   // Toggle visibility of admin-only content across the page
   const adminOnlyElements = document.querySelectorAll('.admin-only');
   adminOnlyElements.forEach(el => {
@@ -337,6 +350,8 @@ async function handleGlobalLogout() {
     console.error('Logout error:', err);
   } finally {
     localStorage.removeItem('isAdminActive');
+    localStorage.removeItem('adminManualAuth');
+    localStorage.removeItem('adminEmail');
     window.currentUser = null;
     const myPageModal = document.getElementById('myPageModal');
     if (myPageModal) myPageModal.style.display = 'none';
@@ -379,6 +394,9 @@ function renderHeaderUserNavUniversal(user) {
         <span style="font-size:13px; font-weight:bold; color:#c2410c; display:inline-flex; align-items:center; gap:5px;">
           <i class="fas fa-user-shield" style="color:#ea580c;"></i> 관리자모드
         </span>
+        <button id="headerAdminUsersBtn" onclick="window.location.href='admin_users.html'; return false;" style="background:#0f766e; color:#fff; border:none; padding:5px 12px; border-radius:16px; font-size:12px; font-weight:bold; cursor:pointer; transition:opacity 0.2s;" title="회원 관리 대시보드로 이동">
+          <i class="fas fa-users-cog"></i> 회원 관리
+        </button>
         <button id="headerJsonUpdateBtn" onclick="if(window.updateJSONData){window.updateJSONData();} return false;" style="background:#0284c7; color:#fff; border:none; padding:5px 12px; border-radius:16px; font-size:12px; font-weight:bold; cursor:pointer; transition:opacity 0.2s;" title="수정한 데이터를 GitHub 서버 소스코드로 자동 커밋 및 업데이트">
           <i class="fas fa-file-export"></i> JSON 업데이트
         </button>
@@ -393,16 +411,23 @@ function renderHeaderUserNavUniversal(user) {
   } else if (activeUser) {
     const displayName = activeUser.displayName || (activeUser.email ? activeUser.email.split('@')[0] : '회원');
     const photoUrl = (activeUser && activeUser.photoURL) || localStorage.getItem('userPhotoURL') || null;
+    const approvalStatus = localStorage.getItem('userApprovalStatus') || 'approved';
+    const approvalBadge = approvalStatus === 'pending'
+      ? `<span style="font-size:11px; font-weight:700; color:#b45309; background:rgba(245,158,11,0.16); padding:2px 8px; border-radius:10px; white-space:nowrap;">승인대기</span>`
+      : (approvalStatus === 'rejected'
+        ? `<span style="font-size:11px; font-weight:700; color:#b91c1c; background:rgba(239,68,68,0.12); padding:2px 8px; border-radius:10px; white-space:nowrap;">승인보류</span>`
+        : '');
     const avatarIcon = photoUrl
       ? `<img src="${photoUrl}" style="width:24px; height:24px; border-radius:50%; object-fit:cover; flex-shrink:0;">`
       : `<i class="fas fa-user-circle" style="color:var(--theme-written); font-size:18px;"></i>`;
 
     userNav.innerHTML = `
-      <div style="display:inline-flex; align-items:center; gap:10px; background:rgba(14,73,135,0.06); padding:4px 8px 4px 12px; border-radius:24px; border:1px solid rgba(14,73,135,0.2);">
-        <a href="index.html" style="font-size:13px; font-weight:bold; color:var(--neutral-900); text-decoration:none; display:inline-flex; align-items:center; gap:6px; cursor:pointer;" title="마이페이지">
+      <div style="display:inline-flex; align-items:center; gap:8px; background:rgba(14,73,135,0.06); padding:4px 8px 4px 12px; border-radius:24px; border:1px solid rgba(14,73,135,0.2);">
+        <a href="index.html?mypage=1" style="font-size:13px; font-weight:bold; color:var(--neutral-900); text-decoration:none; display:inline-flex; align-items:center; gap:6px; cursor:pointer;" title="마이페이지">
           ${avatarIcon}
           <span>${displayName}님</span>
         </a>
+        ${approvalBadge}
         <button id="logoutBtn" onclick="window.handleGlobalLogout(); return false;" style="background:var(--theme-recommend); color:#fff; border:none; padding:5px 12px; border-radius:16px; font-size:12px; font-weight:bold; cursor:pointer; transition:opacity 0.2s;">로그아웃</button>
       </div>
     `;
@@ -460,11 +485,11 @@ function showGithubSettingsModal() {
       </div>
     </div>
   `;
-  
+
   const tempDiv = document.createElement('div');
   tempDiv.innerHTML = modalHTML;
   document.body.appendChild(tempDiv.firstElementChild);
-  
+
   setTimeout(() => {
     document.getElementById('githubSettingsModal').classList.add('open');
   }, 50);
@@ -475,19 +500,19 @@ function submitGithubSettings() {
   const repo = document.getElementById('githubRepo').value.trim();
   const path = document.getElementById('githubPath').value.trim();
   const branch = document.getElementById('githubBranch').value.trim();
-  
+
   if (!token || !repo || !path || !branch) {
     showToast('모든 항목을 입력해주세요.', 'error');
     return;
   }
-  
+
   localStorage.setItem("github_settings", JSON.stringify({
     token,
     repo,
     path,
     branch
   }));
-  
+
   showToast('GitHub 설정이 저장되었습니다.', 'success');
   closeAdminModal('githubSettingsModal');
 }
@@ -497,9 +522,9 @@ function clearGithubSettings() {
     showToast('저장된 GitHub 설정이 없습니다.', 'warning');
     return;
   }
-  
+
   if (!confirm('저장된 GitHub 연동 설정을 모두 삭제하시겠습니까?')) return;
-  
+
   localStorage.removeItem("github_settings");
   showToast('GitHub 연동 설정이 삭제되었습니다.', 'success');
   closeAdminModal('githubSettingsModal');
@@ -717,6 +742,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Update UI components for initial state
   updateAdminUI();
+  if (isAdmin() && typeof window.renderHeaderUserNav === 'function') {
+    window.renderHeaderUserNav(window.currentUser || null);
+  }
 });
 
 // Show EmailJS Settings Modal
@@ -972,7 +1000,7 @@ function handleQuickAddFileSelected(input) {
   if (fsInput) fsInput.value = sizeStr;
 
   const reader = new FileReader();
-  reader.onload = function(e) {
+  reader.onload = function (e) {
     window.quickAddFileData = e.target.result;
   };
   reader.readAsDataURL(file);

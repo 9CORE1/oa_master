@@ -95,15 +95,15 @@ const CERT_CURRICULUM_TRACKS = [
         linkHref: 'practical_lectures.html'
       },
       {
-        step: 'STEP 04 · AI 실무 확장',
-        tools: 'Excel × AI 콜라보 연계',
-        title: '자격증 수식을 대학·직장 실무 데이터 분석으로 확장',
+        step: 'STEP 04 · 실전 모의훈련',
+        tools: '1급 기출풀이 · 시간 배분 전략',
+        title: '엑셀 45분 + 액세스 45분 실전 감각 완주',
         points: [
-          '배운 SUMIFS·VLOOKUP·피벗테이블을 Google Forms 설문 분석과 바로 연결',
-          '오류(#N/A, #VALUE!) 진단 프롬프트로 실무 파일 문제 해결력 강화'
+          '배점이 높은 분석·매크로 및 액세스 쿼리·보고서를 우선 공략해 안정적 70점 이상 확보',
+          '틀린 프로시저·쿼리 유형을 실기 자료실 예제와 해설 영상으로 반복 재확인'
         ],
-        linkLabel: '1일차 Excel × AI 과정 보기',
-        linkHref: 'ai_office_day1.html'
+        linkLabel: '실기 자료실 예제 복습하기 (회원 전용)',
+        linkHref: 'practical_archive.html'
       }
     ]
   },
@@ -146,6 +146,19 @@ function renderCertCurriculum(filterTrack = 'all') {
   const container = document.getElementById('certCurriculumContainer');
   if (!container) return;
 
+  const isAuth = typeof window.isMemberAuthenticated === 'function' && window.isMemberAuthenticated();
+  if (!isAuth) {
+    if (typeof window.renderMemberGateBox === 'function') {
+      window.renderMemberGateBox(container, {
+        title: '회원가입 및 로그인 후 급수별 세부 커리큘럼과 학습 기능을 이용할 수 있습니다',
+        description: '컴활 2급·1급 단계별 커리큘럼 필터, 시험 합격 전략, 그리고 필기·실기 자료실 및 영상강의는 로그인 회원에게 제공됩니다.',
+        buttonLabel: '회원가입 / 로그인하고 전체 보기',
+        theme: 'written'
+      });
+    }
+    return;
+  }
+
   const targetTracks = filterTrack === 'all'
     ? CERT_CURRICULUM_TRACKS
     : CERT_CURRICULUM_TRACKS.filter((item) => item.track === filterTrack);
@@ -153,8 +166,7 @@ function renderCertCurriculum(filterTrack = 'all') {
   container.innerHTML = targetTracks.map((group) => `
     <div style="margin-bottom: 28px;">
       <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; margin-bottom:14px;">
-        <h3 style="font-size:18px; font-weight:800; color:var(--neutral-900); display:flex; align-items:center; gap:10px;">
-          <span class="session-badge ${group.badgeClass}">${group.track === 'grade2' ? '2급' : group.track === 'grade1' ? '1급' : '안내'}</span>
+        <h3 style="font-size:18px; font-weight:800; color:var(--neutral-900); margin:0;">
           ${group.label}
         </h3>
       </div>
@@ -215,19 +227,33 @@ function getInitialTrackFromQuery() {
   return validTracks.includes(trackParam) ? trackParam : 'all';
 }
 
+let activeCertTrack = 'all';
+
 document.addEventListener('DOMContentLoaded', () => {
-  const initialTrack = getInitialTrackFromQuery();
+  activeCertTrack = getInitialTrackFromQuery();
   renderModuleCounts();
-  renderCertCurriculum(initialTrack);
+  renderCertCurriculum(activeCertTrack);
 
   const tabs = document.querySelectorAll('.day-tab[data-track]');
   tabs.forEach((tab) => {
-    tab.classList.toggle('active', tab.dataset.track === initialTrack);
+    tab.classList.toggle('active', tab.dataset.track === activeCertTrack);
     tab.addEventListener('click', () => {
+      const isAuth = typeof window.isMemberAuthenticated === 'function' && window.isMemberAuthenticated();
+      if (!isAuth) {
+        if (typeof window.requireMemberLogin === 'function') {
+          window.requireMemberLogin('🔒 회원가입 및 로그인 후 급수별 필터 기능을 이용하실 수 있습니다.');
+        }
+        return;
+      }
       tabs.forEach((btn) => btn.classList.remove('active'));
       tab.classList.add('active');
-      renderCertCurriculum(tab.dataset.track || 'all');
+      activeCertTrack = tab.dataset.track || 'all';
+      renderCertCurriculum(activeCertTrack);
     });
+  });
+
+  window.addEventListener('oaAuthReady', () => {
+    renderCertCurriculum(activeCertTrack);
   });
 });
 

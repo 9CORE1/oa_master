@@ -161,6 +161,12 @@ header.scrolled {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 16px;
+}
+
+/* 관리자 모드 시 상단 헤더 너비를 회원관리 모듈(1360px) 기준으로 확장 */
+header:has(#headerAdminUsersBtn) .nav-container {
+  max-width: 1360px;
 }
 
 /* Logo Group */
@@ -168,6 +174,8 @@ header.scrolled {
   display: flex;
   align-items: center;
   gap: 12px;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .logo-group img {
@@ -188,6 +196,7 @@ header.scrolled {
   letter-spacing: -0.5px;
   display: flex;
   flex-direction: column;
+  white-space: nowrap;
 }
 
 .logo-subtext {
@@ -196,6 +205,7 @@ header.scrolled {
   color: var(--neutral-400);
   font-weight: 500;
   margin-top: -4px;
+  white-space: nowrap;
 }
 
 /* Navigation Links */
@@ -204,6 +214,7 @@ header.scrolled {
   align-items: center;
   gap: 8px;
   height: 100%;
+  flex-shrink: 0;
 }
 
 .nav-item {
@@ -222,6 +233,7 @@ header.scrolled {
   display: flex;
   align-items: center;
   gap: 6px;
+  white-space: nowrap;
 }
 
 .nav-link:hover,
@@ -1461,6 +1473,17 @@ footer {
 }
 
 /* --- Media Queries --- */
+@media (max-width: 1220px) {
+  header:has(#headerAdminUsersBtn) .nav-link {
+    padding: 8px 10px;
+    font-size: 14px;
+  }
+
+  header:has(#headerAdminUsersBtn) .nav-links {
+    gap: 2px;
+  }
+}
+
 @media (max-width: 992px) {
   .nav-links {
     display: none;
