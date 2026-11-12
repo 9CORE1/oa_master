@@ -11,12 +11,12 @@ document.addEventListener('DOMContentLoaded', () => {
 function initTheme() {
   const path = window.location.pathname;
   const body = document.body;
-  
-  if (path.includes('written_')) {
+
+  if (path.includes('written_') || path.includes('cert_course') || path.includes('ai_office_day2')) {
     body.className = 'theme-written';
-  } else if (path.includes('practical_')) {
+  } else if (path.includes('practical_') || path.includes('ai_office_day1')) {
     body.className = 'theme-practical';
-  } else if (path.includes('recommendations')) {
+  } else if (path.includes('recommendations') || path.includes('ai_office_day3')) {
     body.className = 'theme-recommend';
   } else {
     body.className = 'theme-written'; // Default main theme
@@ -91,7 +91,7 @@ function showToast(message, type = 'success') {
 
   const toast = document.createElement('div');
   toast.className = `toast ${type}`;
-  
+
   let iconClass = 'fa-check-circle';
   if (type === 'error') iconClass = 'fa-times-circle';
   if (type === 'warning') iconClass = 'fa-exclamation-circle';

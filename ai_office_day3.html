@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3일차 · Slides/PPT × AI 콜라보 - OA MASTER</title>
+  <meta name="description"
+    content="AI × OA 콜라보 3일차(4시간): 1슬라이드 1메시지 압축, Gemini Canvas → Slides → PowerPoint 디자이너 마감, 발표 대본·면접 Q&A 및 AI 리터러시 진단 연계 과정입니다.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/ai-office.css">
+  <link rel="icon" href="images/OA_master_LOGO.png" type="image/png">
+  <script src="js/data.js"></script>
+  <script src="js/admin.js"></script>
+</head>
+
+<body class="theme-recommend" data-ai-day="day3">
+
+  <!-- Header -->
+  <header>
+    <div class="nav-container">
+      <a href="index.html" class="logo-group">
+        <img src="images/OA_master_LOGO.png" alt="OA MASTER Logo">
+        <div class="logo-text">
+          OA MASTER
+          <span class="logo-subtext">쉬운 기능도 뭉치면 통한다!</span>
+        </div>
+      </a>
+
+      <!-- Desktop Links -->
+      <nav class="nav-links">
+        <div class="nav-item">
+          <a href="cert_course.html" class="nav-link"><i class="fas fa-graduation-cap"></i> 컴활 자격과정 <i
+              class="fas fa-chevron-down" style="font-size:10px;"></i></a>
+          <div class="dropdown-menu">
+            <a href="cert_course.html" class="dropdown-link"><i class="fas fa-th-large"></i> 자격과정 통합 허브</a>
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-group-title">필기과정</div>
+            <a href="written_archive.html" class="dropdown-link"><i class="fas fa-folder-open"></i> 필기 자료실</a>
+            <a href="written_lectures.html" class="dropdown-link"><i class="fas fa-video"></i> 필기 영상보기</a>
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-group-title">실기과정</div>
+            <a href="practical_archive.html" class="dropdown-link"><i class="fas fa-folder-open"></i> 실기 자료실</a>
+            <a href="practical_lectures.html" class="dropdown-link"><i class="fas fa-video"></i> 실기 영상보기</a>
+          </div>
+        </div>
+        <div class="nav-item active">
+          <a href="ai_office.html" class="nav-link"><i class="fas fa-magic"></i> AI <span class="collab-x"
+              title="콜라보">&times;</span> OA 콜라보 <i class="fas fa-chevron-down" style="font-size:10px;"></i></a>
+          <div class="dropdown-menu" style="min-width: 230px;">
+            <div class="dropdown-group-title">AI와 오피스의 3일 협업</div>
+            <a href="ai_office.html" class="dropdown-link"><i class="fas fa-th-large"></i> 3일 과정 통합 허브</a>
+            <a href="ai_office_day1.html" class="dropdown-link"><i class="fas fa-table"></i> 1일차 · Excel × AI</a>
+            <a href="ai_office_day2.html" class="dropdown-link"><i class="fas fa-file-word"></i> 2일차 · Docs/Word × AI</a>
+            <a href="ai_office_day3.html" class="dropdown-link"><i class="fas fa-desktop"></i> 3일차 · PPT/Slides × AI</a>
+            <div class="dropdown-divider"></div>
+            <a href="AI리터러시진단안내_참고자료.pdf" target="_blank" class="dropdown-link"><i class="fas fa-chart-pie"></i> AI 리터러시 진단 PDF</a>
+          </div>
+        </div>
+        <div class="nav-item">
+          <a href="recommendations.html" class="nav-link"><i class="fas fa-external-link-alt"></i> 추천 사이트</a>
+        </div>
+      </nav>
+
+      <div class="nav-cta">
+        <div id="userNavArea" style="display:inline-block; margin-right:8px;">
+          <button id="openAuthBtn" class="btn-admin-mode"
+            onclick="window.location.href='index.html?auth=required'; return false;"
+            style="background:var(--theme-written); color:#fff; border:none; padding:6px 14px; border-radius:6px; cursor:pointer; font-weight:600;">
+            <i class="fas fa-user"></i> 로그인 / 회원가입
+          </button>
+        </div>
+        <button class="mobile-toggle">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Menu Drawer -->
+  <div class="mobile-nav-overlay"></div>
+  <div class="mobile-nav-drawer">
+    <div class="mobile-nav-header">
+      <div class="logo-text" style="color: var(--logo-color);">OA MASTER</div>
+      <button class="btn-close-mobile">&times;</button>
+    </div>
+    <div class="mobile-nav-list">
+      <div class="mobile-nav-group-title">컴활 자격과정 (필기 · 실기)</div>
+      <a href="cert_course.html" class="mobile-nav-link"><i class="fas fa-graduation-cap"></i> 컴활 자격과정 통합 허브</a>
+      <a href="written_archive.html" class="mobile-nav-link"><i class="fas fa-folder-open"></i> 필기 자료실</a>
+      <a href="written_lectures.html" class="mobile-nav-link"><i class="fas fa-video"></i> 필기 영상강의</a>
+      <a href="practical_archive.html" class="mobile-nav-link"><i class="fas fa-folder-open"></i> 실기 자료실</a>
+      <a href="practical_lectures.html" class="mobile-nav-link"><i class="fas fa-video"></i> 실기 영상강의</a>
+
+      <div class="mobile-nav-group-title">AI × OA 콜라보 (3일 과정)</div>
+      <a href="ai_office.html" class="mobile-nav-link"><i class="fas fa-magic"></i> AI × OA 콜라보 전체 허브</a>
+      <a href="ai_office_day1.html" class="mobile-nav-link"><i class="fas fa-table"></i> 1일차 · Excel × AI</a>
+      <a href="ai_office_day2.html" class="mobile-nav-link"><i class="fas fa-file-word"></i> 2일차 · Docs/Word × AI</a>
+      <a href="ai_office_day3.html" class="mobile-nav-link active"><i class="fas fa-desktop"></i> 3일차 · PPT/Slides × AI</a>
+
+      <div class="mobile-nav-group-title">추천 사이트</div>
+      <a href="recommendations.html" class="mobile-nav-link"><i class="fas fa-external-link-alt"></i> 추천 사이트</a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main>
+    <!-- Hero -->
+    <section class="ai-hero day3">
+      <div class="ai-hero-inner">
+        <div class="day-switcher" aria-label="AI × OA 콜라보 일차 전환">
+          <a href="ai_office.html"><i class="fas fa-th-large"></i> 전체 허브</a>
+          <a href="ai_office_day1.html"><i class="fas fa-table"></i> 1일차 · Excel × AI</a>
+          <a href="ai_office_day2.html"><i class="fas fa-file-word"></i> 2일차 · Docs/Word × AI</a>
+          <a href="ai_office_day3.html" class="active"><i class="fas fa-desktop"></i> 3일차 · PPT/Slides × AI</a>
+        </div>
+        <div class="ai-hero-badge">
+          <i class="fas fa-desktop"></i> AI × OA 콜라보 · Day 3 (4시간 / 50분×4교시)
+        </div>
+        <h1 class="ai-hero-title">3일차 · Slides/PPT × AI 발표 &amp; 면접 Q&amp;A</h1>
+        <p class="ai-hero-desc">
+          2일차 보고서를 <strong>1슬라이드 1메시지·3줄 키워드</strong>로 압축하고, <strong>Gemini Canvas → Google Slides → PowerPoint 디자이너</strong>로 표지·그래프·결론 핵심 슬라이드와 <strong>발표 대본·예상 질문 3선·포트폴리오 PDF</strong>까지 완성합니다.
+        </p>
+        <div class="ai-hero-actions">
+          <a href="#curriculum" class="btn-hero-light">
+            <i class="fas fa-list-ol"></i> 3일차 4교시 보기
+          </a>
+          <a href="#promptLibrary" class="btn-hero-outline">
+            <i class="fas fa-copy"></i> 3일차 프롬프트 복사 (4종)
+          </a>
+          <a href="AI리터러시진단안내_참고자료.pdf" target="_blank" class="btn-hero-outline">
+            <i class="fas fa-chart-pie"></i> AI 리터러시 진단 PDF
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 1: 3일차 목표 및 디자인·발표 원칙 -->
+    <section class="ai-section">
+      <div class="ai-sec-head">
+        <div>
+          <h2>1. 3일차 핵심 목표 &amp; 발표 제작 원칙</h2>
+          <p>무료 크레딧 제한 없이 확실하게 끝까지 완성되는 Gemini Canvas → Slides → PowerPoint 루트를 익힙니다.</p>
+        </div>
+      </div>
+      <div class="day-overview-grid">
+        <article class="day-overview-card">
+          <h3><i class="fas fa-bullseye" style="color: var(--theme-recommend);"></i> 오늘 완성하는 핵심 결과물</h3>
+          <ul>
+            <li>• 10분 발표 기준 8~10장 스토리보드 및 3줄 키워드 압축본</li>
+            <li>• Gemini Canvas 자동 슬라이드 초안 → `.pptx` 글꼴 바꾸기 3초 통일본</li>
+            <li>• AI 무문자 표지 일러스트 + 1일차 설문 그래프 + 3줄 결론 핵심 3장 완성</li>
+            <li>• 1분 300~350자 발표자 노트 대본 &amp; 교수·심사위원·면접관 예상 질문 3선</li>
+          </ul>
+        </article>
+        <article class="day-overview-card">
+          <h3><i class="fas fa-paint-brush" style="color: var(--theme-written);"></i> 디자인·예비직장인 실무 마감 팁</h3>
+          <ul>
+            <li>• <strong>PPT 2원칙</strong>: 1슬라이드 1메시지 + 긴 글 대신 20자 이내 키워드 3줄</li>
+            <li>• <strong>무료 AI 표지 필수 조건</strong>: <em>"이미지 안에 글자는 절대 넣지 마"</em> 명시</li>
+            <li>• <strong>2색 팔레트 + 맑은 고딕/Pretendard</strong> 통일로 깨진 폰트와 난잡함 방지</li>
+            <li>• <strong>수료 후 활용</strong>: 최종 발표 PDF + 1일차 차트 + 2일차 보고서를 포트폴리오로 보관</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <!-- Section 2: 3일차 4교시 커리큘럼 -->
+    <section class="ai-section" id="curriculum">
+      <div class="ai-sec-head">
+        <div>
+          <h2>2. 3일차 교시별 커리큘럼 (1~4교시)</h2>
+          <p>각 교시(50분) 실습 단계와 연결되는 OA MASTER 실기·추천 사이트 자료를 확인하세요.</p>
+        </div>
+      </div>
+      <div id="curriculumContainer"></div>
+    </section>
+
+    <!-- Section 3: 3일차 복사용 프롬프트 -->
+    <section class="ai-section" id="promptLibrary">
+      <div class="ai-sec-head">
+        <div>
+          <h2>3. 3일차 실전 복사용 AI 프롬프트</h2>
+          <p>PPT 압축, 표지 일러스트, 1분 구어체 발표 대본, 예상 질문 Q&amp;A 대비 프롬프트를 바로 복사해 쓰세요.</p>
+        </div>
+      </div>
+      <div class="prompt-grid" id="promptGrid"></div>
+    </section>
+
+    <!-- Section 4: 일차 이동 바 -->
+    <section class="ai-section last">
+      <div class="day-pager">
+        <div>
+          <strong style="font-size: 15px; color: var(--neutral-900);">3일 완성 과정 수료 &amp; 다음 성장 단계</strong>
+          <p style="font-size: 13px; color: var(--neutral-600); margin-top: 2px;">과정 완료 후에도 AI 리터러시 사후 점검과 OA MASTER 컴활 자격과정으로 역량을 이어가세요.</p>
+        </div>
+        <div class="day-pager-links">
+          <a href="ai_office_day2.html" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> 2일차</a>
+          <a href="ai_office.html" class="btn btn-primary" style="background-color: var(--theme-recommend);">
+            <i class="fas fa-th-large"></i> 통합 허브 · 리터러시 진단 보기
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-container">
+      <div class="footer-top">
+        <div class="footer-info">
+          <div class="footer-logo">
+            <img src="images/OA_master_LOGO.png" alt="OA MASTER Logo">
+            <span class="footer-logo-text">OA MASTER</span>
+          </div>
+          <p class="footer-slogan">"쉬운 기능도 AI와 뭉치면 통한다!"</p>
+          <p style="font-size:13px; color: var(--neutral-500);">
+            OA MASTER는 컴퓨터활용능력 1급/2급 및 사무자동화산업기사 자격증과 대학생 AI 활용 실무 교육을 연계해 서비스합니다.
+          </p>
+        </div>
+
+        <div class="footer-links-grid">
+          <div class="footer-links-col">
+            <h4>컴활 자격과정</h4>
+            <ul>
+              <li><a href="cert_course.html">자격과정 통합 허브</a></li>
+              <li><a href="written_archive.html">필기 자료실</a></li>
+              <li><a href="written_lectures.html">필기 영상보기</a></li>
+              <li><a href="practical_archive.html">실기 자료실</a></li>
+              <li><a href="practical_lectures.html">실기 영상보기</a></li>
+            </ul>
+          </div>
+          <div class="footer-links-col">
+            <h4>AI × OA 콜라보</h4>
+            <ul>
+              <li><a href="ai_office.html">3일 과정 통합 허브</a></li>
+              <li><a href="ai_office_day1.html">1일차 · Excel × AI</a></li>
+              <li><a href="ai_office_day2.html">2일차 · Docs/Word × AI</a></li>
+              <li><a href="ai_office_day3.html">3일차 · PPT/Slides × AI</a></li>
+            </ul>
+          </div>
+          <div class="footer-links-col">
+            <h4>자료 · 추천 사이트</h4>
+            <ul>
+              <li><a href="AI리터러시진단안내_참고자료.pdf" target="_blank">AI 리터러시 진단 PDF</a></li>
+              <li><a href="recommendations.html">추천 사이트</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 OA MASTER. All Rights Reserved. Designed for Excellence.</p>
+        <div class="footer-bottom-links">
+          <a href="index.html"><i class="fas fa-home"></i> 메인으로</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/ai-office.js"></script>
+  <script type="module">
+    import { onAuthChange } from './js/firebase-config.js';
+    onAuthChange((user) => {
+      if (window.renderHeaderUserNav) {
+        window.renderHeaderUserNav(user);
+      }
+    });
+  </script>
+</body>
+
+</html>
+

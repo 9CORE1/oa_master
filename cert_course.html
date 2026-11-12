@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>컴활 자격과정 통합 허브 - OA MASTER | 필기 · 실기 1급/2급 단기 합격</title>
+  <meta name="description"
+    content="컴퓨터활용능력 1급·2급 필기 요약 자료실, 개념 특강 영상, 실기 실습 예제와 기출 풀이 영상을 한곳에서 안내하는 OA MASTER 컴활 자격과정 통합 허브입니다.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/ai-office.css">
+  <link rel="icon" href="images/OA_master_LOGO.png" type="image/png">
+  <script src="js/data.js"></script>
+  <script src="js/admin.js"></script>
+</head>
+
+<body class="theme-written">
+
+  <!-- Header -->
+  <header>
+    <div class="nav-container">
+      <a href="index.html" class="logo-group">
+        <img src="images/OA_master_LOGO.png" alt="OA MASTER Logo">
+        <div class="logo-text">
+          OA MASTER
+          <span class="logo-subtext">쉬운 기능도 뭉치면 통한다!</span>
+        </div>
+      </a>
+
+      <!-- Desktop Links -->
+      <nav class="nav-links">
+        <div class="nav-item active">
+          <a href="cert_course.html" class="nav-link"><i class="fas fa-graduation-cap"></i> 컴활 자격과정 <i
+              class="fas fa-chevron-down" style="font-size:10px;"></i></a>
+          <div class="dropdown-menu">
+            <a href="cert_course.html" class="dropdown-link"><i class="fas fa-th-large"></i> 자격과정 통합 허브</a>
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-group-title">필기과정</div>
+            <a href="written_archive.html" class="dropdown-link"><i class="fas fa-folder-open"></i> 필기 자료실</a>
+            <a href="written_lectures.html" class="dropdown-link"><i class="fas fa-video"></i> 필기 영상보기</a>
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-group-title">실기과정</div>
+            <a href="practical_archive.html" class="dropdown-link"><i class="fas fa-folder-open"></i> 실기 자료실</a>
+            <a href="practical_lectures.html" class="dropdown-link"><i class="fas fa-video"></i> 실기 영상보기</a>
+          </div>
+        </div>
+        <div class="nav-item">
+          <a href="ai_office.html" class="nav-link"><i class="fas fa-magic"></i> AI <span class="collab-x"
+              title="콜라보">&times;</span> OA 콜라보 <i class="fas fa-chevron-down" style="font-size:10px;"></i></a>
+          <div class="dropdown-menu" style="min-width: 230px;">
+            <div class="dropdown-group-title">AI와 오피스의 3일 협업</div>
+            <a href="ai_office.html" class="dropdown-link"><i class="fas fa-th-large"></i> 3일 과정 통합 허브</a>
+            <a href="ai_office_day1.html" class="dropdown-link"><i class="fas fa-table"></i> 1일차 · Excel × AI</a>
+            <a href="ai_office_day2.html" class="dropdown-link"><i class="fas fa-file-word"></i> 2일차 · Docs/Word × AI</a>
+            <a href="ai_office_day3.html" class="dropdown-link"><i class="fas fa-desktop"></i> 3일차 · PPT/Slides × AI</a>
+            <div class="dropdown-divider"></div>
+            <a href="AI리터러시진단안내_참고자료.pdf" target="_blank" class="dropdown-link"><i class="fas fa-chart-pie"></i> AI 리터러시 진단 PDF</a>
+          </div>
+        </div>
+        <div class="nav-item">
+          <a href="recommendations.html" class="nav-link"><i class="fas fa-external-link-alt"></i> 추천 사이트</a>
+        </div>
+      </nav>
+
+      <div class="nav-cta">
+        <div id="userNavArea" style="display:inline-block; margin-right:8px;">
+          <button id="openAuthBtn" class="btn-admin-mode"
+            onclick="window.location.href='index.html?auth=required'; return false;"
+            style="background:var(--theme-written); color:#fff; border:none; padding:6px 14px; border-radius:6px; cursor:pointer; font-weight:600;">
+            <i class="fas fa-user"></i> 로그인 / 회원가입
+          </button>
+        </div>
+        <button class="mobile-toggle">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Menu Drawer -->
+  <div class="mobile-nav-overlay"></div>
+  <div class="mobile-nav-drawer">
+    <div class="mobile-nav-header">
+      <div class="logo-text" style="color: var(--logo-color);">OA MASTER</div>
+      <button class="btn-close-mobile">&times;</button>
+    </div>
+    <div class="mobile-nav-list">
+      <div class="mobile-nav-group-title">컴활 자격과정 (필기 · 실기)</div>
+      <a href="cert_course.html" class="mobile-nav-link active"><i class="fas fa-graduation-cap"></i> 컴활 자격과정 통합 허브</a>
+      <a href="written_archive.html" class="mobile-nav-link"><i class="fas fa-folder-open"></i> 필기 자료실</a>
+      <a href="written_lectures.html" class="mobile-nav-link"><i class="fas fa-video"></i> 필기 영상강의</a>
+      <a href="practical_archive.html" class="mobile-nav-link"><i class="fas fa-folder-open"></i> 실기 자료실</a>
+      <a href="practical_lectures.html" class="mobile-nav-link"><i class="fas fa-video"></i> 실기 영상강의</a>
+
+      <div class="mobile-nav-group-title">AI × OA 콜라보 (3일 과정)</div>
+      <a href="ai_office.html" class="mobile-nav-link"><i class="fas fa-magic"></i> AI × OA 콜라보 전체 허브</a>
+      <a href="ai_office_day1.html" class="mobile-nav-link"><i class="fas fa-table"></i> 1일차 · Excel × AI</a>
+      <a href="ai_office_day2.html" class="mobile-nav-link"><i class="fas fa-file-word"></i> 2일차 · Docs/Word × AI</a>
+      <a href="ai_office_day3.html" class="mobile-nav-link"><i class="fas fa-desktop"></i> 3일차 · PPT/Slides × AI</a>
+
+      <div class="mobile-nav-group-title">추천 사이트</div>
+      <a href="recommendations.html" class="mobile-nav-link"><i class="fas fa-external-link-alt"></i> 추천 사이트</a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main>
+    <!-- Hero -->
+    <section class="ai-hero cert">
+      <div class="ai-hero-inner">
+        <div class="day-switcher" aria-label="컴활 자격과정 세부 메뉴 이동">
+          <a href="cert_course.html" class="active"><i class="fas fa-th-large"></i> 자격과정 통합 허브</a>
+          <a href="written_archive.html"><i class="fas fa-folder-open"></i> 필기 자료실</a>
+          <a href="written_lectures.html"><i class="fas fa-video"></i> 필기 영상보기</a>
+          <a href="practical_archive.html"><i class="fas fa-folder-open"></i> 실기 자료실</a>
+          <a href="practical_lectures.html"><i class="fas fa-video"></i> 실기 영상보기</a>
+        </div>
+        <div class="ai-hero-badge">
+          <i class="fas fa-graduation-cap"></i> OA MASTER 컴활 자격과정 | 1급 · 2급 필기 &amp; 실기 단기 합격 허브
+        </div>
+        <h1 class="ai-hero-title">컴퓨터활용능력 1급 · 2급<br>자격과정 통합 허브</h1>
+        <p class="ai-hero-desc">
+          필기 핵심요약 PDF와 개념 특강부터 대한상공회의소 실기 연습파일·기출 해설 영상까지 체계적으로 연결했습니다.
+          목표 급수와 학습 단계에 맞는 모듈을 선택해 효율적으로 합격을 준비해 보세요.
+        </p>
+        <div class="ai-hero-actions">
+          <a href="#courseModules" class="btn-hero-light">
+            <i class="fas fa-map-signs"></i> 급수별 합격 커리큘럼 보기
+          </a>
+          <a href="written_archive.html" class="btn-hero-outline">
+            <i class="fas fa-folder-open"></i> 필기 자료실 (회원 전용)
+          </a>
+          <a href="practical_archive.html" class="btn-hero-outline">
+            <i class="fas fa-laptop-code"></i> 실기 자료실 (회원 전용)
+          </a>
+          <a href="recommendations.html?cat=공식 접수처" class="btn-hero-outline">
+            <i class="fas fa-calendar-check"></i> 시험 접수 · CBT 안내
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 1: 4대 핵심 학습 모듈 바로가기 -->
+    <section class="ai-section">
+      <div class="ai-sec-head">
+        <div>
+          <h2>1. 컴활 자격과정 4대 핵심 학습 모듈</h2>
+          <p>회원 로그인 후 모든 자료실 파일 다운로드와 공유·퍼가기 보호 적용 실전 해설 영상을 무제한으로 학습할 수 있습니다.</p>
+        </div>
+      </div>
+
+      <div class="tool-grid">
+        <article class="tool-card">
+          <span class="tool-pill" id="countWrittenArchive">필기 핵심요약 · 기출자료</span>
+          <h3>필기 자료실</h3>
+          <ul>
+            <li>컴퓨터활용능력 1급·2급 핵심요약집 PDF 및 용어 250선 수록</li>
+            <li>2027년 자격 변경사항 요약과 과목별 출제 포인트 정리</li>
+            <li>급수별(1급/2급/공통) 필터로 필요한 자료만 즉시 다운로드</li>
+          </ul>
+          <div class="session-link-bar">
+            <a href="written_archive.html"><i class="fas fa-folder-open"></i> 필기 자료실 (회원 전용)</a>
+          </div>
+        </article>
+
+        <article class="tool-card teal">
+          <span class="tool-pill" id="countWrittenVideo">필기 개념 · 함수 특강</span>
+          <h3>필기 영상강의</h3>
+          <ul>
+            <li>초보자 눈높이에 맞춘 컴활 2급·1급 핵심 함수 사용법 시리즈</li>
+            <li>자료실 요약집과 연동되는 단원별 원리 집중 해설</li>
+            <li>고화질 스트리밍으로 반복 복습에 최적화된 영상 환경</li>
+          </ul>
+          <div class="session-link-bar">
+            <a href="written_lectures.html"><i class="fas fa-video"></i> 필기 영상보기 (회원 전용)</a>
+          </div>
+        </article>
+
+        <article class="tool-card">
+          <span class="tool-pill" id="countPracticalArchive">실기 연습 · 기출파일</span>
+          <h3>실기 자료실</h3>
+          <ul>
+            <li>대한상공회의소 연습문제, 시나공·기본서 섹션별 실습 예제 ZIP</li>
+            <li>참조 방식·수식·피벗·매크로 등 영역별 실습 데이터 완비</li>
+            <li>관련 해설 영상과 바로 연결되는 연계 배지 지원</li>
+          </ul>
+          <div class="session-link-bar">
+            <a href="practical_archive.html"><i class="fas fa-folder-open"></i> 실기 자료실 (회원 전용)</a>
+          </div>
+        </article>
+
+        <article class="tool-card wine">
+          <span class="tool-pill" id="countPracticalVideo">실기 파트별 · 기출풀이</span>
+          <h3>실기 영상강의</h3>
+          <ul>
+            <li>기본작업·계산작업·분석작업·기타작업 4대 파트 단계별 시연</li>
+            <li>최신 기출문제 풀이 영상으로 40분 시간 배분 전략 체득</li>
+            <li>자주 감점되는 서식·함수 오류를 화면과 함께 즉시 교정</li>
+          </ul>
+          <div class="session-link-bar">
+            <a href="practical_lectures.html"><i class="fas fa-play-circle"></i> 실기 영상보기 (회원 전용)</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Section 2: 급수별 커리큘럼 & 시험 안내 -->
+    <section class="ai-section" id="courseModules">
+      <div class="ai-sec-head">
+        <div>
+          <h2>2. 급수별 학습 커리큘럼 &amp; 시험 합격 로드맵</h2>
+          <p>본인의 목표 급수(2급 입문 / 1급 심화)를 선택해 단계별 추천 학습 순서와 연결 자료를 확인하세요.</p>
+        </div>
+      </div>
+
+      <div class="day-tabs" role="tablist" aria-label="컴활 급수 및 안내 필터">
+        <button type="button" class="day-tab active" data-track="all">전체 보기 (2급 · 1급 · 시험안내)</button>
+        <button type="button" class="day-tab" data-track="grade2">컴활 2급 과정</button>
+        <button type="button" class="day-tab" data-track="grade1">컴활 1급 과정</button>
+        <button type="button" class="day-tab" data-track="exam">시험 안내 · 합격 기준</button>
+      </div>
+
+      <div id="certCurriculumContainer"></div>
+    </section>
+
+    <!-- Section 3: 단기 합격을 위한 4단계 학습 루틴 & 유의사항 -->
+    <section class="ai-section">
+      <div class="ai-sec-head">
+        <div>
+          <h2>3. 단기 합격을 위한 추천 학습 루틴</h2>
+          <p>무작정 기출만 풀기보다 개념·함수 원리를 잡은 뒤 실기 예제를 병행하면 합격 기간을 절반으로 줄일 수 있습니다.</p>
+        </div>
+      </div>
+
+      <div class="day-overview-grid">
+        <article class="day-overview-card">
+          <h3><i class="fas fa-route" style="color: var(--theme-written);"></i> 권장 4단계 합격 동선</h3>
+          <ul>
+            <li>• <strong>1단계 (개념 압축)</strong>: 필기 자료실 핵심요약 PDF와 용어 250선으로 전체 틀 파악</li>
+            <li>• <strong>2단계 (CBT 회독)</strong>: 추천 사이트 전자문제집 CBT로 5개년 기출 오답 중심 반복</li>
+            <li>• <strong>3단계 (실기 기본기)</strong>: 필기·실기 영상강의로 함수/분석작업 패턴을 손에 익히기</li>
+            <li>• <strong>4단계 (시간 관리)</strong>: 실기 자료실 기출 예제로 제한시간(40~45분) 실전 모의 테스트</li>
+          </ul>
+        </article>
+        <article class="day-overview-card">
+          <h3><i class="fas fa-check-double" style="color: var(--theme-practical);"></i> 실기 시험 감점 방지 체크포인트</h3>
+          <ul>
+            <li>• <strong>파일 저장 습관</strong>: 각 작업 완료 시마다 `Ctrl + S` 저장으로 돌발 상황 대비</li>
+            <li>• <strong>함수 우선순위</strong>: 시간이 오래 걸리는 계산 문제는 표시 후 분석·기타작업 먼저 확보</li>
+            <li>• <strong>절대/혼합참조</strong>: 채우기 핸들 사용 시 `$A$1` vs `A$1` 범위 고정 여부 필수 검산</li>
+            <li>• <strong>AI 오답 정리</strong>: 막히는 수식 오류는 1일차 Excel × AI 프롬프트로 원인 즉시 복습</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <!-- Section 4: AI × OA 콜라보 & 추천 사이트 연계 -->
+    <section class="ai-section last">
+      <div class="literacy-box">
+        <div>
+          <span class="card-badge card-badge-practical" style="margin-bottom: 10px;">자격증에서 대학·직장 실무까지</span>
+          <h2 style="font-size: 22px; color: var(--neutral-900); margin-bottom: 8px;">컴활 실기 역량을 AI × OA 콜라보와 연결하세요</h2>
+          <p style="font-size: 14px; color: var(--neutral-700); line-height: 1.65;">
+            컴활에서 익힌 엑셀 수식, 피벗테이블, 문서 서식 역량은 <strong>AI × OA 콜라보 3일 과정</strong>에서
+            설문 분석·보고서·발표 PPT 제작 실무로 바로 확장됩니다. 원서 접수와 무료 CBT 훈련은 <strong>추천 사이트 허브</strong>에서 확인하세요.
+          </p>
+          <div class="literacy-pills">
+            <span class="literacy-pill">1일차 · Excel 함수 · 오류 진단 AI</span>
+            <span class="literacy-pill">2일차 · 보고서 목차 · 문서 마감</span>
+            <span class="literacy-pill">추천 · 대한상공회의소 · CBT 기출</span>
+          </div>
+          <div class="ai-hero-actions">
+            <a href="ai_office.html" class="btn btn-primary" style="background-color: var(--theme-practical);">
+              <i class="fas fa-magic"></i> AI × OA 콜라보 3일 과정 보기
+            </a>
+            <a href="recommendations.html" class="btn btn-secondary">
+              <i class="fas fa-external-link-alt"></i> 추천 사이트 허브 이동
+            </a>
+          </div>
+        </div>
+
+        <div class="literacy-qr-card">
+          <img src="images/qrcode-chassem.jpg" alt="대학생 AI 리터러시 진단 QR 코드">
+          <span>AI 리터러시 진단 QR</span>
+          <small style="color: var(--neutral-500); font-size: 11px;">모바일 스캔으로 진단 페이지 접속</small>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-container">
+      <div class="footer-top">
+        <div class="footer-info">
+          <div class="footer-logo">
+            <img src="images/OA_master_LOGO.png" alt="OA MASTER Logo">
+            <span class="footer-logo-text">OA MASTER</span>
+          </div>
+          <p class="footer-slogan">"쉬운 기능도 뭉치면 통한다!"</p>
+          <p style="font-size:13px; color: var(--neutral-500);">
+            OA MASTER는 컴퓨터활용능력 1급/2급 및 사무자동화산업기사 자격증과 대학생 AI 활용 실무 교육을 연계해 서비스합니다.
+          </p>
+        </div>
+
+        <div class="footer-links-grid">
+          <div class="footer-links-col">
+            <h4>컴활 자격과정</h4>
+            <ul>
+              <li><a href="cert_course.html">자격과정 통합 허브</a></li>
+              <li><a href="written_archive.html">필기 자료실</a></li>
+              <li><a href="written_lectures.html">필기 영상보기</a></li>
+              <li><a href="practical_archive.html">실기 자료실</a></li>
+              <li><a href="practical_lectures.html">실기 영상보기</a></li>
+            </ul>
+          </div>
+          <div class="footer-links-col">
+            <h4>AI × OA 콜라보</h4>
+            <ul>
+              <li><a href="ai_office.html">3일 과정 통합 허브</a></li>
+              <li><a href="ai_office_day1.html">1일차 · Excel × AI</a></li>
+              <li><a href="ai_office_day2.html">2일차 · Docs/Word × AI</a></li>
+              <li><a href="ai_office_day3.html">3일차 · PPT/Slides × AI</a></li>
+            </ul>
+          </div>
+          <div class="footer-links-col">
+            <h4>자료 · 추천 사이트</h4>
+            <ul>
+              <li><a href="AI리터러시진단안내_참고자료.pdf" target="_blank">AI 리터러시 진단 PDF</a></li>
+              <li><a href="recommendations.html">추천 사이트</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 OA MASTER. All Rights Reserved. Designed for Excellence.</p>
+        <div class="footer-bottom-links">
+          <a href="index.html"><i class="fas fa-home"></i> 메인으로</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/cert-course.js"></script>
+  <script type="module">
+    import { onAuthChange } from './js/firebase-config.js';
+    onAuthChange((user) => {
+      if (window.renderHeaderUserNav) {
+        window.renderHeaderUserNav(user);
+      }
+    });
+  </script>
+</body>
+
+</html>
+

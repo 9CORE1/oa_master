@@ -8,9 +8,9 @@
 2. 사이트 구조
 - 페이지 형태 : 멀티 페이지
 - 메인 메뉴 구성 (3대 축) :
-    1) 컴활 자격과정 : 필기과정(자료실/영상보기), 실기과정(자료실/영상보기)
-    2) AI × OA 콜라보 : 3일 과정 통합 허브(ai_office.html), 1일차 Excel × AI, 2일차 Docs/Word × AI, 3일차 PPT/Slides × AI, AI 리터러시 진단 안내 PDF
-    3) 추천 사이트 : 원서 접수, 학습 커뮤니티, 무료 기출풀이, AI·오피스 무료 도구
+    1) 컴활 자격과정 : 과정 통합 허브(cert_course.html), 필기과정(자료실/영상보기), 실기과정(자료실/영상보기)
+    2) AI × OA 콜라보 : 3일 과정 통합 허브(ai_office.html), 1일차 Excel × AI(ai_office_day1.html), 2일차 Docs/Word × AI(ai_office_day2.html), 3일차 PPT/Slides × AI(ai_office_day3.html), AI 리터러시 진단 안내 PDF
+    3) 추천 사이트 : 추천 사이트 허브(recommendations.html - 원서 접수, 무료 CBT 기출풀이, 학습 커뮤니티, 인터넷 강의, AI·오피스 무료 도구)
 
 3. 로고는 images폴더 내 OA_master_LOGO.png 파일을 사용, OA MASTER 텍스트 색상은 #0e4987
     배경색은 흰색, 필기과정 테마색상 #0e4987, 실기과정 테마색상 #005b5e, 추천사이트 테마색상 #812940

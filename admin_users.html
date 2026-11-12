@@ -145,7 +145,7 @@
 
   <!-- 🔒 Synchronous Early Auth Guard -->
   <script>
-    (function() {
+    (function () {
       var email = (localStorage.getItem('userEmail') || '').toLowerCase().trim();
       var role = localStorage.getItem('userRole');
       var isAdminActive = localStorage.getItem('isAdminActive') === 'true';
@@ -177,9 +177,11 @@
       <!-- Desktop Links -->
       <nav class="nav-links">
         <div class="nav-item">
-          <a href="written_archive.html" class="nav-link"><i class="fas fa-graduation-cap"></i> 컴활 자격과정 <i
+          <a href="cert_course.html" class="nav-link"><i class="fas fa-graduation-cap"></i> 컴활 자격과정 <i
               class="fas fa-chevron-down" style="font-size:10px;"></i></a>
           <div class="dropdown-menu">
+            <a href="cert_course.html" class="dropdown-link"><i class="fas fa-th-large"></i> 자격과정 통합 허브</a>
+            <div class="dropdown-divider"></div>
             <div class="dropdown-group-title">필기과정</div>
             <a href="written_archive.html" class="dropdown-link"><i class="fas fa-folder-open"></i> 필기 자료실</a>
             <a href="written_lectures.html" class="dropdown-link"><i class="fas fa-video"></i> 필기 영상보기</a>
@@ -197,7 +199,8 @@
           <a href="recommendations.html" class="nav-link"><i class="fas fa-external-link-alt"></i> 추천 사이트</a>
         </div>
         <div class="nav-item active">
-          <a href="admin_users.html" class="nav-link" style="color:var(--theme-primary); font-weight:700;"><i class="fas fa-users-cog"></i> 회원 관리</a>
+          <a href="admin_users.html" class="nav-link" style="color:var(--theme-primary); font-weight:700;"><i
+              class="fas fa-users-cog"></i> 회원 관리</a>
         </div>
       </nav>
 
@@ -224,6 +227,7 @@
       <a href="admin_users.html" class="mobile-nav-link active"><i class="fas fa-users-cog"></i> 회원 관리 목록</a>
 
       <div class="mobile-nav-group-title">컴활 자격과정 (필기 · 실기)</div>
+      <a href="cert_course.html" class="mobile-nav-link"><i class="fas fa-graduation-cap"></i> 컴활 자격과정 통합 허브</a>
       <a href="written_archive.html" class="mobile-nav-link"><i class="fas fa-folder-open"></i> 필기 자료실</a>
       <a href="written_lectures.html" class="mobile-nav-link"><i class="fas fa-video"></i> 필기 영상강의</a>
       <a href="practical_archive.html" class="mobile-nav-link"><i class="fas fa-folder-open"></i> 실기 자료실</a>
@@ -282,28 +286,38 @@
       </div>
 
       <!-- Filter & Search Controls -->
-      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:20px; background:#fff; padding:14px 18px; border-radius:var(--radius-lg); border:1px solid var(--neutral-200); box-shadow:0 2px 8px rgba(0,0,0,0.02);">
+      <div
+        style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:20px; background:#fff; padding:14px 18px; border-radius:var(--radius-lg); border:1px solid var(--neutral-200); box-shadow:0 2px 8px rgba(0,0,0,0.02);">
         <div style="display:flex; align-items:center; flex-wrap:wrap; gap:12px;">
           <div class="filter-group">
             <button class="filter-btn active" onclick="setUserFilter('all')" id="ufilter-all">전체 회원</button>
-            <button class="filter-btn" onclick="setUserFilter('google')" id="ufilter-google"><i class="fab fa-google" style="color:#34a853;"></i> 구글 회원</button>
-            <button class="filter-btn" onclick="setUserFilter('email')" id="ufilter-email"><i class="fas fa-envelope" style="color:#6366f1;"></i> 이메일 회원</button>
+            <button class="filter-btn" onclick="setUserFilter('google')" id="ufilter-google"><i class="fab fa-google"
+                style="color:#34a853;"></i> 구글 회원</button>
+            <button class="filter-btn" onclick="setUserFilter('email')" id="ufilter-email"><i class="fas fa-envelope"
+                style="color:#6366f1;"></i> 이메일 회원</button>
           </div>
 
           <!-- Date Range Filter -->
-          <div style="display:flex; align-items:center; gap:6px; font-size:13px; color:var(--neutral-700); background:var(--neutral-100); padding:4px 10px; border-radius:var(--radius-md); border:1px solid var(--border-color);">
+          <div
+            style="display:flex; align-items:center; gap:6px; font-size:13px; color:var(--neutral-700); background:var(--neutral-100); padding:4px 10px; border-radius:var(--radius-md); border:1px solid var(--border-color);">
             <i class="far fa-calendar-alt" style="color:var(--theme-primary);"></i>
             <span style="font-weight:600;">가입일:</span>
-            <input type="date" id="startDateInput" onchange="handleDateFilterChange()" class="form-input" style="padding:3px 8px; font-size:12px; height:30px; width:130px; background:#fff;">
+            <input type="date" id="startDateInput" onchange="handleDateFilterChange()" class="form-input"
+              style="padding:3px 8px; font-size:12px; height:30px; width:130px; background:#fff;">
             <span>~</span>
-            <input type="date" id="endDateInput" onchange="handleDateFilterChange()" class="form-input" style="padding:3px 8px; font-size:12px; height:30px; width:130px; background:#fff;">
-            <button type="button" onclick="resetDateFilter()" style="border:none; background:none; color:var(--neutral-500); cursor:pointer; font-size:12px; padding:2px 4px;" title="날짜 필터 초기화"><i class="fas fa-times-circle"></i></button>
+            <input type="date" id="endDateInput" onchange="handleDateFilterChange()" class="form-input"
+              style="padding:3px 8px; font-size:12px; height:30px; width:130px; background:#fff;">
+            <button type="button" onclick="resetDateFilter()"
+              style="border:none; background:none; color:var(--neutral-500); cursor:pointer; font-size:12px; padding:2px 4px;"
+              title="날짜 필터 초기화"><i class="fas fa-times-circle"></i></button>
           </div>
         </div>
 
         <div style="position:relative; min-width:240px;">
-          <i class="fas fa-search" style="position:absolute; left:12px; top:50%; transform:translateY(-50%); color:var(--neutral-400);"></i>
-          <input type="text" id="userSearchInput" oninput="handleUserSearch()" class="form-input" placeholder="이메일, 성명, 소속 검색..." style="padding-left:36px; background:#fff;">
+          <i class="fas fa-search"
+            style="position:absolute; left:12px; top:50%; transform:translateY(-50%); color:var(--neutral-400);"></i>
+          <input type="text" id="userSearchInput" oninput="handleUserSearch()" class="form-input"
+            placeholder="이메일, 성명, 소속 검색..." style="padding-left:36px; background:#fff;">
         </div>
       </div>
 
@@ -363,7 +377,8 @@
 
         <div class="form-group">
           <label class="form-label" for="userMemoText" style="font-weight:700;">특이사항 및 메모 내용</label>
-          <textarea id="userMemoText" class="form-input" placeholder="해당 회원의 수강 정보, 가입 목적 또는 문의 내역 등의 특이사항을 기록해 주세요." style="height:100px;"></textarea>
+          <textarea id="userMemoText" class="form-input" placeholder="해당 회원의 수강 정보, 가입 목적 또는 문의 내역 등의 특이사항을 기록해 주세요."
+            style="height:100px;"></textarea>
         </div>
       </div>
       <div class="modal-footer">
@@ -379,8 +394,11 @@
       <div class="footer-bottom" style="border-top:none; padding-top:0;">
         <p style="color:var(--neutral-400);">&copy; 2026 OA MASTER. All Rights Reserved. Designed for Excellence.</p>
         <div class="footer-bottom-links">
-          <a href="admin_users.html" style="color:var(--theme-primary); font-weight:700;"><i class="fas fa-users-cog"></i> 회원 관리</a>
-          <a href="#" onclick="if(window.handleGlobalLogout){window.handleGlobalLogout();}else{toggleAdminMode();} return false;" style="color:var(--neutral-400);"><i class="fas fa-sign-out-alt"></i> 관리자 로그아웃</a>
+          <a href="admin_users.html" style="color:var(--theme-primary); font-weight:700;"><i
+              class="fas fa-users-cog"></i> 회원 관리</a>
+          <a href="#"
+            onclick="if(window.handleGlobalLogout){window.handleGlobalLogout();}else{toggleAdminMode();} return false;"
+            style="color:var(--neutral-400);"><i class="fas fa-sign-out-alt"></i> 관리자 로그아웃</a>
         </div>
       </div>
     </div>
@@ -397,8 +415,8 @@
       const email = (localStorage.getItem('userEmail') || '').toLowerCase().trim();
       const role = localStorage.getItem('userRole');
       const is_admin = (typeof isAdmin === 'function' && isAdmin()) ||
-                       (localStorage.getItem('isAdminActive') === 'true') ||
-                       (email === 'teacha99@gmail.com' || role === 'Host' || role === 'Manager');
+        (localStorage.getItem('isAdminActive') === 'true') ||
+        (email === 'teacha99@gmail.com' || role === 'Host' || role === 'Manager');
 
       if (!user && !is_admin) {
         window.location.replace('index.html');
@@ -426,8 +444,8 @@
       const email = (localStorage.getItem('userEmail') || '').toLowerCase().trim();
       const role = localStorage.getItem('userRole');
       const is_admin = (typeof isAdmin === 'function' && isAdmin()) ||
-                       (localStorage.getItem('isAdminActive') === 'true') ||
-                       (email === 'teacha99@gmail.com' || role === 'Host' || role === 'Manager');
+        (localStorage.getItem('isAdminActive') === 'true') ||
+        (email === 'teacha99@gmail.com' || role === 'Host' || role === 'Manager');
 
       if (!is_admin) {
         alert('🔒 관리자 전용 기능입니다. 로그인 후 이용해 주세요.');
@@ -676,7 +694,7 @@
       document.getElementById('memoTargetName').innerText = name;
       document.getElementById('memoTargetEmail').innerText = email;
       document.getElementById('userMemoText').value = existingMemo || '';
-      
+
       const roleSelect = document.getElementById('userRoleSelect');
       if (roleSelect) {
         const activeRole = (email && email.toLowerCase().trim() === 'teacha99@gmail.com') ? 'Host' : (role || 'User');
