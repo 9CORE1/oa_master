@@ -296,6 +296,7 @@ export function onAuthChange(callback) {
             const userDocRef = doc(db, "users", user.uid);
             unsubscribeUserSnapshot = onSnapshot(userDocRef, (docSnap) => {
                 if (!docSnap.exists()) {
+                    if (docSnap.metadata && docSnap.metadata.fromCache) return;
                     if (email !== 'teacha99@gmail.com' && (approvalStatus !== 'pending' || role !== 'User')) {
                         approvalStatus = 'pending';
                         role = 'User';

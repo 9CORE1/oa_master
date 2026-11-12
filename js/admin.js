@@ -431,7 +431,7 @@ function renderHeaderUserNavUniversal(user) {
   } else if (activeUser) {
     const displayName = activeUser.displayName || (activeUser.email ? activeUser.email.split('@')[0] : '회원');
     const photoUrl = (activeUser && activeUser.photoURL) || localStorage.getItem('userPhotoURL') || null;
-    const approvalStatus = localStorage.getItem('userApprovalStatus') || 'approved';
+    const approvalStatus = localStorage.getItem('userApprovalStatus') || 'pending';
     const approvalBadge = getMemberApprovalBadgeHtml(approvalStatus);
     const avatarIcon = photoUrl
       ? `<img src="${photoUrl}" style="width:24px; height:24px; border-radius:50%; object-fit:cover; flex-shrink:0;">`

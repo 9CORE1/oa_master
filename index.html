@@ -1171,7 +1171,7 @@
         try {
           const displayName = user.displayName || (user.email ? user.email.split('@')[0] : '회원');
           const photoUrl = (user && user.photoURL) || localStorage.getItem('userPhotoURL') || null;
-          const approvalStatus = localStorage.getItem('userApprovalStatus') || 'approved';
+          const approvalStatus = localStorage.getItem('userApprovalStatus') || 'pending';
           const approvalBadge = typeof window.getMemberApprovalBadgeHtml === 'function'
             ? window.getMemberApprovalBadgeHtml(approvalStatus)
             : (approvalStatus === 'approved'
@@ -1240,7 +1240,7 @@
       if (user && user.uid) {
         localStorage.setItem('userUid', user.uid);
         try {
-          const fsRes = await getUserDataFromFirestore(user.uid);
+          const fsRes = await getUserDataFromFirestore(user.uid, { preferServer: true });
           if (fsRes && fsRes.success && fsRes.data) {
             if (fsRes.data.schoolName) {
               localStorage.setItem(`user_school_${user.uid}`, fsRes.data.schoolName);
