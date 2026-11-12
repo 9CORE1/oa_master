@@ -335,8 +335,8 @@
 
   <!-- Scripts -->
   <script src="js/data.js"></script>
-  <script src="js/main.js?v=20261112f"></script>
-  <script src="js/admin.js?v=20261112f"></script>
+  <script src="js/main.js?v=20261112g"></script>
+  <script src="js/admin.js?v=20261112g"></script>
 
   <!-- Custom YouTube Player & Playlist Logic -->
   <script>
@@ -1056,11 +1056,13 @@
 
   <!-- 🔒 Auth Guard & 로그인 사용자 상태 표시 -->
   <script type="module">
-    import { onAuthChange, logout } from './js/firebase-config.js?v=20261112f';
+    import { onAuthChange, logout } from './js/firebase-config.js?v=20261112g';
     onAuthChange((user, authMeta = null) => {
       const is_admin = (typeof isAdmin === 'function' && isAdmin()) || (localStorage.getItem('isAdminActive') === 'true');
       const diag = (authMeta && authMeta.diag) || window.__oaAuthDiag || null;
-      const approvalStatus = (authMeta && authMeta.approvalStatus) || (diag && (diag.approvalStatus || diag.fsApprovalStatus)) || localStorage.getItem('userApprovalStatus') || 'pending';
+      const fsRawStatus = diag && diag.fsApprovalStatus ? String(diag.fsApprovalStatus).trim().toLowerCase() : '';
+      const rawStatus = (authMeta && authMeta.approvalStatus) || (diag && diag.approvalStatus) || localStorage.getItem('userApprovalStatus') || 'pending';
+      const approvalStatus = (fsRawStatus === 'approved' || String(rawStatus).trim().toLowerCase() === 'approved') ? 'approved' : String(rawStatus).trim().toLowerCase();
       if (!user && !is_admin) {
         alert('🔒 회원가입 및 로그인이 필요한 서비스입니다.');
         window.location.href = 'index.html?auth=required';

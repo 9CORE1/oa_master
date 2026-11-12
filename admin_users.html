@@ -621,11 +621,11 @@
 
   <!-- Scripts -->
   <script src="js/data.js"></script>
-  <script src="js/main.js?v=20261112f"></script>
-  <script src="js/admin.js?v=20261112f"></script>
+  <script src="js/main.js?v=20261112g"></script>
+  <script src="js/admin.js?v=20261112g"></script>
   <!-- 🔒 Module Auth Guard & Realtime State Listener -->
   <script type="module">
-    import { onAuthChange } from './js/firebase-config.js?v=20261112f';
+    import { onAuthChange } from './js/firebase-config.js?v=20261112g';
     onAuthChange((user) => {
       const email = (localStorage.getItem('userEmail') || '').toLowerCase().trim();
       const role = localStorage.getItem('userRole');

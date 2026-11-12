@@ -270,6 +270,9 @@ export function onAuthChange(callback) {
                     approvalStatus = cachedStatus;
                 }
             }
+            if (fsData && String(fsData.approvalStatus || '').trim().toLowerCase() === 'approved') {
+                approvalStatus = 'approved';
+            }
 
             localStorage.setItem('userRole', role);
             localStorage.setItem('userApprovalStatus', approvalStatus);
@@ -336,7 +339,12 @@ export function onAuthChange(callback) {
                         if (typeof window.showToast === 'function') {
                             window.showToast('⚠️ 관리자에 의해 회원 정보가 삭제되어 세부 이용 권한이 해제되었습니다.', 'warning');
                         }
-                        callback(user);
+                        if (window.__oaAuthDiag) {
+                            window.__oaAuthDiag.role = role;
+                            window.__oaAuthDiag.approvalStatus = approvalStatus;
+                            window.__oaAuthDiag.fsDocNotFound = true;
+                        }
+                        callback(user, { approvalStatus, role, diag: window.__oaAuthDiag || null });
                         if (typeof window.notifyAuthReady === 'function') {
                             window.notifyAuthReady(user);
                         }
@@ -349,7 +357,10 @@ export function onAuthChange(callback) {
                     localStorage.setItem(`user_school_${user.uid}`, liveSchool);
                 }
                 const nextRole = (email === 'teacha99@gmail.com') ? 'Host' : (liveData.role || 'User');
-                const nextStatus = resolveApprovalStatus(user, { ...liveData, role: nextRole });
+                let nextStatus = resolveApprovalStatus(user, { ...liveData, role: nextRole });
+                if (String(liveData.approvalStatus || '').trim().toLowerCase() === 'approved') {
+                    nextStatus = 'approved';
+                }
 
                 if (nextStatus !== approvalStatus || nextRole !== role) {
                     const newlyApproved = (approvalStatus !== 'approved' && nextStatus === 'approved');
