@@ -364,11 +364,17 @@ export function onAuthChange(callback) {
                         localStorage.removeItem('isAdminActive');
                     }
 
+                    if (window.__oaAuthDiag) {
+                        window.__oaAuthDiag.role = role;
+                        window.__oaAuthDiag.approvalStatus = approvalStatus;
+                        window.__oaAuthDiag.fsApprovalStatus = liveData.approvalStatus || window.__oaAuthDiag.fsApprovalStatus;
+                    }
+
                     if (newlyApproved && typeof window.showToast === 'function') {
                         window.showToast('🎉 관리자 승인이 완료되었습니다! 모든 세부 콘텐츠를 바로 이용하실 수 있습니다.', 'success');
                     }
 
-                    callback(user);
+                    callback(user, { approvalStatus, role, diag: window.__oaAuthDiag || null });
                     if (typeof window.notifyAuthReady === 'function') {
                         window.notifyAuthReady(user);
                     }
@@ -376,6 +382,8 @@ export function onAuthChange(callback) {
             }, (err) => {
                 console.warn("실시간 승인 상태 감시 오류:", err);
             });
+            callback(user, { approvalStatus, role, diag: authDiag });
+            return;
         } else {
             localStorage.removeItem('isLoggedIn');
             localStorage.removeItem('userEmail');
@@ -389,7 +397,7 @@ export function onAuthChange(callback) {
                 localStorage.removeItem('isAdminActive');
             }
         }
-        callback(user);
+        callback(user, null);
     });
 }
 

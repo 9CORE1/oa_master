@@ -625,7 +625,7 @@
   <script src="js/admin.js?v=20261112d"></script>
   <!-- 🔒 Module Auth Guard & Realtime State Listener -->
   <script type="module">
-    import { onAuthChange } from './js/firebase-config.js?v=20261112d';
+    import { onAuthChange } from './js/firebase-config.js?v=20261112e';
     onAuthChange((user) => {
       const email = (localStorage.getItem('userEmail') || '').toLowerCase().trim();
       const role = localStorage.getItem('userRole');
