@@ -1311,13 +1311,35 @@
           item.approvalStatus = nextStatus;
           if (payload.approvedAt) item.approvedAt = payload.approvedAt;
         }
+
+        // 동일 이메일의 중복 UID 문서가 있는 경우 함께 승인 상태를 동기화합니다.
+        let syncedDuplicates = 0;
+        const targetEmail = item && item.email ? String(item.email).toLowerCase().trim() : '';
+        if (nextStatus === 'approved' && targetEmail) {
+          const duplicateItems = rawUsersList.filter(u =>
+            u.id !== uid &&
+            u.email &&
+            String(u.email).toLowerCase().trim() === targetEmail &&
+            getUserApprovalStatus(u) !== 'approved'
+          );
+          for (const dup of duplicateItems) {
+            const dupRes = await window.FirebaseApp.saveUserDataToFirestore(dup.id, payload);
+            if (dupRes && dupRes.success) {
+              dup.approvalStatus = nextStatus;
+              if (payload.approvedAt) dup.approvedAt = payload.approvedAt;
+              syncedDuplicates += 1;
+            }
+          }
+        }
+
         updateKPICards();
         renderUsersTable();
 
         const statusLabel = nextStatus === 'approved'
           ? '승인 완료'
           : (nextStatus === 'rejected' ? '승인 보류' : '승인 대기');
-        showToast(`회원 승인 상태가 '${statusLabel}'(으)로 변경되었습니다.`, 'success');
+        const dupMsg = syncedDuplicates > 0 ? ` (동일 이메일 중복 계정 ${syncedDuplicates}건 포함)` : '';
+        showToast(`회원 승인 상태가 '${statusLabel}'(으)로 변경되었습니다.${dupMsg}`, 'success');
       } else {
         if (selectEl) selectEl.value = prevStatus;
         showToast('승인 상태 변경 중 오류가 발생했습니다: ' + res.error, 'error');
