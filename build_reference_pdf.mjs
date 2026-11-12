@@ -1,0 +1,1190 @@
+import fs from 'fs';
+import path from 'path';
+import { spawn } from 'child_process';
+
+// 출력 파일 경로 상수 정의
+const WORKSPACE_DIR = process.cwd();
+const HTML_OUT = path.join(WORKSPACE_DIR, '참고자료.html');
+const PDF_OUT = path.join(WORKSPACE_DIR, '참고자료.pdf');
+
+/**
+ * HTML 특수문자를 안전하게 이스케이프합니다.
+ * @param {string} str - 원본 문자열
+ * @returns {string} 이스케이프된 문자열
+ */
+function esc(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+// 5대 핵심 역량 데이터 (진단개요.md 및 역량 설명.txt 기반)
+const COMPETENCIES = [
+  {
+    code: '역량 1',
+    name: 'AI 기반 문제해결·창의적 적용',
+    avg: 71.92,
+    tag: '실무 적용 · 실행력',
+    summary: '리포트 작성, 데이터 분석, 팀 과제 등 학업과 전공 분야의 실제 문제를 해결하기 위해 적절한 AI 도구를 선별·활용하고 창의적인 아이디어와 결과물을 창출하는 역량입니다.',
+    detail: '학습자가 다양한 AI 도구를 선택 및 활용하여 과제와 프로젝트를 해결하고 새로운 콘텐츠를 만들 수 있다고 인식하는 자기효능감과 실행 능력을 반영합니다.'
+  },
+  {
+    code: '역량 2',
+    name: 'AI 개념·원리 및 생성형 AI 이해',
+    avg: 53.62,
+    tag: '인지 기초 · 기술 이해',
+    summary: '데이터 학습 원리, 머신러닝과 딥러닝의 차이, 생성형 AI의 작동 메커니즘, 인간과 AI 추론의 차이 등 인공지능 기술의 기초 이론과 학문적 배경을 이해하는 역량입니다.',
+    detail: '인공지능 기술이 어떻게 설계되고 사회 및 산업 현장에서 작동·활용되는지에 대한 이론적·개념적 지식 수준을 측정하며, 대학생 평균이 가장 낮게 나타나는 기초 영역입니다.'
+  },
+  {
+    code: '역량 3',
+    name: 'AI 활용 태도·진로 및 사회적 영향 인식',
+    avg: 76.73,
+    tag: '진로 통찰 · 학습 동기',
+    summary: 'AI 기술이 자신의 전공과 미래 직업 세계에 미칠 파급효과를 통찰하고, 지속적인 학습 의지와 함께 사회 전반에 미치는 긍정적·부정적 영향을 균형 있게 바라보는 역량입니다.',
+    detail: 'AI의 중요성과 미래 경쟁력으로서의 가치를 인식하고, 책임 있는 사용 태도와 지속 학습 동기를 유지하려는 전반적 태도를 반영합니다.'
+  },
+  {
+    code: '역량 4',
+    name: 'AI 데이터·윤리·보안 인식',
+    avg: 69.09,
+    tag: '규범 준수 · 보안 의식',
+    summary: 'AI 활용 시 발생할 수 있는 개인정보 침해, 저작권, 데이터 편향성, 정보의 부정확성을 명확히 인지하고, 출처 표기와 사회적 책임감을 준수하는 규범적·윤리적 역량입니다.',
+    detail: 'AI 사용이 개인과 사회에 미칠 영향을 고려하여 개인정보 보호, 저작권 준수, 데이터 편향 검증 등 규범과 책임을 실제 과제에 실천하려는 태도를 측정합니다.'
+  },
+  {
+    code: '역량 5',
+    name: '프롬프트 설계 및 비판적 활용 역량',
+    avg: 73.18,
+    tag: '지시 구조화 · 교차 검증',
+    summary: '원하는 결과물을 도출하기 위해 명확하고 구체적인 프롬프트를 구조화하고, AI가 생성한 결과물을 맹신하지 않고 사실 여부를 교차 검증하는 비판적 사고·통제 역량입니다.',
+    detail: '상호작용을 반복 조정해 AI 응답 품질을 높이는 프롬프트 설계 능력과, 생성된 정보의 오류와 근거를 비판적으로 검토·검증하는 활용 역량을 함께 반영합니다.'
+  }
+];
+
+/**
+ * 전체 3페이지 A4 참고자료 HTML 문서를 생성합니다.
+ * @returns {string} 완성된 HTML 문서 문자열
+ */
+function buildHtmlDocument() {
+  const maxAvg = 100;
+
+  return `<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>대학생의 AI 리터러시 진단 참고자료</title>
+  <style>
+    @font-face {
+      font-family: 'Pretendard';
+      src: url('fonts/PretendardVariable.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @page {
+      size: A4 portrait;
+      margin: 0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif !important;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    body {
+      background: #e2e8f0;
+      color: #0f172a;
+      line-height: 1.48;
+    }
+
+    .page {
+      width: 210mm;
+      height: 297mm;
+      background: #ffffff;
+      padding: 12mm 15mm 10.5mm 15mm;
+      margin: 0 auto 16px auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      position: relative;
+      page-break-after: always;
+      break-after: page;
+    }
+
+    .page:last-child {
+      page-break-after: auto;
+      break-after: auto;
+    }
+
+    @media print {
+      body {
+        background: #ffffff;
+      }
+      .page {
+        margin: 0;
+        box-shadow: none;
+      }
+    }
+
+    .page-body {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 18px;
+      flex: 1;
+    }
+
+    /* 상단 헤더 (1페이지) */
+    .hero-header {
+      border-bottom: 2.5px solid #0e4987;
+      padding-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 14px;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: #eaf1f8;
+      color: #0e4987;
+      border: 1px solid #bfdbfe;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 999px;
+      margin-bottom: 6px;
+      letter-spacing: 0.01em;
+    }
+
+    .hero-title {
+      font-size: 25px;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.025em;
+      line-height: 1.22;
+    }
+
+    .hero-sub {
+      font-size: 12.5px;
+      color: #475569;
+      margin-top: 4px;
+      font-weight: 500;
+    }
+
+    .brand-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 11px;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      background: #f8fafc;
+      flex-shrink: 0;
+    }
+
+    .brand-box img {
+      height: 22px;
+      width: auto;
+      display: block;
+    }
+
+    .brand-box span {
+      font-size: 12px;
+      font-weight: 800;
+      color: #0e4987;
+      letter-spacing: 0.02em;
+    }
+
+    /* 2~3페이지 미니 헤더 */
+    .sub-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #0e4987;
+    }
+
+    .sub-header-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sub-pill {
+      background: #0e4987;
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 6px;
+    }
+
+    .sub-title {
+      font-size: 17px;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.02em;
+    }
+
+    .sub-doc-name {
+      font-size: 11.5px;
+      color: #64748b;
+      font-weight: 600;
+    }
+
+    /* 섹션 제목 */
+    .sec-head {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-top: 4px;
+      margin-bottom: 11px;
+    }
+
+    .sec-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 21px;
+      height: 21px;
+      border-radius: 6px;
+      background: #0e4987;
+      color: #ffffff;
+      font-size: 11.5px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .sec-num.teal {
+      background: #005b5e;
+    }
+
+    .sec-head h2 {
+      font-size: 15px;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.015em;
+    }
+
+    /* 목적 2단 카드 */
+    .purpose-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .purpose-card {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-left: 4px solid #0e4987;
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+
+    .purpose-card.teal {
+      border-left-color: #005b5e;
+    }
+
+    .purpose-card h3 {
+      font-size: 12.5px;
+      font-weight: 800;
+      color: #0e4987;
+      margin-bottom: 6px;
+    }
+
+    .purpose-card.teal h3 {
+      color: #005b5e;
+    }
+
+    .purpose-card p {
+      font-size: 11.8px;
+      color: #334155;
+      line-height: 1.48;
+    }
+
+    /* 4단 진단 규격 카드 */
+    .spec-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 11px;
+    }
+
+    .spec-card {
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 12px 13px;
+    }
+
+    .spec-label {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: #64748b;
+      margin-bottom: 3px;
+    }
+
+    .spec-value {
+      font-size: 14.5px;
+      font-weight: 800;
+      color: #0e4987;
+      margin-bottom: 3px;
+    }
+
+    .spec-desc {
+      font-size: 10.8px;
+      color: #475569;
+      line-height: 1.38;
+    }
+
+    /* 5대 역량 테이블 */
+    .table-box {
+      border: 1.5px solid #cbd5e1;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    table.comp-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .comp-table th {
+      background: #0e4987;
+      color: #ffffff;
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 8px 10px;
+      text-align: left;
+    }
+
+    .comp-table th.center,
+    .comp-table td.center {
+      text-align: center;
+    }
+
+    .comp-table td {
+      padding: 11px 11px;
+      border-top: 1px solid #e2e8f0;
+      font-size: 11.4px;
+      color: #1e293b;
+      vertical-align: middle;
+      line-height: 1.48;
+    }
+
+    .comp-table tr:nth-child(even) td {
+      background: #f8fafc;
+    }
+
+    .comp-badge {
+      display: inline-block;
+      background: #eaf1f8;
+      color: #0e4987;
+      font-weight: 800;
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      white-space: nowrap;
+    }
+
+    .comp-name {
+      font-size: 12px;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 2px;
+    }
+
+    .comp-tag {
+      font-size: 10.5px;
+      font-weight: 600;
+      color: #005b5e;
+    }
+
+    .avg-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .avg-score {
+      font-size: 12.5px;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    .avg-score.low {
+      color: #812940;
+    }
+
+    .avg-bar-bg {
+      width: 72px;
+      height: 6px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .avg-bar-fill {
+      height: 100%;
+      background: #005b5e;
+      border-radius: 999px;
+    }
+
+    .avg-bar-fill.low {
+      background: #812940;
+    }
+
+    .callout-note {
+      background: #fdf2f4;
+      border: 1px solid #f5c2cf;
+      border-left: 4px solid #812940;
+      border-radius: 8px;
+      padding: 11px 14px;
+      margin-top: 2px;
+      font-size: 11.4px;
+      color: #334155;
+      line-height: 1.48;
+    }
+
+    .callout-note strong {
+      color: #812940;
+    }
+
+    /* 2페이지 상세 요인 카드 */
+    .factor-list {
+      display: flex;
+      flex-direction: column;
+      gap: 11px;
+    }
+
+    .factor-card {
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 9.5px 14px;
+      background: #ffffff;
+    }
+
+    .factor-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 5px;
+    }
+
+    .factor-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .factor-code {
+      background: #005b5e;
+      color: #ffffff;
+      font-size: 10.8px;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 5px;
+    }
+
+    .factor-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    .factor-avg {
+      font-size: 11px;
+      font-weight: 700;
+      color: #475569;
+      background: #f1f5f9;
+      padding: 2px 8px;
+      border-radius: 999px;
+    }
+
+    .factor-desc {
+      font-size: 11.5px;
+      color: #334155;
+      line-height: 1.45;
+    }
+
+    .factor-focus {
+      margin-top: 3px;
+      font-size: 11.2px;
+      color: #0e4987;
+      font-weight: 600;
+      line-height: 1.42;
+    }
+
+    /* 2페이지 레포트 구성 체계 2단 */
+    .report-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 13px;
+    }
+
+    .report-box {
+      border: 1.5px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 13px 15px;
+      background: #f8fafc;
+    }
+
+    .report-box.accent {
+      border-color: #99d1d3;
+      background: #f2fafa;
+    }
+
+    .report-box-head {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin-bottom: 9px;
+      padding-bottom: 7px;
+      border-bottom: 1px solid #cbd5e1;
+    }
+
+    .page-chip {
+      background: #0e4987;
+      color: #ffffff;
+      font-size: 10.5px;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 5px;
+    }
+
+    .report-box.accent .page-chip {
+      background: #005b5e;
+    }
+
+    .report-box-head h3 {
+      font-size: 12.8px;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    .clean-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .clean-list li {
+      position: relative;
+      padding-left: 12px;
+      font-size: 11.3px;
+      color: #334155;
+      line-height: 1.43;
+    }
+
+    .clean-list li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 6px;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #0e4987;
+    }
+
+    .report-box.accent .clean-list li::before {
+      background: #005b5e;
+    }
+
+    /* 3페이지 샘플 이미지 쇼케이스 */
+    .sample-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .sample-card {
+      border: 1.5px solid #cbd5e1;
+      border-radius: 11px;
+      padding: 12px;
+      background: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      gap: 11px;
+    }
+
+    .sample-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .sample-header h3 {
+      font-size: 12.5px;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    .sample-tag {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: #0e4987;
+      background: #eaf1f8;
+      padding: 2px 8px;
+      border-radius: 999px;
+    }
+
+    .sample-tag.teal {
+      color: #005b5e;
+      background: #e6f4f4;
+    }
+
+    .sample-img-wrap {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 5px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .sample-img-wrap img {
+      width: 100%;
+      height: 478px;
+      object-fit: contain;
+      display: block;
+    }
+
+    .sample-points {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 11px 12px;
+    }
+
+    .bottom-row {
+      display: grid;
+      grid-template-columns: 1fr 158px;
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    .guide-banner {
+      background: #f8fafc;
+      border: 1.5px solid #0e4987;
+      border-radius: 10px;
+      padding: 13px 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .guide-banner h3 {
+      font-size: 13px;
+      font-weight: 800;
+      color: #0e4987;
+      margin-bottom: 8px;
+    }
+
+    .guide-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 9px;
+      flex: 1;
+    }
+
+    .guide-item {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 9px 10px;
+    }
+
+    .guide-step {
+      font-size: 10.3px;
+      font-weight: 800;
+      color: #005b5e;
+      margin-bottom: 4px;
+    }
+
+    .guide-item p {
+      font-size: 10.6px;
+      color: #334155;
+      line-height: 1.42;
+    }
+
+    /* 3페이지 오른쪽 하단 진단 QR 카드 */
+    .qr-card {
+      background: #ffffff;
+      border: 1.5px solid #0e4987;
+      border-radius: 10px;
+      padding: 10px 10px 9px 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      text-align: center;
+    }
+
+    .qr-badge {
+      background: #0e4987;
+      color: #ffffff;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 999px;
+      letter-spacing: 0.01em;
+    }
+
+    .qr-card img {
+      width: 98px;
+      height: 98px;
+      object-fit: contain;
+      display: block;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 2px;
+      background: #ffffff;
+    }
+
+    .qr-caption {
+      font-size: 10.3px;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.32;
+    }
+
+    .qr-sub {
+      display: block;
+      font-size: 9.5px;
+      font-weight: 500;
+      color: #475569;
+      margin-top: 1px;
+    }
+
+    /* 하단 푸터 */
+    .page-footer {
+      border-top: 1px solid #cbd5e1;
+      padding-top: 7px;
+      margin-top: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 10.5px;
+      font-weight: 600;
+      color: #64748b;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== PAGE 1 ==================== -->
+  <section class="page">
+    <div class="page-body">
+      <header class="hero-header">
+        <div>
+          <span class="hero-badge">참고자료 · 대학생 AI 리터러시 진단 체계</span>
+          <h1 class="hero-title">대학생의 AI 리터러시 진단 개요 및 역량 기준</h1>
+          <p class="hero-sub">5대 핵심 역량 진단 구조, 대학생 기준 평균 및 A4 2페이지 개인별 프로파일 안내</p>
+        </div>
+        <div class="brand-box">
+          <img src="images/OA_master_LOGO.png" alt="OA MASTER">
+          <span>OA MASTER</span>
+        </div>
+      </header>
+
+      <div>
+        <div class="sec-head">
+          <span class="sec-num">1</span>
+          <h2>진단 목적 및 도입 배경</h2>
+        </div>
+        <div class="purpose-grid">
+          <div class="purpose-card">
+            <h3>5대 영역 다차원 정밀 진단</h3>
+            <p>생성형 AI와 인공지능 도구가 대학 학업·일상에 보편화됨에 따라 대학생이 갖추어야 할 <strong>기술적 이해, 실무적 문제 해결력, 프롬프트 설계력, 윤리적 태도 및 미래 진로 인식</strong>을 균형 있게 측정합니다.</p>
+          </div>
+          <div class="purpose-card teal">
+            <h3>강점·보완점 기반 맞춤형 학습 연계</h3>
+            <p>단순한 총점 확인에 그치지 않고, 진단 결과를 토대로 학생 개개인이 어떤 역량 영역에서 강점과 보완점을 갖는지 객관적 지표와 실천 과제 중심으로 파악하도록 지원합니다.</p>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="sec-head">
+          <span class="sec-num teal">2</span>
+          <h2>진단 규격 및 결과 산출 방식</h2>
+        </div>
+        <div class="spec-grid">
+          <div class="spec-card">
+            <div class="spec-label">문항 구성</div>
+            <div class="spec-value">총 30문항</div>
+            <div class="spec-desc">5대 핵심 역량 요인을 균형 있게 측정하는 자기진단 문항</div>
+          </div>
+          <div class="spec-card">
+            <div class="spec-label">응답 척도</div>
+            <div class="spec-value">7점 리커트</div>
+            <div class="spec-desc">1점(전혀 그렇지 않다) ~ 4점(보통) ~ 7점(매우 그렇다)</div>
+          </div>
+          <div class="spec-card">
+            <div class="spec-label">결과 산출</div>
+            <div class="spec-value">100점 환산</div>
+            <div class="spec-desc">표준 점수 환산 및 5대 요인 방사형(Radar) 프로파일</div>
+          </div>
+          <div class="spec-card">
+            <div class="spec-label">발급 결과물</div>
+            <div class="spec-value">A4 2페이지</div>
+            <div class="spec-desc">PDF 다운로드, 모바일 PDF 공유, 1·2페이지 JPG 저장</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="sec-head">
+          <span class="sec-num">3</span>
+          <h2>5대 핵심 역량 요인 및 대학생 기준 평균</h2>
+        </div>
+        <div class="table-box">
+          <table class="comp-table">
+            <thead>
+              <tr>
+                <th class="center" style="width: 10%;">구분</th>
+                <th style="width: 26%;">핵심 역량명</th>
+                <th class="center" style="width: 15%;">대학생 기준 평균</th>
+                <th style="width: 49%;">역량의 핵심 정의 및 개념</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${COMPETENCIES.map((c) => {
+                const isLow = c.avg < 60;
+                const widthPct = Math.min(100, (c.avg / maxAvg) * 100).toFixed(1);
+                return `
+              <tr>
+                <td class="center"><span class="comp-badge">${esc(c.code)}</span></td>
+                <td>
+                  <div class="comp-name">${esc(c.name)}</div>
+                  <div class="comp-tag">${esc(c.tag)}</div>
+                </td>
+                <td class="center">
+                  <div class="avg-wrap">
+                    <span class="avg-score ${isLow ? 'low' : ''}">${c.avg.toFixed(2)}점</span>
+                    <div class="avg-bar-bg">
+                      <div class="avg-bar-fill ${isLow ? 'low' : ''}" style="width: ${widthPct}%;"></div>
+                    </div>
+                  </div>
+                </td>
+                <td>${esc(c.summary)}</td>
+              </tr>`;
+              }).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="callout-note">
+        <strong>대학생 기준 평균 시사점:</strong> 전체 5대 요인 중 <strong>역량 3(AI 활용 태도·진로 및 사회적 영향 인식, 76.73점)</strong>과 <strong>역량 5(프롬프트 설계 및 비판적 활용, 73.18점)</strong>는 상대적으로 높은 반면, <strong>역량 2(AI 개념·원리 및 생성형 AI 이해, 53.62점)</strong>는 가장 낮게 나타나 기초 원리 이해와 교차 검증·윤리 실천을 함께 보완하는 학습 설계가 중요합니다.
+      </div>
+    </div>
+
+    <footer class="page-footer">
+      <span>OA MASTER · 대학생 AI 리터러시 진단 참고자료</span>
+      <span>1 / 3</span>
+    </footer>
+  </section>
+
+  <!-- ==================== PAGE 2 ==================== -->
+  <section class="page">
+    <div class="page-body">
+      <header class="sub-header">
+        <div class="sub-header-left">
+          <span class="sub-pill">PART 02</span>
+          <h1 class="sub-title">5대 역량 요인별 상세 해설 및 결과 레포트 구성 체계</h1>
+        </div>
+        <span class="sub-doc-name">대학생 AI 리터러시 진단 참고자료</span>
+      </header>
+
+      <div>
+        <div class="sec-head">
+          <span class="sec-num">4</span>
+          <h2>5대 역량 요인별 측정 관점 및 세부 설명</h2>
+        </div>
+        <div class="factor-list">
+          ${COMPETENCIES.map((c, idx) => `
+          <div class="factor-card">
+            <div class="factor-top">
+              <div class="factor-title-wrap">
+                <span class="factor-code">요인 ${idx + 1}</span>
+                <span class="factor-title">${esc(c.name)}</span>
+              </div>
+              <span class="factor-avg">대학생 평균 ${c.avg.toFixed(2)}점 · ${esc(c.tag)}</span>
+            </div>
+            <p class="factor-desc">${esc(c.summary)}</p>
+            <p class="factor-focus">측정 핵심: ${esc(c.detail)}</p>
+          </div>`).join('')}
+        </div>
+      </div>
+
+      <div>
+        <div class="sec-head">
+          <span class="sec-num teal">5</span>
+          <h2>진단 결과 레포트 (A4 2페이지) 구성 체계</h2>
+        </div>
+        <div class="report-grid">
+          <div class="report-box">
+            <div class="report-box-head">
+              <span class="page-chip">1페이지</span>
+              <h3>AI 리터러시 역량 개별 프로파일</h3>
+            </div>
+            <ul class="clean-list">
+              <li><strong>인적사항 영역:</strong> 학과, 학년, 성명, 이메일(또는 소속 대학·학번·평가일자) 등 응시자 기본 정보 표시</li>
+              <li><strong>역량 수준 종합 요약표:</strong> 전체 역량 지수(100점 만점 기준 점수 및 등급)와 5대 요인별 수준 판정(상·중·하) 및 기준 평균과의 편차 제시</li>
+              <li><strong>방사형 역량 프로파일 차트(Radar Chart):</strong> 5대 핵심 요인의 '내 점수'와 '영역별 평균'을 겹쳐 시각화해 개인별 강점과 보완 영역을 직관적으로 비교</li>
+              <li><strong>결과에 따른 1차 제안점 요약:</strong> 5대 역량 각각의 수준(상·중·하)에 맞춘 개인화 진단 소견 및 학습 방향 요약 제공</li>
+            </ul>
+          </div>
+          <div class="report-box accent">
+            <div class="report-box-head">
+              <span class="page-chip">2페이지</span>
+              <h3>AI 리터러시 역량 맞춤형 실천 가이드</h3>
+            </div>
+            <ul class="clean-list">
+              <li><strong>핵심 요인별 맞춤 제안 재확인:</strong> 1페이지에 제시된 5대 요인별 진단 소견을 실천 가이드 상단에 연계 배치해 맥락 유지</li>
+              <li><strong>추천 세부 실천 과제(Action Plan):</strong> 대학 학부생이 전공·교양 수업, 스터디, 공모전, 비교과 활동에서 즉시 실행할 수 있는 요인별 구체적 실천 과제 4가지 제시</li>
+              <li><strong>실천 예시 범위:</strong> AI 활용 프로젝트·포트폴리오 구축, 비전공자 개념 강좌 수강, 커리어 플랜 작성, AI 인용·출처 표기 가이드 제작, 프롬프트 3회 수정·교차 검증 실습</li>
+              <li><strong>공인 인증 및 보안 워터마크:</strong> 진단 결과의 신뢰성과 공식 활용도를 높이기 위한 레포트 인증·보안 체계 포함</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="page-footer">
+      <span>OA MASTER · 대학생 AI 리터러시 진단 참고자료</span>
+      <span>2 / 3</span>
+    </footer>
+  </section>
+
+  <!-- ==================== PAGE 3 ==================== -->
+  <section class="page">
+    <div class="page-body">
+      <header class="sub-header">
+        <div class="sub-header-left">
+          <span class="sub-pill">PART 03</span>
+          <h1 class="sub-title">진단 결과 레포트 샘플(A4 2페이지) 미리보기 및 활용 가이드</h1>
+        </div>
+        <span class="sub-doc-name">대학생 AI 리터러시 진단 참고자료</span>
+      </header>
+
+      <div>
+        <div class="sec-head">
+          <span class="sec-num">6</span>
+          <h2>실제 진단 결과 레포트 샘플 화면 (1페이지 · 2페이지)</h2>
+        </div>
+        <div class="sample-grid">
+          <div class="sample-card">
+            <div class="sample-header">
+              <h3>1페이지 · 개별 역량 프로파일 (SAMPLE)</h3>
+              <span class="sample-tag">진단 결과 요약</span>
+            </div>
+            <div class="sample-img-wrap">
+              <img src="images/AILiteracy_profile01.jpg" alt="AI 리터러시 역량 개별 프로파일 샘플 1페이지">
+            </div>
+            <div class="sample-points">
+              <ul class="clean-list">
+                <li><strong>전체 역량 지수:</strong> 예시 기준 66.7점(중) 및 5대 요소별 평가 등급(상·중·하) 표기</li>
+                <li><strong>방사형 비교 차트:</strong> 내 점수(주황)와 영역별 평균(초록)을 5축에서 한눈에 대조</li>
+                <li><strong>1차 제안점 요약:</strong> 역량 1~5별 현재 수준 진단과 우선 보완 방향 문구 제공</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="sample-card">
+            <div class="sample-header">
+              <h3>2페이지 · 맞춤형 실천 가이드 (SAMPLE)</h3>
+              <span class="sample-tag teal">실행 과제 가이드</span>
+            </div>
+            <div class="sample-img-wrap">
+              <img src="images/AILiteracy_profile02.jpg" alt="AI 리터러시 역량 맞춤형 실천 가이드 샘플 2페이지">
+            </div>
+            <div class="sample-points">
+              <ul class="clean-list">
+                <li><strong>전공·학업 실행 과제:</strong> 전공+AI 미니 프로젝트, AI 활용 포트폴리오 정리 등 안내</li>
+                <li><strong>기초·윤리 보완 활동:</strong> 비전공자 기초 강좌, AI 결과물 인용/표기 가이드 작성 실습</li>
+                <li><strong>프롬프트·검증 루틴:</strong> 역할+맥락+지시+형식 설계, 3회 수정·교차 검증 기록 제안</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bottom-row">
+        <div class="guide-banner">
+          <h3>수업·자율 학습 연계 활용 3단계</h3>
+          <div class="guide-grid">
+            <div class="guide-item">
+              <div class="guide-step">STEP 1 · 현재 위치 파악</div>
+              <p>1페이지 방사형 차트에서 대학생 평균 대비 점수가 낮은 요인(예: 역량 2 개념 이해 또는 역량 4 윤리·보안)을 우선 확인합니다.</p>
+            </div>
+            <div class="guide-item">
+              <div class="guide-step">STEP 2 · 실천 과제 선택</div>
+              <p>2페이지 맞춤형 실천 가이드에서 자신의 학업·과제 일정에 바로 적용 가능한 실천 과제 1~2개를 선정합니다.</p>
+            </div>
+            <div class="guide-item">
+              <div class="guide-step">STEP 3 · 오피스 실습 연계</div>
+              <p>프롬프트 구조화(역량 5), 문서·데이터 검증(역량 1·4)을 AI 오피스 실습 과제에 적용하고 포트폴리오로 축적합니다.</p>
+            </div>
+          </div>
+        </div>
+
+        <aside class="qr-card">
+          <span class="qr-badge">AI 리터러시 진단 QR</span>
+          <img src="images/qrcode-chassem.jpg" alt="대학생 AI 리터러시 진단 접속 QR 코드">
+          <div class="qr-caption">
+            AI 리터러시 진단 바로가기
+            <span class="qr-sub">모바일 스캔으로 진단 페이지 접속</span>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <footer class="page-footer">
+      <span>OA MASTER · 대학생 AI 리터러시 진단 참고자료</span>
+      <span>3 / 3</span>
+    </footer>
+  </section>
+
+</body>
+</html>`;
+}
+
+/**
+ * Microsoft Edge 헤드리스 모드로 HTML을 A4 PDF로 변환합니다.
+ */
+function exportPdfWithEdge() {
+  const edgeCandidates = [
+    'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',
+    'C:\\Program Files\\Microsoft\\Edge\\Application\\msedge.exe'
+  ];
+  const edgePath = edgeCandidates.find((p) => fs.existsSync(p));
+  if (!edgePath) {
+    throw new Error('Microsoft Edge 실행 파일을 찾을 수 없습니다.');
+  }
+
+  const fileUrl = 'file:///' + HTML_OUT.replace(/\\/g, '/');
+  const args = [
+    '--headless=new',
+    '--disable-gpu',
+    '--no-sandbox',
+    '--run-all-compositor-stages-before-draw',
+    '--virtual-time-budget=3000',
+    '--print-to-pdf-no-header',
+    '--no-pdf-header-footer',
+    `--print-to-pdf=${PDF_OUT}`,
+    fileUrl
+  ];
+
+  if (fs.existsSync(PDF_OUT)) {
+    fs.unlinkSync(PDF_OUT);
+  }
+
+  return new Promise((resolve, reject) => {
+    let settled = false;
+    const child = spawn(edgePath, args, { stdio: ['ignore', 'pipe', 'pipe'] });
+    let stderrBuf = '';
+
+    const finishSuccess = () => {
+      if (settled) return;
+      settled = true;
+      try {
+        child.kill('SIGKILL');
+      } catch {
+        // 프로세스 종료 예외 무시
+      }
+      resolve();
+    };
+
+    const pollTimer = setInterval(() => {
+      if (fs.existsSync(PDF_OUT)) {
+        const buf = fs.readFileSync(PDF_OUT);
+        if (buf.length > 5000 && buf.toString('latin1').includes('%%EOF')) {
+          clearInterval(pollTimer);
+          clearTimeout(timeoutTimer);
+          setTimeout(finishSuccess, 400);
+        }
+      }
+    }, 300);
+
+    const timeoutTimer = setTimeout(() => {
+      clearInterval(pollTimer);
+      if (settled) return;
+      settled = true;
+      try {
+        child.kill('SIGKILL');
+      } catch {
+        // 타임아웃 종료 예외 무시
+      }
+      reject(new Error(`Edge PDF 변환 시간 초과: ${stderrBuf}`));
+    }, 30000);
+
+    child.stderr.on('data', (chunk) => {
+      stderrBuf += chunk.toString('utf8');
+      if (stderrBuf.includes('bytes written to file')) {
+        clearInterval(pollTimer);
+        clearTimeout(timeoutTimer);
+        setTimeout(finishSuccess, 400);
+      }
+    });
+
+    child.on('error', (err) => {
+      clearInterval(pollTimer);
+      clearTimeout(timeoutTimer);
+      if (!settled) {
+        settled = true;
+        reject(err);
+      }
+    });
+
+    child.on('exit', (code) => {
+      if (!settled && code === 0 && fs.existsSync(PDF_OUT)) {
+        clearInterval(pollTimer);
+        clearTimeout(timeoutTimer);
+        finishSuccess();
+      }
+    });
+  });
+}
+
+// CLI 모드 분기 (--html-only 또는 --pdf-only)
+const modeArg = process.argv[2] || '';
+
+if (modeArg !== '--pdf-only') {
+  const fullHtml = buildHtmlDocument();
+  const emojis = fullHtml.match(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu) || [];
+  if (emojis.length > 0) {
+    throw new Error('이모지가 포함되어 있습니다: ' + [...new Set(emojis)].join(' '));
+  }
+  fs.writeFileSync(HTML_OUT, fullHtml, 'utf8');
+  console.log(`Generated HTML (3 pages, 0 emojis) -> ${HTML_OUT}`);
+}
+
+if (modeArg === '--html-only') {
+  process.exit(0);
+}
+
+try {
+  await exportPdfWithEdge();
+  const pdfBuf = fs.readFileSync(PDF_OUT);
+  const pageCount = (pdfBuf.toString('latin1').match(/\/Type\s*\/Page\b(?!s)/g) || []).length;
+  console.log(`Generated PDF -> ${PDF_OUT} (${pdfBuf.length} bytes, ${pageCount} pages)`);
+} catch (err) {
+  console.error('PDF export failed:', err.message);
+  process.exit(1);
+}
+

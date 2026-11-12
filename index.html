@@ -33,19 +33,33 @@
       <!-- Desktop Links -->
       <nav class="nav-links">
         <div class="nav-item">
-          <a href="written_archive.html" class="nav-link"><i class="fas fa-book"></i> 필기과정 <i
+          <a href="written_archive.html" class="nav-link"><i class="fas fa-graduation-cap"></i> 컴활 자격과정 <i
               class="fas fa-chevron-down" style="font-size:10px;"></i></a>
           <div class="dropdown-menu">
-            <a href="written_archive.html" class="dropdown-link"><i class="fas fa-folder-open"></i> 자료실</a>
-            <a href="written_lectures.html" class="dropdown-link"><i class="fas fa-video"></i> 영상보기</a>
+            <div class="dropdown-group-title">필기과정</div>
+            <a href="written_archive.html" class="dropdown-link"><i class="fas fa-folder-open"></i> 필기 자료실</a>
+            <a href="written_lectures.html" class="dropdown-link"><i class="fas fa-video"></i> 필기 영상보기</a>
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-group-title">실기과정</div>
+            <a href="practical_archive.html" class="dropdown-link"><i class="fas fa-folder-open"></i> 실기 자료실</a>
+            <a href="practical_lectures.html" class="dropdown-link"><i class="fas fa-video"></i> 실기 영상보기</a>
           </div>
         </div>
         <div class="nav-item">
-          <a href="practical_archive.html" class="nav-link"><i class="fas fa-laptop-code"></i> 실기과정 <i
-              class="fas fa-chevron-down" style="font-size:10px;"></i></a>
-          <div class="dropdown-menu">
-            <a href="practical_archive.html" class="dropdown-link"><i class="fas fa-folder-open"></i> 자료실</a>
-            <a href="practical_lectures.html" class="dropdown-link"><i class="fas fa-video"></i> 영상보기</a>
+          <a href="ai_office.html" class="nav-link"><i class="fas fa-magic"></i> AI <span class="collab-x"
+              title="콜라보">&times;</span> OA 콜라보 <i class="fas fa-chevron-down" style="font-size:10px;"></i></a>
+          <div class="dropdown-menu" style="min-width: 230px;">
+            <div class="dropdown-group-title">AI와 오피스의 3일 협업</div>
+            <a href="ai_office.html" class="dropdown-link"><i class="fas fa-th-large"></i> 3일 과정 통합 허브</a>
+            <a href="ai_office.html?day=day1#curriculum" class="dropdown-link"><i class="fas fa-table"></i> 1일차 · Excel
+              × AI</a>
+            <a href="ai_office.html?day=day2#curriculum" class="dropdown-link"><i class="fas fa-file-word"></i> 2일차 ·
+              Docs/Word × AI</a>
+            <a href="ai_office.html?day=day3#curriculum" class="dropdown-link"><i class="fas fa-desktop"></i> 3일차 ·
+              PPT/Slides × AI</a>
+            <div class="dropdown-divider"></div>
+            <a href="AI리터러시진단안내_참고자료.pdf" target="_blank" class="dropdown-link"><i class="fas fa-chart-pie"></i> AI 리터러시
+              진단 PDF</a>
           </div>
         </div>
         <div class="nav-item">
@@ -78,15 +92,22 @@
       <button class="btn-close-mobile">&times;</button>
     </div>
     <div class="mobile-nav-list">
-      <div class="mobile-nav-group-title">필기과정</div>
+      <div class="mobile-nav-group-title">컴활 자격과정 (필기 · 실기)</div>
       <a href="written_archive.html" class="mobile-nav-link"><i class="fas fa-folder-open"></i> 필기 자료실</a>
       <a href="written_lectures.html" class="mobile-nav-link"><i class="fas fa-video"></i> 필기 영상강의</a>
-
-      <div class="mobile-nav-group-title">실기과정</div>
       <a href="practical_archive.html" class="mobile-nav-link"><i class="fas fa-folder-open"></i> 실기 자료실</a>
       <a href="practical_lectures.html" class="mobile-nav-link"><i class="fas fa-video"></i> 실기 영상강의</a>
 
-      <div class="mobile-nav-group-title">추천 정보</div>
+      <div class="mobile-nav-group-title">AI × OA 콜라보 (3일 과정)</div>
+      <a href="ai_office.html" class="mobile-nav-link"><i class="fas fa-magic"></i> AI × OA 콜라보 전체 허브</a>
+      <a href="ai_office.html?day=day1#curriculum" class="mobile-nav-link"><i class="fas fa-table"></i> 1일차 · Excel ×
+        AI</a>
+      <a href="ai_office.html?day=day2#curriculum" class="mobile-nav-link"><i class="fas fa-file-word"></i> 2일차 ·
+        Docs/Word × AI</a>
+      <a href="ai_office.html?day=day3#curriculum" class="mobile-nav-link"><i class="fas fa-desktop"></i> 3일차 ·
+        PPT/Slides × AI</a>
+
+      <div class="mobile-nav-group-title">추천 사이트</div>
       <a href="recommendations.html" class="mobile-nav-link"><i class="fas fa-external-link-alt"></i> 추천 사이트</a>
     </div>
   </div>
@@ -109,8 +130,8 @@
           엄선된 학습 요약본, 실습 기출문제 파일과 무료 동영상 강의를 오직 OA MASTER에서 경험해 보세요.
         </p>
         <div class="hero-actions">
-          <a href="written_archive.html" class="btn btn-primary">필기과정 학습하기</a>
-          <a href="practical_archive.html" class="btn btn-secondary">실기과정 실습하기</a>
+          <a href="#certCourse" class="btn btn-primary"><i class="fas fa-graduation-cap"></i> 컴활 자격과정</a>
+          <a href="ai_office.html" class="btn btn-accent"><i class="fas fa-magic"></i> AI × OA 콜라보 3일 과정</a>
         </div>
       </div>
     </section>
@@ -118,62 +139,76 @@
     <!-- Main Features Grid -->
     <div class="content-container" style="padding-top: 40px;">
       <div class="grid">
-        <!-- Card 1: Written Course -->
-        <div class="card" style="border-top: 4px solid var(--theme-written);">
+        <!-- Card 1: 컴활 자격과정 (필기 + 실기 통합) -->
+        <div id="certCourse" class="card" style="border-top: 4px solid var(--theme-written); scroll-margin-top: 100px;">
           <div class="card-header">
-            <span class="card-badge card-badge-written">Written Exam</span>
-            <h3 class="card-title">필기 과정</h3>
+            <span class="card-badge card-badge-written">Written &amp; Practical</span>
+            <h3 class="card-title">컴활 자격과정 (필기 · 실기)</h3>
           </div>
           <div class="card-body">
-            <p style="margin-bottom: 16px;">자격증 합격의 첫 단계! 개념 구조를 한눈에 파악하는 필기 마스터 코스입니다. 핵심 요약 자료와 최신 기출 강의로 이론을 탄탄하게
-              다집니다.</p>
+            <p style="margin-bottom: 16px;">자격증 합격의 정석! 개념 구조와 기출을 정리하는 필기 과정부터 엑셀·액세스·파워포인트 실기 훈련까지 한곳에 모았습니다.</p>
             <ul style="display: flex; flex-direction: column; gap: 8px; font-size: 13px;">
-              <li><i class="fas fa-check" style="color:var(--theme-written); margin-right:6px;"></i> 컴퓨터 일반 및 스프레드시트 기출
-                정리</li>
-              <li><i class="fas fa-check" style="color:var(--theme-written); margin-right:6px;"></i> 다운로드 가능한 PDF 필기
-                핵심요약집</li>
-              <li><i class="fas fa-check" style="color:var(--theme-written); margin-right:6px;"></i> 이해하기 쉬운 무료 동영상 개념
-                특강</li>
+              <li><i class="fas fa-check" style="color:var(--theme-written); margin-right:6px;"></i> 필기 PDF 핵심요약집 &amp;
+                무료 개념 특강</li>
+              <li><i class="fas fa-check" style="color:var(--theme-written); margin-right:6px;"></i> 엑셀 함수·배열수식 및 공단 실습
+                예제</li>
+              <li><i class="fas fa-check" style="color:var(--theme-written); margin-right:6px;"></i> 공유·퍼가기 차단 실전 해설 영상
+                강의</li>
             </ul>
           </div>
-          <div class="card-footer">
-            <span style="font-weight:600; color:var(--theme-written);">이론 및 문제 풀이</span>
-            <div class="action-buttons">
-              <a href="written_archive.html" class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;"><i
-                  class="fas fa-folder-open"></i> 자료실</a>
-              <a href="written_lectures.html" class="btn btn-primary"
-                style="padding: 6px 12px; font-size: 12px; background-color: var(--theme-written);"><i
-                  class="fas fa-play"></i> 강의</a>
+          <div class="card-footer" style="flex-direction: column; align-items: stretch; gap: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px;">
+              <span style="font-weight:700; font-size:12px; color:var(--theme-written);">필기과정</span>
+              <div class="action-buttons">
+                <a href="written_archive.html" class="btn btn-secondary" style="padding: 5px 10px; font-size: 12px;"><i
+                    class="fas fa-folder-open"></i> 자료실</a>
+                <a href="written_lectures.html" class="btn btn-primary"
+                  style="padding: 5px 10px; font-size: 12px; background-color: var(--theme-written);"><i
+                    class="fas fa-play"></i> 영상</a>
+              </div>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px;">
+              <span style="font-weight:700; font-size:12px; color:var(--theme-practical);">실기과정</span>
+              <div class="action-buttons">
+                <a href="practical_archive.html" class="btn btn-secondary"
+                  style="padding: 5px 10px; font-size: 12px;"><i class="fas fa-folder-open"></i> 자료실</a>
+                <a href="practical_lectures.html" class="btn btn-primary"
+                  style="padding: 5px 10px; font-size: 12px; background-color: var(--theme-practical);"><i
+                    class="fas fa-play"></i> 영상</a>
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- Card 2: Practical Course -->
+        <!-- Card 2: AI × OA 콜라보 (3일 과정) -->
         <div class="card" style="border-top: 4px solid var(--theme-practical);">
           <div class="card-header">
-            <span class="card-badge card-badge-practical">Practical Exam</span>
-            <h3 class="card-title">실기 과정</h3>
+            <span class="card-badge card-badge-practical">AI × OA Collab · 3일 완성</span>
+            <h3 class="card-title">AI <span class="collab-x">&times;</span> OA 콜라보 과정</h3>
           </div>
           <div class="card-body">
-            <p style="margin-bottom: 16px;">합격을 결정짓는 실전 훈련! 엑셀(스프레드시트)과 액세스(데이터베이스), 파워포인트를 직접 실습할 수 있도록 설계된 체계적 강좌군입니다.
-            </p>
+            <p style="margin-bottom: 16px;">대학생 학교생활과 예비직장인 실무를 위해 MS 365·Google Workspace에 무료 AI 도구를 결합한 4시간×3일 협업
+              특강입니다.</p>
             <ul style="display: flex; flex-direction: column; gap: 8px; font-size: 13px;">
-              <li><i class="fas fa-check" style="color:var(--theme-practical); margin-right:6px;"></i> 엑셀 함수 및 배열수식 집중
-                트레이닝</li>
-              <li><i class="fas fa-check" style="color:var(--theme-practical); margin-right:6px;"></i> 공단 배포 정식 실습 예제 및
-                답안 템플릿</li>
-              <li><i class="fas fa-check" style="color:var(--theme-practical); margin-right:6px;"></i> 화면 밖으로 새어 나가지 않는
-                실전 해설 강의</li>
+              <li><i class="fas fa-check" style="color:var(--theme-practical); margin-right:6px;"></i> 1일차 · Excel × AI
+                (수식·설문 분석·피벗)</li>
+              <li><i class="fas fa-check" style="color:var(--theme-practical); margin-right:6px;"></i> 2일차 · Docs/Word ×
+                AI (NotebookLM·보고서)</li>
+              <li><i class="fas fa-check" style="color:var(--theme-practical); margin-right:6px;"></i> 3일차 · PPT/Slides
+                × AI (10분 발표·면접 Q&amp;A)</li>
             </ul>
           </div>
-          <div class="card-footer">
-            <span style="font-weight:600; color:var(--theme-practical);">엑셀 / 데이터베이스 / PPT</span>
-            <div class="action-buttons">
-              <a href="practical_archive.html" class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;"><i
-                  class="fas fa-folder-open"></i> 자료실</a>
-              <a href="practical_lectures.html" class="btn btn-primary"
-                style="padding: 6px 12px; font-size: 12px; background-color: var(--theme-practical);"><i
-                  class="fas fa-play"></i> 강의</a>
+          <div class="card-footer" style="flex-direction: column; align-items: stretch; gap: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; gap: 6px; flex-wrap: wrap;">
+              <a href="ai_office.html?day=day1#curriculum" class="btn btn-secondary"
+                style="padding: 5px 9px; font-size: 12px;">1일차</a>
+              <a href="ai_office.html?day=day2#curriculum" class="btn btn-secondary"
+                style="padding: 5px 9px; font-size: 12px;">2일차</a>
+              <a href="ai_office.html?day=day3#curriculum" class="btn btn-secondary"
+                style="padding: 5px 9px; font-size: 12px;">3일차</a>
+              <a href="ai_office.html" class="btn btn-primary"
+                style="padding: 5px 12px; font-size: 12px; background-color: var(--theme-practical); flex: 1; justify-content: center;"><i
+                  class="fas fa-magic"></i> 과정 허브</a>
             </div>
           </div>
         </div>
@@ -205,6 +240,28 @@
           </div>
         </div>
       </div>
+
+      <!-- AI 리터러시 진단 참고자료 바로가기 -->
+      <div class="card"
+        style="margin-top: 28px; border-left: 6px solid var(--theme-practical); background: linear-gradient(135deg, #ffffff 0%, #f0fdfa 100%);">
+        <div class="card-body"
+          style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 20px;">
+          <div style="flex: 1 1 520px;">
+            <span class="card-badge card-badge-practical" style="margin-bottom: 10px;">AI 리터러시 진단 안내</span>
+            <h3 class="card-title" style="margin-bottom: 8px; font-size: 19px;">대학생 AI 리터러시 진단 참고자료
+            </h3>
+            <p style="font-size: 14px; color: var(--neutral-600); line-height: 1.6;">
+              5대 역량(30문항) AI 리터러시 진단 개요와 역량별 해석 기준을 담은 참고자료 PDF를 바로 확인해 보세요.
+            </p>
+          </div>
+          <div class="action-buttons" style="display: flex; flex-wrap: wrap; gap: 10px;">
+            <a href="AI리터러시진단안내_참고자료.pdf" target="_blank" class="btn btn-primary"
+              style="background-color: var(--theme-practical);">
+              <i class="fas fa-chart-pie"></i> AI 리터러시 진단 PDF
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
 
 
@@ -227,23 +284,28 @@
 
         <div class="footer-links-grid">
           <div class="footer-links-col">
-            <h4>필기과정</h4>
+            <h4>컴활 자격과정</h4>
             <ul>
               <li><a href="written_archive.html">필기 자료실</a></li>
               <li><a href="written_lectures.html">필기 영상보기</a></li>
-            </ul>
-          </div>
-          <div class="footer-links-col">
-            <h4>실기과정</h4>
-            <ul>
               <li><a href="practical_archive.html">실기 자료실</a></li>
               <li><a href="practical_lectures.html">실기 영상보기</a></li>
             </ul>
           </div>
           <div class="footer-links-col">
-            <h4>추천 사이트</h4>
+            <h4>AI × OA 콜라보</h4>
             <ul>
-              <li><a href="recommendations.html">외부 유용 링크</a></li>
+              <li><a href="ai_office.html">3일 과정 통합 허브</a></li>
+              <li><a href="ai_office.html?day=day1#curriculum">1일차 · Excel × AI</a></li>
+              <li><a href="ai_office.html?day=day2#curriculum">2일차 · Docs/Word × AI</a></li>
+              <li><a href="ai_office.html?day=day3#curriculum">3일차 · PPT/Slides × AI</a></li>
+            </ul>
+          </div>
+          <div class="footer-links-col">
+            <h4>자료 · 추천 사이트</h4>
+            <ul>
+              <li><a href="AI리터러시진단안내_참고자료.pdf" target="_blank">AI 리터러시 진단 PDF</a></li>
+              <li><a href="recommendations.html">추천 사이트</a></li>
             </ul>
           </div>
         </div>
@@ -270,10 +332,14 @@
 
       <!-- 이메일 로그인/회원가입 폼 -->
       <form id="authForm" style="display:flex; flex-direction:column; gap:10px;">
-        <input type="text" id="authName" placeholder="성명 (실명 입력)" style="padding:10px; border:1px solid #ccc; border-radius:6px; display:none;">
-        <input type="email" id="authEmail" placeholder="이메일 주소" required style="padding:10px; border:1px solid #ccc; border-radius:6px;">
-        <input type="password" id="authPassword" placeholder="비밀번호" required style="padding:10px; border:1px solid #ccc; border-radius:6px;">
-        <button type="submit" id="authSubmitBtn" style="padding:10px; background:var(--theme-written); color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:bold;">로그인</button>
+        <input type="text" id="authName" placeholder="성명 (실명 입력)"
+          style="padding:10px; border:1px solid #ccc; border-radius:6px; display:none;">
+        <input type="email" id="authEmail" placeholder="이메일 주소" required
+          style="padding:10px; border:1px solid #ccc; border-radius:6px;">
+        <input type="password" id="authPassword" placeholder="비밀번호" required
+          style="padding:10px; border:1px solid #ccc; border-radius:6px;">
+        <button type="submit" id="authSubmitBtn"
+          style="padding:10px; background:var(--theme-written); color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:bold;">로그인</button>
       </form>
 
       <div style="margin:15px 0; font-size:14px; color:#666;">또는</div>
@@ -300,28 +366,41 @@
       <span id="closeAdminAuthModal" onclick="document.getElementById('adminAuthModal').style.display='none';"
         style="position:absolute; right:15px; top:10px; font-size:24px; cursor:pointer; color:#64748b;">&times;</span>
 
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid #eee; padding-bottom:12px;">
-        <h3 style="margin:0; font-size:18px; color:#1e293b;"><i class="fas fa-lock" style="color:var(--theme-written, #0e4987);"></i> 관리자 이메일 인증</h3>
+      <div
+        style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid #eee; padding-bottom:12px;">
+        <h3 style="margin:0; font-size:18px; color:#1e293b;"><i class="fas fa-lock"
+            style="color:var(--theme-written, #0e4987);"></i> 관리자 이메일 인증</h3>
       </div>
 
       <div class="modal-body">
         <div id="adminEmailInputGroup">
-          <label for="adminLoginEmail" style="display:block; font-weight:bold; margin-bottom:6px; font-size:14px; color:#334155;">관리자 이메일 주소</label>
-          <input type="email" id="adminLoginEmail" placeholder="이메일 주소를 입력하세요" style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; font-size:14px;">
+          <label for="adminLoginEmail"
+            style="display:block; font-weight:bold; margin-bottom:6px; font-size:14px; color:#334155;">관리자 이메일
+            주소</label>
+          <input type="email" id="adminLoginEmail" placeholder="이메일 주소를 입력하세요"
+            style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; font-size:14px;">
           <p style="font-size:12px; color:#64748b; margin-top:6px;">설정된 관리자 이메일 주소와 동일해야 인증번호가 발송됩니다.</p>
         </div>
 
         <div id="adminCodeGroup" style="display:none; margin-top:15px;">
-          <label for="adminVerifyCodeInput" style="display:block; font-weight:bold; margin-bottom:6px; font-size:14px; color:#334155;">인증번호 (6자리)</label>
-          <input type="text" id="adminVerifyCodeInput" placeholder="인증번호 6자리를 입력하세요" maxlength="6" style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; font-size:14px;">
+          <label for="adminVerifyCodeInput"
+            style="display:block; font-weight:bold; margin-bottom:6px; font-size:14px; color:#334155;">인증번호
+            (6자리)</label>
+          <input type="text" id="adminVerifyCodeInput" placeholder="인증번호 6자리를 입력하세요" maxlength="6"
+            style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; font-size:14px;">
           <p style="color:#10b981; font-weight:500; font-size:12px; margin-top:6px;">이메일로 발송된 6자리 인증번호를 입력하십시오.</p>
         </div>
       </div>
 
       <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:24px;">
-        <button type="button" onclick="document.getElementById('adminAuthModal').style.display='none';" style="padding:8px 16px; background:#e2e8f0; border:none; border-radius:6px; cursor:pointer; font-weight:600; color:#475569;">취소</button>
-        <button type="button" id="btnAdminRequestCode" onclick="window.requestVerificationCode();" style="padding:8px 16px; background:var(--theme-written, #0e4987); color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:bold;">인증번호 전송</button>
-        <button type="button" id="btnAdminVerifyCode" onclick="window.verifyAdminCode();" style="display:none; padding:8px 16px; background:#10b981; color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:bold;">인증 완료</button>
+        <button type="button" onclick="document.getElementById('adminAuthModal').style.display='none';"
+          style="padding:8px 16px; background:#e2e8f0; border:none; border-radius:6px; cursor:pointer; font-weight:600; color:#475569;">취소</button>
+        <button type="button" id="btnAdminRequestCode" onclick="window.requestVerificationCode();"
+          style="padding:8px 16px; background:var(--theme-written, #0e4987); color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:bold;">인증번호
+          전송</button>
+        <button type="button" id="btnAdminVerifyCode" onclick="window.verifyAdminCode();"
+          style="display:none; padding:8px 16px; background:#10b981; color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:bold;">인증
+          완료</button>
       </div>
     </div>
   </div>
@@ -1080,6 +1159,18 @@
 
       if (authForm) authForm.onsubmit = handleEmailAuth;
       if (authSubmitBtn) authSubmitBtn.onclick = handleEmailAuth;
+
+      // 비로그인 리다이렉트(?auth=required) 시 로그인 모달 자동 표시
+      const authParams = new URLSearchParams(window.location.search);
+      if (authParams.get('auth') === 'required') {
+        const isLogged = (currentUser !== null) ||
+          (localStorage.getItem('isLoggedIn') === 'true') ||
+          (typeof isAdmin === 'function' && isAdmin());
+        if (!isLogged && authModal) {
+          authModal.style.display = 'flex';
+        }
+        window.history.replaceState({}, '', window.location.pathname);
+      }
     });
   </script>
 </body>

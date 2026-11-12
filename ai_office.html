@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI × OA 콜라보 3일 완성 - OA MASTER | 대학생·예비직장인 AI 활용 가이드</title>
+  <meta name="description"
+    content="대학생의 학교생활과 예비직장인 실무 소양을 위한 AI × OA 콜라보(MS Office 365 + Google Workspace) 3일 완성 과정 및 OA MASTER 컴활 연계 허브입니다.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/ai-office.css">
+  <link rel="icon" href="images/OA_master_LOGO.png" type="image/png">
+  <script src="js/data.js"></script>
+  <script src="js/admin.js"></script>
+</head>
+
+<body class="theme-written">
+
+  <!-- Header -->
+  <header>
+    <div class="nav-container">
+      <a href="index.html" class="logo-group">
+        <img src="images/OA_master_LOGO.png" alt="OA MASTER Logo">
+        <div class="logo-text">
+          OA MASTER
+          <span class="logo-subtext">쉬운 기능도 뭉치면 통한다!</span>
+        </div>
+      </a>
+
+      <!-- Desktop Links -->
+      <nav class="nav-links">
+        <div class="nav-item">
+          <a href="written_archive.html" class="nav-link"><i class="fas fa-graduation-cap"></i> 컴활 자격과정 <i
+              class="fas fa-chevron-down" style="font-size:10px;"></i></a>
+          <div class="dropdown-menu">
+            <div class="dropdown-group-title">필기과정</div>
+            <a href="written_archive.html" class="dropdown-link"><i class="fas fa-folder-open"></i> 필기 자료실</a>
+            <a href="written_lectures.html" class="dropdown-link"><i class="fas fa-video"></i> 필기 영상보기</a>
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-group-title">실기과정</div>
+            <a href="practical_archive.html" class="dropdown-link"><i class="fas fa-folder-open"></i> 실기 자료실</a>
+            <a href="practical_lectures.html" class="dropdown-link"><i class="fas fa-video"></i> 실기 영상보기</a>
+          </div>
+        </div>
+        <div class="nav-item active">
+          <a href="ai_office.html" class="nav-link"><i class="fas fa-magic"></i> AI <span class="collab-x"
+              title="콜라보">&times;</span> OA 콜라보 <i class="fas fa-chevron-down" style="font-size:10px;"></i></a>
+          <div class="dropdown-menu" style="min-width: 230px;">
+            <div class="dropdown-group-title">AI와 오피스의 3일 협업</div>
+            <a href="ai_office.html" class="dropdown-link"><i class="fas fa-th-large"></i> 3일 과정 통합 허브</a>
+            <a href="ai_office.html?day=day1#curriculum" class="dropdown-link"><i class="fas fa-table"></i> 1일차 · Excel × AI</a>
+            <a href="ai_office.html?day=day2#curriculum" class="dropdown-link"><i class="fas fa-file-word"></i> 2일차 · Docs/Word × AI</a>
+            <a href="ai_office.html?day=day3#curriculum" class="dropdown-link"><i class="fas fa-desktop"></i> 3일차 · PPT/Slides × AI</a>
+            <div class="dropdown-divider"></div>
+            <a href="AI리터러시진단안내_참고자료.pdf" target="_blank" class="dropdown-link"><i class="fas fa-chart-pie"></i> AI 리터러시 진단 PDF</a>
+          </div>
+        </div>
+        <div class="nav-item">
+          <a href="recommendations.html" class="nav-link"><i class="fas fa-external-link-alt"></i> 추천 사이트</a>
+        </div>
+      </nav>
+
+      <div class="nav-cta">
+        <div id="userNavArea" style="display:inline-block; margin-right:8px;">
+          <button id="openAuthBtn" class="btn-admin-mode"
+            onclick="window.location.href='index.html?auth=required'; return false;"
+            style="background:var(--theme-written); color:#fff; border:none; padding:6px 14px; border-radius:6px; cursor:pointer; font-weight:600;">
+            <i class="fas fa-user"></i> 로그인 / 회원가입
+          </button>
+        </div>
+        <button class="mobile-toggle">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Menu Drawer -->
+  <div class="mobile-nav-overlay"></div>
+  <div class="mobile-nav-drawer">
+    <div class="mobile-nav-header">
+      <div class="logo-text" style="color: var(--logo-color);">OA MASTER</div>
+      <button class="btn-close-mobile">&times;</button>
+    </div>
+    <div class="mobile-nav-list">
+      <div class="mobile-nav-group-title">컴활 자격과정 (필기 · 실기)</div>
+      <a href="written_archive.html" class="mobile-nav-link"><i class="fas fa-folder-open"></i> 필기 자료실</a>
+      <a href="written_lectures.html" class="mobile-nav-link"><i class="fas fa-video"></i> 필기 영상강의</a>
+      <a href="practical_archive.html" class="mobile-nav-link"><i class="fas fa-folder-open"></i> 실기 자료실</a>
+      <a href="practical_lectures.html" class="mobile-nav-link"><i class="fas fa-video"></i> 실기 영상강의</a>
+
+      <div class="mobile-nav-group-title">AI × OA 콜라보 (3일 과정)</div>
+      <a href="ai_office.html" class="mobile-nav-link active"><i class="fas fa-magic"></i> AI × OA 콜라보 전체 허브</a>
+      <a href="ai_office.html?day=day1#curriculum" class="mobile-nav-link"><i class="fas fa-table"></i> 1일차 · Excel × AI</a>
+      <a href="ai_office.html?day=day2#curriculum" class="mobile-nav-link"><i class="fas fa-file-word"></i> 2일차 · Docs/Word × AI</a>
+      <a href="ai_office.html?day=day3#curriculum" class="mobile-nav-link"><i class="fas fa-desktop"></i> 3일차 · PPT/Slides × AI</a>
+
+      <div class="mobile-nav-group-title">추천 사이트</div>
+      <a href="recommendations.html" class="mobile-nav-link"><i class="fas fa-external-link-alt"></i> 추천 사이트</a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main>
+    <!-- Hero -->
+    <section class="ai-hero">
+      <div class="ai-hero-inner">
+        <div class="ai-hero-badge">
+          <i class="fas fa-graduation-cap"></i> AI × OA 콜라보 특강 | 1일 4시간(50분×4교시) × 3일 완성
+        </div>
+        <h1 class="ai-hero-title">대학생·예비직장인을 위한<br>AI × OA 콜라보 3일 완성 허브</h1>
+        <p class="ai-hero-desc">
+          쉬운 오피스 기능도 AI와 만나면 통합니다! <strong>MS Office 365(학생 무료)</strong>와 <strong>Google Workspace</strong>에 AI를 결합해
+          전공 시험 대비, 컴활 기초 실기, 설문 분석, A+ 리포트, 10분 발표 PPT와 예비직장인 실무 소양까지 한 번에 연결합니다.
+        </p>
+        <div class="ai-hero-actions">
+          <a href="AI리터러시진단안내_참고자료.pdf" target="_blank" class="btn-hero-light">
+            <i class="fas fa-chart-pie"></i> AI 리터러시 진단 안내 PDF
+          </a>
+          <a href="#curriculum" class="btn-hero-outline">
+            <i class="fas fa-calendar-alt"></i> 3일 커리큘럼 바로가기
+          </a>
+          <a href="#promptLibrary" class="btn-hero-outline">
+            <i class="fas fa-copy"></i> 실전 프롬프트 복사
+          </a>
+          <a href="practical_archive.html" class="btn-hero-outline">
+            <i class="fas fa-folder-open"></i> 컴활 실기 자료실 (회원 전용)
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 1: 4대 무료 AI & 학생 프로모션 도구 -->
+    <section class="ai-section">
+      <div class="ai-sec-head">
+        <div>
+          <h2>1. 대학생 무료 프로모션 · 4대 핵심 AI 도구 조합</h2>
+          <p>유료 결제 없이 학교 계정과 무료 플랜을 조합해 비용 부담과 사용량 한도를 모두 해결합니다.</p>
+        </div>
+      </div>
+
+      <div class="tool-grid">
+        <article class="tool-card">
+          <span class="tool-pill">대학생 1년 무료 프로모션</span>
+          <h3>Gemini</h3>
+          <ul>
+            <li>학교 이메일/재학생 인증으로 상위 요금제 활용 <small class="tool-note">(신청 시점별 정책 확인 및 만료 전 해지 알림 필수)</small></li>
+            <li>Deep Research(자료 조사 → Docs 내보내기), Canvas(초안/슬라이드), 표지 이미지 생성</li>
+            <li>내장 AI 버튼 미지원 시 웹 복사·내보내기로 100% 동일 실습</li>
+          </ul>
+        </article>
+
+        <article class="tool-card teal">
+          <span class="tool-pill">무료 PDF 학습 AI</span>
+          <h3>NotebookLM</h3>
+          <ul>
+            <li>내가 올린 강의안 PDF·컴활 요약집·논문 안에서만 답해 환각(거짓 정보) 최소화</li>
+            <li>Studio: 학습 가이드 · 플래시카드 · 예상 퀴즈 자동 생성</li>
+            <li>출처 번호([1], [2]) 제공 · 학술 검색은 Perplexity 무료 보조 가능</li>
+          </ul>
+        </article>
+
+        <article class="tool-card">
+          <span class="tool-pill">학교 웹메일(.ac.kr) 무료</span>
+          <h3>MS Office 365</h3>
+          <ul>
+            <li>대학 메일 인증으로 Excel·Word·PowerPoint 정품(웹 A1/설치판 A3+) 사용</li>
+            <li>웹 기반 무료 Copilot Chat은 이메일·문서 초안 보조 가능 <small class="tool-note">(앱 내장 Copilot 미포함)</small></li>
+            <li>자격증 실기 표준 및 제출용 서식·디자이너 최종 마감 담당</li>
+          </ul>
+        </article>
+
+        <article class="tool-card wine">
+          <span class="tool-pill">무료 플랜 핵심 활용</span>
+          <h3>ChatGPT + Google</h3>
+          <ul>
+            <li>Google Forms 설문 수집 → `.xlsx` 직접 첨부해 쉬운 데이터 요약·그래프 추천</li>
+            <li>개인정보(이름·학번) 및 실무 대외비 삭제 후 업로드 수칙 필수</li>
+            <li>시트 `=AI()` 미지원 계정에서도 웹 복붙으로 동일 작업 가능</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <!-- Section 2: 3일 완성 인터랙티브 커리큘럼 & OA MASTER 연계 -->
+    <section class="ai-section" id="curriculum">
+      <div class="ai-sec-head">
+        <div>
+          <h2>2. AI × OA 콜라보 3일 커리큘럼 &amp; 컴활 자료 연계</h2>
+          <p>1일차 설문 그래프 → 2일차 보고서 본문 첨부 → 3일차 발표 PPT 및 실무 포트폴리오로 이어집니다. <small style="color: var(--neutral-500);">(자료실·영상보기는 회원 로그인 후 이용)</small></p>
+        </div>
+      </div>
+
+      <div class="day-tabs" role="tablist" aria-label="일차별 커리큘럼 선택">
+        <button type="button" class="day-tab active" data-day="all">전체 3일 (12교시)</button>
+        <button type="button" class="day-tab" data-day="day1">1일차 · Excel & Sheets</button>
+        <button type="button" class="day-tab" data-day="day2">2일차 · Docs & Word</button>
+        <button type="button" class="day-tab" data-day="day3">3일차 · Slides & PPT</button>
+      </div>
+
+      <div id="curriculumContainer"></div>
+    </section>
+
+    <!-- Section 3: 실전 프롬프트 원클릭 복사 라이브러리 -->
+    <section class="ai-section" id="promptLibrary">
+      <div class="ai-sec-head">
+        <div>
+          <h2>3. 실전 복사용 AI 프롬프트 라이브러리</h2>
+          <p>강의와 과제, 예비직장인 보고·메일·회의록 작성에 바로 복사해서 붙여넣어 사용할 수 있습니다.</p>
+        </div>
+      </div>
+
+      <div class="prompt-filters" role="group" aria-label="프롬프트 일차 필터">
+        <button type="button" class="prompt-filter-btn active" data-cat="all">전체 보기</button>
+        <button type="button" class="prompt-filter-btn" data-cat="day1">1일차 · 엑셀/오답/설문</button>
+        <button type="button" class="prompt-filter-btn" data-cat="day2">2일차 · 보고서/메일/회의록</button>
+        <button type="button" class="prompt-filter-btn" data-cat="day3">3일차 · PPT/표지/면접Q&A</button>
+      </div>
+
+      <div class="prompt-grid" id="promptGrid"></div>
+    </section>
+
+    <!-- Section 4: 대학생 AI 리터러시 진단 연계 -->
+    <section class="ai-section last">
+      <div class="literacy-box">
+        <div>
+          <span class="card-badge card-badge-written" style="margin-bottom: 10px;">사전·사후 역량 점검 연계</span>
+          <h2 style="font-size: 22px; color: var(--neutral-900); margin-bottom: 8px;">대학생 AI 리터러시 진단 & 맞춤형 실천 가이드</h2>
+          <p style="font-size: 14px; color: var(--neutral-700); line-height: 1.65;">
+            총 30문항(7점 리커트 척도, 100점 표준 환산) 진단을 통해 5대 핵심 역량 중 본인의 강점과 보완 영역을 먼저 파악한 뒤,
+            부족한 역량을 본 AI × OA 콜라보 실습과 OA MASTER 컴활 학습에 연계해 보세요. <small style="color: var(--neutral-500);">(아래 수치는 대학생 비교 기준 평균 점수입니다.)</small>
+          </p>
+          <div class="literacy-pills">
+            <span class="literacy-pill">역량 1 · 문제해결·창의적 적용 (참고 평균 71.92점)</span>
+            <span class="literacy-pill">역량 2 · 개념·생성형 AI 이해 (참고 평균 53.62점)</span>
+            <span class="literacy-pill">역량 3 · 태도·진로·사회 영향 (참고 평균 76.73점)</span>
+            <span class="literacy-pill">역량 4 · 데이터·윤리·보안 (참고 평균 69.09점)</span>
+            <span class="literacy-pill">역량 5 · 프롬프트·비판적 활용 (참고 평균 73.18점)</span>
+          </div>
+          <div class="ai-hero-actions">
+            <a href="AI리터러시진단안내_참고자료.pdf" target="_blank" class="btn btn-primary"
+              style="background-color: var(--theme-written);">
+              <i class="fas fa-file-pdf"></i> AI 리터러시 진단 참고자료 PDF (3p)
+            </a>
+            <a href="written_archive.html" class="btn btn-secondary">
+              <i class="fas fa-folder-open"></i> 컴활 필기 자료실 (회원 전용)
+            </a>
+          </div>
+        </div>
+
+        <div class="literacy-qr-card">
+          <img src="images/qrcode-chassem.jpg" alt="대학생 AI 리터러시 진단 QR 코드">
+          <span>AI 리터러시 진단 QR</span>
+          <small style="color: var(--neutral-500); font-size: 11px;">모바일 스캔으로 진단 페이지 접속</small>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-container">
+      <div class="footer-top">
+        <div class="footer-info">
+          <div class="footer-logo">
+            <img src="images/OA_master_LOGO.png" alt="OA MASTER Logo">
+            <span class="footer-logo-text">OA MASTER</span>
+          </div>
+          <p class="footer-slogan">"쉬운 기능도 AI와 뭉치면 통한다!"</p>
+          <p style="font-size:13px; color: var(--neutral-500);">
+            OA MASTER는 컴퓨터활용능력 1급/2급 및 사무자동화산업기사 자격증과 대학생 AI 활용 실무 교육을 연계해 서비스합니다.
+          </p>
+        </div>
+
+        <div class="footer-links-grid">
+          <div class="footer-links-col">
+            <h4>컴활 자격과정</h4>
+            <ul>
+              <li><a href="written_archive.html">필기 자료실</a></li>
+              <li><a href="written_lectures.html">필기 영상보기</a></li>
+              <li><a href="practical_archive.html">실기 자료실</a></li>
+              <li><a href="practical_lectures.html">실기 영상보기</a></li>
+            </ul>
+          </div>
+          <div class="footer-links-col">
+            <h4>AI × OA 콜라보</h4>
+            <ul>
+              <li><a href="ai_office.html">3일 과정 통합 허브</a></li>
+              <li><a href="ai_office.html?day=day1#curriculum">1일차 · Excel × AI</a></li>
+              <li><a href="ai_office.html?day=day2#curriculum">2일차 · Docs/Word × AI</a></li>
+              <li><a href="ai_office.html?day=day3#curriculum">3일차 · PPT/Slides × AI</a></li>
+            </ul>
+          </div>
+          <div class="footer-links-col">
+            <h4>자료 · 추천 사이트</h4>
+            <ul>
+              <li><a href="AI리터러시진단안내_참고자료.pdf" target="_blank">AI 리터러시 진단 PDF</a></li>
+              <li><a href="recommendations.html">추천 사이트</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 OA MASTER. All Rights Reserved. Designed for Excellence.</p>
+        <div class="footer-bottom-links">
+          <a href="index.html"><i class="fas fa-home"></i> 메인으로</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/ai-office.js"></script>
+  <script type="module">
+    import { onAuthChange } from './js/firebase-config.js';
+    onAuthChange((user) => {
+      if (window.renderHeaderUserNav) {
+        window.renderHeaderUserNav(user);
+      }
+    });
+  </script>
+</body>
+
+</html>

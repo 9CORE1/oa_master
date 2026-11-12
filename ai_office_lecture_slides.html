@@ -1,0 +1,2511 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>대학생을 위한 AI 활용 오피스 3일 완성 (50슬라이드)</title>
+  <style>
+    @font-face {
+      font-family: 'Pretendard';
+      src: url('fonts/PretendardVariable.woff2') format('woff2-variations');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: block;
+    }
+
+    @page {
+      size: 13.3333in 7.5in;
+      margin: 0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    }
+
+    html, body {
+      width: 1280px;
+      background: #e2e8f0;
+      color: #0f172a;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .slide {
+      width: 1280px;
+      height: 720px;
+      background: #ffffff;
+      padding: 36px 52px 26px 52px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      page-break-after: always;
+      break-after: page;
+    }
+
+    .slide:last-child {
+      page-break-after: auto;
+      break-after: auto;
+    }
+
+    /* 커버 슬라이드 */
+    .slide-cover {
+      padding: 50px 64px;
+      background: #ffffff;
+    }
+    .cover-bg {
+      position: absolute;
+      top: -120px;
+      right: -120px;
+      width: 560px;
+      height: 560px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(14,73,135,0.10), rgba(67,56,202,0.14));
+      z-index: 0;
+    }
+    .cover-inner {
+      position: relative;
+      z-index: 1;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .cover-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .brand-lockup {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .logo-img {
+      height: 44px;
+      width: auto;
+    }
+    .logo-img-sm {
+      height: 28px;
+      width: auto;
+      background: #ffffff;
+      border-radius: 6px;
+      padding: 2px;
+    }
+    .brand-name {
+      font-size: 24px;
+      font-weight: 800;
+      color: #0e4987;
+      letter-spacing: -0.02em;
+    }
+    .cover-badge {
+      background: #eff6ff;
+      color: #0e4987;
+      border: 1.5px solid #bfdbfe;
+      padding: 8px 18px;
+      border-radius: 999px;
+      font-size: 16px;
+      font-weight: 700;
+    }
+    .cover-badge.dark {
+      background: rgba(255,255,255,0.15);
+      color: #ffffff;
+      border-color: rgba(255,255,255,0.3);
+    }
+    .cover-main h1 {
+      font-size: 52px;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1.2;
+      letter-spacing: -0.03em;
+      margin-bottom: 18px;
+    }
+    .cover-sub {
+      font-size: 24px;
+      font-weight: 500;
+      color: #334155;
+      margin-bottom: 28px;
+    }
+    .tag-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .tag-pill {
+      background: #0e4987;
+      color: #ffffff;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: 700;
+    }
+    .cover-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 2px solid #e2e8f0;
+      padding-top: 20px;
+    }
+    .tool-pills {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .tool-pill {
+      background: #f1f5f9;
+      color: #1e293b;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+    }
+    .page-num {
+      font-size: 15px;
+      font-weight: 700;
+      color: #64748b;
+    }
+
+    /* 섹션 간지 슬라이드 */
+    .slide-section {
+      background: linear-gradient(135deg, var(--c) 0%, #0f172a 100%);
+      color: #ffffff;
+      padding: 48px 64px 28px 64px;
+    }
+    .section-stripe {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 14px;
+      height: 100%;
+      background: rgba(255,255,255,0.28);
+    }
+    .section-inner {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .section-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .section-day {
+      background: rgba(255,255,255,0.18);
+      padding: 8px 18px;
+      border-radius: 999px;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+    .brand-lockup.small span {
+      font-size: 17px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+    .section-title {
+      font-size: 42px;
+      font-weight: 800;
+      line-height: 1.28;
+      letter-spacing: -0.02em;
+    }
+    .section-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .section-item {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.22);
+      border-radius: 14px;
+      padding: 18px 22px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 19px;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+    .sec-num {
+      background: #ffffff;
+      color: var(--c);
+      font-size: 16px;
+      font-weight: 800;
+      padding: 5px 11px;
+      border-radius: 8px;
+      flex-shrink: 0;
+    }
+
+    /* 마무리 슬라이드 */
+    .slide-closing {
+      background: linear-gradient(160deg, #0f172a 0%, #1e3a8a 100%);
+      color: #ffffff;
+      padding: 46px 56px 32px 56px;
+    }
+    .closing-inner {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .closing-header h1 {
+      font-size: 42px;
+      font-weight: 800;
+      margin: 14px 0 8px 0;
+    }
+    .closing-sub {
+      font-size: 21px;
+      color: #cbd5e1;
+      font-weight: 500;
+    }
+    .slide-closing .card-clean {
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.22);
+      color: #ffffff;
+    }
+    .slide-closing .card-clean h3 {
+      color: #ffffff;
+    }
+    .slide-closing .card-clean p {
+      color: #e2e8f0;
+    }
+    .slide-closing .num-badge {
+      background: #ffffff;
+      color: #0e4987;
+    }
+    .closing-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid rgba(255,255,255,0.2);
+      padding-top: 16px;
+    }
+    .slogan-text {
+      font-size: 20px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+    .slide-closing .page-num {
+      color: #cbd5e1;
+    }
+
+    /* 일반 콘텐츠 슬라이드 헤더/타이틀 */
+    .slide-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .header-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .part-pill {
+      background: var(--c);
+      color: #ffffff;
+      padding: 5px 14px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .tag-chip {
+      background: var(--soft);
+      color: var(--c);
+      border: 1px solid var(--border);
+      padding: 4px 13px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .slide-id {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--c);
+      letter-spacing: 0.04em;
+    }
+    .title-block {
+      margin-bottom: 16px;
+      border-left: 6px solid var(--c);
+      padding-left: 16px;
+    }
+    .title-block h2 {
+      font-size: 31px;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1.24;
+      letter-spacing: -0.02em;
+    }
+    .lead {
+      font-size: 17.5px;
+      font-weight: 500;
+      color: #475569;
+      margin-top: 6px;
+      line-height: 1.42;
+    }
+
+    .slide-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 14px;
+      min-height: 0;
+    }
+
+    /* 공통 인라인 코드 */
+    .inline-code {
+      background: #f1f5f9;
+      color: var(--c);
+      padding: 2px 7px;
+      border-radius: 5px;
+      font-weight: 700;
+      font-size: 0.94em;
+      border: 1px solid #e2e8f0;
+    }
+    .slide-section .inline-code, .slide-closing .inline-code {
+      background: rgba(255,255,255,0.18);
+      color: #ffffff;
+      border-color: rgba(255,255,255,0.3);
+    }
+
+    /* 테이블 스타일 */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1.5px solid #cbd5e1;
+    }
+    .data-table th {
+      background: var(--c);
+      color: #ffffff;
+      text-align: left;
+      padding: 12px 16px;
+      font-size: 17px;
+      font-weight: 700;
+    }
+    .data-table td {
+      padding: 12px 16px;
+      font-size: 16.5px;
+      line-height: 1.45;
+      color: #1e293b;
+      border-top: 1px solid #e2e8f0;
+      vertical-align: top;
+    }
+    .data-table tbody tr:nth-child(even) {
+      background: #f8fafc;
+    }
+    .data-table.compact th {
+      padding: 10px 13px;
+      font-size: 15.5px;
+    }
+    .data-table.compact td {
+      padding: 10px 13px;
+      font-size: 15px;
+      line-height: 1.4;
+    }
+
+    /* 그리드 & 카드 */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      height: 100%;
+    }
+    .grid-2.compact-gap {
+      height: auto;
+      gap: 18px;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .compare-card, .info-card, .card-clean {
+      background: #f8fafc;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 20px 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .compare-card.tone-good {
+      background: #f0fdf4;
+      border-color: #bbf7d0;
+    }
+    .compare-card.tone-bad {
+      background: #fef2f2;
+      border-color: #fecaca;
+    }
+    .compare-card.tone-accent {
+      background: var(--soft);
+      border-color: var(--border);
+    }
+    .compare-badge, .info-label {
+      display: inline-block;
+      align-self: flex-start;
+      background: var(--c);
+      color: #ffffff;
+      padding: 5px 13px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 700;
+    }
+    .compare-card.tone-bad .compare-badge {
+      background: #dc2626;
+    }
+    .compare-card.tone-good .compare-badge {
+      background: #0f766e;
+    }
+    .compare-card h3, .info-card h3, .card-clean h3 {
+      font-size: 21px;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1.3;
+    }
+    .compare-card ul, .info-card ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 2px;
+    }
+    .compare-card li, .info-card li {
+      font-size: 17px;
+      line-height: 1.46;
+      color: #1e293b;
+      padding-left: 16px;
+      position: relative;
+    }
+    .compare-card li::before, .info-card li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: var(--c);
+      font-weight: 800;
+    }
+    .quote-txt {
+      font-size: 18px;
+      line-height: 1.5;
+      color: #1e293b;
+      font-weight: 500;
+    }
+
+    .card-clean {
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      padding: 20px;
+    }
+    .num-badge {
+      align-self: flex-start;
+      background: var(--c);
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: 800;
+      padding: 5px 12px;
+      border-radius: 8px;
+    }
+    .card-clean p {
+      font-size: 17px;
+      line-height: 1.5;
+      color: #334155;
+    }
+
+    /* 분할 레이아웃 & 체크리스트 */
+    .split-layout {
+      display: grid;
+      grid-template-columns: 1.2fr 0.9fr;
+      gap: 20px;
+      align-items: stretch;
+    }
+    .checklist-panel {
+      background: var(--soft);
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      padding: 20px 22px;
+      height: 100%;
+    }
+    .checklist-panel.wide {
+      height: auto;
+      padding: 18px 24px;
+    }
+    .checklist-panel h3 {
+      font-size: 19px;
+      font-weight: 800;
+      color: var(--c);
+      margin-bottom: 12px;
+    }
+    .checklist-panel ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 11px;
+    }
+    .checklist-panel li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 16.5px;
+      line-height: 1.42;
+      color: #0f172a;
+      font-weight: 500;
+    }
+    .chk-box {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      background: var(--c);
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* 프롬프트 & 배너 */
+    .meta-banner {
+      background: var(--soft);
+      border: 1.5px solid var(--border);
+      color: var(--c);
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-size: 16.5px;
+      font-weight: 700;
+    }
+    .prompt-box {
+      background: #0f172a;
+      color: #f8fafc;
+      border-radius: 14px;
+      padding: 18px 24px;
+    }
+    .prompt-label {
+      display: inline-block;
+      background: #38bdf8;
+      color: #0f172a;
+      font-size: 13px;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 6px;
+      margin-bottom: 8px;
+    }
+    .prompt-box p {
+      font-size: 18px;
+      line-height: 1.5;
+      font-weight: 500;
+      color: #f8fafc;
+    }
+    .tips-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .tip-item {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-left: 5px solid var(--c);
+      border-radius: 10px;
+      padding: 11px 16px;
+      font-size: 16.5px;
+      line-height: 1.42;
+      color: #1e293b;
+    }
+    .meta-notes {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 10px 16px;
+      font-size: 16px;
+      color: #334155;
+      line-height: 1.42;
+    }
+    .callout-box {
+      background: #f8fafc;
+      border: 1.5px solid #cbd5e1;
+      border-left: 6px solid var(--c);
+      border-radius: 12px;
+      padding: 14px 20px;
+    }
+    .callout-title {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--c);
+      margin-bottom: 4px;
+    }
+    .callout-box p {
+      font-size: 16.5px;
+      line-height: 1.45;
+      color: #1e293b;
+    }
+
+    /* 하단 요약 바 및 푸터 */
+    .summary-bar {
+      margin-top: 12px;
+      background: var(--soft);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 16px;
+      font-size: 16px;
+      font-weight: 600;
+      color: #0f172a;
+      line-height: 1.38;
+    }
+    .slide-footer {
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px solid #e2e8f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: #64748b;
+    }
+    .slide-footer.light {
+      border-top-color: rgba(255,255,255,0.22);
+      color: #e2e8f0;
+    }
+  </style>
+</head>
+<body>
+
+    <section class="slide slide-cover" style="--c:#1e3a8a; --accent:#4338ca;">
+      <div class="cover-bg"></div>
+      <div class="cover-inner">
+        <div class="cover-top">
+          <div class="brand-lockup">
+            <img src="images/OA_master_LOGO.png" alt="OA MASTER" class="logo-img">
+            <span class="brand-name">OA MASTER</span>
+          </div>
+          <span class="cover-badge">OA MASTER × AI 실전 가이드 · 3일 완성 (총 12시간) · 입문~기초</span>
+        </div>
+        <div class="cover-main">
+          <h1>대학생을 위한 AI 활용 오피스 3일 완성</h1>
+          <p class="cover-sub">쉬운 기능도 AI와 뭉치면 통한다! — 학교생활·실무 기본기 완성 (MS 365 + Google)</p>
+          <div class="tag-row">
+            <span class="tag-pill"># 전공 공부</span><span class="tag-pill"># 컴활 자격증</span><span class="tag-pill"># 리포트·발표</span><span class="tag-pill"># 예비직장인 소양</span>
+          </div>
+        </div>
+        <div class="cover-footer">
+          <div class="tool-pills">
+            <span class="tool-pill">Gemini (대학생 1년 무료)</span><span class="tool-pill">NotebookLM</span><span class="tool-pill">ChatGPT</span><span class="tool-pill">MS Office 365</span><span class="tool-pill">Google Workspace</span>
+          </div>
+          <span class="page-num cover-page">01 / 50</span>
+        </div>
+      </div>
+    </section>
+
+  <section class="slide" style="--c:#1e3a8a; --soft:#eff6ff; --border:#bfdbfe; --accent:#4338ca;">
+    <header class="slide-header">
+      <div class="header-meta">
+        <span class="part-pill">PART 0 · 오프닝 &amp; 준비</span>
+        <span class="tag-chip">과정 로드맵</span>
+      </div>
+      <span class="slide-id">S02</span>
+    </header>
+    <div class="title-block">
+      <h2>3일 뒤, 내 손에 남는 3가지 실전 결과물</h2>
+      <p class="lead">1일 4시간(50분×4교시) 과정으로, 앞선 날의 결과물이 다음 날의 재료로 이어지며 학교생활과 실무 기본기를 완성합니다.</p>
+    </div>
+    <main class="slide-body">
+      
+      <table class="data-table">
+        <thead>
+          <tr><th>일차</th><th>사용 도구</th><th>완성할 핵심 결과물</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1일차 (4시간)<br>데이터 · 자격증</td><td><strong>MS Excel + Google Sheets</strong><br>+ ChatGPT · Gemini</td><td>• 기초 수식 &amp; 오류 해결 연습표<br>• <strong>자격증 오답노트 &amp; 공부 진도 체크표</strong><br>• <strong>구글 폼 설문 요약 &amp; 한눈에 보이는 그래프</strong></td></tr><tr><td>2일차 (4시간)<br>학습 · 리포트</td><td><strong>Google Docs + MS Word</strong><br>+ NotebookLM · Gemini</td><td>• <strong>PDF 강의자료/기출 퀴즈·요약 노트</strong><br>• <strong>자동 목차 &amp; 참고문헌이 포함된 A+ 보고서(PDF)</strong></td></tr><tr><td>3일차 (4시간)<br>시각화 · 발표</td><td><strong>Google Slides + PowerPoint</strong><br>+ Gemini · ChatGPT</td><td>• <strong>10분 발표용 깔끔한 PPT 8~10장</strong><br>• <strong>발표자 노트 구어체 대본 &amp; 예상 질문 3선 답변</strong></td></tr>
+        </tbody>
+      </table>
+    </main>
+    <div class="summary-bar">핵심 연결 흐름: 1일차 설문 그래프 → 2일차 보고서 본문 첨부 → 3일차 발표 PPT 자동 변환</div>
+    <footer class="slide-footer">
+      <span class="footer-brand">OA MASTER · AI 활용 오피스 3일 완성</span>
+      <span>02 / 50</span>
+    </footer>
+  </section>
+
+  <section class="slide" style="--c:#1e3a8a; --soft:#eff6ff; --border:#bfdbfe; --accent:#4338ca;">
+    <header class="slide-header">
+      <div class="header-meta">
+        <span class="part-pill">PART 0 · 오프닝 &amp; 준비</span>
+        <span class="tag-chip">도구 전략</span>
+      </div>
+      <span class="slide-id">S03</span>
+    </header>
+    <div class="title-block">
+      <h2>왜 MS Office와 Google Workspace를 함께 쓰나요?</h2>
+      <p class="lead">초안과 협업은 구글에서, 자격증 실기와 최종 서식 마감은 MS 오피스에서 진행하는 것이 가장 효율적입니다.</p>
+    </div>
+    <main class="slide-body">
+      
+      <div class="grid-2">
+        
+          <div class="compare-card tone-good">
+            <div class="compare-badge">Google Workspace</div>
+            <h3>Forms · Sheets · Docs · Slides</h3>
+            <ul>
+              <li><strong>설문조사 제작 및 자동 취합</strong> (<span class="inline-code">Google Forms</span>)</li><li><strong>조별과제 실시간 동시 편집</strong> (<span class="inline-code">최종_진짜최종</span> 방지)</li><li><strong>Gemini 자료조사·초안</strong> 클릭 한 번에 바로 저장</li><li><strong>한 줄 역할</strong>: 초안 만들기 · 자료 모으기 · 팀플 협업</li>
+            </ul>
+          </div>
+          <div class="compare-card tone-accent">
+            <div class="compare-badge">MS Office 365 (학생 무료)</div>
+            <h3>Excel · Word · PowerPoint</h3>
+            <ul>
+              <li><strong>컴활 자격증 실기 시험 표준 환경</strong> 그대로 연습</li><li><strong>학교·교수님 제출용</strong> 정교한 문서 서식 마감</li><li><strong>PowerPoint 디자이너</strong> 기능으로 1초 레이아웃 꾸미기</li><li><strong>한 줄 역할</strong>: 자격증 실기 · 최종 서식 및 디자인 마감</li>
+            </ul>
+          </div>
+      </div>
+    </main>
+    <div class="summary-bar">핵심 변환 공식: 초안·협업(Google) → .xlsx / .docx / .pptx 내려받기 → 최종 마감(MS Office)</div>
+    <footer class="slide-footer">
+      <span class="footer-brand">OA MASTER · AI 활용 오피스 3일 완성</span>
+      <span>03 / 50</span>
+    </footer>
+  </section>
+
+  <section class="slide" style="--c:#1e3a8a; --soft:#eff6ff; --border:#bfdbfe; --accent:#4338ca;">
+    <header class="slide-header">
+      <div class="header-meta">
+        <span class="part-pill">PART 0 · 오프닝 &amp; 준비</span>
+        <span class="tag-chip">무료 AI ①</span>
+      </div>
+      <span class="slide-id">S04</span>
+    </header>
+    <div class="title-block">
+      <h2>대학생 무료 AI 챙기기 ① — Gemini 1년 무료 &amp; NotebookLM</h2>
+      <p class="lead">재학생 무료 프로모션과 PDF 전용 학습 AI를 결합하면 비용 부담 없이 학습·리서치 효율을 높일 수 있습니다.</p>
+    </div>
+    <main class="slide-body">
+      
+      <div class="grid-2">
+        
+          <div class="info-card">
+            <div class="info-label">1순위 · Gemini (대학생 1년 무료 프로모션)</div>
+            <ul>
+              <li>학교 이메일·재학생 인증 시 1년간 상위 요금제 무료 이용</li><li><strong>핵심 기능</strong>: 긴 PDF 분석, <strong>Deep Research</strong>(자료 조사→Docs 내보내기), <strong>Canvas</strong>(초안·슬라이드), 이미지 생성</li><li><strong>주의 1</strong>: 신청 시점별 프로모션 자격 확인 및 <strong>만료 전 해지 알림</strong> 등록 필수</li><li><strong>주의 2</strong>: 학생 플랜(<span class="inline-code">Google AI Plus</span> 등)에 따라 시트/문서 내장 버튼이 안 보일 수 있음 → <strong>웹 복사·내보내기</strong>로 동일 실습 가능</li>
+            </ul>
+          </div>
+          <div class="info-card">
+            <div class="info-label">학습 필수 · NotebookLM (무료 학습 AI)</div>
+            <ul>
+              <li>내가 올린 <strong>강의안 PDF · 컴활 요약집 · 논문</strong> 범위 안에서만 답변해 거짓 정보(환각) 최소화</li><li>답변마다 원문 <strong>출처 번호</strong>가 표시되어 시험 개념 확인이 정확 *(학술 검색 보조: <span class="inline-code">Perplexity</span> 무료 플랜)*</li><li><strong>Studio 학습 가이드</strong>: 핵심 개념 요약 노트 자동 생성</li><li><strong>Studio 플래시카드 &amp; 예상 퀴즈</strong>: 암기 카드 및 모의 문제 즉시 생성</li>
+            </ul>
+          </div>
+      </div>
+    </main>
+    <div class="summary-bar">문서·시트 내장 AI 버튼이 보이지 않는 계정이라도 웹 Gemini의 내보내기와 복사·붙여넣기로 모든 실습을 동일하게 진행할 수 있습니다.</div>
+    <footer class="slide-footer">
+      <span class="footer-brand">OA MASTER · AI 활용 오피스 3일 완성</span>
+      <span>04 / 50</span>
+    </footer>
+  </section>
+
+  <section class="slide" style="--c:#1e3a8a; --soft:#eff6ff; --border:#bfdbfe; --accent:#4338ca;">
+    <header class="slide-header">
+      <div class="header-meta">
+        <span class="part-pill">PART 0 · 오프닝 &amp; 준비</span>
+        <span class="tag-chip">무료 AI ②</span>
+      </div>
+      <span class="slide-id">S05</span>
+    </header>
+    <div class="title-block">
+      <h2>대학생 무료 AI 챙기기 ② — MS 365 학생 계정 &amp; ChatGPT</h2>
+      <p class="lead">학교 웹메일로 정품 오피스를 확보하고, 무료 AI별 강점에 따라 역할을 나누어 사용하면 하루 한도 걱정 없이 활용 가능합니다.</p>
+    </div>
+    <main class="slide-body">
+      
+      <div class="grid-2">
+        
+          <div class="info-card">
+            <div class="info-label">MS Office 365 교육용 (학생 무료 계정)</div>
+            <ul>
+              <li>대학교 웹메일(<span class="inline-code">.ac.kr</span>) 인증으로 <strong>Office 웹(A1)</strong> 무료, 학교 계약에 따라 <strong>PC 설치판(A3+)</strong> 무료 이용</li><li><strong>유료 Copilot 구분</strong>: 웹 기반 <strong>Copilot Chat(무료)</strong>은 메일·문서 초안 보조에 활용 가능하나, 앱 내장형 <strong>M365 Copilot</strong>은 미포함</li><li>본 과정은 <strong>정품 MS Office 기본 기능 + 웹 Gemini / ChatGPT</strong>를 나란히 띄워 작업하는 실전 방식으로 진행</li>
+            </ul>
+          </div>
+          <div class="info-card">
+            <div class="info-label">ChatGPT (무료 플랜 기준 활용 전략)</div>
+            <ul>
+              <li><strong>핵심 강점</strong>: 엑셀/CSV 설문 파일 직접 업로드 후 쉬운 분석 요청, 수식 오류 해결, 발표 예상 질문 연습</li><li><strong>무료 한도 관리 팁</strong>: 무료 플랜은 일일 파일 업로드·고급 모델 횟수 제한이 존재</li><li><strong>역할 분담</strong>: PDF 공부·자료 조사는 <span class="inline-code">NotebookLM / Gemini</span>, 데이터 분석·질의응답 연습은 <span class="inline-code">ChatGPT</span>로 분산 사용</li>
+            </ul>
+          </div>
+      </div>
+    </main>
+    <div class="summary-bar">4대 무료 도구 조합: 공부·퀴즈(NotebookLM) + 자료조사·초안(Gemini) + 설문분석·오류해결(ChatGPT) + 서식·디자인 마감(MS 365)</div>
+    <footer class="slide-footer">
+      <span class="footer-brand">OA MASTER · AI 활용 오피스 3일 완성</span>
+      <span>05 / 50</span>
+    </footer>
+  </section>
+
+  <section class="slide" style="--c:#1e3a8a; --soft:#eff6ff; --border:#bfdbfe; --accent:#4338ca;">
+    <header class="slide-header">
+      <div class="header-meta">
+        <span class="part-pill">PART 0 · 오프닝 &amp; 준비</span>
+        <span class="tag-chip">5분 세팅</span>
+      </div>
+      <span class="slide-id">S06</span>
+    </header>
+    <div class="title-block">
+      <h2>실습 전 5분 세팅 &amp; OA MASTER 자료실 활용법</h2>
+      <p class="lead">OA MASTER 웹사이트에 등록된 실제 컴활 필기 요약 PDF와 실기 엑셀 파일을 그대로 사용해 학습과 자격증을 동시에 대비합니다.</p>
+    </div>
+    <main class="slide-body">
+      
+      <div class="split-layout">
+        <div class="split-left">
+          <table class="data-table compact">
+            <thead>
+              <tr><th>OA MASTER 메뉴</th><th>연계 핵심 자료</th><th>활용 시점</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>필기 자료실</strong><br>(<span class="inline-code">written_archive.html</span>)</td><td><span class="inline-code">컴활2급_용어_정리_250선.pdf</span><br><span class="inline-code">컴활1급_필기_핵심요약집</span> 등</td><td><strong>2일차 1교시</strong><br>NotebookLM 퀴즈·요약</td></tr><tr><td><strong>실기 자료실</strong><br>(<span class="inline-code">practical_archive.html</span>)</td><td><span class="inline-code">셀 참조방식의 이해.xlsx</span><br><span class="inline-code">성적처리하면서 함수 익히기.xlsx</span></td><td><strong>1일차 1·4교시</strong><br>함수·피벗·차트 실습</td></tr><tr><td><strong>영상보기 · 추천 사이트</strong><br>(<span class="inline-code">written_lectures.html</span> 등)</td><td><span class="inline-code">컴활2급대비 함수사용법(1)~(3)</span><br><span class="inline-code">CBT 기출문제(comcbt.com)</span></td><td><strong>1일차 복습</strong><br>오답노트 문제 출처</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="split-right">
+          <div class="checklist-panel">
+            <h3>실습 시작 전 4단계 체크리스트</h3>
+            <ul>
+              <li><span class="chk-box">1</span><span>Chrome에서 개인 Google 계정 로그인 (<span class="inline-code">Drive</span>, <span class="inline-code">Sheets</span>, <span class="inline-code">Docs</span>, <span class="inline-code">Slides</span>)</span></li><li><span class="chk-box">2</span><span><span class="inline-code">Gemini</span> · <span class="inline-code">NotebookLM</span> · <span class="inline-code">ChatGPT</span> 로그인 후 브라우저 새 탭 고정</span></li><li><span class="chk-box">3</span><span>MS Office (<span class="inline-code">Excel</span> · <span class="inline-code">Word</span> · <span class="inline-code">PowerPoint</span>) 실행 또는 <span class="inline-code">office.com</span> 로그인</span></li><li><span class="chk-box">4</span><span><span class="inline-code">OA MASTER</span> 북마크 및 1일차 실기 예제 2종 미리 내려받기 *(1교시 초반 15분 세팅 여유 배정)*</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </main>
+    
+    <footer class="slide-footer">
+      <span class="footer-brand">OA MASTER · AI 활용 오피스 3일 완성</span>
+      <span>06 / 50</span>
+    </footer>
+  </section>
+
+    <section class="slide slide-section" style="--c:#005b5e; --soft:#f0fdfa; --accent:#0f766e;">
+      <div class="section-stripe"></div>
+      <div class="section-inner">
+        <div class="section-top">
+          <span class="section-day">PART 1 · 1일차 (4시간)</span>
+          <div class="brand-lockup small">
+            <img src="images/OA_master_LOGO.png" alt="OA MASTER" class="logo-img-sm">
+            <span>OA MASTER</span>
+          </div>
+        </div>
+        <h1 class="section-title">Excel &amp; Google Sheets + AI<br>표 정리부터 자격증 기초 · 설문 차트까지</h1>
+        <div class="section-list">
+          
+            <div class="section-item">
+              <span class="sec-num">01</span>
+              <span>1교시(50분): 함수를 외우지 않는 AI 질문 3단 공식 &amp; 오류 해결 (OA MASTER 예제)</span>
+            </div>
+            <div class="section-item">
+              <span class="sec-num">02</span>
+              <span>2교시(50분): 지저분한 표 1분 청소 &amp; 자격증 오답노트 DB 만들기</span>
+            </div>
+            <div class="section-item">
+              <span class="sec-num">03</span>
+              <span>3교시(50분): Google Forms 설문 수집 &amp; ChatGPT로 쉬운 데이터 분석</span>
+            </div>
+            <div class="section-item">
+              <span class="sec-num">04</span>
+              <span>4교시(50분): 보고서용 그래프 3종 · 기초 피벗 테이블 · 1페이지 PDF 인쇄</span>
+            </div>
+        </div>
+        <div class="slide-footer light">
+          <span>대학생을 위한 AI 활용 오피스 3일 완성</span>
+          <span>07 / 50</span>
+        </div>
+      </div>
+    </section>
+
+  <section class="slide" style="--c:#005b5e; --soft:#f0fdfa; --border:#99f6e4; --accent:#0f766e;">
+    <header class="slide-header">
+      <div class="header-meta">
+        <span class="part-pill">1일차 · Excel &amp; Sheets + AI</span>
+        <span class="tag-chip">1교시 · 함수 질문법</span>
+      </div>
+      <span class="slide-id">S08</span>
+    </header>
+    <div class="title-block">
+      <h2>함수를 외우지 마세요! AI에게 물어보는 3단 공식</h2>
+      <p class="lead">막연히 함수 이름만 묻기보다 표의 셀 위치, 원하는 결과, 조건 예시 3가지를 함께 적어 질문하면 바로 쓸 수 있는 수식을 얻습니다.</p>
+    </div>
+    <main class="slide-body">
+      
+      <div class="grid-2 compact-gap">
+        <div class="compare-card tone-bad">
+          <div class="compare-badge">피해야 할 방식</div>
+          <p class="quote-txt">엑셀 개수 세는 함수 알려줘 (내 표의 열 위치와 조건이 없어 바로 적용 불가)</p>
+        </div>
+        <div class="compare-card tone-good">
+          <div class="compare-badge">권장하는 방식</div>
+          <p class="quote-txt">① 내 표의 셀 위치(<span class="inline-code">B2:B30</span>) + ② 원하는 결과(학생 수) + ③ 조건 예시(80점 이상, 출석 15일 이상)</p>
+        </div>
+      </div>
+      <div class="prompt-box">
+        <div class="prompt-label">실전 복사용 프롬프트</div>
+        <p>엑셀 B2:B30에는 점수, C2:C30에는 출석일수가 있어. 점수가 80점 이상이면서 출석일수가 15일 이상인 학생 수만 세고 싶은데, 어떤 함수를 쓰면 돼? 바로 복사해 붙일 수 있는 수식과 초보자용 단계별 설명을 같이 적어줘.</p>
+      </div>
+    </main>
+    
+    <footer class="slide-footer">
+      <span class="footer-brand">OA MASTER · AI 활용 오피스 3일 완성</span>
+      <span>08 / 50</span>
+    </footer>
+  </section>
+
+  <section class="slide" style="--c:#005b5e; --soft:#f0fdfa; --border:#99f6e4; --accent:#0f766e;">
+    <header class="slide-header">
+      <div class="header-meta">
+        <span class="part-pill">1일차 · Excel &amp; Sheets + AI</span>
+        <span class="tag-chip">1교시 · 기초 함수 5대장</span>
+      </div>
+      <span class="slide-id">S09</span>
+    </header>
+    <div class="title-block">
+      <h2>이름만 알아두면 절반은 끝! 필수 기초 함수 5가지</h2>
+      <p class="lead">괄호 안 인수 순서를 외울 필요는 없습니다. 어떤 상황에서 어떤 함수를 쓰는지만 떠올리고 실제 수식 작성은 AI에게 맡기세요.</p>
+    </div>
+    <main class="slide-body">
+      
+      <table class="data-table">
+        <thead>
+          <tr><th>함수명</th><th>하는 일 (쉬운 설명)</th><th>대표 활용 상황</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong><span class="inline-code">SUM</span></strong></td><td>선택한 칸의 숫자를 모두 더하기</td><td>성적 총점, 동아리 지출 합계</td></tr><tr><td><strong><span class="inline-code">AVERAGE</span></strong></td><td>선택한 칸의 평균 구하기</td><td>과목 평균 점수, 설문 평균 만족도</td></tr><tr><td><strong><span class="inline-code">IF</span></strong></td><td>조건에 맞으면 O, 틀리면 X 표시</td><td>60점 이상 <span class="inline-code">"합격"</span> / 미만 <span class="inline-code">"불합격"</span></td></tr><tr><td><strong><span class="inline-code">COUNTIF</span></strong></td><td>특정 조건을 만족하는 칸의 개수 세기</td><td><span class="inline-code">"1급"</span> 응시자 수, <span class="inline-code">"찬성"</span> 응답 수</td></tr><tr><td><strong><span class="inline-code">VLOOKUP</span></strong></td><td>다른 표에서 코드·이름에 맞는 값 찾아오기</td><td>학번으로 학생 이름·점수 자동 불러오기</td></tr>
+        </tbody>
+      </table>
+    </main>
+    <div class="summary-bar">대학 과제와 컴활 2급 기초 실기에서 가장 자주 쓰이는 5가지 함수의 개념만 익혀두면 실전 적용이 빨라집니다.</div>
+    <footer class="slide-footer">
+      <span class="footer-brand">OA MASTER · AI 활용 오피스 3일 완성</span>
+      <span>09 / 50</span>
+    </footer>
+  </section>
+
+  <section class="slide" style="--c:#005b5e; --soft:#f0fdfa; --border:#99f6e4; --accent:#0f766e;">
+    <header class="slide-header">
+      <div class="header-meta">
+        <span class="part-pill">1일차 · Excel &amp; Sheets + AI</span>
+        <span class="tag-chip">1교시 · 실습</span>
+      </div>
+      <span class="slide-id">S10</span>
+    </header>
+    <div class="title-block">
+      <h2>[실습] OA MASTER 실기 파일로 바로 연습하기</h2>
+      <p class="lead">OA MASTER 실기 자료실에 등록된 단일 .xlsx 예제 파일을 열어 기초 수식 입력과 절대참조($) 원리를 함께 익힙니다.</p>
+    </div>
+    <main class="slide-body">
+      
+      <div class="meta-banner">연계 자료: OA MASTER 실기 자료실 (practical_archive.html)</div>
+      <div class="grid-3">
+        
+          <div class="card-clean">
+            <div class="num-badge">01</div>
+            <h3>예제 파일 열기</h3>
+            <p>OA MASTER 실기 자료실에서 위 2개 <span class="inline-code">.xlsx</span> 파일을 내려받아 Excel 또는 Google Sheets에서 엽니다.</p>
+          </div>
+          <div class="card-clean">
+            <div class="num-badge">02</div>
+            <h3>기초 수식 채우기</h3>
+            <p><span class="inline-code">성적처리</span> 시트의 총점(<span class="inline-code">SUM</span>), 평균(<span class="inline-code">AVERAGE</span>), 합격 여부(<span class="inline-code">IF</span>)를 AI 질문 3단 공식으로 작성해 입력합니다.</p>
+          </div>
+          <div class="card-clean">
+            <div class="num-badge">03</div>
+            <h3>절대참조($) 해결하기</h3>
+            <p>수식을 아래로 드래그했을 때 기준 셀이 밀리면 <strong><span class="inline-code">$</span>(절대참조, <span class="inline-code">F4</span> 키)</strong>를 어디에 붙여야 하는지 AI에게 묻고 수정합니다.</p>
+          </div>
+      </div>
+      
+        <div class="meta-notes">
+          <span>• 파일 1: <span class="inline-code">셀 참조방식의 이해.xlsx</span> (상대·절대·혼합참조 연습)</span><span>• 파일 2: <span class="inline-code">[수업중] 성적처리하면서 함수 익히기.xlsx</span></span>
+        </div>
+    </main>
+    
+    <footer class="slide-footer">
+      <span class="footer-brand">OA MASTER · AI 활용 오피스 3일 완성</span>
+      <span>10 / 50</span>
+    </footer>
+  </section>
+
+  <section class="slide" style="--c:#005b5e; --soft:#f0fdfa; --border:#99f6e4; --accent:#0f766e;">
+    <header class="slide-header">
+      <div class="header-meta">
+        <span class="part-pill">1일차 · Excel &amp; Sheets + AI</span>
+        <span class="tag-chip">1교시 · 오류 해결</span>
+      </div>
+      <span class="slide-id">S11</span>
+    </header>
+    <div class="title-block">
+      <h2>당황 금지! 자주 뜨는 엑셀·시트 오류 4종 10초 해결</h2>
+      <p class="lead">빨간 오류가 뜨면 수식을 지우지 말고 입력한 수식과 오류 이름을 AI에게 함께 보여주세요.</p>
+    </div>
+    <main class="slide-body">
+      
+      <table class="data-table">
+        <thead>
+          <tr><th>오류 표시</th><th>주요 발생 원인</th><th>AI 질문 예시</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong><span class="inline-code">#NAME?</span></strong></td><td>함수 이름 철자가 틀렸거나 글자에 큰따옴표(<span class="inline-code">" "</span>)가 빠졌을 때</td><td>수식 오타 점검 요청</td></tr><tr><td><strong><span class="inline-code">#VALUE!</span></strong></td><td>숫자로 계산해야 하는 칸에 문자나 공백이 섞여 있을 때</td><td>문자/숫자 형식 확인</td></tr><tr><td><strong><span class="inline-code">#N/A</span></strong></td><td><span class="inline-code">VLOOKUP</span> 등으로 값을 찾았으나 기준 표에 찾는 값이 없을 때</td><td><span class="inline-code">=VLOOKUP(...)</span> <span class="inline-code">#N/A</span> 원인 질문</td></tr><tr><td><strong><span class="inline-code">#DIV/0!</span></strong></td><td>어떤 수를 <span class="inline-code">0</span>이나 빈 칸으로 나누려고 했을 때</td><td><span class="inline-code">IFERROR</span> 처리 방법 질문</td></tr>
+        </tbody>
+      </table>
+    </main>
+    <div class="summary-bar">복습 연계: OA MASTER 필기 영상보기(written_lectures.html) — 컴활2급대비 함수사용법(1)~(3)</div>
+    <footer class="slide-footer">
+      <span class="footer-brand">OA MASTER · AI 활용 오피스 3일 완성</span>
+      <span>11 / 50</span>
+    </footer>
+  </section>
+
+  <section class="slide" style="--c:#005b5e; --soft:#f0fdfa; --border:#99f6e4; --accent:#0f766e;">
+    <header class="slide-header">
+      <div class="header-meta">
+        <span class="part-pill">1일차 · Excel &amp; Sheets + AI</span>
+        <span class="tag-chip">2교시 · 데이터 청소</span>
+      </div>
+      <span class="slide-id">S12</span>
+    </header>
+    <div class="title-block">
+      <h2>노가다 삭제 금지! 지저분한 표 클릭 3번으로 청소하기</h2>
+      <p class="lead">설문조사나 공공데이터 포털에서 받은 표는 중복 제거, 찾기 및 바꾸기(Ctrl+H), 빠른 채우기(Ctrl+E)로 1분 만에 정리할 수 있습니다.</p>
+    </div>
+    <main class="slide-body">
+      
+      <div class="grid-3">
+        
+          <div class="card-clean">
+            <div class="num-badge">01</div>
+            <h3>중복된 항목 제거</h3>
+            <p>같은 사람이나 응답이 2번 이상 들어간 행을 한 번에 정리<br>• Excel: <span class="inline-code">데이터 &gt; 중복된 항목 제거</span><br>• Sheets: <span class="inline-code">데이터 &gt; 데이터 정리 &gt; 중복 항목 삭제</span></p>
+          </div>
+          <div class="card-clean">
+            <div class="num-badge">02</div>
+            <h3>한 번에 모양 바꾸기 (Ctrl+H)</h3>
+            <p>제각각인 날짜(<span class="inline-code">2026.11.01</span>, <span class="inline-code">26/11/1</span>)나 불필요한 단위(<span class="inline-code">점</span>, <span class="inline-code">원</span>)를 찾기 및 바꾸기로 일괄 통일</p>
+          </div>
+          <div class="card-clean">
+            <div class="num-badge">03</div>
+            <h3>패턴 자동 채우기 (Ctrl+E)</h3>
+            <p>Excel <span class="inline-code">빠른 채우기</span>: 한 칸에 붙어 있는 <span class="inline-code">이름/학번</span>에서 앞 1~2칸만 예시로 적고 <span class="inline-code">Ctrl+E</span>를 누르면 나머지 자동 분리</p>
+          </div>
+      </div>
+    </main>
+    <div class="summary-bar">수백 줄의 표를 눈으로 보며 하나씩 지우지 말고 기본 정리 메뉴 3가지를 먼저 적용해 깨끗한 표를 만드세요.</div>
+    <footer class="slide-footer">
+      <span class="footer-brand">OA MASTER · AI 활용 오피스 3일 완성</span>
+      <span>12 / 50</span>
+    </footer>
+  </section>
+
+  <section class="slide" style="--c:#005b5e; --soft:#f0fdfa; --border:#99f6e4; --accent:#0f766e;">
+    <header class="slide-header">
+      <div class="header-meta">
+        <span class="part-pill">1일차 · Excel &amp; Sheets + AI</span>
+        <span class="tag-chip">2교시 · 구글 시트 AI</span>
+      </div>
+      <span class="slide-id">S13</span>
+    </header>
+    <div class="title-block">
+      <h2>구글 시트 내장 =AI() 함수 기초 &amp; 미지원 계정 대안</h2>
+      <p class="lead">내 계정에 =AI() 함수가 지원되지 않아도 표 범위를 복사해 웹 Gemini나 ChatGPT에 붙여넣으면 똑같은 결과를 얻을 수 있습니다.</p>
+    </div>
+    <main class="slide-body">
+      
+      <div class="grid-2">
+        
+          <div class="info-card">
+            <div class="info-label">① 지원 계정에서의 =AI() 사용법</div>
+            <ul>
+              <li>구글 시트 공식 함수는 <span class="inline-code">=GEMINI()</span>가 아닌 <strong><span class="inline-code">=AI()</span></strong></li><li>셀 안에 한글 지시어를 적어 여러 줄 텍스트를 한 번에 요약·분류</li><li><strong>오답 정리</strong>: <span class="inline-code">=AI("이 오답의 핵심 개념 1가지만 적어줘", A2)</span></li><li><strong>설문 분류</strong>: <span class="inline-code">=AI("긍정인지 부정인지 분류해줘", B2)</span></li>
+            </ul>
+          </div>
+          <div class="info-card">
+            <div class="info-label">② =AI()가 안 뜨는 계정일 때 100% 해결 대안</div>
+            <ul>
+              <li>1단계: 정리할 표 범위를 드래그해 복사(<span class="inline-code">Ctrl + C</span>)</li><li>2단계: 웹 <strong>Gemini</strong> 또는 <strong>ChatGPT</strong> 채팅창에 붙여넣기</li><li>3단계: *"각 행의 핵심 개념 1개씩 뽑아 표로 돌려줘"* 요청</li><li>4단계: AI가 만든 표를 복사해 다시 시트에 붙여넣기</li>
+            </ul>
+          </div>
+      </div>
+    </main>
+    <div class="summary-bar">학생 프로모션 요금제나 학교 계정에 따라 시트 내장 =AI() 기능이 비활성화되어 있어도 웹 복붙으로 동일하게 실습 가능합니다.</div>
+    <footer class="slide-footer">
+      <span class="footer-brand">OA MASTER · AI 활용 오피스 3일 완성</span>
+      <span>13 / 50</span>
+    </footer>
+  </section>
+
+  <section class="slide" style="--c:#005b5e; --soft:#f0fdfa; --border:#99f6e4; --accent:#0f766e;">
+    <header class="slide-header">
+      <div class="header-meta">
+        <span class="part-pill">1일차 · Excel &amp; Sheets + AI</span>
+        <span class="tag-chip">2교시 · 실습</span>
+      </div>
+      <span class="slide-id">S14</span>
+    </header>
+    <div class="title-block">
+      <h2>[실습] 나만의 자격증 오답노트 &amp; 공부 진도표 만들기</h2>
+      <p class="lead">OA MASTER 계산작업 문제와 CBT 기출풀이에서 틀린 문항을 기록하고, 체크박스로 복습률까지 관리하는 시트를 구축합니다.</p>
+    </div>
+    <main class="slide-body">
+      
+      <div class="meta-banner">연계 자료: OA MASTER [수업중] 계산작업만 다시 공부하기 · 추천 사이트 comcbt.com</div>
+      <div class="prompt-box">
+        <div class="prompt-label">실전 복사용 프롬프트</div>
+        <p>컴퓨터활용능력 자격증 공부를 위한 오답노트 표 양식을 만들어줘. 열은 [날짜, 과목/파트, 틀린 문제 요약, 내가 고른 오답, 핵심 개념, 복습 완료 여부]로 구성해서 구글 시트나 엑셀에 바로 붙여넣을 수 있게 표로 출력해줘.</p>
+      </div>
+      <div class="tips-list">
+        <div class="tip-item"><strong>체크박스 추가</strong>: Google Sheets 상단 <span class="inline-code">삽입 &gt; 체크박스</span>를 <span class="inline-code">복습 완료 여부</span> 열에 넣으면 클릭만으로 복습 체크 가능</div><div class="tip-item"><strong>진도율 자동 계산</strong>: <span class="inline-code">COUNTIF</span> 함수로 체크된 개수(<span class="inline-code">TRUE</span>)를 세면 실시간 복습 달성률 표시 가능</div>
+      </div>
+    </main>
+    
+    <footer class="slide-footer">
+      <span class="footer-brand">OA MASTER · AI 활용 오피스 3일 완성</span>
+      <span>14 / 50</span>
+    </footer>
+  </section>
+
+  <section class="slide" style="--c:#005b5e; --soft:#f0fdfa; --border:#99f6e4; --accent:#0f766e;">
+    <header class="slide-header">
+      <div class="header-meta">
+        <span class="part-pill">1일차 · Excel &amp; Sheets + AI</span>
+        <span class="tag-chip">3교시 · 설문 수집</span>
+      </div>
+      <span class="slide-id">S15</span>
+    </header>
+    <div class="title-block">
+      <h2>Google Forms로 설문 만들고 1초 만에 표로 모으기</h2>
+      <p class="lead">조별 과제나 소논문 설문 시 그래프 그리기 편한 질문 유형을 선택하고, 클릭 한 번으로 시트와 엑셀 파일로 연결합니다.</p>
+    </div>
+    <main class="slide-body">
+      
+      <div class="grid-2">
+        
+          <div class="info-card">
+            <div class="info-label">그래프 그리기 편한 설문 설계 2가지 팁</div>
+            <ul>
+              <li><strong>객관식·체크박스 위주 구성</strong>: 자유 주관식만 많으면 나중에 통계를 내거나 차트 그리기가 어려움</li><li><strong>보기 항목 통일</strong>: 학년(<span class="inline-code">1~4학년</span>), 만족도(<span class="inline-code">1~5점</span>)처럼 숫자와 범주를 명확히 구분해 설계</li>
+            </ul>
+          </div>
+          <div class="info-card">
+            <div class="info-label">응답을 표(.xlsx)로 바로 받는 3단계</div>
+            <ul>
+              <li>1단계: 설문 종료 후 Forms 상단 <strong><span class="inline-code">응답</span> 탭</strong> 클릭</li><li>2단계: 초록색 <strong><span class="inline-code">Sheets에 연결</span></strong> 클릭 → 실시간 응답 시트 생성</li><li>3단계: <span class="inline-code">파일 &gt; 다운로드 &gt; Microsoft Excel(.xlsx)</span> 저장</li>
+            </ul>
+          </div>
+      </div>
+    </main>
+    <div class="summary-bar">현장 설문 응답 수집 시간이 부족하면 미리 준비된 연습용 샘플 설문(.xlsx)으로 3·4교시 분석 실습을 바로 진행하세요.</div>
+    <footer class="slide-footer">
+      <span class="footer-brand">OA MASTER · AI 활용 오피스 3일 완성</span>
+      <span>15 / 50</span>
+    </footer>
+  </section>
+
+  <section class="slide" style="--c:#005b5e; --soft:#f0fdfa; --border:#99f6e4; --accent:#0f766e;">
+    <header class="slide-header">
+      <div class="header-meta">
+        <span class="part-pill">1일차 · Excel &amp; Sheets + AI</span>
+        <span class="tag-chip">3교시 · AI 파일 분석</span>
+      </div>
+      <span class="slide-id">S16</span>
+    </header>
+    <div class="title-block">
+      <h2>파일만 올리면 끝! ChatGPT에 설문 엑셀 올려 분석하기</h2>
+      <p class="lead">ChatGPT 무료 플랜에서도 엑셀(.xlsx)이나 CSV 파일을 직접 첨부해 어려운 통계 지식 없이 핵심 경향을 물어볼 수 있습니다.</p>
+    </div>
+    <main class="slide-body">
+      
+      <div class="meta-banner">필수 보안 수칙: 개인정보 및 회사 대외비·기밀 입력 금지</div>
+      <div class="grid-3">
+        
+          <div class="card-clean">
+            <div class="num-badge">01</div>
+            <h3>개인정보 · 기밀 열 삭제</h3>
+            <p>이름·연락처·학번 등 개인정보 열과 실무 대외비 데이터가 포함되지 않도록 먼저 정리·삭제합니다.</p>
+          </div>
+          <div class="card-clean">
+            <div class="num-badge">02</div>
+            <h3>파일 첨부(+)</h3>
+            <p>ChatGPT(또는 Gemini) 입력창 왼쪽 <span class="inline-code">+</span> 버튼을 눌러 정제된 <span class="inline-code">.xlsx</span> 파일을 업로드합니다.</p>
+          </div>
+          <div class="card-clean">
+            <div class="num-badge">03</div>
+            <h3>일상어로 질문</h3>
+            <p>복잡한 통계 용어 대신 보고서에 넣고 싶은 내용과 그래프 추천을 한국어로 바로 질문합니다.</p>
+          </div>
+      </div>
+      
+        <div class="meta-notes">
+          <span>• 지원 파일: <span class="inline-code">.xlsx</span> (Excel) 또는 <span class="inline-code">.csv</span> (쉼표 구분 파일)</span><span>• 주의 사항: <strong>이름·전화번호·이메일·학번</strong> 삭제 필수 (실무 시 <strong>기업 기밀·대외비</strong> 업로드 금지)</span>
+        </div>
+    </main>
+    
+    <footer class="slide-footer">
+      <span class="footer-brand">OA MASTER · AI 활용 오피스 3일 완성</span>
+      <span>16 / 50</span>
+    </footer>
+  </section>
+
+  <section class="slide" style="--c:#005b5e; --soft:#f0fdfa; --border:#99f6e4; --accent:#0f766e;">
+    <header class="slide-header">
+      <div class="header-meta">
+        <span class="part-pill">1일차 · Excel &amp; Sheets + AI</span>
+        <span class="tag-chip">3교시 · 실습</span>
+      </div>
+      <span class="slide-id">S17</span>
+    </header>
+    <div class="title-block">
+      <h2>[실습] 설문 특징 3줄 요약 &amp; 추천 그래프 받아내기</h2>
+      <p class="lead">구체적인 출력 형식을 지정해 질문하면 보고서 본문에 바로 활용할 수 있는 인사이트와 차트 설계안을 얻을 수 있습니다.</p>
+    </div>
+    <main class="slide-body">
+      
+      <div class="meta-banner">2일차 보고서 · 3일차 발표 PPT와 직접 연결되는 핵심 데이터</div>
+      <div class="prompt-box">
+        <div class="prompt-label">실전 복사용 프롬프트</div>
+        <p>첨부한 설문조사 엑셀 파일을 분석해줘. 어려운 통계 용어는 빼고 초보자도 바로 이해할 수 있게 ① 가장 눈에 띄는 결과 특징 3가지, ② 보고서에 넣기 좋은 그래프 종류 2가지, ③ 그래프를 만들 때 어떤 열과 어떤 열을 묶어서 그리면 좋을지 표로 정리해줘.</p>
+      </div>
+      <div class="tips-list">
+        <div class="tip-item"><strong>보고서 연계</strong>: AI가 뽑아준 핵심 특징 3가지는 2일차 보고서 본론의 객관적 근거 문장으로 그대로 활용</div><div class="tip-item"><strong>PPT 연계</strong>: 추천받은 그래프 2종을 4교시에서 직접 그려 3일차 발표 슬라이드에 삽입</div>
+      </div>
+    </main>
+    
+    <footer class="slide-footer">
+      <span class="footer-brand">OA MASTER · AI 활용 오피스 3일 완성</span>
+      <span>17 / 50</span>
+    </footer>
+  </section>
+
+  <section class="slide" style="--c:#005b5e; --soft:#f0fdfa; --border:#99f6e4; --accent:#0f766e;">
+    <header class="slide-header">
+      <div class="header-meta">
+        <span class="part-pill">1일차 · Excel &amp; Sheets + AI</span>
+        <span class="tag-chip">4교시 · 차트 작성</span>
+      </div>
+      <span class="slide-id">S18</span>
+    </header>
+    <div class="title-block">
+      <h2>보고서 점수를 올리는 그래프 3종 선택 기준</h2>
+      <p class="lead">표의 숫자를 그대로 넣기보다 데이터 목적에 맞는 그래프를 선택하고, 제목에 핵심 결론을 적으면 전달력이 크게 높아집니다.</p>
+    </div>
+    <main class="slide-body">
+      
+      <table class="data-table">
+        <thead>
+          <tr><th>그래프 종류</th><th>사용하는 상황</th><th>대표 활용 예시</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>막대 그래프</strong></td><td>여러 항목의 <strong>크기·개수 비교</strong></td><td>선호하는 AI 도구 순위(1~5위)</td></tr><tr><td><strong>원형(도넛) 그래프</strong></td><td>전체 100% 중 <strong>차지하는 비율</strong></td><td>설문 찬성 vs 반대 비율, 학년별 구성</td></tr><tr><td><strong>꺾은선 그래프</strong></td><td><strong>시간·날짜 흐름에 따른 변화</strong></td><td>주차별 자격증 공부 시간, 월별 지출</td></tr>
+        </tbody>
+      </table>
+    </main>
+    <div class="summary-bar">차트 다듬기 3팁: ① 제목을 "설문 결과" 대신 핵심 결론("응답자 68% AI 활용")으로 적기 ② 데이터 레이블 켜기 ③ 불필요한 격자선 지우기 (OA MASTER 차트 영상 연계)</div>
+    <footer class="slide-footer">
+      <span class="footer-brand">OA MASTER · AI 활용 오피스 3일 완성</span>
+      <span>18 / 50</span>
+    </footer>
+  </section>
+
+  <section class="slide" style="--c:#005b5e; --soft:#f0fdfa; --border:#99f6e4; --accent:#0f766e;">
+    <header class="slide-header">
+      <div class="header-meta">
+        <span class="part-pill">1일차 · Excel &amp; Sheets + AI</span>
+        <span class="tag-chip">4교시 · 기초 피벗</span>
+      </div>
+      <span class="slide-id">S19</span>
+    </header>
+    <div class="title-block">
+      <h2>긴 표를 항목별로 쏙쏙 묶어주는 마법: 기초 피벗 테이블</h2>
+      <p class="lead">수식 하나 입력하지 않고도 행(묶을 기준)과 값(합계/개수) 딱 두 칸만 끌어다 놓으면 깔끔한 요약표가 완성됩니다.</p>
+    </div>
+    <main class="slide-body">
+      
+      <div class="meta-banner">연계 자료: OA MASTER 실기 자료실 [수업중] 작업별 연습 추가 (피벗테이블)</div>
+      <div class="grid-3">
+        
+          <div class="card-clean">
+            <div class="num-badge">01</div>
+            <h3>삽입 &gt; 피벗 테이블</h3>
+            <p>표 안의 셀 아무 곳이나 클릭한 뒤 상단 메뉴 <span class="inline-code">삽입 &gt; 피벗 테이블</span>을 눌러 확인합니다.</p>
+          </div>
+          <div class="card-clean">
+            <div class="num-badge">02</div>
+            <h3>행(묶을 기준) 넣기</h3>
+            <p>오른쪽 설정 창에서 <span class="inline-code">행</span> 칸에 기준이 될 열(예: <span class="inline-code">학년</span> 또는 <span class="inline-code">과목</span>)을 끌어다 놓습니다.</p>
+          </div>
+          <div class="card-clean">
+            <div class="num-badge">03</div>
+            <h3>값(계산할 항목) 넣기</h3>
+            <p><span class="inline-code">값</span> 칸에 더하거나 개수를 셀 열(예: <span class="inline-code">점수</span> 또는 <span class="inline-code">응답 ID</span>)을 끌어다 놓으면 요약표가 즉시 완성됩니다.</p>
+          </div>
+      </div>
+      
+        <div class="meta-notes">
+          <span>• 피벗 테이블은 수십 줄의 원시 표를 원하는 기준별로 묶어 요약해 주는 기능</span><span>• 컴활 실기 시험의 필수 단골 영역이자 과제 요약표 제작의 핵심 도구</span>
+        </div>
+    </main>
+    
+    <footer class="slide-footer">
+      <span class="footer-brand">OA MASTER · AI 활용 오피스 3일 완성</span>
+      <span>19 / 50</span>
+    </footer>
+  </section>
+
+  <section class="slide" style="--c:#005b5e; --soft:#f0fdfa; --border:#99f6e4; --accent:#0f766e;">
+    <header class="slide-header">
+      <div class="header-meta">
+        <span class="part-pill">1일차 · Excel &amp; Sheets + AI</span>
+        <span class="tag-chip">4교시 · 인쇄 마무리</span>
+      </div>
+      <span class="slide-id">S20</span>
+    </header>
+    <div class="title-block">
+      <h2>표가 반으로 잘려 인쇄될 때! 1페이지 맞춤 &amp; PDF 저장</h2>
+      <p class="lead">인쇄나 PDF 변환 전 용지 방향(가로)과 배율(한 페이지에 모든 열 맞추기)만 설정해도 표가 두 쪽으로 잘리는 실수를 막을 수 있습니다.</p>
+    </div>
+    <main class="slide-body">
+      
+      <div class="meta-banner">Excel · Google Sheets 공통 인쇄 마무리 규칙</div>
+      <div class="grid-3">
+        
+          <div class="card-clean">
+            <div class="num-badge">01</div>
+            <h3>인쇄 창 열기 (Ctrl+P)</h3>
+            <p>표가 완성되면 <span class="inline-code">파일 &gt; 인쇄</span>(<span class="inline-code">Ctrl + P</span>)를 눌러 미리보기 화면을 확인합니다.</p>
+          </div>
+          <div class="card-clean">
+            <div class="num-badge">02</div>
+            <h3>용지 방향 가로로 변경</h3>
+            <p>열이 많은 표나 대시보드는 <span class="inline-code">세로</span> 대신 <strong><span class="inline-code">가로</span> 방향</strong>으로 바꿉니다.</p>
+          </div>
+          <div class="card-clean">
+            <div class="num-badge">03</div>
+            <h3>한 페이지에 모든 열 맞추기</h3>
+            <p>배율 설정에서 <strong><span class="inline-code">한 페이지에 모든 열 맞추기</span></strong>(또는 <span class="inline-code">너비에 맞추기</span>) 선택 후 <strong>PDF로 저장</strong>합니다.</p>
+          </div>
+      </div>
+      
+        <div class="meta-notes">
+          <span>• 증상: 열이 많은 표를 그대로 PDF 저장하면 오른쪽 1~2개 열이 다음 페이지로 넘어감</span><span>• 해결: <span class="inline-code">Ctrl + P</span> 인쇄 미리보기에서 2가지 옵션만 변경</span>
+        </div>
+    </main>
+    
+    <footer class="slide-footer">
+      <span class="footer-brand">OA MASTER · AI 활용 오피스 3일 완성</span>
+      <span>20 / 50</span>
+    </footer>
+  </section>
+
+  <section class="slide" style="--c:#005b5e; --soft:#f0fdfa; --border:#99f6e4; --accent:#0f766e;">
+    <header class="slide-header">
+      <div class="header-meta">
+        <span class="part-pill">1일차 · Excel &amp; Sheets + AI</span>
+        <span class="tag-chip">1일차 마무리</span>
+      </div>
+      <span class="slide-id">S21</span>
+    </header>
+    <div class="title-block">
+      <h2>1일차 핵심 요약 &amp; 시트 ↔ 엑셀 호환 주의 팁</h2>
+      <p class="lead">구글 시트 전용 함수(=AI() 등)가 들어간 표를 엑셀로 옮길 때는 값만 붙여넣기(Ctrl+Shift+V)를 사용하면 수식 깨짐을 방지할 수 있습니다.</p>
+    </div>
+    <main class="slide-body">
+      
+      <div class="checklist-panel wide">
+        <ul>
+          <li><span class="chk-box">1</span><span><strong>AI 함수 질문 3단 공식</strong>(<span class="inline-code">셀 위치 + 원하는 결과 + 조건</span>)으로 기초 수식과 오류 해결 완료</span></li><li><span class="chk-box">2</span><span>OA MASTER 연계 <strong>자격증 오답노트 DB &amp; 공부 진도 체크표</strong> 구축 완료</span></li><li><span class="chk-box">3</span><span><strong>Google Forms → ChatGPT 파일 분석 → 그래프 3종 · 기초 피벗 · PDF 저장</strong> 완료</span></li>
+        </ul>
+      </div>
+      <div class="callout-box">
+        <div class="callout-title">Google Sheets ↔ Excel 파일 호환 핵심 팁</div>
+        <p>Google Sheets 전용 함수(<span class="inline-code">=AI()</span>, <span class="inline-code">QUERY</span> 등)는 Excel에서 오류가 날 수 있습니다. Excel(<span class="inline-code">.xlsx</span>)로 옮길 때는 결과 영역을 복사한 뒤 <strong><span class="inline-code">Ctrl + Shift + V</span>(값만 붙여넣기)</strong>를 사용해 결과 텍스트만 깔끔하게 넘기세요. 오늘 만든 그래프와 요약은 2일차 보고서의 근거 자료로 바로 이어집니다.</p>
+      </div>
+    </main>
+    
+    <footer class="slide-footer">
+      <span class="footer-brand">OA MASTER · AI 활용 오피스 3일 완성</span>
+      <span>21 / 50</span>
+    </footer>
+  </section>
+
+    <section class="slide slide-section" style="--c:#0e4987; --soft:#eff6ff; --accent:#1d4ed8;">
+      <div class="section-stripe"></div>
+      <div class="section-inner">
+        <div class="section-top">
+          <span class="section-day">PART 2 · 2일차 (4시간)</span>
+          <div class="brand-lockup small">
+            <img src="images/OA_master_LOGO.png" alt="OA MASTER" class="logo-img-sm">
+            <span>OA MASTER</span>
+          </div>
+        </div>
+        <h1 class="section-title">Google Docs &amp; Word + NotebookLM<br>전공 공부부터 A+ 리포트 · 소논문 초안까지</h1>
+        <div class="section-list">
+          
+            <div class="section-item">
+              <span class="sec-num">01</span>
+              <span>1교시(50분): NotebookLM으로 PDF 벼락치기 &amp; Deep Research 자료 조사</span>
+            </div>
+            <div class="section-item">
+              <span class="sec-num">02</span>
+              <span>2교시(50분): 빈 화면 탈출! 서론-본론-결론 5분 목차 &amp; 초안 쓰기</span>
+            </div>
+            <div class="section-item">
+              <span class="sec-num">03</span>
+              <span>3교시(50분): 보고서 문체 · 비즈니스 메일 응용 · 표절 방지 · 참고문헌</span>
+            </div>
+            <div class="section-item">
+              <span class="sec-num">04</span>
+              <span>4교시(50분): 제목 스타일 1초 자동 목차 · 1분 회의록 &amp; Word/PDF 완성</span>
+            </div>
+        </div>
+        <div class="slide-footer light">
+          <span>대학생을 위한 AI 활용 오피스 3일 완성</span>
+          <span>22 / 50</span>
+        </div>
+      </div>
+    </section>
+
+  <section class="slide" style="--c:#0e4987; --soft:#eff6ff; --border:#bfdbfe; --accent:#1d4ed8;">
+    <header class="slide-header">
+      <div class="header-meta">
+        <span class="part-pill">2일차 · Docs &amp; Word + NotebookLM</span>
+        <span class="tag-chip">1교시 · NotebookLM</span>
+      </div>
+      <span class="slide-id">S23</span>
+    </header>
+    <div class="title-block">
+      <h2>NotebookLM: 두꺼운 PDF를 내 전용 AI 과외선생님으로!</h2>
+      <p class="lead">업로드한 강의안·요약집·논문 안에서만 근거를 찾아 출처 번호와 함께 답해주므로 거짓 정보 걱정 없이 시험 대비에 활용할 수 있습니다.</p>
+    </div>
+    <main class="slide-body">
+      
+      <div class="grid-2">
+        
+          <div class="compare-card tone-accent">
+            <div class="compare-badge">일반 AI 챗봇 vs NotebookLM</div>
+            <h3>왜 시험 공부는 NotebookLM인가요?</h3>
+            <ul>
+              <li>일반 챗봇: 웹 정보를 섞어 답해 수업 내용과 다른 설명이 나올 수 있음</li><li><strong>NotebookLM</strong>: 내가 올린 <strong>PDF·강의안·논문 범위 안에서만</strong> 답변</li><li>모든 답변 옆에 <strong>출처 번호(<span class="inline-code">[1]</span>, <span class="inline-code">[2]</span>)</strong>가 붙어 원문 페이지 바로 확인 가능</li>
+            </ul>
+          </div>
+          <div class="compare-card tone-good">
+            <div class="compare-badge">Studio 패널 3대 학습 기능</div>
+            <h3>PDF 업로드 즉시 자동 생성</h3>
+            <ul>
+              <li><strong>학습 가이드(Study Guide)</strong>: 핵심 개념 요약 및 정리 노트 자동 완성</li><li><strong>플래시카드(Flashcards)</strong>: 암기용 용어 카드 생성 및 복습 체크</li><li><strong>예상 퀴즈(Quizzes)</strong>: 객관식·단답형 모의 문제 풀이 및 오답 해설</li>
+            </ul>
+          </div>
+      </div>
+    </main>
+    <div class="summary-bar">두꺼운 전공 PDF나 자격증 요약집을 처음부터 다시 읽기 막막할 때, NotebookLM에 올리면 곧바로 요약과 모의 퀴즈를 만들 수 있습니다.</div>
+    <footer class="slide-footer">
+      <span class="footer-brand">OA MASTER · AI 활용 오피스 3일 완성</span>
+      <span>23 / 50</span>
+    </footer>
+  </section>
+
+  <section class="slide" style="--c:#0e4987; --soft:#eff6ff; --border:#bfdbfe; --accent:#1d4ed8;">
+    <header class="slide-header">
+      <div class="header-meta">
+        <span class="part-pill">2일차 · Docs &amp; Word + NotebookLM</span>
+        <span class="tag-chip">1교시 · 실습</span>
+      </div>
+      <span class="slide-id">S24</span>
+    </header>
+    <div class="title-block">
+      <h2>[실습] OA MASTER 필기 PDF로 벼락치기 퀴즈 만들기</h2>
+      <p class="lead">OA MASTER 필기 자료실의 요약집 PDF를 NotebookLM에 올려 퀴즈·플래시카드를 생성하고 헷갈리는 용어를 표로 비교합니다.</p>
+    </div>
+    <main class="slide-body">
+      
+      <div class="meta-banner">연계 자료: OA MASTER 필기 자료실 (written_archive.html) — 컴활2급_용어_정리_250선.pdf 등</div>
+      <div class="prompt-box">
+        <div class="prompt-label">실전 복사용 프롬프트</div>
+        <p>업로드한 자료에서 시험에 자주 나오지만 수험생이 가장 많이 헷갈려 하는 핵심 용어 5쌍을 골라 차이점을 표로 쉽게 비교해줘.</p>
+      </div>
+      <div class="tips-list">
+        <div class="tip-item"><strong>1단계</strong>: OA MASTER 필기 자료실에서 <span class="inline-code">컴활2급_용어_정리_250선.pdf</span> 또는 <span class="inline-code">컴활1급_필기_핵심요약집_2026</span> 내려받기</div><div class="tip-item"><strong>2단계</strong>: NotebookLM <span class="inline-code">[+ 새 노트북]</span> 생성 후 PDF 업로드 → <strong>Studio &gt; 퀴즈/플래시카드</strong> 5문제 풀어보기</div>
+      </div>
+    </main>
+    
+    <footer class="slide-footer">
+      <span class="footer-brand">OA MASTER · AI 활용 오피스 3일 완성</span>
+      <span>24 / 50</span>
+    </footer>
+  </section>
+
+  <section class="slide" style="--c:#0e4987; --soft:#eff6ff; --border:#bfdbfe; --accent:#1d4ed8;">
+    <header class="slide-header">
+      <div class="header-meta">
+        <span class="part-pill">2일차 · Docs &amp; Word + NotebookLM</span>
+        <span class="tag-chip">1교시 · Deep Research</span>
+      </div>
+      <span class="slide-id">S25</span>
+    </header>
+    <div class="title-block">
+      <h2>보고서 자료 조사: Deep Research → Google Docs 바로 보내기</h2>
+      <p class="lead">Gemini Deep Research로 주제별 배경과 사례를 조사한 뒤 Google Docs로 내보내기 버튼을 누르면 즉시 편집 가능한 문서가 만들어집니다.</p>
+    </div>
+    <main class="slide-body">
+      
+      <div class="meta-banner">검색 노가다를 줄이는 1초 내보내기 워크플로우</div>
+      <div class="grid-3">
+        
+          <div class="card-clean">
+            <div class="num-badge">01</div>
+            <h3>Deep Research 실행</h3>
+            <p>Gemini에서 <span class="inline-code">Deep Research</span>를 선택하고 리포트·소논문 주제와 찾고 싶은 핵심 쟁점을 입력합니다.</p>
+          </div>
+          <div class="card-clean">
+            <div class="num-badge">02</div>
+            <h3>조사 보고서 검토</h3>
+            <p>AI가 여러 웹 자료를 종합해 정리한 배경·현황·사례 요약본과 출처 목록을 확인합니다.</p>
+          </div>
+          <div class="card-clean">
+            <div class="num-badge">03</div>
+            <h3>Google Docs로 내보내기</h3>
+            <p>하단 <strong><span class="inline-code">공유 및 내보내기 &gt; Google Docs로 내보내기</span></strong>를 클릭해 내 Google Drive에 서식 그대로 저장합니다.</p>
+          </div>
+      </div>
+      
+        <div class="meta-notes">
+          <span>• 운영 팁: Deep Research 생성 대기(3~5분) 중 2교시 보고서 목차 프롬프트(<span class="inline-code">S26</span>) 먼저 작성</span><span>• 필수 주의: 생성된 문서의 <strong>출처 링크를 직접 클릭해 실제 자료·수치인지 반드시 확인</strong></span>
+        </div>
+    </main>
+    
+    <footer class="slide-footer">
+      <span class="footer-brand">OA MASTER · AI 활용 오피스 3일 완성</span>
+      <span>25 / 50</span>
+    </footer>
+  </section>
+
+  <section class="slide" style="--c:#0e4987; --soft:#eff6ff; --border:#bfdbfe; --accent:#1d4ed8;">
+    <header class="slide-header">
+      <div class="header-meta">
+        <span class="part-pill">2일차 · Docs &amp; Word + NotebookLM</span>
+        <span class="tag-chip">2교시 · 목차 설계</span>
+      </div>
+      <span class="slide-id">S26</span>
+    </header>
+    <div class="title-block">
+      <h2>빈 화면 증후군 탈출! 서론-본론-결론 5분 목차 잡기</h2>
+      <p class="lead">글쓰기를 시작하기 전 주제와 분량만 주어 5단 목차 설계도를 먼저 받으면 글의 흐름이 흔들리지 않고 분량 배분이 쉬워집니다.</p>
+    </div>
+    <main class="slide-body">
+      
+      <div class="meta-banner">표준 5단 구조: 서론 → 본론①(현황) → 본론②(원인/사례) → 본론③(대안) → 결론</div>
+      <div class="prompt-box">
+        <div class="prompt-label">실전 복사용 프롬프트</div>
+        <p>나는 대학생이고 '[보고서/소논문 주제]'에 대해 A4 5장 분량의 보고서를 쓰려고 해. 서론 - 본론(소주제 3개) - 결론 구조로 목차를 짜주고, 각 소주제 아래에 어떤 내용과 근거를 넣으면 좋을지 2줄씩 설명해줘.</p>
+      </div>
+      <div class="tips-list">
+        <div class="tip-item"><strong>서론</strong>: 주제를 고른 이유(문제 제기)와 보고서 목적 제시</div><div class="tip-item"><strong>본론 ①~③</strong>: 1일차 설문/데이터 결과 + 조사 자료 사례 + 해결 방안 제안</div><div class="tip-item"><strong>결론</strong>: 전체 핵심 요약 및 한계점·느낀 점</div>
+      </div>
+    </main>
+    
+    <footer class="slide-footer">
+      <span class="footer-brand">OA MASTER · AI 활용 오피스 3일 완성</span>
+      <span>26 / 50</span>
+    </footer>
+  </section>
+
+  <section class="slide" style="--c:#0e4987; --soft:#eff6ff; --border:#bfdbfe; --accent:#1d4ed8;">
+    <header class="slide-header">
+      <div class="header-meta">
+        <span class="part-pill">2일차 · Docs &amp; Word + NotebookLM</span>
+        <span class="tag-chip">2교시 · 초안 고도화</span>
+      </div>
+      <span class="slide-id">S27</span>
+    </header>
+    <div class="title-block">
+      <h2>AI 초안에 '내 생각'을 섞어 진짜 내 글로 쓰는 3단계 공식</h2>
+      <p class="lead">주제만 던져 만든 AI 글은 추상적이고 뻔합니다. 내 메모와 1일차 데이터를 재료로 주고 문장을 다듬게 해야 설득력이 생깁니다.</p>
+    </div>
+    <main class="slide-body">
+      
+      <div class="meta-banner">핵심 공식: 내 메모(주장) + 1일차 설문·자료 + AI 문장 다듬기 = A+ 문단</div>
+      <div class="grid-3">
+        
+          <div class="card-clean">
+            <div class="num-badge">01</div>
+            <h3>내 메모 먼저 적기</h3>
+            <p>완벽한 문장이 아니어도 좋으니 내 의견과 수업 내용을 키워드 2~3줄로 적어 AI에 함께 입력합니다.</p>
+          </div>
+          <div class="card-clean">
+            <div class="num-badge">02</div>
+            <h3>1일차 수치 넣기</h3>
+            <p>*"설문 응답자 중 72%가 ~라고 답했다"*처럼 1일차에서 직접 정리한 데이터 결과를 문단에 연결합니다.</p>
+          </div>
+          <div class="card-clean">
+            <div class="num-badge">03</div>
+            <h3>구체적 예시 보강 요청</h3>
+            <p>*"방금 내가 쓴 주장을 뒷받침할 대학생 일상 속 구체적 사례 1가지를 보태 문단을 자연스럽게 이어줘"*라고 요청합니다.</p>
+          </div>
+      </div>
+      
+        <div class="meta-notes">
+          <span>• AI에게 백지 작성을 맡기지 말고 <strong>재료(내 의견 + 수치)를 먼저 제공</strong>하는 것이 핵심</span>
+        </div>
+    </main>
+    
+    <footer class="slide-footer">
+      <span class="footer-brand">OA MASTER · AI 활용 오피스 3일 완성</span>
+      <span>27 / 50</span>
+    </footer>
+  </section>
+
+  <section class="slide" style="--c:#0e4987; --soft:#eff6ff; --border:#bfdbfe; --accent:#1d4ed8;">
+    <header class="slide-header">
+      <div class="header-meta">
+        <span class="part-pill">2일차 · Docs &amp; Word + NotebookLM</span>
+        <span class="tag-chip">2교시 · 실습</span>
+      </div>
+      <span class="slide-id">S28</span>
+    </header>
+    <div class="title-block">
+      <h2>[실습] Google Docs에 내 보고서 목차 및 초안 세우기</h2>
+      <p class="lead">제출해야 할 전공 리포트 주제 또는 OA MASTER 자격 정보 요약 문서를 소재로 삼아 5단 목차와 서론·본론 초안을 작성합니다.</p>
+    </div>
+    <main class="slide-body">
+      
+      <div class="grid-2">
+        
+          <div class="info-card">
+            <div class="info-label">실습 주제 선택 (A 또는 B)</div>
+            <ul>
+              <li><strong>선택 A (자격증 연계)</strong>: OA MASTER 필기 자료실 <span class="inline-code">컴퓨터활용능력 자격 정보 요약(2027년 변경사항)</span>을 바탕으로 <strong>"2027년 개편 대비 컴활 단기 합격 전략 보고서"</strong> 작성</li><li><strong>선택 B (전공/자유)</strong>: 이번 학기 실제 제출해야 하는 전공 수업 리포트 또는 관심 소논문 주제</li>
+            </ul>
+          </div>
+          <div class="info-card">
+            <div class="info-label">Google Docs 실습 체크 항목</div>
+            <ul>
+              <li>1단계: Google Docs 새 문서 생성 및 제목 입력</li><li>2단계: AI와 함께 만든 <strong>서론-본론(3)-결론 5단 목차</strong> 붙여넣기</li><li>3단계: 1일차 데이터 또는 조사 자료를 반영해 <strong>서론 + 본론 1개 소주제 초안</strong> 완성</li>
+            </ul>
+          </div>
+      </div>
+    </main>
+    <div class="summary-bar">2일차에서 완성한 보고서 초안은 3일차에서 10분 발표용 PPT 슬라이드 재료로 그대로 활용됩니다.</div>
+    <footer class="slide-footer">
+      <span class="footer-brand">OA MASTER · AI 활용 오피스 3일 완성</span>
+      <span>28 / 50</span>
+    </footer>
+  </section>
+
+  <section class="slide" style="--c:#0e4987; --soft:#eff6ff; --border:#bfdbfe; --accent:#1d4ed8;">
+    <header class="slide-header">
+      <div class="header-meta">
+        <span class="part-pill">2일차 · Docs &amp; Word + NotebookLM</span>
+        <span class="tag-chip">3교시 · 문체 교정</span>
+      </div>
+      <span class="slide-id">S29</span>
+    </header>
+    <div class="title-block">
+      <h2>구어체·번역투를 깔끔한 대학 보고서 문체로 바꾸기</h2>
+      <p class="lead">초안은 편하게 적고 마지막에 보고서 서술형(~다/~이다)으로 교정합니다. 교수님 문의 메일·대외활동 지원서·직장 보고 이메일 톤 변환에도 동일하게 응용합니다.</p>
+    </div>
+    <main class="slide-body">
+      
+      <div class="grid-2 compact-gap">
+        <div class="compare-card tone-bad">
+          <div class="compare-badge">피해야 할 방식</div>
+          <p class="quote-txt">요즘 대학생들은 자격증 따려고 AI를 엄청 많이 쓰거든요. 근데 잘못 쓰면 틀린 답이 나와서 진짜 조심해야 돼요.</p>
+        </div>
+        <div class="compare-card tone-good">
+          <div class="compare-badge">권장하는 방식</div>
+          <p class="quote-txt">최근 대학생들 사이에서 자격증 학습을 위해 생성형 AI를 활용하는 사례가 증가하고 있다. 그러나 잘못된 정보가 포함될 수 있으므로 검증 과정이 필수적이다.</p>
+        </div>
+      </div>
+      <div class="prompt-box">
+        <div class="prompt-label">실전 복사용 프롬프트</div>
+        <p>아래 내가 쓴 초안의 핵심 의미와 수치는 바꾸지 말고, 대학생 과제 보고서에 어울리는 객관적이고 매끄러운 문체(~다/~이다)로만 다듬어줘. 어색한 표현을 왜 수정했는지도 간단히 알려줘.</p>
+      </div>
+    </main>
+    
+    <footer class="slide-footer">
+      <span class="footer-brand">OA MASTER · AI 활용 오피스 3일 완성</span>
+      <span>29 / 50</span>
+    </footer>
+  </section>
+
+  <section class="slide" style="--c:#0e4987; --soft:#eff6ff; --border:#bfdbfe; --accent:#1d4ed8;">
+    <header class="slide-header">
+      <div class="header-meta">
+        <span class="part-pill">2일차 · Docs &amp; Word + NotebookLM</span>
+        <span class="tag-chip">3교시 · 연구 윤리</span>
+      </div>
+      <span class="slide-id">S30</span>
+    </header>
+    <div class="title-block">
+      <h2>안전한 A+ 과제를 위한 AI 표절 방지 &amp; 연구 윤리 3원칙</h2>
+      <p class="lead">AI는 보조 도구일 뿐 최종 작성 책임은 본인에게 있습니다. 원문 대조, 내 문장 재구성, 활용 내역 표기 3원칙을 반드시 지킵니다.</p>
+    </div>
+    <main class="slide-body">
+      
+      <div class="grid-3">
+        
+          <div class="card-clean">
+            <div class="num-badge">01</div>
+            <h3>그대로 복붙 금지</h3>
+            <p>AI 초안을 통째로 복사해 제출하면 문체가 부자연스럽고 AI 탐지 및 표절 검사(카피킬러 등)에서 문제가 될 수 있으므로 내 말로 재구성합니다.</p>
+          </div>
+          <div class="card-clean">
+            <div class="num-badge">02</div>
+            <h3>출처·수치 직접 클릭 확인</h3>
+            <p>AI가 그럴듯하게 지어낸 가짜 논문 제목, 없는 법령, 틀린 연도가 섞일 수 있으므로 원문 링크와 통계 수치를 반드시 대조 확인합니다.</p>
+          </div>
+          <div class="card-clean">
+            <div class="num-badge">03</div>
+            <h3>학교·수업 가이드라인 준수</h3>
+            <p>강의계획서 기준을 확인하고, 필요 시 보고서 끝에 *"자료 요약 및 문체 교정에 AI 도구를 보조적으로 활용함"*과 같이 사용 범위를 명시합니다.</p>
+          </div>
+      </div>
+    </main>
+    <div class="summary-bar">검증되지 않은 AI 문장을 그대로 제출하지 않고 사실 확인과 본인만의 재해석을 거치는 것이 가장 안전한 기준입니다.</div>
+    <footer class="slide-footer">
+      <span class="footer-brand">OA MASTER · AI 활용 오피스 3일 완성</span>
+      <span>30 / 50</span>
+    </footer>
+  </section>
+
+  <section class="slide" style="--c:#0e4987; --soft:#eff6ff; --border:#bfdbfe; --accent:#1d4ed8;">
+    <header class="slide-header">
+      <div class="header-meta">
+        <span class="part-pill">2일차 · Docs &amp; Word + NotebookLM</span>
+        <span class="tag-chip">3교시 · 참고문헌</span>
+      </div>
+      <span class="slide-id">S31</span>
+    </header>
+    <div class="title-block">
+      <h2>URL 링크만 툭? 보기 좋은 참고문헌 목록 깔끔하게 달기</h2>
+      <p class="lead">웹 주소만 나열하는 대신 기관/저자, 연도, 제목, URL 형식으로 통일하고 없는 정보는 비워두도록 AI에게 요청해 정리합니다.</p>
+    </div>
+    <main class="slide-body">
+      
+      <div class="meta-banner">Google Docs 편리 기능: 상단 메뉴 도구 &gt; 인용(Citations)에서 APA/MLA 양식 자동 삽입 가능</div>
+      <div class="prompt-box">
+        <div class="prompt-label">실전 복사용 프롬프트</div>
+        <p>아래 내가 참고한 자료 목록을 대학 보고서용 참고문헌 형식(저자/기관, 연도, 제목, 출처 URL)으로 보기 좋게 번호를 매겨 통일해줘. 없는 정보는 지어내지 말고 비워둬.</p>
+      </div>
+      <div class="tips-list">
+        <div class="tip-item"><strong>나쁜 예</strong>: <span class="inline-code">참고: https://blog.naver.com/..., https://www.comcbt.com/...</span> (링크만 나열)</div><div class="tip-item"><strong>좋은 예</strong>: <span class="inline-code">1. 대한상공회의소(2026). 컴퓨터활용능력 자격검정 안내. https://license.korcham.net</span></div>
+      </div>
+    </main>
+    
+    <footer class="slide-footer">
+      <span class="footer-brand">OA MASTER · AI 활용 오피스 3일 완성</span>
+      <span>31 / 50</span>
+    </footer>
+  </section>
+
+  <section class="slide" style="--c:#0e4987; --soft:#eff6ff; --border:#bfdbfe; --accent:#1d4ed8;">
+    <header class="slide-header">
+      <div class="header-meta">
+        <span class="part-pill">2일차 · Docs &amp; Word + NotebookLM</span>
+        <span class="tag-chip">4교시 · 자동 목차</span>
+      </div>
+      <span class="slide-id">S32</span>
+    </header>
+    <div class="title-block">
+      <h2>스페이스바 노가다 끝! '제목 스타일'과 1초 자동 목차</h2>
+      <p class="lead">제목 줄에 글자 크기만 키우지 말고 제목 1, 제목 2 스타일을 지정해 두면 클릭 한 번으로 페이지 번호까지 맞는 자동 목차가 생성됩니다.</p>
+    </div>
+    <main class="slide-body">
+      
+      <div class="meta-banner">Google Docs · MS Word 공통 서식 자동화 핵심</div>
+      <div class="grid-3">
+        
+          <div class="card-clean">
+            <div class="num-badge">01</div>
+            <h3>제목 1 · 제목 2 스타일 지정</h3>
+            <p>각 장의 큰 제목을 드래그해 상단 툴바에서 <span class="inline-code">일반 텍스트 → 제목 1</span>, 소제목은 <span class="inline-code">제목 2</span>로 지정합니다.</p>
+          </div>
+          <div class="card-clean">
+            <div class="num-badge">02</div>
+            <h3>좌측 문서 개요 확인</h3>
+            <p>스타일을 지정하자마자 왼쪽에 <strong>문서 개요(목차 패널)</strong>가 자동 생성되어 긴 문서도 클릭 한 번에 이동할 수 있습니다.</p>
+          </div>
+          <div class="card-clean">
+            <div class="num-badge">03</div>
+            <h3>1초 자동 목차 삽입</h3>
+            <p>문서 맨 앞 페이지로 이동해 <strong><span class="inline-code">삽입 &gt; 목차</span>(Docs)</strong> 또는 <strong><span class="inline-code">참조 &gt; 목차</span>(Word)</strong>를 클릭하면 완성됩니다.</p>
+          </div>
+      </div>
+      
+        <div class="meta-notes">
+          <span>• 초보자 실수: 글자 크기와 볼드체만 바꿔서는 자동 목차를 만들 수 없음</span><span>• 장점: 본문 길이가 바뀌어도 목차의 <strong>새로 고침</strong> 버튼 1번으로 페이지 번호 즉시 갱신</span>
+        </div>
+    </main>
+    
+    <footer class="slide-footer">
+      <span class="footer-brand">OA MASTER · AI 활용 오피스 3일 완성</span>
+      <span>32 / 50</span>
+    </footer>
+  </section>
+
+  <section class="slide" style="--c:#0e4987; --soft:#eff6ff; --border:#bfdbfe; --accent:#1d4ed8;">
+    <header class="slide-header">
+      <div class="header-meta">
+        <span class="part-pill">2일차 · Docs &amp; Word + NotebookLM</span>
+        <span class="tag-chip">4교시 · 팀플 협업</span>
+      </div>
+      <span class="slide-id">S33</span>
+    </header>
+    <div class="title-block">
+      <h2>최종_진짜최종.docx 탈출! Google Docs 실시간 협업</h2>
+      <p class="lead">조별 과제는 Google Docs 1개 파일에서 권한 분리, 제안 모드, @멘션 댓글을 활용하면 파일 버전이 꼬이지 않습니다.</p>
+    </div>
+    <main class="slide-body">
+      
+      <div class="grid-3">
+        
+          <div class="card-clean">
+            <div class="num-badge">01</div>
+            <h3>공유 권한 나누기</h3>
+            <p>우측 상단 <span class="inline-code">공유</span>에서 함께 수정할 팀원은 <strong><span class="inline-code">편집자</span></strong>, 조언만 받을 때는 <strong><span class="inline-code">댓글 작성자</span></strong>로 권한을 분리합니다.</p>
+          </div>
+          <div class="card-clean">
+            <div class="num-badge">02</div>
+            <h3>제안 모드 (Suggesting)</h3>
+            <p>남의 글을 바로 지우지 않고 수정 제안 흔적을 남겨 팀원 간 합의 후 <span class="inline-code">수락</span>으로 깔끔하게 반영합니다.</p>
+          </div>
+          <div class="card-clean">
+            <div class="num-badge">03</div>
+            <h3>@멘션 댓글 &amp; 문서 탭</h3>
+            <p>수정이 필요한 문장을 드래그해 <span class="inline-code">@팀원이름</span>으로 할 일을 배정하고, 좌측 <strong>문서 탭(Tabs)</strong>으로 자료조사·본문 탭을 분리합니다.</p>
+          </div>
+      </div>
+    </main>
+    <div class="summary-bar">실무·팀플 1분 회의록 팁: 회의 메모를 넣고 "[결정사항 / 담당자 / 마감일] 3열 액션아이템 표로 정리해줘"를 함께 활용하세요.</div>
+    <footer class="slide-footer">
+      <span class="footer-brand">OA MASTER · AI 활용 오피스 3일 완성</span>
+      <span>33 / 50</span>
+    </footer>
+  </section>
+
+  <section class="slide" style="--c:#0e4987; --soft:#eff6ff; --border:#bfdbfe; --accent:#1d4ed8;">
+    <header class="slide-header">
+      <div class="header-meta">
+        <span class="part-pill">2일차 · Docs &amp; Word + NotebookLM</span>
+        <span class="tag-chip">4교시 · 실습</span>
+      </div>
+      <span class="slide-id">S34</span>
+    </header>
+    <div class="title-block">
+      <h2>[실습] MS Word(.docx) 변환 &amp; 최종 PDF 제출본 완성</h2>
+      <p class="lead">Google Docs 협업 초안을 .docx로 내려받아 MS Word에서 폰트와 표 잘림을 최종 점검한 뒤 PDF로 저장해 제출본을 완성합니다.</p>
+    </div>
+    <main class="slide-body">
+      
+      <div class="meta-banner">Google Docs(초안·협업) → MS Word(최종 서식 마감) → PDF(제출)</div>
+      <div class="grid-3">
+        
+          <div class="card-clean">
+            <div class="num-badge">01</div>
+            <h3>Word(.docx) 다운로드</h3>
+            <p>Google Docs 상단 <strong><span class="inline-code">파일 &gt; 다운로드 &gt; Microsoft Word(.docx)</span></strong>를 클릭해 PC에 저장합니다.</p>
+          </div>
+          <div class="card-clean">
+            <div class="num-badge">02</div>
+            <h3>MS Word 3대 최종 점검</h3>
+            <p>학교 무료 MS Word에서 열어 ① 한글 폰트·줄 간격 깨짐 ② 표·1일차 차트 페이지 잘림 ③ 목차 새로 고침을 확인합니다.</p>
+          </div>
+          <div class="card-clean">
+            <div class="num-badge">03</div>
+            <h3>최종 PDF 내보내기</h3>
+            <p>Word에서 <strong><span class="inline-code">파일 &gt; 다른 이름으로 저장(또는 내보내기) &gt; PDF</span></strong>를 선택해 최종 제출 파일을 완성합니다.</p>
+          </div>
+      </div>
+      
+        <div class="meta-notes">
+          <span>• 어떤 기기에서 열어도 글꼴이나 페이지 배치가 흐트러지지 않도록 최종 제출은 <strong>PDF 저장</strong> 권장</span>
+        </div>
+    </main>
+    
+    <footer class="slide-footer">
+      <span class="footer-brand">OA MASTER · AI 활용 오피스 3일 완성</span>
+      <span>34 / 50</span>
+    </footer>
+  </section>
+
+  <section class="slide" style="--c:#0e4987; --soft:#eff6ff; --border:#bfdbfe; --accent:#1d4ed8;">
+    <header class="slide-header">
+      <div class="header-meta">
+        <span class="part-pill">2일차 · Docs &amp; Word + NotebookLM</span>
+        <span class="tag-chip">2일차 마무리</span>
+      </div>
+      <span class="slide-id">S35</span>
+    </header>
+    <div class="title-block">
+      <h2>2일차 핵심 요약 &amp; 과제·논문 제출 전 5분 체크리스트</h2>
+      <p class="lead">2일차에서 완성한 자료 조사, 목차, 차트가 포함된 보고서 PDF는 3일차에서 10분 발표용 PPT로 빠르게 변환됩니다.</p>
+    </div>
+    <main class="slide-body">
+      
+      <div class="checklist-panel wide">
+        <ul>
+          <li><span class="chk-box">1</span><span>AI가 찾은 수치·출처 링크를 원문 페이지와 직접 대조해 확인했는가?</span></li><li><span class="chk-box">2</span><span>1일차에 만든 설문/데이터 그래프와 본인의 주장·해석이 문단에 반영되었는가?</span></li><li><span class="chk-box">3</span><span><span class="inline-code">제목 1, 2</span> 스타일을 적용하고 자동 목차를 최신 상태로 새로 고침했는가?</span></li><li><span class="chk-box">4</span><span>보고서 마지막에 기관·연도·제목·URL 형식의 참고문헌을 깔끔하게 정리했는가?</span></li><li><span class="chk-box">5</span><span>최종 PDF 파일을 직접 열어 표나 글자가 잘린 페이지가 없는지 확인했는가?</span></li>
+        </ul>
+      </div>
+      <div class="callout-box">
+        <div class="callout-title">2일차 핵심 흐름 요약</div>
+        <p><strong>공부·암기(NotebookLM) → 자료 조사(Deep Research) → 초안·협업(Google Docs) → 서식 마감(MS Word·PDF)</strong> 순서로 작업하면 어떤 전공 리포트나 소논문도 체계적으로 완성할 수 있습니다.</p>
+      </div>
+    </main>
+    
+    <footer class="slide-footer">
+      <span class="footer-brand">OA MASTER · AI 활용 오피스 3일 완성</span>
+      <span>35 / 50</span>
+    </footer>
+  </section>
+
+    <section class="slide slide-section" style="--c:#812940; --soft:#fff1f2; --accent:#4338ca;">
+      <div class="section-stripe"></div>
+      <div class="section-inner">
+        <div class="section-top">
+          <span class="section-day">PART 3 · 3일차 (4시간)</span>
+          <div class="brand-lockup small">
+            <img src="images/OA_master_LOGO.png" alt="OA MASTER" class="logo-img-sm">
+            <span>OA MASTER</span>
+          </div>
+        </div>
+        <h1 class="section-title">Google Slides &amp; PowerPoint + AI<br>디자인 초보도 10분 발표 PPT &amp; 질문 대비까지</h1>
+        <div class="section-list">
+          
+            <div class="section-item">
+              <span class="sec-num">01</span>
+              <span>1교시(50분): 망하지 않는 PPT 규칙 &amp; AI로 글 줄여 10장 스토리보드 짜기</span>
+            </div>
+            <div class="section-item">
+              <span class="sec-num">02</span>
+              <span>2교시(50분): Gemini Canvas로 슬라이드 생성 &amp; .pptx 글꼴 3초 통일</span>
+            </div>
+            <div class="section-item">
+              <span class="sec-num">03</span>
+              <span>3교시(50분): PowerPoint 디자이너 1초 꾸미기 &amp; AI 표지 이미지 · 차트</span>
+            </div>
+            <div class="section-item">
+              <span class="sec-num">04</span>
+              <span>4교시(50분): 발표자 노트 구어체 대본 &amp; 예상 질문 3선 (발표·면접 Q&amp;A)</span>
+            </div>
+        </div>
+        <div class="slide-footer light">
+          <span>대학생을 위한 AI 활용 오피스 3일 완성</span>
+          <span>36 / 50</span>
+        </div>
+      </div>
+    </section>
+
+  <section class="slide" style="--c:#812940; --soft:#fff1f2; --border:#fecdd3; --accent:#4338ca;">
+    <header class="slide-header">
+      <div class="header-meta">
+        <span class="part-pill">3일차 · Slides &amp; PowerPoint + AI</span>
+        <span class="tag-chip">1교시 · PPT 기본 원칙</span>
+      </div>
+      <span class="slide-id">S37</span>
+    </header>
+    <div class="title-block">
+      <h2>발표 PPT가 지루해지는 이유와 해결책 2가지</h2>
+      <p class="lead">좋은 발표 슬라이드의 기준은 화려한 효과가 아니라 여백과 압축입니다. 한 장에 메시지 1개, 키워드 3줄 원칙만 지켜도 훨씬 깔끔해집니다.</p>
+    </div>
+    <main class="slide-body">
+      
+      <div class="grid-2">
+        
+          <div class="compare-card tone-bad">
+            <div class="compare-badge">피해야 할 PPT (보고서 복붙형)</div>
+            <h3>글자가 화면에 꽉 찬 슬라이드</h3>
+            <ul>
+              <li>보고서 문단 전체를 복사해 작은 글씨로 화면을 가득 채움</li><li>6~10줄 이상의 긴 줄글이 나열되어 한눈에 안 들어옴</li><li>청중이 화면 글씨를 읽느라 발표자의 설명에 집중하지 못함</li>
+            </ul>
+          </div>
+          <div class="compare-card tone-good">
+            <div class="compare-badge">권장하는 PPT (발표 보조형)</div>
+            <h3>핵심 키워드 3줄 + 충분한 여백</h3>
+            <ul>
+              <li><strong>한 슬라이드 = 핵심 메시지 1개</strong>만 명확하게 배치</li><li>긴 문장 대신 <strong>짧은 키워드 3줄</strong>과 그래프·이미지 중심 구성</li><li>청중이 핵심 키워드와 차트를 보며 발표자의 설명에 집중함</li>
+            </ul>
+          </div>
+      </div>
+    </main>
+    <div class="summary-bar">황금 원칙: 슬라이드는 읽는 문서가 아니라 발표자의 말을 도와주는 큰 그림판입니다.</div>
+    <footer class="slide-footer">
+      <span class="footer-brand">OA MASTER · AI 활용 오피스 3일 완성</span>
+      <span>37 / 50</span>
+    </footer>
+  </section>
+
+  <section class="slide" style="--c:#812940; --soft:#fff1f2; --border:#fecdd3; --accent:#4338ca;">
+    <header class="slide-header">
+      <div class="header-meta">
+        <span class="part-pill">3일차 · Slides &amp; PowerPoint + AI</span>
+        <span class="tag-chip">1교시 · 내용 압축</span>
+      </div>
+      <span class="slide-id">S38</span>
+    </header>
+    <div class="title-block">
+      <h2>보고서 긴 문단을 PPT용 키워드 3줄로 10초 만에 줄이기</h2>
+      <p class="lead">글자 수 제한을 걸어 화면에 띄울 짧은 키워드와 입으로 말할 보충 설명을 따로 분리해 달라고 요청하면 바로 쓸 수 있는 PPT 문구가 나옵니다.</p>
+    </div>
+    <main class="slide-body">
+      
+      <div class="meta-banner">2일차 보고서 문단 → 3일차 슬라이드 키워드 변환 프롬프트</div>
+      <div class="prompt-box">
+        <div class="prompt-label">실전 복사용 프롬프트</div>
+        <p>아래 보고서 내용을 PPT 슬라이드 1장에 넣을 수 있게 줄여줘. ① 맨 위에 들어갈 핵심 제목 1줄(15자 이내), ② 화면 본문에 들어갈 짧은 키워드 요약 3줄(각 20자 이내), ③ 내가 입으로 설명할 보충 내용은 따로 분리해서 적어줘.</p>
+      </div>
+      <div class="tips-list">
+        <div class="tip-item"><strong>화면용 제목 예시</strong>: <span class="inline-code">AI 활용 시 반드시 필요한 팩트체크</span></div><div class="tip-item"><strong>화면용 3줄 예시</strong>: <span class="inline-code">• 빠른 요약 대비 가짜 정보 혼입 위험</span> / <span class="inline-code">• 원문 링크 클릭 대조 필수</span> / <span class="inline-code">• 내 문장과 데이터 결합 필요</span></div>
+      </div>
+    </main>
+    
+    <footer class="slide-footer">
+      <span class="footer-brand">OA MASTER · AI 활용 오피스 3일 완성</span>
+      <span>38 / 50</span>
+    </footer>
+  </section>
+
+  <section class="slide" style="--c:#812940; --soft:#fff1f2; --border:#fecdd3; --accent:#4338ca;">
+    <header class="slide-header">
+      <div class="header-meta">
+        <span class="part-pill">3일차 · Slides &amp; PowerPoint + AI</span>
+        <span class="tag-chip">1교시 · 실습</span>
+      </div>
+      <span class="slide-id">S39</span>
+    </header>
+    <div class="title-block">
+      <h2>[실습] 10분 발표용 8~10장 슬라이드 뼈대(스토리보드) 짜기</h2>
+      <p class="lead">10분 발표는 장당 약 1분을 기준으로 8~10장이 적당합니다. 슬라이드를 꾸미기 전에 전체 장별 제목과 구성표를 먼저 확정합니다.</p>
+    </div>
+    <main class="slide-body">
+      
+      <table class="data-table">
+        <thead>
+          <tr><th>슬라이드 번호</th><th>구성 단계</th><th>들어가야 할 핵심 내용</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>1장</strong></td><td>표지</td><td>발표 제목, 발표자(조원), 발표 날짜</td></tr><tr><td><strong>2장</strong></td><td>목차 · 문제 제기</td><td>발표 순서 및 왜 이 주제를 다루었는지(배경)</td></tr><tr><td><strong>3 ~ 5장</strong></td><td>현황 · 자료 분석</td><td>2일차 조사 내용 요약 + <strong>1일차 설문 그래프 삽입</strong></td></tr><tr><td><strong>6 ~ 8장</strong></td><td>핵심 제안 · 해결</td><td>우리 조·나의 핵심 해결 방안 및 실행 아이디어 3가지</td></tr><tr><td><strong>9 ~ 10장</strong></td><td>결론 · Q&amp;A</td><td>한눈에 보는 결론 요약 3줄 + 감사합니다 / 질의응답</td></tr>
+        </tbody>
+      </table>
+    </main>
+    <div class="summary-bar">실습 미션: 2일차 보고서 요약을 AI에 넣고 위 10장 흐름에 맞춰 장별 제목과 내용을 표로 먼저 받아 흐름을 확인하세요.</div>
+    <footer class="slide-footer">
+      <span class="footer-brand">OA MASTER · AI 활용 오피스 3일 완성</span>
+      <span>39 / 50</span>
+    </footer>
+  </section>
+
+  <section class="slide" style="--c:#812940; --soft:#fff1f2; --border:#fecdd3; --accent:#4338ca;">
+    <header class="slide-header">
+      <div class="header-meta">
+        <span class="part-pill">3일차 · Slides &amp; PowerPoint + AI</span>
+        <span class="tag-chip">2교시 · 슬라이드 생성</span>
+      </div>
+      <span class="slide-id">S40</span>
+    </header>
+    <div class="title-block">
+      <h2>보고서 요약에서 Google Slides 골격까지 한 번에 생성하기</h2>
+      <p class="lead">Gemini Canvas에서 보고서 요약본을 프레젠테이션으로 만든 뒤 Google Slides로 내보내면 10장짜리 빈 틀을 그리는 수고를 덜 수 있습니다.</p>
+    </div>
+    <main class="slide-body">
+      
+      <div class="meta-banner">외부 툴(Gamma·Canva) 무료 크레딧 제한 걱정 없는 안정적 기본 경로</div>
+      <div class="grid-3">
+        
+          <div class="card-clean">
+            <div class="num-badge">01</div>
+            <h3>Gemini Canvas 실행</h3>
+            <p>Gemini에서 <span class="inline-code">Canvas</span>를 켜고 2일차 보고서 요약과 10장 스토리보드를 입력해 슬라이드 생성을 요청합니다.</p>
+          </div>
+          <div class="card-clean">
+            <div class="num-badge">02</div>
+            <h3>구성 및 내용 확인</h3>
+            <p>Canvas 패널에서 10장 슬라이드의 제목과 핵심 불릿이 의도대로 배치되었는지 확인합니다.</p>
+          </div>
+          <div class="card-clean">
+            <div class="num-badge">03</div>
+            <h3>Google Slides로 내보내기</h3>
+            <p>상단 <strong>내보내기 &gt; <span class="inline-code">Google Slides로 내보내기</span></strong>를 클릭하면 내 Drive에 편집 가능한 슬라이드 파일이 즉시 열립니다.</p>
+          </div>
+      </div>
+      
+        <div class="meta-notes">
+          <span>• 외부 툴 무료 플랜은 생성 횟수 제한이나 <span class="inline-code">.pptx</span> 변환 시 도형 어긋남이 잦음</span><span>• 초보자는 <strong>Gemini Canvas → Google Slides</strong>가 무료·호환성 면에서 가장 깔끔함</span>
+        </div>
+    </main>
+    
+    <footer class="slide-footer">
+      <span class="footer-brand">OA MASTER · AI 활용 오피스 3일 완성</span>
+      <span>40 / 50</span>
+    </footer>
+  </section>
+
+  <section class="slide" style="--c:#812940; --soft:#fff1f2; --border:#fecdd3; --accent:#4338ca;">
+    <header class="slide-header">
+      <div class="header-meta">
+        <span class="part-pill">3일차 · Slides &amp; PowerPoint + AI</span>
+        <span class="tag-chip">2교시 · 파일 전환</span>
+      </div>
+      <span class="slide-id">S41</span>
+    </header>
+    <div class="title-block">
+      <h2>파워포인트(.pptx)로 옮긴 뒤 깨진 글꼴 3초 만에 통일하기</h2>
+      <p class="lead">Google Slides를 .pptx로 내려받았을 때 글씨체가 제각각으로 보이면 PowerPoint의 글꼴 바꾸기 기능으로 전체를 한 번에 통일합니다.</p>
+    </div>
+    <main class="slide-body">
+      
+      <div class="meta-banner">Google Slides → MS PowerPoint(.pptx) 변환 필수 복구 팁</div>
+      <div class="grid-3">
+        
+          <div class="card-clean">
+            <div class="num-badge">01</div>
+            <h3>.pptx 파일 다운로드</h3>
+            <p>Google Slides 상단 메뉴 <strong><span class="inline-code">파일 &gt; 다운로드 &gt; Microsoft PowerPoint(.pptx)</span></strong>를 선택해 저장합니다.</p>
+          </div>
+          <div class="card-clean">
+            <div class="num-badge">02</div>
+            <h3>MS PowerPoint에서 열기</h3>
+            <p>학교 무료 MS PowerPoint로 내려받은 <span class="inline-code">.pptx</span> 파일을 엽니다.</p>
+          </div>
+          <div class="card-clean">
+            <div class="num-badge">03</div>
+            <h3>글꼴 일괄 바꾸기 (3초 해결)</h3>
+            <p><strong><span class="inline-code">홈</span> 탭 맨 오른쪽 <span class="inline-code">바꾸기 ▾</span> &gt; <span class="inline-code">글꼴 바꾸기</span></strong>를 눌러 기존 폰트를 <strong><span class="inline-code">맑은 고딕</span></strong> 등으로 한 번에 교체합니다.</p>
+          </div>
+      </div>
+      
+        <div class="meta-notes">
+          <span>• 원인: Google 웹 폰트가 PC에 설치되어 있지 않아 PowerPoint에서 기본 글꼴로 대체되며 줄 바꿈이 밀림</span>
+        </div>
+    </main>
+    
+    <footer class="slide-footer">
+      <span class="footer-brand">OA MASTER · AI 활용 오피스 3일 완성</span>
+      <span>41 / 50</span>
+    </footer>
+  </section>
+
+  <section class="slide" style="--c:#812940; --soft:#fff1f2; --border:#fecdd3; --accent:#4338ca;">
+    <header class="slide-header">
+      <div class="header-meta">
+        <span class="part-pill">3일차 · Slides &amp; PowerPoint + AI</span>
+        <span class="tag-chip">2교시 · 색감과 폰트</span>
+      </div>
+      <span class="slide-id">S42</span>
+    </header>
+    <div class="title-block">
+      <h2>디자인 감각이 없어도 깔끔해 보이는 색감·폰트 2원칙</h2>
+      <p class="lead">화려한 요소를 더하는 것보다 사용하는 폰트와 색상 개수를 줄이는 것이 세련된 발표 자료를 만드는 가장 빠른 비결입니다.</p>
+    </div>
+    <main class="slide-body">
+      
+      <div class="grid-2">
+        
+          <div class="info-card">
+            <div class="info-label">원칙 ① 폰트는 전체 1종류(최대 2종류)만 사용</div>
+            <ul>
+              <li><strong>추천 기본·무료 폰트</strong>: <span class="inline-code">맑은 고딕</span>(어느 강의실 PC에서도 깨지지 않음), <span class="inline-code">Pretendard</span>, <span class="inline-code">나눔스퀘어네오</span></li><li>제목은 <strong>굵게(Bold)</strong>, 본문은 <strong>보통(Regular)</strong>으로 굵기와 크기 차이만 주어도 충분히 깔끔하게 구분됨</li>
+            </ul>
+          </div>
+          <div class="info-card">
+            <div class="info-label">원칙 ② 색상은 배경(흰색) + 메인색 1개 + 강조색 1개</div>
+            <ul>
+              <li><strong>권장 조합</strong>: 흰색 바탕 + 진한 남색(<span class="inline-code">#0e4987</span>, 제목·구분선) + 포인트 색상 1개(핵심 숫자 강조)</li><li>슬라이드마다 4~5가지 무지개색을 섞으면 시선이 분산되고 촌스러워 보이므로 2색 이내로 제한</li>
+            </ul>
+          </div>
+      </div>
+    </main>
+    <div class="summary-bar">강의실 PC로 발표 파일을 옮겨야 한다면 <span class="inline-code">맑은 고딕</span> 사용 또는 저장 시 <span class="inline-code">파일 &gt; 옵션 &gt; 저장 &gt; 파일에 글꼴 포함</span> 체크를 권장합니다.</div>
+    <footer class="slide-footer">
+      <span class="footer-brand">OA MASTER · AI 활용 오피스 3일 완성</span>
+      <span>42 / 50</span>
+    </footer>
+  </section>
+
+  <section class="slide" style="--c:#812940; --soft:#fff1f2; --border:#fecdd3; --accent:#4338ca;">
+    <header class="slide-header">
+      <div class="header-meta">
+        <span class="part-pill">3일차 · Slides &amp; PowerPoint + AI</span>
+        <span class="tag-chip">3교시 · PPT 디자이너</span>
+      </div>
+      <span class="slide-id">S43</span>
+    </header>
+    <div class="title-block">
+      <h2>클릭 한 번으로 레이아웃 완성: PowerPoint '디자이너'</h2>
+      <p class="lead">글자와 사진만 슬라이드에 올려두고 PowerPoint 디자이너 패널을 열면 프로 디자이너 수준의 레이아웃 시안을 1초 만에 적용할 수 있습니다.</p>
+    </div>
+    <main class="slide-body">
+      
+      <div class="meta-banner">디자인 감각이 없어도 완성도를 높여주는 PowerPoint 핵심 기능</div>
+      <div class="grid-3">
+        
+          <div class="card-clean">
+            <div class="num-badge">01</div>
+            <h3>요소만 대충 올려두기</h3>
+            <p>슬라이드 안에 위치나 크기를 신경 쓰지 말고 <strong>제목 + 짧은 3줄 + 이미지 1장</strong>만 배치합니다.</p>
+          </div>
+          <div class="card-clean">
+            <div class="num-badge">02</div>
+            <h3>홈 &gt; 디자이너 클릭</h3>
+            <p>상단 메뉴 <strong><span class="inline-code">홈 &gt; 디자이너</span></strong>를 클릭하거나 오른쪽에 자동으로 뜨는 디자인 아이디어 패널을 확인합니다.</p>
+          </div>
+          <div class="card-clean">
+            <div class="num-badge">03</div>
+            <h3>마음에 드는 시안 1클릭</h3>
+            <p>오른쪽에 추천되는 5~6가지 깔끔한 레이아웃 카드 중 가장 보기 좋은 디자인을 클릭해 즉시 적용합니다.</p>
+          </div>
+      </div>
+      
+        <div class="meta-notes">
+          <span>• 적용 효과 최고 구간: <strong>표지 슬라이드, 목차, 핵심 요약 3줄 + 이미지 1장 슬라이드</strong></span>
+        </div>
+    </main>
+    
+    <footer class="slide-footer">
+      <span class="footer-brand">OA MASTER · AI 활용 오피스 3일 완성</span>
+      <span>43 / 50</span>
+    </footer>
+  </section>
+
+  <section class="slide" style="--c:#812940; --soft:#fff1f2; --border:#fecdd3; --accent:#4338ca;">
+    <header class="slide-header">
+      <div class="header-meta">
+        <span class="part-pill">3일차 · Slides &amp; PowerPoint + AI</span>
+        <span class="tag-chip">3교시 · AI 이미지</span>
+      </div>
+      <span class="slide-id">S44</span>
+    </header>
+    <div class="title-block">
+      <h2>저작권 걱정 없는 깔끔한 PPT 표지·삽화 AI로 10초 생성</h2>
+      <p class="lead">배경색 톤, 미니멀 스타일, 글자 삽입 금지 3가지를 프롬프트에 적으면 PPT와 자연스럽게 어우러지는 고화질 표지 그림을 얻을 수 있습니다.</p>
+    </div>
+    <main class="slide-body">
+      
+      <div class="meta-banner">이미지 검색·워터마크·저작권 걱정 없는 맞춤형 비주얼 제작</div>
+      <div class="prompt-box">
+        <div class="prompt-label">실전 복사용 프롬프트</div>
+        <p>대학생 발표 PPT 표지에 쓸 깔끔하고 모던한 일러스트 그려줘. 주제는 '[발표 주제]'이고, 흰색 바탕에 차분한 남색(#0e4987) 톤의 미니멀한 플랫 디자인으로 그려줘. 이미지 안에 글자는 절대 넣지 마.</p>
+      </div>
+      <div class="tips-list">
+        <div class="tip-item"><strong>성공 키워드 ① 배경색 지정</strong>: PPT 배경과 어우러지도록 <span class="inline-code">흰색 바탕</span> 명시</div><div class="tip-item"><strong>성공 키워드 ② 스타일 지정</strong>: <span class="inline-code">미니멀한 플랫 디자인</span>으로 깔끔한 톤 유지</div><div class="tip-item"><strong>성공 키워드 ③ 글자 금지</strong>: <span class="inline-code">글자는 절대 넣지 마</span>를 꼭 써야 깨진 한글 없이 PPT 제목을 얹기 좋음</div>
+      </div>
+    </main>
+    
+    <footer class="slide-footer">
+      <span class="footer-brand">OA MASTER · AI 활용 오피스 3일 완성</span>
+      <span>44 / 50</span>
+    </footer>
+  </section>
+
+  <section class="slide" style="--c:#812940; --soft:#fff1f2; --border:#fecdd3; --accent:#4338ca;">
+    <header class="slide-header">
+      <div class="header-meta">
+        <span class="part-pill">3일차 · Slides &amp; PowerPoint + AI</span>
+        <span class="tag-chip">3교시 · 실습</span>
+      </div>
+      <span class="slide-id">S45</span>
+    </header>
+    <div class="title-block">
+      <h2>[실습] 핵심 슬라이드 3장 완성하기 (표지 · 데이터 · 결론)</h2>
+      <p class="lead">10장 중 시선과 설득력을 좌우하는 표지, 1일차 설문 그래프 슬라이드, 핵심 결론 3줄 슬라이드 3장을 집중적으로 완성합니다.</p>
+    </div>
+    <main class="slide-body">
+      
+      <div class="grid-3">
+        
+          <div class="card-clean">
+            <div class="num-badge">01</div>
+            <h3>1번 슬라이드 [표지]</h3>
+            <p>S44에서 만든 AI 표지 이미지와 발표 제목·이름·날짜를 올린 뒤 <strong>PowerPoint 디자이너</strong>로 1초 만에 표지 레이아웃을 적용합니다.</p>
+          </div>
+          <div class="card-clean">
+            <div class="num-badge">02</div>
+            <h3>2번 슬라이드 [데이터 분석]</h3>
+            <p>1일차에 만든 <strong>Excel/Sheets 설문 그래프</strong>를 복사해 붙이고, 옆에 핵심 수치 1줄(<span class="inline-code">"응답자 72%가 ~를 선택"</span>)을 크게 강조합니다.</p>
+          </div>
+          <div class="card-clean">
+            <div class="num-badge">03</div>
+            <h3>3번 슬라이드 [핵심 결론]</h3>
+            <p>보고서 결론을 압축한 <strong>3줄 핵심 메시지 카드</strong>를 배치하고 디자이너 레이아웃으로 깔끔하게 정렬합니다.</p>
+          </div>
+      </div>
+    </main>
+    <div class="summary-bar">모든 슬라이드를 똑같이 힘주어 꾸미기보다 표지·데이터·결론 3장의 완성도를 높이면 발표 전체의 인상이 크게 달라집니다.</div>
+    <footer class="slide-footer">
+      <span class="footer-brand">OA MASTER · AI 활용 오피스 3일 완성</span>
+      <span>45 / 50</span>
+    </footer>
+  </section>
+
+  <section class="slide" style="--c:#812940; --soft:#fff1f2; --border:#fecdd3; --accent:#4338ca;">
+    <header class="slide-header">
+      <div class="header-meta">
+        <span class="part-pill">3일차 · Slides &amp; PowerPoint + AI</span>
+        <span class="tag-chip">4교시 · 발표자 노트</span>
+      </div>
+      <span class="slide-id">S46</span>
+    </header>
+    <div class="title-block">
+      <h2>화면은 짧게, 말은 자연스럽게! '발표자 노트' 대본 생성</h2>
+      <p class="lead">슬라이드 화면에는 짧은 키워드만 남기고, 실제 읽을 구어체 대본은 슬라이드 하단 발표자 노트 칸에 넣어두면 당황하지 않고 발표할 수 있습니다.</p>
+    </div>
+    <main class="slide-body">
+      
+      <div class="meta-banner">발표자 도구 화면에서 발표자만 보고 읽을 수 있는 PowerPoint 하단 노트 칸 활용</div>
+      <div class="prompt-box">
+        <div class="prompt-label">실전 복사용 프롬프트</div>
+        <p>내가 만든 PPT 슬라이드 10장 구성에 맞춰, 각 장마다 발표자가 자연스럽게 말할 수 있는 구어체 대본('안녕하십니까~', '~살펴보겠습니다')을 짜줘. 슬라이드 1장당 40초~1분 분량으로 연결되게 작성해줘.</p>
+      </div>
+      <div class="tips-list">
+        <div class="tip-item"><strong>발표자 노트 여는 법</strong>: PowerPoint 오른쪽 아래 상태 표시줄의 <strong><span class="inline-code">메모</span></strong> 버튼을 누르면 각 슬라이드 밑에 대본 입력 칸이 열립니다.</div><div class="tip-item"><strong>발표자 도구 활용</strong>: 슬라이드 쇼 진행 시 내 화면(노트북)에만 대본이 보이고, 스크린에는 깔끔한 슬라이드만 표시됩니다.</div>
+      </div>
+    </main>
+    
+    <footer class="slide-footer">
+      <span class="footer-brand">OA MASTER · AI 활용 오피스 3일 완성</span>
+      <span>46 / 50</span>
+    </footer>
+  </section>
+
+  <section class="slide" style="--c:#812940; --soft:#fff1f2; --border:#fecdd3; --accent:#4338ca;">
+    <header class="slide-header">
+      <div class="header-meta">
+        <span class="part-pill">3일차 · Slides &amp; PowerPoint + AI</span>
+        <span class="tag-chip">4교시 · 시간 조절</span>
+      </div>
+      <span class="slide-id">S47</span>
+    </header>
+    <div class="title-block">
+      <h2>시간 초과 없는 10분 발표 대본 분량 공식 &amp; 말하기 표시</h2>
+      <p class="lead">한국어 보통 말하기 속도(1분 약 300~350자)를 기준으로 대본 길이를 맞추고, 클릭 타이밍과 쉴 곳을 표시하면 여유 있는 발표가 됩니다.</p>
+    </div>
+    <main class="slide-body">
+      
+      <div class="grid-2">
+        
+          <div class="info-card">
+            <div class="info-label">10분 발표 대본 적정 글자 수 공식</div>
+            <ul>
+              <li><strong>한국어 보통 발표 속도</strong>: 1분에 공백 포함 <strong>약 300~350자</strong></li><li><strong>10분 전체 분량</strong>: 총 <strong>3,000 ~ 3,500자 내외</strong></li><li><strong>10장 기준</strong>: 슬라이드 1장당 약 300~350자(4~5문장)로 맞추면 시간 초과 없이 안정적</li>
+            </ul>
+          </div>
+          <div class="info-card">
+            <div class="info-label">실전 실수를 막는 대본 마킹 3가지</div>
+            <ul>
+              <li><strong>핵심 단어 볼드</strong>: 힘주어 말할 수치·키워드는 <strong>굵게</strong> 표시</li><li><strong>화면 전환 표시</strong>: 문장 끝에 <strong><span class="inline-code">[다음 슬라이드 클릭]</span></strong> 메모</li><li><strong>잠깐 멈춤 표시</strong>: 중요한 결론 직전에 <strong><span class="inline-code">[1초 멈춤]</span></strong> 표시</li>
+            </ul>
+          </div>
+      </div>
+    </main>
+    <div class="summary-bar">AI가 써준 대본을 소리 내어 한 번만 읽어보고 본인 입에 잘 붙지 않는 단어만 바꾸면 훨씬 자연스러운 발표가 됩니다.</div>
+    <footer class="slide-footer">
+      <span class="footer-brand">OA MASTER · AI 활용 오피스 3일 완성</span>
+      <span>47 / 50</span>
+    </footer>
+  </section>
+
+  <section class="slide" style="--c:#812940; --soft:#fff1f2; --border:#fecdd3; --accent:#4338ca;">
+    <header class="slide-header">
+      <div class="header-meta">
+        <span class="part-pill">3일차 · Slides &amp; PowerPoint + AI</span>
+        <span class="tag-chip">4교시 · 실습</span>
+      </div>
+      <span class="slide-id">S48</span>
+    </header>
+    <div class="title-block">
+      <h2>[실습] AI와 함께하는 예상 질문 3선 &amp; 30초 답변 공식</h2>
+      <p class="lead">교수님·심사위원뿐 아니라 예비직장인 면접관·실무 보고 관점의 예상 질문 3가지를 뽑아 결론 중심 30초 답변 구조로 대비합니다.</p>
+    </div>
+    <main class="slide-body">
+      
+      <div class="meta-banner">결론 먼저 → 근거 1개 → 마무리 (발표·면접·실무 보고 30초 방어 공식)</div>
+      <div class="prompt-box">
+        <div class="prompt-label">실전 복사용 프롬프트</div>
+        <p>너는 꼼꼼한 대학 교수님(또는 실무 면접관·심사위원)이야. 아래 내 발표 대본과 슬라이드 내용을 보고, 발표가 끝난 뒤 가장 물어보고 싶은 현실적인 질문 3가지를 뽑아줘. 그리고 각 질문에 30초 내외로 깔끔하게 답할 수 있는 모범 답변 예시도 함께 알려줘.</p>
+      </div>
+      <div class="tips-list">
+        <div class="tip-item"><strong>1단계 결론 먼저</strong>: <span class="inline-code">"네, 좋은 질문 감사합니다. 결론부터 말씀드리면 ~입니다."</span></div><div class="tip-item"><strong>2단계 근거 1개</strong>: <span class="inline-code">"1일차 설문/조사 자료에서 확인했듯이 ~때문입니다."</span></div><div class="tip-item"><strong>3단계 마무리</strong>: <span class="inline-code">"따라서 이 부분에 집중해 개선 방안을 도출했습니다."</span></div>
+      </div>
+    </main>
+    
+    <footer class="slide-footer">
+      <span class="footer-brand">OA MASTER · AI 활용 오피스 3일 완성</span>
+      <span>48 / 50</span>
+    </footer>
+  </section>
+
+  <section class="slide" style="--c:#812940; --soft:#fff1f2; --border:#fecdd3; --accent:#4338ca;">
+    <header class="slide-header">
+      <div class="header-meta">
+        <span class="part-pill">3일차 · Slides &amp; PowerPoint + AI</span>
+        <span class="tag-chip">총정리</span>
+      </div>
+      <span class="slide-id">S49</span>
+    </header>
+    <div class="title-block">
+      <h2>3일 완성 AI 오피스 전체 흐름 &amp; OA MASTER 복습 로드맵</h2>
+      <p class="lead">데이터 정리(1일차) → 문서화(2일차) → 발표(3일차) 흐름을 익힌 뒤에는 OA MASTER 자료실과 영상강의로 자격증 취득까지 이어갑니다.</p>
+    </div>
+    <main class="slide-body">
+      
+      <table class="data-table">
+        <thead>
+          <tr><th>단계 / 구분</th><th>핵심 도구 및 워크플로우</th><th>최종 활용 결과</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>1일차</strong><br>데이터 · 자격증</td><td><span class="inline-code">Google Forms 설문</span> + <span class="inline-code">Excel / Sheets</span> + <span class="inline-code">ChatGPT 분석</span></td><td>오답노트 DB · 설문 요약표 · 차트</td></tr><tr><td><strong>2일차</strong><br>학습 · 보고서</td><td><span class="inline-code">NotebookLM 퀴즈</span> + <span class="inline-code">Deep Research</span> + <span class="inline-code">Docs → Word</span></td><td>PDF 벼락치기 노트 · A+ 보고서 PDF</td></tr><tr><td><strong>3일차</strong><br>시각화 · 발표</td><td><span class="inline-code">Gemini Canvas</span> + <span class="inline-code">Slides → PowerPoint 디자이너</span> + <span class="inline-code">AI Q&amp;A</span></td><td>10장 발표 PPTX · 대본 · Q&amp;A 대비</td></tr><tr><td><strong>수업 후 복습</strong><br>OA MASTER 연계</td><td>필기 PDF(<span class="inline-code">written_archive.html</span>) → <strong>NotebookLM</strong><br>실기 예제(<span class="inline-code">practical_archive.html</span>) + <span class="inline-code">comcbt.com</span> → <strong>오답시트</strong></td><td>컴활 필기·실기 합격까지 지속 연계</td></tr>
+        </tbody>
+      </table>
+    </main>
+    <div class="summary-bar">학교생활(설문·리포트·발표)과 예비직장인 실무 소양(보고·이메일·보안·데이터 정리)을 하나의 AI 오피스 흐름으로 연결했습니다.</div>
+    <footer class="slide-footer">
+      <span class="footer-brand">OA MASTER · AI 활용 오피스 3일 완성</span>
+      <span>49 / 50</span>
+    </footer>
+  </section>
+
+    <section class="slide slide-closing" style="--c:#812940; --accent:#4338ca;">
+      <div class="closing-inner">
+        <div class="closing-header">
+          <span class="cover-badge dark">OA MASTER × AI 실전 오피스 3일 완성</span>
+          <h1>과정 완주를 축하합니다!</h1>
+          <p class="closing-sub">앞으로 계속 써먹는 마지막 3가지 체크포인트</p>
+        </div>
+        <div class="grid-3">
+          
+            <div class="card-clean">
+              <div class="num-badge">01</div>
+              <h3>나만의 결과물 3종 보관</h3>
+              <p>Google Drive / PC에 <span class="inline-code">설문·오답노트 시트</span>, <span class="inline-code">A+ 보고서 PDF</span>, <span class="inline-code">발표 PPTX + 대본</span>을 보관해 과제와 입사 포트폴리오에 재사용하세요.</p>
+            </div>
+            <div class="card-clean">
+              <div class="num-badge">02</div>
+              <h3>대학생 무료 혜택 리마인드</h3>
+              <p>Gemini 1년 무료 프로모션 종료 전 캘린더 해지 알림을 확인하고, 재학 중 MS 365 학생 계정을 꾸준히 활용하세요.</p>
+            </div>
+            <div class="card-clean">
+              <div class="num-badge">03</div>
+              <h3>OA MASTER와 함께 성장</h3>
+              <p>OA MASTER의 컴활 필기 PDF, 실기 예제, 무료 영상강의를 AI 학습법과 연결해 자격증 합격까지 이어가세요.</p>
+            </div>
+        </div>
+        <div class="closing-footer">
+          <div class="brand-lockup">
+            <img src="images/OA_master_LOGO.png" alt="OA MASTER" class="logo-img">
+            <span class="slogan-text">쉬운 기능도 AI와 뭉치면 통한다! — OA MASTER</span>
+          </div>
+          <span class="page-num">50 / 50</span>
+        </div>
+      </div>
+    </section>
+</body>
+</html>

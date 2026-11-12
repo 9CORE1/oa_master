@@ -276,6 +276,44 @@ header.scrolled {
   font-size: 14px;
 }
 
+.dropdown-group-title {
+  padding: 6px 14px 4px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: var(--neutral-400);
+  text-transform: uppercase;
+}
+
+.dropdown-divider {
+  height: 1px;
+  background-color: var(--neutral-200);
+  margin: 6px 8px;
+}
+
+/* AI × OA 콜라보 강조 마크 */
+.collab-x {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  color: #d97706;
+  margin: 0 2px;
+  font-size: 1.08em;
+}
+
+.collab-badge-inline {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, rgba(14, 73, 135, 0.12), rgba(0, 91, 94, 0.14));
+  color: var(--theme-practical);
+  margin-left: 2px;
+  vertical-align: middle;
+}
+
 /* Call to Action Button */
 .nav-cta {
   display: flex;
@@ -1481,6 +1519,7 @@ footer {
   z-index: 1001;
   transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   padding: 30px 24px;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 30px;

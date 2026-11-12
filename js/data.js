@@ -38,6 +38,32 @@ const DEFAULT_WRITTEN_ARCHIVE = [
     "hasVideoLink": false,
     "fileFormat": "PDF",
     "fileDriveUrl": "https://drive.google.com/file/d/1OSgfBOvPZaoA2AniymfBpNJ8_DWM2eIj/view?usp=sharing"
+  },
+  {
+    "title": "컴활1급필기_핵심_요약 2025(내용충분)",
+    "description": "영진닷컴",
+    "grade": "1급",
+    "hasVideoLink": false,
+    "fileFormat": "PDF",
+    "fileName": "구글드라이브_공유자료.zip",
+    "fileSize": "Google Drive",
+    "fileDriveUrl": "https://drive.google.com/file/d/1fuoI34DWHJEVEKBuCkoQw1Q44VAUq1TC/view?usp=drive_link",
+    "id": "wr-1785286508982",
+    "date": "2026-07-29",
+    "author": "관리자"
+  },
+  {
+    "title": "컴활1급_필기_핵심요약집_2026(용어위주)",
+    "description": "컴활1급_필기_핵심요약집_2026",
+    "grade": "1급",
+    "hasVideoLink": false,
+    "fileFormat": "PDF",
+    "fileName": "구글드라이브_공유자료.zip",
+    "fileSize": "Google Drive",
+    "fileDriveUrl": "https://drive.google.com/file/d/1Nm5nhtjCKPyT6zoLqlsBaoKw857zCG6_/view?usp=sharing",
+    "id": "wr-1785285659807",
+    "date": "2026-07-29",
+    "author": "관리자"
   }
 ];
 
@@ -86,6 +112,19 @@ const DEFAULT_PRACTICAL_ARCHIVE = [
     "author": "관리자"
   },
   {
+    "title": "컴활2급과정(Start)",
+    "description": "엑셀의 기본 기능\n참조방식의 이해\n엑셀의 수식 및 함수 사용",
+    "grade": "2급",
+    "hasVideoLink": false,
+    "fileFormat": "ZIP",
+    "fileName": "구글드라이브_실습자료.zip",
+    "fileSize": "Google Drive",
+    "fileDriveUrl": "https://drive.google.com/file/d/1PwDxi8J6sNAudTeLVs-HCqrr_oghanKk/view?usp=drive_link",
+    "id": "pr-1785111086110",
+    "date": "2026-07-27",
+    "author": "관리자"
+  },
+  {
     "title": "[수업중] 2026_컴활2급실기_기본서_섹션별 문제포함",
     "description": "2026_컴활2급실기_기본서 中 기본편\n섹션별 문제 포함파일",
     "grade": "2급",
@@ -93,21 +132,47 @@ const DEFAULT_PRACTICAL_ARCHIVE = [
     "fileFormat": "ZIP",
     "fileName": "구글드라이브_실습자료.zip",
     "fileSize": "Google Drive",
-    "fileDriveUrl": "https://drive.google.com/file/d/1RYIPABl5EPYV7UA70FkM_LuV7UGW377K/view?usp=sharing",
+    "fileDriveUrl": "https://drive.google.com/file/d/1bPT1b-LvGiL3uBQ3GERoh72gCN6b5fKh/view?usp=sharing",
     "id": "pr-1784883095050",
-    "date": "2026-07-24",
+    "date": "2026-07-26",
     "author": "관리자"
   },
   {
-    "title": "[수업중] 셀참조방식 이해하기",
-    "description": "상대참조, 절대참조, 혼합참조, 이름참조\n\n다양한 참조방식에 대해 이해해봅시다!",
+    "title": "셀 참조방식의 이해",
+    "description": "절대참조\n상대참조\n혼합참조",
+    "grade": "공통",
+    "hasVideoLink": false,
+    "fileFormat": "XLSX",
+    "fileName": "구글드라이브_실습자료.zip",
+    "fileSize": "Google Drive",
+    "fileDriveUrl": "https://docs.google.com/spreadsheets/d/1Eoo0nXjpZ0iLr9bp0kT6wnKExBtJp98B/edit?usp=drive_link&ouid=110810627928172311649&rtpof=true&sd=true",
+    "id": "pr-1785218613692",
+    "date": "2026-07-28",
+    "author": "관리자"
+  },
+  {
+    "title": "(수업중)상시 기출문제 2개",
+    "description": "2025년 상시01 컴퓨터활용능력 2급 (암호 : 1054@8)\n- 별책부록 124페이지\n2025년 상시02 컴퓨터활용능력 2급 (암호 : 7%2280)\n- 별책부록 133페이지",
+    "grade": "2급",
+    "hasVideoLink": false,
+    "fileFormat": "ZIP",
+    "fileName": "구글드라이브_실습자료.zip",
+    "fileSize": "Google Drive",
+    "fileDriveUrl": "https://drive.google.com/file/d/1icZhkO-0pL7bKH7rRJ__ZiZY_-y2_T-3/view?usp=sharing",
+    "id": "pr-1785291029474",
+    "date": "2026-07-29",
+    "author": "관리자"
+  },
+  {
+    "title": "[수업중] 성적처리하면서 함수 익히기",
+    "description": "엑셀 함수를 한번에 정리해 봅시다!!\n\n성적처리하면서 함수 익히기",
     "grade": "2급",
     "hasVideoLink": false,
     "fileFormat": "XLSX",
     "fileName": "구글드라이브_실습자료.zip",
     "fileSize": "Google Drive",
-    "fileDriveUrl": "https://docs.google.com/spreadsheets/d/1Eoo0nXjpZ0iLr9bp0kT6wnKExBtJp98B/edit?usp=sharing&ouid=110810627928172311649&rtpof=true&sd=true",
-    "id": "pr-1784883721394",
+    "fileDriveUrl": "https://docs.google.com/spreadsheets/d/14Han6trHta3u0G-LxON-xwYjPkcbYtqW/edit?usp=sharing&ouid=110810627928172311649&rtpof=true&sd=true",
+    "id": "pr-1784886534284",
     "date": "2026-07-24",
     "author": "관리자"
   },
@@ -121,19 +186,6 @@ const DEFAULT_PRACTICAL_ARCHIVE = [
     "fileSize": "Google Drive",
     "fileDriveUrl": "https://drive.google.com/file/d/17FD7FyKZRbWZYtrYYB8Yg58RCc4_z7h8/view?usp=drive_link",
     "id": "pr-1784883460813",
-    "date": "2026-07-24",
-    "author": "관리자"
-  },
-  {
-    "title": "[수업중] 성적처리하면서 함수 익히기",
-    "description": "엑셀 함수를 한번에 정리해 봅시다!!\n\n성적처리하면서 함수 익히기",
-    "grade": "2급",
-    "hasVideoLink": false,
-    "fileFormat": "XLSX",
-    "fileName": "구글드라이브_실습자료.zip",
-    "fileSize": "Google Drive",
-    "fileDriveUrl": "https://docs.google.com/spreadsheets/d/14Han6trHta3u0G-LxON-xwYjPkcbYtqW/edit?usp=sharing&ouid=110810627928172311649&rtpof=true&sd=true",
-    "id": "pr-1784886534284",
     "date": "2026-07-24",
     "author": "관리자"
   },
@@ -525,27 +577,50 @@ const DEFAULT_RECOMMEND_SITES = [
     "siteUrl": "https://www.comcbt.com",
     "category": "무료 기출풀이",
     "tag": "CBT"
+  },
+  {
+    "title": "차쌤의 통하는 클라스(네이버 카페)",
+    "siteUrl": "https://cafe.naver.com/9core1",
+    "description": "차쌤의 통하는 클라스(네이버 카페)",
+    "category": "학습 커뮤니티",
+    "tag": "네이버카페",
+    "id": "re-1784890094810",
+    "date": "2026-07-24",
+    "author": "관리자"
+  },
+  {
+    "title": "유동균 컴활 인강 유튜브",
+    "siteUrl": "https://www.youtube.com/@yudongkyun",
+    "description": "유동균 컴활 인강 유튜브 채널",
+    "category": "인터넷 강의",
+    "tag": "유튜브",
+    "id": "re-1785201321272",
+    "date": "2026-07-28",
+    "author": "관리자"
   }
 ];
 
 // Database utility functions
 const DB = {
   init() {
-    if (!localStorage.getItem("written_archive")) {
+    const currentSignature = JSON.stringify({
+      written_archive: DEFAULT_WRITTEN_ARCHIVE,
+      written_video: DEFAULT_WRITTEN_VIDEO,
+      practical_archive: DEFAULT_PRACTICAL_ARCHIVE,
+      practical_video: DEFAULT_PRACTICAL_VIDEO,
+      recommend_sites: DEFAULT_RECOMMEND_SITES
+    });
+    
+    const savedSignature = localStorage.getItem("oa_master_defaults_signature");
+    if (savedSignature !== currentSignature) {
       localStorage.setItem("written_archive", JSON.stringify(DEFAULT_WRITTEN_ARCHIVE));
-    }
-    if (!localStorage.getItem("written_video")) {
       localStorage.setItem("written_video", JSON.stringify(DEFAULT_WRITTEN_VIDEO));
-    }
-    if (!localStorage.getItem("practical_archive")) {
       localStorage.setItem("practical_archive", JSON.stringify(DEFAULT_PRACTICAL_ARCHIVE));
-    }
-    if (!localStorage.getItem("practical_video")) {
       localStorage.setItem("practical_video", JSON.stringify(DEFAULT_PRACTICAL_VIDEO));
-    }
-    if (!localStorage.getItem("recommend_sites")) {
       localStorage.setItem("recommend_sites", JSON.stringify(DEFAULT_RECOMMEND_SITES));
+      localStorage.setItem("oa_master_defaults_signature", currentSignature);
     }
+    
     if (!localStorage.getItem("emailjs_settings")) {
       localStorage.setItem("emailjs_settings", JSON.stringify({
         publicKey: "",

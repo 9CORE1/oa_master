@@ -561,21 +561,24 @@ const DEFAULT_RECOMMEND_SITES = ${JSON.stringify(JSON.parse(recommendSites), nul
 // Database utility functions
 const DB = {
   init() {
-    if (!localStorage.getItem("written_archive")) {
+    const currentSignature = JSON.stringify({
+      written_archive: DEFAULT_WRITTEN_ARCHIVE,
+      written_video: DEFAULT_WRITTEN_VIDEO,
+      practical_archive: DEFAULT_PRACTICAL_ARCHIVE,
+      practical_video: DEFAULT_PRACTICAL_VIDEO,
+      recommend_sites: DEFAULT_RECOMMEND_SITES
+    });
+    
+    const savedSignature = localStorage.getItem("oa_master_defaults_signature");
+    if (savedSignature !== currentSignature) {
       localStorage.setItem("written_archive", JSON.stringify(DEFAULT_WRITTEN_ARCHIVE));
-    }
-    if (!localStorage.getItem("written_video")) {
       localStorage.setItem("written_video", JSON.stringify(DEFAULT_WRITTEN_VIDEO));
-    }
-    if (!localStorage.getItem("practical_archive")) {
       localStorage.setItem("practical_archive", JSON.stringify(DEFAULT_PRACTICAL_ARCHIVE));
-    }
-    if (!localStorage.getItem("practical_video")) {
       localStorage.setItem("practical_video", JSON.stringify(DEFAULT_PRACTICAL_VIDEO));
-    }
-    if (!localStorage.getItem("recommend_sites")) {
       localStorage.setItem("recommend_sites", JSON.stringify(DEFAULT_RECOMMEND_SITES));
+      localStorage.setItem("oa_master_defaults_signature", currentSignature);
     }
+    
     if (!localStorage.getItem("emailjs_settings")) {
       localStorage.setItem("emailjs_settings", JSON.stringify({
         publicKey: "",
