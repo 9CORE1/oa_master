@@ -1094,8 +1094,44 @@ function submitQuickAddForm() {
   if (window.renderSitesGrid) window.renderSitesGrid();
 }
 
+/**
+ * 문의용 이메일 주소를 클립보드에 복사하고 안내 메시지를 표시합니다.
+ * @param {string} [email='jjung9935@naver.com'] - 복사할 이메일 주소
+ */
+async function copyContactEmail(email = 'jjung9935@naver.com') {
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(email);
+    } else {
+      const textarea = document.createElement('textarea');
+      textarea.value = email;
+      textarea.setAttribute('readonly', '');
+      textarea.style.position = 'fixed';
+      textarea.style.left = '-9999px';
+      document.body.appendChild(textarea);
+      textarea.select();
+      const copied = document.execCommand('copy');
+      document.body.removeChild(textarea);
+      if (!copied) {
+        throw new Error('클립보드 복사를 지원하지 않는 환경입니다.');
+      }
+    }
+
+    const msg = `📧 문의 메일 주소(${email})가 클립보드에 복사되었습니다.`;
+    if (typeof window.showToast === 'function') {
+      window.showToast(msg, 'success');
+    } else {
+      alert(msg);
+    }
+  } catch (err) {
+    console.warn('이메일 복사 실패:', err);
+    alert(`📧 문의 메일 주소: ${email}\n위 메일 주소로 문의해 주세요.`);
+  }
+}
+
 // Export functions to window scope
 window.isAdmin = isAdmin;
+window.copyContactEmail = copyContactEmail;
 window.toggleAdminMode = toggleAdminMode;
 window.openAdminAuthModalDirectly = openAdminAuthModalDirectly;
 window.updateAdminUI = updateAdminUI;
