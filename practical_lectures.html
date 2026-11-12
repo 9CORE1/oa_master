@@ -325,7 +325,8 @@
       <div class="footer-bottom">
         <p>&copy; 2026 OA MASTER. All Rights Reserved. Designed for Excellence.</p>
         <div class="footer-bottom-links">
-          <a href="#" onclick="copyContactEmail(); return false;" title="클릭 시 문의 메일 주소(jjung9935@naver.com) 복사"><i class="fas fa-envelope"></i> 문의하기</a>
+          <a href="#" onclick="copyContactEmail(); return false;" title="클릭 시 문의 메일 주소(jjung9935@naver.com) 복사"><i
+              class="fas fa-envelope"></i> 문의하기</a>
           <a href="#" onclick="toggleAdminMode(); return false;"><i class="fas fa-user-shield"></i> 관리자 로그인</a>
         </div>
       </div>
@@ -1065,8 +1066,9 @@
       } else if (user && !is_admin && approvalStatus !== 'approved') {
         alert('⏳ 관리자 승인 대기 중인 계정입니다.\n관리자 승인 완료 후 세부 페이지를 이용하실 수 있습니다.');
         window.location.href = 'index.html?auth=pending';
-      } else if (window.renderHeaderUserNav) {
-        window.renderHeaderUserNav(user);
+      } else {
+        if (window.renderHeaderUserNav) window.renderHeaderUserNav(user);
+        if (window.notifyAuthReady) window.notifyAuthReady(user);
       }
     });
   </script>

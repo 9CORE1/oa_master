@@ -55,10 +55,12 @@
             <div class="dropdown-divider"></div>
             <div class="dropdown-group-title">3일 과정</div>
             <a href="ai_office_day1.html" class="dropdown-link"><i class="fas fa-table"></i> 1일차 · Excel × AI</a>
-            <a href="ai_office_day2.html" class="dropdown-link"><i class="fas fa-file-word"></i> 2일차 · Docs/Word × AI</a>
+            <a href="ai_office_day2.html" class="dropdown-link"><i class="fas fa-file-word"></i> 2일차 · Docs/Word ×
+              AI</a>
             <a href="ai_office_day3.html" class="dropdown-link"><i class="fas fa-desktop"></i> 3일차 · PPT/Slides × AI</a>
             <div class="dropdown-divider"></div>
-            <a href="AI리터러시진단안내_참고자료.pdf" target="_blank" class="dropdown-link"><i class="fas fa-chart-pie"></i> AI 리터러시 진단 PDF</a>
+            <a href="AI리터러시진단안내_참고자료.pdf" target="_blank" class="dropdown-link"><i class="fas fa-chart-pie"></i> AI 리터러시
+              진단 PDF</a>
           </div>
         </div>
         <div class="nav-item">
@@ -306,7 +308,8 @@
       <div class="footer-bottom">
         <p>&copy; 2026 OA MASTER. All Rights Reserved. Designed for Excellence.</p>
         <div class="footer-bottom-links">
-          <a href="#" onclick="copyContactEmail(); return false;" title="클릭 시 문의 메일 주소(jjung9935@naver.com) 복사"><i class="fas fa-envelope"></i> 문의하기</a>
+          <a href="#" onclick="copyContactEmail(); return false;" title="클릭 시 문의 메일 주소(jjung9935@naver.com) 복사"><i
+              class="fas fa-envelope"></i> 문의하기</a>
           <a href="#" onclick="toggleAdminMode(); return false;"><i class="fas fa-user-shield"></i> 관리자 로그인</a>
         </div>
       </div>
@@ -909,8 +912,9 @@
       } else if (user && !is_admin && approvalStatus !== 'approved') {
         alert('⏳ 관리자 승인 대기 중인 계정입니다.\n관리자 승인 완료 후 세부 페이지를 이용하실 수 있습니다.');
         window.location.href = 'index.html?auth=pending';
-      } else if (window.renderHeaderUserNav) {
-        window.renderHeaderUserNav(user);
+      } else {
+        if (window.renderHeaderUserNav) window.renderHeaderUserNav(user);
+        if (window.notifyAuthReady) window.notifyAuthReady(user);
       }
     });
   </script>

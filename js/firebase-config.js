@@ -21,6 +21,7 @@ import {
     doc,
     setDoc,
     getDoc,
+    getDocFromServer,
     deleteDoc,
     collection,
     getDocs,
@@ -156,6 +157,10 @@ export function resolveApprovalStatus(user, existingData = null) {
     }
 
     if (existingData && existingData.approvalStatus) {
+        const normalized = String(existingData.approvalStatus).trim().toLowerCase();
+        if (normalized === 'approved' || normalized === 'pending' || normalized === 'rejected') {
+            return normalized;
+        }
         return existingData.approvalStatus;
     }
 
@@ -210,17 +215,29 @@ export function onAuthChange(callback) {
 
             let role = 'User';
             let fsData = null;
+            let fsReadError = false;
+            let fsDocNotFound = false;
 
             try {
-                const fsRes = await getUserDataFromFirestore(user.uid);
+                const fsRes = await getUserDataFromFirestore(user.uid, { preferServer: true });
                 if (fsRes && fsRes.success && fsRes.data) {
                     fsData = fsRes.data;
                     if (fsData.role) {
                         role = fsData.role;
                     }
+                } else if (fsRes && fsRes.notFound) {
+                    fsDocNotFound = true;
+                } else {
+                    fsReadError = true;
                 }
             } catch (e) {
+                fsReadError = true;
                 console.warn("Role/approval fetch error:", e);
+            }
+
+            if (fsReadError && localStorage.getItem('userUid') === user.uid) {
+                const cachedRole = localStorage.getItem('userRole');
+                if (cachedRole) role = cachedRole;
             }
 
             if (email === 'teacha99@gmail.com') {
@@ -234,6 +251,12 @@ export function onAuthChange(callback) {
             }
 
             let approvalStatus = resolveApprovalStatus(user, { ...(fsData || {}), role });
+            if (fsReadError && localStorage.getItem('userUid') === user.uid) {
+                const cachedStatus = localStorage.getItem('userApprovalStatus');
+                if (cachedStatus === 'approved' || cachedStatus === 'rejected') {
+                    approvalStatus = cachedStatus;
+                }
+            }
 
             localStorage.setItem('userRole', role);
             localStorage.setItem('userApprovalStatus', approvalStatus);
@@ -241,25 +264,27 @@ export function onAuthChange(callback) {
             if (user.photoURL) localStorage.setItem('userPhotoURL', user.photoURL);
             if (user.uid) localStorage.setItem('userUid', user.uid);
 
-            // Firestore에 프로필 사진, 역할(role), 초기 승인 상태 자동 동기화 (기존 approvalStatus는 덮어쓰지 않음)
+            // Firestore에 프로필 사진, 역할(role), 초기 승인 상태 자동 동기화 (조회 오류 시 기존 approvalStatus 보호)
             const providerId = (user.providerData && user.providerData.length > 0) ? user.providerData[0].providerId : 'password';
             const syncPayload = {
                 email: user.email || '',
-                provider: providerId,
-                role: role
+                provider: providerId
             };
+            if (!fsReadError) {
+                syncPayload.role = role;
+            }
             if (user.displayName || !fsData || !fsData.displayName) {
                 syncPayload.displayName = user.displayName || (fsData && fsData.displayName) || (user.email ? user.email.split('@')[0] : '회원');
             }
             if (user.photoURL) {
                 syncPayload.photoURL = user.photoURL;
             }
-            if (!fsData || !fsData.createdAt) {
+            if (!fsReadError && (!fsData || !fsData.createdAt)) {
                 syncPayload.createdAt = (user.metadata && user.metadata.creationTime)
                     ? new Date(user.metadata.creationTime).toISOString()
                     : new Date().toISOString();
             }
-            if (!fsData || !fsData.approvalStatus) {
+            if (!fsReadError && (fsDocNotFound || (fsData && !fsData.approvalStatus))) {
                 syncPayload.approvalStatus = approvalStatus;
                 if (approvalStatus === 'approved' && (!fsData || !fsData.approvedAt)) {
                     syncPayload.approvedAt = new Date().toISOString();
@@ -377,19 +402,30 @@ export async function saveUserDataToFirestore(uid, userData) {
     }
 }
 
-// [Firestore 2] 회원 프로필 통합 조회
-export async function getUserDataFromFirestore(uid) {
+// [Firestore 2] 회원 프로필 통합 조회 (preferServer: 오래된 로컬 캐시 우회)
+export async function getUserDataFromFirestore(uid, options = {}) {
+    const { preferServer = false } = options || {};
     try {
         const userRef = doc(db, "users", uid);
-        const snap = await getDoc(userRef);
-        if (snap.exists()) {
-            return { success: true, data: snap.data() };
+        let snap = null;
+        if (preferServer) {
+            try {
+                snap = await getDocFromServer(userRef);
+            } catch (serverErr) {
+                console.warn("Firestore 서버 직접 조회 폴백:", serverErr);
+                snap = await getDoc(userRef);
+            }
         } else {
-            return { success: false, error: "데이터 없음" };
+            snap = await getDoc(userRef);
         }
+
+        if (snap && snap.exists()) {
+            return { success: true, data: snap.data() };
+        }
+        return { success: false, notFound: true, error: "데이터 없음" };
     } catch (error) {
         console.error("Firestore 조회 실패:", error);
-        return { success: false, error: error.message };
+        return { success: false, isError: true, error: error.message };
     }
 }
 

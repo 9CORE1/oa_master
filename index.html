@@ -1062,16 +1062,29 @@
       const cachedSchool = localStorage.getItem(`user_school_${user.uid}`) || '';
 
       let existingData = null;
+      let existingReadError = false;
+      let existingNotFound = false;
       try {
-        const existingRes = await getUserDataFromFirestore(user.uid);
+        const existingRes = await getUserDataFromFirestore(user.uid, { preferServer: true });
         if (existingRes && existingRes.success && existingRes.data) {
           existingData = existingRes.data;
+        } else if (existingRes && existingRes.notFound) {
+          existingNotFound = true;
+        } else {
+          existingReadError = true;
         }
       } catch (err) {
+        existingReadError = true;
         console.warn('Existing user lookup warning:', err);
       }
 
-      const approvalStatus = resolveApprovalStatus(user, existingData);
+      let approvalStatus = resolveApprovalStatus(user, existingData);
+      if (existingReadError && localStorage.getItem('userUid') === user.uid) {
+        const cachedStatus = localStorage.getItem('userApprovalStatus');
+        if (cachedStatus === 'approved' || cachedStatus === 'rejected') {
+          approvalStatus = cachedStatus;
+        }
+      }
       localStorage.setItem('userApprovalStatus', approvalStatus);
 
       const payload = {
@@ -1084,7 +1097,7 @@
         createdAt: (existingData && existingData.createdAt) || createdDate               // 7. 가입 일자
       };
 
-      if (!existingData || !existingData.approvalStatus) {
+      if (!existingReadError && (existingNotFound || (existingData && !existingData.approvalStatus))) {
         payload.approvalStatus = approvalStatus;
         if (approvalStatus === 'approved') {
           payload.approvedAt = (existingData && existingData.approvedAt) || new Date().toISOString();

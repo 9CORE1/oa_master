@@ -766,8 +766,9 @@
       } else if (user && !is_admin && approvalStatus !== 'approved') {
         alert('⏳ 관리자 승인 대기 중인 계정입니다.\n관리자 승인 완료 후 세부 페이지를 이용하실 수 있습니다.');
         window.location.href = 'index.html?auth=pending';
-      } else if (window.renderHeaderUserNav) {
-        window.renderHeaderUserNav(user);
+      } else {
+        if (window.renderHeaderUserNav) window.renderHeaderUserNav(user);
+        if (window.notifyAuthReady) window.notifyAuthReady(user);
       }
     });
   </script>
