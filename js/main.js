@@ -145,6 +145,10 @@ function getMemberApprovalStatus() {
   const isAdminSession = (typeof window.isAdmin === 'function' && window.isAdmin()) ||
     (localStorage.getItem('isAdminActive') === 'true');
   if (isAdminSession) return 'approved';
+  const diag = window.__oaAuthDiag || null;
+  if (diag && (diag.approvalStatus || diag.fsApprovalStatus)) {
+    return diag.approvalStatus || diag.fsApprovalStatus;
+  }
   return localStorage.getItem('userApprovalStatus') || 'pending';
 }
 

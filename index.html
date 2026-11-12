@@ -1553,7 +1553,10 @@
             (localStorage.getItem('isAdminActive') === 'true');
           const isUserLoggedIn = (currentUser !== null) ||
             (localStorage.getItem('isLoggedIn') === 'true');
-          const approvalStatus = localStorage.getItem('userApprovalStatus') || 'pending';
+          const diag = window.__oaAuthDiag || null;
+          const approvalStatus = (diag && (diag.approvalStatus || diag.fsApprovalStatus)) ||
+            localStorage.getItem('userApprovalStatus') ||
+            'pending';
 
           if (!isAdminSession && !isUserLoggedIn) {
             e.preventDefault();
