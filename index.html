@@ -616,6 +616,72 @@
     let lastKnownMemberApprovalStatus = localStorage.getItem('userApprovalStatus') || null;
     let approvedAutoEnterTimer = null;
 
+    /**
+     * 현재 활성 회원의 UID를 안전하게 반환합니다.
+     */
+    const getActiveMemberUid = (targetUser = null) => {
+      return (targetUser && targetUser.uid) ||
+        (currentUser && currentUser.uid) ||
+        localStorage.getItem('userUid') ||
+        null;
+    };
+
+    /**
+     * 첫 승인완료 팝업모달의 페이지 이동 클릭 또는 세부 페이지 접근 이력이 있는지 확인합니다.
+     */
+    const hasCompletedFirstApprovalModal = (uid = null, fsData = null) => {
+      const targetUid = uid || getActiveMemberUid();
+      if (targetUid) {
+        if (localStorage.getItem(`oa_approval_notice_ack_${targetUid}`) === 'true') return true;
+        if (localStorage.getItem(`oa_detail_access_history_${targetUid}`) === 'true') return true;
+      }
+      if (fsData && (
+        fsData.approvalNoticeAck === true ||
+        fsData.detailAccessHistoryRecorded === true ||
+        Boolean(fsData.firstDetailAccessedAt) ||
+        Boolean(fsData.lastDetailAccessedAt)
+      )) {
+        return true;
+      }
+      return false;
+    };
+
+    /**
+     * 첫 승인완료 팝업모달 확인(페이지 이동) 또는 세부 콘텐츠 접근 이력을 localStorage 및 Firestore에 저장합니다.
+     */
+    const markApprovalNoticeCompleted = (targetUser = null, options = {}) => {
+      const targetUid = getActiveMemberUid(targetUser);
+      if (!targetUid) return Promise.resolve();
+
+      const isAdminSession = (typeof isAdmin === 'function' && isAdmin()) ||
+        (localStorage.getItem('isAdminActive') === 'true');
+      if (isAdminSession) return Promise.resolve();
+
+      const { visitedDetail = false, targetPage = '' } = options || {};
+      const nowIso = new Date().toISOString();
+      const isFirstDetailLocal = visitedDetail && localStorage.getItem(`oa_detail_access_history_${targetUid}`) !== 'true';
+
+      localStorage.setItem(`oa_approval_notice_ack_${targetUid}`, 'true');
+      if (visitedDetail) {
+        localStorage.setItem(`oa_detail_access_history_${targetUid}`, 'true');
+      }
+
+      const payload = {
+        approvalNoticeAck: true,
+        approvalNoticeAckAt: nowIso
+      };
+      if (visitedDetail) {
+        payload.detailAccessHistoryRecorded = true;
+        payload.lastDetailAccessedAt = nowIso;
+        if (targetPage) payload.lastDetailPage = targetPage;
+        if (isFirstDetailLocal) payload.firstDetailAccessedAt = nowIso;
+      }
+
+      return saveUserDataToFirestore(targetUid, payload).catch((err) => {
+        console.warn('승인완료 안내 이력 저장 경고:', err);
+      });
+    };
+
     // ⚡ 전역 팝업 모달 상호 배제 닫기 헬퍼 함수 (모달 중첩 겹침 완전 방지)
     const closeAllModals = () => {
       const authModal = document.getElementById('authModal');
@@ -636,7 +702,7 @@
     /**
      * 승인 완료 후 대기창에서 바로 웹페이지(또는 직전 요청 페이지)로 진입합니다.
      */
-    const enterWebsiteAfterApproval = () => {
+    const enterWebsiteAfterApproval = async () => {
       if (approvedAutoEnterTimer) {
         clearTimeout(approvedAutoEnterTimer);
         approvedAutoEnterTimer = null;
@@ -650,6 +716,19 @@
       const nextUrl = sessionStorage.getItem('oaPendingRedirectUrl');
       if (nextUrl) {
         sessionStorage.removeItem('oaPendingRedirectUrl');
+      }
+
+      const syncPromise = markApprovalNoticeCompleted(currentUser, {
+        visitedDetail: Boolean(nextUrl),
+        targetPage: nextUrl || ''
+      });
+
+      if (nextUrl) {
+        // 페이지 이동 직전 Firestore 동기화가 중단되지 않도록 짧게 대기 후 이동
+        await Promise.race([
+          syncPromise,
+          new Promise((resolve) => setTimeout(resolve, 350))
+        ]);
         window.location.href = nextUrl;
       }
     };
@@ -661,6 +740,7 @@
      */
     const openApprovalWaitingModal = (targetUser = null, forcedStatus = null) => {
       const userObj = targetUser || currentUser || {
+        uid: localStorage.getItem('userUid') || null,
         displayName: localStorage.getItem('userDisplayName') || '회원',
         email: localStorage.getItem('userEmail') || ''
       };
@@ -672,6 +752,11 @@
       const status = forcedStatus || localStorage.getItem('userApprovalStatus') || 'pending';
       const waitingModal = document.getElementById('approvalWaitingModal');
       if (!waitingModal) return;
+
+      if (status === 'approved' && hasCompletedFirstApprovalModal(getActiveMemberUid(userObj))) {
+        waitingModal.style.display = 'none';
+        return;
+      }
 
       const celebrationModal = document.getElementById('signupCelebrationModal');
       if (celebrationModal) celebrationModal.style.display = 'none';
@@ -792,7 +877,16 @@
      * @param {object} userObj - 승인된 사용자 객체
      */
     const handleRealtimeApprovalUnlocked = (userObj) => {
+      const uid = getActiveMemberUid(userObj);
       const celebrationModal = document.getElementById('signupCelebrationModal');
+      const waitingModal = document.getElementById('approvalWaitingModal');
+
+      if (hasCompletedFirstApprovalModal(uid)) {
+        if (celebrationModal) celebrationModal.style.display = 'none';
+        if (waitingModal) waitingModal.style.display = 'none';
+        return;
+      }
+
       if (celebrationModal && celebrationModal.style.display === 'flex') {
         celebrationModal.style.display = 'none';
       }
@@ -1065,10 +1159,10 @@
           const displayName = user.displayName || (user.email ? user.email.split('@')[0] : '회원');
           const photoUrl = (user && user.photoURL) || localStorage.getItem('userPhotoURL') || null;
           const approvalStatus = localStorage.getItem('userApprovalStatus') || 'approved';
-          const approvalBadge = approvalStatus === 'pending'
-            ? `<button type="button" onclick="if(window.openApprovalWaitingModal){window.openApprovalWaitingModal();} return false;" title="클릭하여 승인 대기 화면 확인" style="border:none; cursor:pointer; font-size:11px; font-weight:700; color:#b45309; background:rgba(245,158,11,0.16); padding:3px 9px; border-radius:10px; white-space:nowrap;">승인대기</button>`
-            : (approvalStatus === 'rejected'
-              ? `<button type="button" onclick="if(window.openApprovalWaitingModal){window.openApprovalWaitingModal();} return false;" title="클릭하여 승인 상태 확인" style="border:none; cursor:pointer; font-size:11px; font-weight:700; color:#b91c1c; background:rgba(239,68,68,0.12); padding:3px 9px; border-radius:10px; white-space:nowrap;">승인보류</button>`
+          const approvalBadge = typeof window.getMemberApprovalBadgeHtml === 'function'
+            ? window.getMemberApprovalBadgeHtml(approvalStatus)
+            : (approvalStatus === 'approved'
+              ? `<span style="font-size:11px; font-weight:700; color:#15803d; background:rgba(34,197,94,0.14); padding:3px 9px; border-radius:10px; white-space:nowrap; display:inline-flex; align-items:center; gap:4px;"><i class="fas fa-check-circle"></i> 승인회원</span>`
               : '');
           const avatarIcon = photoUrl
             ? `<img src="${photoUrl}" style="width:24px; height:24px; border-radius:50%; object-fit:cover; flex-shrink:0;">`
@@ -1144,6 +1238,17 @@
             if (fsRes.data.displayName) {
               localStorage.setItem('userDisplayName', fsRes.data.displayName);
             }
+            if (fsRes.data.approvalNoticeAck === true) {
+              localStorage.setItem(`oa_approval_notice_ack_${user.uid}`, 'true');
+            }
+            if (
+              fsRes.data.detailAccessHistoryRecorded === true ||
+              fsRes.data.firstDetailAccessedAt ||
+              fsRes.data.lastDetailAccessedAt
+            ) {
+              localStorage.setItem(`oa_detail_access_history_${user.uid}`, 'true');
+              localStorage.setItem(`oa_approval_notice_ack_${user.uid}`, 'true');
+            }
           }
         } catch (err) {
           console.warn('Firestore profile sync warning:', err);
@@ -1160,17 +1265,27 @@
         const currentApprovalStatus = localStorage.getItem('userApprovalStatus') || 'pending';
         const celebrationModal = document.getElementById('signupCelebrationModal');
         const waitingModal = document.getElementById('approvalWaitingModal');
+        const alreadyCompletedApprovalModal = hasCompletedFirstApprovalModal(user.uid);
         const isWaitingModalVisible = Boolean(
           (celebrationModal && celebrationModal.style.display === 'flex') ||
           (waitingModal && waitingModal.style.display === 'flex')
         );
-        const transitionedToApproved = !isAdminSession && currentApprovalStatus === 'approved' && (
-          (lastKnownMemberApprovalStatus && lastKnownMemberApprovalStatus !== 'approved') ||
-          isWaitingModalVisible
-        );
+        const transitionedToApproved = !isAdminSession &&
+          currentApprovalStatus === 'approved' &&
+          !alreadyCompletedApprovalModal && (
+            (lastKnownMemberApprovalStatus && lastKnownMemberApprovalStatus !== 'approved') ||
+            isWaitingModalVisible
+          );
         lastKnownMemberApprovalStatus = currentApprovalStatus;
 
-        if (transitionedToApproved) {
+        if (currentApprovalStatus === 'approved' && alreadyCompletedApprovalModal) {
+          if (approvedAutoEnterTimer) {
+            clearTimeout(approvedAutoEnterTimer);
+            approvedAutoEnterTimer = null;
+          }
+          if (celebrationModal) celebrationModal.style.display = 'none';
+          if (waitingModal) waitingModal.style.display = 'none';
+        } else if (transitionedToApproved) {
           handleRealtimeApprovalUnlocked(user);
         } else if (!isHandlingManualAuthFlow && !isAdminSession && currentApprovalStatus !== 'approved') {
           if (sessionStorage.getItem('oaWaitingModalDismissed') !== 'true') {
@@ -1432,6 +1547,11 @@
             sessionStorage.setItem('oaPendingRedirectUrl', href);
             sessionStorage.removeItem('oaWaitingModalDismissed');
             openApprovalWaitingModal(currentUser, approvalStatus);
+          } else if (!isAdminSession && approvalStatus === 'approved') {
+            markApprovalNoticeCompleted(currentUser, {
+              visitedDetail: true,
+              targetPage: href
+            });
           }
         }
       }, true);

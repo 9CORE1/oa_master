@@ -163,8 +163,63 @@ function isMemberAuthenticated() {
  * Firebase 인증 상태 변경 결과를 전역에 반영하고 구독자에게 알립니다.
  * @param {object|null} user - Firebase 사용자 객체 또는 null
  */
+/**
+ * 승인된 일반 회원이 세부 콘텐츠 페이지에 접근하거나 이동한 이력을 기록합니다.
+ * @param {object|null} sourceUser - Firebase 인증 사용자 객체(선택)
+ * @param {string} [targetHref=''] - 클릭한 세부 링크 대상 경로(선택)
+ */
+function recordMemberDetailAccessHistory(sourceUser = null, targetHref = '') {
+  try {
+    const isAdminSession = (typeof window.isAdmin === 'function' && window.isAdmin()) ||
+      (localStorage.getItem('isAdminActive') === 'true');
+    if (isAdminSession || !isMemberAuthenticated()) return;
+
+    const uid = (sourceUser && sourceUser.uid) || localStorage.getItem('userUid');
+    if (!uid) return;
+
+    const currentFile = (window.location.pathname.split('/').pop() || 'index.html').toLowerCase();
+    const isDetailPage = Boolean(currentFile) &&
+      currentFile !== 'index.html' &&
+      !currentFile.startsWith('admin');
+
+    if (!targetHref && !isDetailPage) return;
+
+    const targetName = targetHref || currentFile || 'detail_page';
+    const isFirstLocalRecord = localStorage.getItem(`oa_detail_access_history_${uid}`) !== 'true';
+    localStorage.setItem(`oa_detail_access_history_${uid}`, 'true');
+    localStorage.setItem(`oa_approval_notice_ack_${uid}`, 'true');
+
+    const syncKey = `oa_detail_access_synced_${uid}`;
+    if (sessionStorage.getItem(syncKey) === 'true' && !targetHref) return;
+
+    const nowIso = new Date().toISOString();
+    const payload = {
+      approvalNoticeAck: true,
+      detailAccessHistoryRecorded: true,
+      lastDetailAccessedAt: nowIso,
+      lastDetailPage: targetName
+    };
+    if (isFirstLocalRecord) {
+      payload.firstDetailAccessedAt = nowIso;
+    }
+
+    if (window.FirebaseApp && typeof window.FirebaseApp.saveUserDataToFirestore === 'function') {
+      sessionStorage.setItem(syncKey, 'true');
+      window.FirebaseApp.saveUserDataToFirestore(uid, payload).catch((err) => {
+        sessionStorage.removeItem(syncKey);
+        console.warn('세부 페이지 접근 이력 동기화 실패:', err);
+      });
+    }
+  } catch (err) {
+    console.warn('세부 페이지 접근 이력 기록 오류:', err);
+  }
+}
+
 function notifyAuthReady(user) {
   verifiedAuthState = Boolean(user);
+  if (user) {
+    recordMemberDetailAccessHistory(user);
+  }
   window.dispatchEvent(new CustomEvent('oaAuthReady', {
     detail: { user, approvalStatus: getMemberApprovalStatus() }
   }));
@@ -261,6 +316,8 @@ function initProtectedDetailLinks() {
     window.location.pathname.endsWith('index.html');
   if (isHome) return;
 
+  recordMemberDetailAccessHistory();
+
   document.addEventListener('click', (e) => {
     const target = e.target.closest('a, button');
     if (!target) return;
@@ -272,6 +329,8 @@ function initProtectedDetailLinks() {
         e.preventDefault();
         e.stopPropagation();
         requireMemberLogin('🔒 회원가입 및 로그인이 필요한 세부 학습 페이지입니다.');
+      } else {
+        recordMemberDetailAccessHistory(null, href);
       }
     }
   }, true);
@@ -283,6 +342,7 @@ window.PROTECTED_DETAIL_PAGES = PROTECTED_DETAIL_PAGES;
 window.isMemberLoggedInSession = isMemberLoggedInSession;
 window.getMemberApprovalStatus = getMemberApprovalStatus;
 window.isMemberAuthenticated = isMemberAuthenticated;
+window.recordMemberDetailAccessHistory = recordMemberDetailAccessHistory;
 window.notifyAuthReady = notifyAuthReady;
 window.requireMemberLogin = requireMemberLogin;
 window.renderMemberGateBox = renderMemberGateBox;

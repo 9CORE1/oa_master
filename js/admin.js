@@ -384,6 +384,22 @@ document.addEventListener('click', (e) => {
   }
 });
 
+/**
+ * 회원의 승인 상태에 따른 상단 헤더 배지 HTML을 반환합니다.
+ * @param {string} approvalStatus - 'approved' | 'pending' | 'rejected'
+ * @returns {string} 배지 HTML 문자열
+ */
+function getMemberApprovalBadgeHtml(approvalStatus) {
+  if (approvalStatus === 'pending') {
+    return `<button type="button" onclick="if(window.openApprovalWaitingModal){window.openApprovalWaitingModal();}else{window.location.href='index.html?auth=pending';} return false;" title="클릭하여 승인 대기 화면 확인" style="border:none; cursor:pointer; font-size:11px; font-weight:700; color:#b45309; background:rgba(245,158,11,0.16); padding:3px 9px; border-radius:10px; white-space:nowrap;">승인대기</button>`;
+  }
+  if (approvalStatus === 'rejected') {
+    return `<button type="button" onclick="if(window.openApprovalWaitingModal){window.openApprovalWaitingModal();}else{window.location.href='index.html?auth=pending';} return false;" title="클릭하여 승인 상태 확인" style="border:none; cursor:pointer; font-size:11px; font-weight:700; color:#b91c1c; background:rgba(239,68,68,0.12); padding:3px 9px; border-radius:10px; white-space:nowrap;">승인보류</button>`;
+  }
+  return `<span style="font-size:11px; font-weight:700; color:#15803d; background:rgba(34,197,94,0.14); padding:3px 9px; border-radius:10px; white-space:nowrap; display:inline-flex; align-items:center; gap:4px;"><i class="fas fa-check-circle"></i> 승인회원</span>`;
+}
+window.getMemberApprovalBadgeHtml = getMemberApprovalBadgeHtml;
+
 // Universal Header User Nav Renderer for All Pages
 function renderHeaderUserNavUniversal(user) {
   const userNav = document.getElementById('userNavArea');
@@ -416,11 +432,7 @@ function renderHeaderUserNavUniversal(user) {
     const displayName = activeUser.displayName || (activeUser.email ? activeUser.email.split('@')[0] : '회원');
     const photoUrl = (activeUser && activeUser.photoURL) || localStorage.getItem('userPhotoURL') || null;
     const approvalStatus = localStorage.getItem('userApprovalStatus') || 'approved';
-    const approvalBadge = approvalStatus === 'pending'
-      ? `<span style="font-size:11px; font-weight:700; color:#b45309; background:rgba(245,158,11,0.16); padding:2px 8px; border-radius:10px; white-space:nowrap;">승인대기</span>`
-      : (approvalStatus === 'rejected'
-        ? `<span style="font-size:11px; font-weight:700; color:#b91c1c; background:rgba(239,68,68,0.12); padding:2px 8px; border-radius:10px; white-space:nowrap;">승인보류</span>`
-        : '');
+    const approvalBadge = getMemberApprovalBadgeHtml(approvalStatus);
     const avatarIcon = photoUrl
       ? `<img src="${photoUrl}" style="width:24px; height:24px; border-radius:50%; object-fit:cover; flex-shrink:0;">`
       : `<i class="fas fa-user-circle" style="color:var(--theme-written); font-size:18px;"></i>`;
