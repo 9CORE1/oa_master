@@ -236,10 +236,14 @@ function requireMemberLogin(message = '🔒 회원가입 및 로그인 후 이�
       window.openApprovalWaitingModal(null, status);
       return;
     }
+    const diag = window.__oaAuthDiag || null;
+    const diagSuffix = (diag && diag.fsReadError)
+      ? `\n\n[진단 정보] 서버 상태 조회 오류(${diag.fsReadErrorCode || 'unknown'})`
+      : (diag && diag.email ? `\n(계정: ${diag.email}, 현재 상태: ${status})` : '');
     if (status === 'rejected') {
-      alert('⛔ 현재 계정은 관리자 승인 보류 상태입니다.\n이용 관련 사항은 관리자에게 문의해 주세요.');
+      alert(`⛔ 현재 계정은 관리자 승인 보류 상태입니다.\n이용 관련 사항은 관리자에게 문의해 주세요.${diagSuffix}`);
     } else {
-      alert('⏳ 회원가입 및 로그인은 완료되었으나 현재 관리자 승인 대기 중입니다.\n관리자 승인 완료 후 바로 세부 콘텐츠를 이용하실 수 있습니다.');
+      alert(`⏳ 회원가입 및 로그인은 완료되었으나 현재 관리자 승인 대기 중입니다.\n관리자 승인 완료 후 바로 세부 콘텐츠를 이용하실 수 있습니다.${diagSuffix}`);
     }
     return;
   }

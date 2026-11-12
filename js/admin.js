@@ -108,6 +108,87 @@ function closeAdminModal(modalId) {
   modal.style.display = 'none';
 }
 
+/**
+ * EmailJS 설정값의 유효성을 검사합니다.
+ * @param {Object|null} settings - 저장된 EmailJS 설정 객체
+ * @returns {{valid: boolean, reason: string, normalized: Object}} 검사 결과
+ */
+function validateEmailJSSettings(settings) {
+  const raw = settings && typeof settings === 'object' ? settings : {};
+  const normalized = {
+    publicKey: String(raw.publicKey || '').trim(),
+    serviceId: String(raw.serviceId || '').trim(),
+    templateId: String(raw.templateId || '').trim(),
+    adminEmail: String(raw.adminEmail || '').trim()
+  };
+
+  if (!normalized.publicKey || !normalized.serviceId || !normalized.templateId) {
+    return {
+      valid: false,
+      reason: 'EmailJS 연동 키(Public Key, Service ID, Template ID)가 비어 있습니다.',
+      normalized
+    };
+  }
+
+  const hasWhitespace = /\s/.test(normalized.publicKey) || /\s/.test(normalized.serviceId) || /\s/.test(normalized.templateId);
+  if (hasWhitespace) {
+    return {
+      valid: false,
+      reason: 'EmailJS 키 또는 ID에 공백이 포함되어 있습니다. 공백 없이 정확히 입력해 주세요.',
+      normalized
+    };
+  }
+
+  const placeholderPattern = /^(user_x+|service_x+|template_x+|your_|example)/i;
+  if (
+    placeholderPattern.test(normalized.publicKey) ||
+    placeholderPattern.test(normalized.serviceId) ||
+    placeholderPattern.test(normalized.templateId)
+  ) {
+    return {
+      valid: false,
+      reason: 'EmailJS 설정값이 기본 예시값으로 되어 있습니다. 실제 발급받은 키로 재설정해 주세요.',
+      normalized
+    };
+  }
+
+  if (normalized.adminEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalized.adminEmail)) {
+    return {
+      valid: false,
+      reason: '관리자 수신 이메일 주소 형식이 올바르지 않습니다.',
+      normalized
+    };
+  }
+
+  return { valid: true, reason: '', normalized };
+}
+
+/**
+ * EmailJS 전송 오류 객체를 사용자 친화적인 한국어 안내 문구로 변환합니다.
+ * @param {*} error - EmailJS SDK 오류 객체
+ * @returns {string} 오류 설명 문자열
+ */
+function formatEmailJSErrorReason(error) {
+  const status = error && (error.status || error.statusCode);
+  const rawText = error && (error.text || error.message || (typeof error === 'string' ? error : ''));
+  const text = String(rawText || '').trim();
+
+  if (status === 401 || status === 403 || /public key|user id|invalid grant|unauthorized/i.test(text)) {
+    return `Public Key 인증에 실패했습니다.${status ? ` (HTTP ${status})` : ''} Public Key를 확인해 주세요.`;
+  }
+  if (status === 404 || /service id|template id|not found/i.test(text)) {
+    return `Service ID 또는 Template ID를 찾을 수 없습니다.${status ? ` (HTTP ${status})` : ''} ID 값을 다시 확인해 주세요.`;
+  }
+  if (status === 400) {
+    return `EmailJS 요청 파라미터 또는 설정값(Public Key / Service ID / Template ID)이 올바르지 않습니다. (HTTP 400${text ? `: ${text}` : ''})`;
+  }
+  if (status === 412) {
+    return `EmailJS 메일 서비스 연동 권한 또는 템플릿 변수를 확인해 주세요. (HTTP 412${text ? `: ${text}` : ''})`;
+  }
+
+  return `인증 메일 전송 오류${status ? ` (HTTP ${status})` : ''}${text ? `: ${text}` : ' - EmailJS 설정값을 확인해 주세요.'}`;
+}
+
 // Request Email Verification Code using EmailJS
 function requestVerificationCode() {
   const emailInput = document.getElementById('adminLoginEmail') || document.getElementById('loginEmail');
@@ -125,8 +206,17 @@ function requestVerificationCode() {
   }
 
   const settings = (window.DB && window.DB.getEmailJSSettings) ? window.DB.getEmailJSSettings() : {};
+  const validation = validateEmailJSSettings(settings);
+  if (!validation.valid) {
+    alert(`❌ EmailJS 설정에 오류가 있습니다.\n\n사유: ${validation.reason}\n\nEmailJS 설정을 다시 입력할 수 있도록 재설정 창을 엽니다.`);
+    if (window.showToast) window.showToast('EmailJS 설정을 재설정해 주세요.', 'error');
+    showEmailJSSettingsModal(validation.reason, { reopenAdminAuth: true });
+    return;
+  }
+
+  const normalized = validation.normalized;
   const validAdminEmails = [
-    (settings.adminEmail || '').trim().toLowerCase(),
+    normalized.adminEmail.toLowerCase(),
     'teacha99@gmail.com'
   ].filter(Boolean);
 
@@ -163,20 +253,33 @@ function requestVerificationCode() {
     }
   };
 
-  if (!settings.publicKey || !settings.serviceId || !settings.templateId) {
-    alert('❌ EmailJS 연동 키(Public Key / Service ID / Template ID)가 설정되지 않았습니다.');
-    showEmailJSSettingsModal();
-    return;
-  }
-
   if (typeof emailjs === 'undefined') {
     alert('❌ EmailJS SDK 라이브러리를 불러올 수 없습니다. 인터넷 연결을 확인해 주세요.');
     return;
   }
 
+  const btnReq = document.getElementById('btnAdminRequestCode') || document.getElementById('btnRequestCode');
+  const originalBtnText = btnReq ? btnReq.textContent : '';
+  if (btnReq) {
+    btnReq.disabled = true;
+    btnReq.textContent = '전송 중...';
+  }
+
   if (window.showToast) window.showToast('인증번호를 이메일로 발송 중입니다...', 'info');
 
-  emailjs.init(settings.publicKey);
+  try {
+    emailjs.init(normalized.publicKey);
+  } catch (initError) {
+    console.error('EmailJS init FAILED...', initError);
+    if (btnReq) {
+      btnReq.disabled = false;
+      btnReq.textContent = originalBtnText || '인증번호 전송';
+    }
+    const reason = formatEmailJSErrorReason(initError);
+    alert(`❌ EmailJS 초기화에 실패했습니다.\n\n사유: ${reason}\n\nEmailJS 재설정 창을 엽니다.`);
+    showEmailJSSettingsModal(reason, { reopenAdminAuth: true });
+    return;
+  }
 
   const templateParams = {
     action: '관리자 로그인 인증',
@@ -187,15 +290,25 @@ function requestVerificationCode() {
     date: new Date().toLocaleString()
   };
 
-  emailjs.send(settings.serviceId, settings.templateId, templateParams)
-    .then(response => {
+  emailjs.send(normalized.serviceId, normalized.templateId, templateParams)
+    .then(() => {
+      if (btnReq) {
+        btnReq.disabled = false;
+        btnReq.textContent = originalBtnText || '인증번호 전송';
+      }
       alert(`📧 인증번호가 관리자 이메일(${adminEmail})로 성공적으로 발송되었습니다!`);
       if (window.showToast) window.showToast('인증번호가 발송되었습니다.', 'success');
       switchToVerificationUI();
     }, error => {
       console.error('Email Verification Send FAILED...', error);
-      alert('❌ 인증번호 메일 전송 중 오류가 발생했습니다. EmailJS 설정이나 템플릿 항목을 확인해 주세요.');
-      if (window.showToast) window.showToast('인증 메일 전송 실패', 'error');
+      if (btnReq) {
+        btnReq.disabled = false;
+        btnReq.textContent = originalBtnText || '인증번호 전송';
+      }
+      const errorReason = formatEmailJSErrorReason(error);
+      alert(`❌ 인증번호 메일 전송에 실패했습니다.\n\n사유: ${errorReason}\n\nEmailJS 설정값을 수정할 수 있도록 재설정 창을 엽니다.`);
+      if (window.showToast) window.showToast('인증 메일 전송 실패 - EmailJS 설정을 확인해 주세요.', 'error');
+      showEmailJSSettingsModal(errorReason, { reopenAdminAuth: true });
     });
 }
 
@@ -763,46 +876,81 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// Show EmailJS Settings Modal
-function showEmailJSSettingsModal() {
+/**
+ * HTML 문자열 특수문자를 안전하게 이스케이프합니다.
+ * @param {string} value - 원본 문자열
+ * @returns {string} 이스케이프된 문자열
+ */
+function escapeHtmlAttr(value) {
+  return String(value || '')
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+// Show EmailJS Settings Modal (오류 발생 시 재설정 화면으로도 자동 호출됨)
+function showEmailJSSettingsModal(errorReason = '', options = {}) {
   const existingModal = document.getElementById('emailjsSettingsModal');
   if (existingModal) existingModal.remove();
 
-  let settings = (window.DB && window.DB.getEmailJSSettings) ? window.DB.getEmailJSSettings() : {
+  const reopenAdminAuth = Boolean(options && options.reopenAdminAuth);
+  const adminModal = document.getElementById('adminAuthModal') || document.getElementById('loginModal');
+  if (reopenAdminAuth && adminModal && adminModal.style.display !== 'none') {
+    adminModal.style.display = 'none';
+  }
+
+  const rawSettings = (window.DB && window.DB.getEmailJSSettings) ? window.DB.getEmailJSSettings() : null;
+  const settings = rawSettings || {
     publicKey: "",
     serviceId: "",
     templateId: "",
     adminEmail: "teacha99@gmail.com"
   };
 
+  const errorBannerHTML = errorReason ? `
+    <div style="background:#fef2f2; border:1px solid #fecaca; color:#b91c1c; padding:10px 12px; border-radius:8px; font-size:12.5px; line-height:1.5; margin-bottom:14px;">
+      <strong style="display:block; margin-bottom:2px;"><i class="fas fa-exclamation-triangle"></i> EmailJS 설정 오류로 재설정 화면을 열었습니다</strong>
+      <span>${escapeHtmlAttr(errorReason)}</span>
+    </div>
+  ` : '';
+
   const modalHTML = `
-    <div class="modal-backdrop open" id="emailjsSettingsModal" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:99999999; display:flex; justify-content:center; align-items:center;">
+    <div class="modal-backdrop open" id="emailjsSettingsModal" data-reopen-admin-auth="${reopenAdminAuth ? 'true' : 'false'}" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:99999999; display:flex; justify-content:center; align-items:center;">
       <div class="modal-content" style="background:#fff; padding:30px; border-radius:12px; max-width:480px; width:90%; position:relative; text-align:left; box-shadow:0 20px 25px -5px rgba(0,0,0,0.3);">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; border-bottom:1px solid #eee; padding-bottom:10px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; border-bottom:1px solid #eee; padding-bottom:10px;">
           <h3 style="margin:0; font-size:18px; color:#1e293b;"><i class="fas fa-envelope-open-text" style="color:var(--theme-written, #0e4987);"></i> EmailJS 연동 키 설정</h3>
-          <button onclick="closeAdminModal('emailjsSettingsModal')" style="background:none; border:none; font-size:24px; cursor:pointer; color:#64748b;">&times;</button>
+          <button type="button" onclick="cancelEmailJSSettingsModal()" style="background:none; border:none; font-size:24px; cursor:pointer; color:#64748b;">&times;</button>
         </div>
+        ${errorBannerHTML}
+        <p style="font-size:12px; color:#64748b; margin:0 0 12px 0; line-height:1.5;">
+          관리자 로그인 인증번호 발송에 사용되는 EmailJS 계정 정보를 입력해 주세요. (브라우저 로컬 저장소에 저장됩니다)
+        </p>
         <div class="modal-body" style="display:flex; flex-direction:column; gap:12px;">
           <div>
             <label style="display:block; font-weight:bold; font-size:13px; margin-bottom:4px; color:#334155;">Public Key (공개 키)</label>
-            <input type="text" id="emailjsPublicKey" value="${settings.publicKey || ''}" placeholder="예: user_xxxxxxxxxxxx" style="width:100%; padding:9px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; font-size:13px;">
+            <input type="text" id="emailjsPublicKey" value="${escapeHtmlAttr(settings.publicKey || '')}" placeholder="예: 8aBcDeFgHiJkLmNoP" style="width:100%; padding:9px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; font-size:13px;">
           </div>
           <div>
             <label style="display:block; font-weight:bold; font-size:13px; margin-bottom:4px; color:#334155;">Service ID (서비스 ID)</label>
-            <input type="text" id="emailjsServiceId" value="${settings.serviceId || ''}" placeholder="예: service_xxxxxxx" style="width:100%; padding:9px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; font-size:13px;">
+            <input type="text" id="emailjsServiceId" value="${escapeHtmlAttr(settings.serviceId || '')}" placeholder="예: service_xxxxxxx" style="width:100%; padding:9px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; font-size:13px;">
           </div>
           <div>
             <label style="display:block; font-weight:bold; font-size:13px; margin-bottom:4px; color:#334155;">Template ID (템플릿 ID)</label>
-            <input type="text" id="emailjsTemplateId" value="${settings.templateId || ''}" placeholder="예: template_xxxxxxx" style="width:100%; padding:9px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; font-size:13px;">
+            <input type="text" id="emailjsTemplateId" value="${escapeHtmlAttr(settings.templateId || '')}" placeholder="예: template_xxxxxxx" style="width:100%; padding:9px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; font-size:13px;">
           </div>
           <div>
             <label style="display:block; font-weight:bold; font-size:13px; margin-bottom:4px; color:#334155;">관리자 수신 이메일 주소</label>
-            <input type="email" id="emailjsAdminEmail" value="${settings.adminEmail || 'teacha99@gmail.com'}" style="width:100%; padding:9px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; font-size:13px;">
+            <input type="email" id="emailjsAdminEmail" value="${escapeHtmlAttr(settings.adminEmail || 'teacha99@gmail.com')}" style="width:100%; padding:9px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; font-size:13px;">
           </div>
         </div>
-        <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:20px;">
-          <button type="button" onclick="closeAdminModal('emailjsSettingsModal')" style="padding:8px 16px; background:#e2e8f0; border:none; border-radius:6px; cursor:pointer; font-weight:600; color:#475569;">취소</button>
-          <button type="button" onclick="saveEmailJSSettingsFromModal()" style="padding:8px 16px; background:var(--theme-written, #0e4987); color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:bold;">설정 저장</button>
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-top:20px;">
+          <button type="button" onclick="resetEmailJSSettingsFromModal()" style="padding:8px 12px; background:#fef2f2; color:#dc2626; border:1px solid #fecaca; border-radius:6px; cursor:pointer; font-size:12px; font-weight:600;">입력 초기화</button>
+          <div style="display:flex; gap:8px;">
+            <button type="button" onclick="cancelEmailJSSettingsModal()" style="padding:8px 16px; background:#e2e8f0; border:none; border-radius:6px; cursor:pointer; font-weight:600; color:#475569;">취소</button>
+            <button type="button" onclick="saveEmailJSSettingsFromModal()" style="padding:8px 16px; background:var(--theme-written, #0e4987); color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:bold;">설정 저장</button>
+          </div>
         </div>
       </div>
     </div>
@@ -811,6 +959,39 @@ function showEmailJSSettingsModal() {
   const tempDiv = document.createElement('div');
   tempDiv.innerHTML = modalHTML;
   document.body.appendChild(tempDiv.firstElementChild);
+
+  const publicKeyInput = document.getElementById('emailjsPublicKey');
+  if (publicKeyInput) publicKeyInput.focus();
+}
+
+/**
+ * EmailJS 설정 모달의 입력값과 저장 데이터를 초기화합니다.
+ */
+function resetEmailJSSettingsFromModal() {
+  const fields = ['emailjsPublicKey', 'emailjsServiceId', 'emailjsTemplateId'];
+  fields.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  localStorage.removeItem('emailjs_settings');
+  if (window.showToast) window.showToast('EmailJS 키 입력값이 초기화되었습니다. 새 키를 입력해 주세요.', 'info');
+  const firstInput = document.getElementById('emailjsPublicKey');
+  if (firstInput) firstInput.focus();
+}
+
+/**
+ * EmailJS 설정 모달을 닫고 필요 시 관리자 인증 모달로 복귀합니다.
+ */
+function cancelEmailJSSettingsModal() {
+  const modal = document.getElementById('emailjsSettingsModal');
+  const shouldReopen = modal && modal.dataset.reopenAdminAuth === 'true';
+  closeAdminModal('emailjsSettingsModal');
+  if (modal) modal.remove();
+
+  if (shouldReopen) {
+    const adminModal = document.getElementById('adminAuthModal') || document.getElementById('loginModal');
+    if (adminModal) adminModal.style.display = 'flex';
+  }
 }
 
 function saveEmailJSSettingsFromModal() {
@@ -825,14 +1006,36 @@ function saveEmailJSSettingsFromModal() {
   }
 
   const newSettings = { publicKey, serviceId, templateId, adminEmail };
-  if (window.DB && window.DB.saveEmailJSSettings) {
-    window.DB.saveEmailJSSettings(newSettings);
-  } else {
-    localStorage.setItem("emailjs_settings", JSON.stringify(newSettings));
+  const validation = validateEmailJSSettings(newSettings);
+  if (!validation.valid) {
+    alert(`❌ ${validation.reason}`);
+    return;
   }
 
+  if (window.DB && window.DB.saveEmailJSSettings) {
+    window.DB.saveEmailJSSettings(validation.normalized);
+  } else {
+    localStorage.setItem("emailjs_settings", JSON.stringify(validation.normalized));
+  }
+
+  const modal = document.getElementById('emailjsSettingsModal');
+  const shouldReopen = modal && modal.dataset.reopenAdminAuth === 'true';
+
   alert('🎉 EmailJS 연동 설정이 성공적으로 저장되었습니다!');
+  if (window.showToast) window.showToast('EmailJS 설정이 저장되었습니다.', 'success');
   closeAdminModal('emailjsSettingsModal');
+  if (modal) modal.remove();
+
+  if (shouldReopen) {
+    const adminModal = document.getElementById('adminAuthModal') || document.getElementById('loginModal');
+    if (adminModal) {
+      adminModal.style.display = 'flex';
+      const emailInput = document.getElementById('adminLoginEmail') || document.getElementById('loginEmail');
+      if (emailInput && !emailInput.value.trim()) {
+        emailInput.value = validation.normalized.adminEmail;
+      }
+    }
+  }
 }
 
 // --- Global YouTube ID Extractor ---
@@ -1157,6 +1360,8 @@ window.clearGithubSettings = clearGithubSettings;
 window.updateJSONData = updateJSONData;
 window.showEmailJSSettingsModal = showEmailJSSettingsModal;
 window.saveEmailJSSettingsFromModal = saveEmailJSSettingsFromModal;
+window.resetEmailJSSettingsFromModal = resetEmailJSSettingsFromModal;
+window.cancelEmailJSSettingsModal = cancelEmailJSSettingsModal;
 window.renderHeaderUserNavUniversal = renderHeaderUserNavUniversal;
 window.extractYoutubeId = extractYoutubeId;
 window.openQuickAddModal = openQuickAddModal;

@@ -164,6 +164,10 @@ export function resolveApprovalStatus(user, existingData = null) {
         return existingData.approvalStatus;
     }
 
+    if (existingData && existingData.approvedAt) {
+        return 'approved';
+    }
+
     const creationSource = (user && user.metadata && user.metadata.creationTime) || (existingData && existingData.createdAt) || '';
     const creationMs = creationSource ? Date.parse(creationSource) : NaN;
 
@@ -216,6 +220,7 @@ export function onAuthChange(callback) {
             let role = 'User';
             let fsData = null;
             let fsReadError = false;
+            let fsReadErrorCode = '';
             let fsDocNotFound = false;
 
             try {
@@ -229,9 +234,11 @@ export function onAuthChange(callback) {
                     fsDocNotFound = true;
                 } else {
                     fsReadError = true;
+                    fsReadErrorCode = (fsRes && fsRes.errorCode) || (fsRes && fsRes.error) || 'unknown';
                 }
             } catch (e) {
                 fsReadError = true;
+                fsReadErrorCode = (e && (e.code || e.message)) || 'exception';
                 console.warn("Role/approval fetch error:", e);
             }
 
@@ -263,6 +270,19 @@ export function onAuthChange(callback) {
             localStorage.setItem('userDisplayName', user.displayName || (user.email ? user.email.split('@')[0] : '회원'));
             if (user.photoURL) localStorage.setItem('userPhotoURL', user.photoURL);
             if (user.uid) localStorage.setItem('userUid', user.uid);
+
+            const authDiag = {
+                uid: user.uid,
+                email,
+                role,
+                approvalStatus,
+                fsReadError,
+                fsReadErrorCode,
+                fsDocNotFound,
+                fsApprovalStatus: (fsData && fsData.approvalStatus) || null
+            };
+            window.__oaAuthDiag = authDiag;
+            console.info('[OA Auth]', authDiag);
 
             // Firestore에 프로필 사진, 역할(role), 초기 승인 상태 자동 동기화 (조회 오류 시 기존 approvalStatus 보호)
             const providerId = (user.providerData && user.providerData.length > 0) ? user.providerData[0].providerId : 'password';
@@ -426,7 +446,7 @@ export async function getUserDataFromFirestore(uid, options = {}) {
         return { success: false, notFound: true, error: "데이터 없음" };
     } catch (error) {
         console.error("Firestore 조회 실패:", error);
-        return { success: false, isError: true, error: error.message };
+        return { success: false, isError: true, errorCode: (error && error.code) || '', error: error.message };
     }
 }
 

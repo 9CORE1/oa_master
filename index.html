@@ -14,7 +14,7 @@
   <!-- EmailJS SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
   <script src="js/data.js"></script>
-  <script src="js/admin.js"></script>
+  <script src="js/admin.js?v=20261112d"></script>
 </head>
 
 <body class="theme-written">
@@ -398,15 +398,21 @@
         </div>
       </div>
 
-      <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:24px;">
-        <button type="button" onclick="document.getElementById('adminAuthModal').style.display='none';"
-          style="padding:8px 16px; background:#e2e8f0; border:none; border-radius:6px; cursor:pointer; font-weight:600; color:#475569;">취소</button>
-        <button type="button" id="btnAdminRequestCode" onclick="window.requestVerificationCode();"
-          style="padding:8px 16px; background:var(--theme-written, #0e4987); color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:bold;">인증번호
-          전송</button>
-        <button type="button" id="btnAdminVerifyCode" onclick="window.verifyAdminCode();"
-          style="display:none; padding:8px 16px; background:#10b981; color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:bold;">인증
-          완료</button>
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-top:24px;">
+        <button type="button" onclick="if (window.showEmailJSSettingsModal) window.showEmailJSSettingsModal('', { reopenAdminAuth: true });"
+          style="padding:6px 10px; background:transparent; border:1px solid #cbd5e1; border-radius:6px; cursor:pointer; font-size:12px; font-weight:600; color:#475569;">
+          <i class="fas fa-sliders-h"></i> EmailJS 설정
+        </button>
+        <div style="display:flex; gap:8px;">
+          <button type="button" onclick="document.getElementById('adminAuthModal').style.display='none';"
+            style="padding:8px 16px; background:#e2e8f0; border:none; border-radius:6px; cursor:pointer; font-weight:600; color:#475569;">취소</button>
+          <button type="button" id="btnAdminRequestCode" onclick="window.requestVerificationCode();"
+            style="padding:8px 16px; background:var(--theme-written, #0e4987); color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:bold;">인증번호
+            전송</button>
+          <button type="button" id="btnAdminVerifyCode" onclick="window.verifyAdminCode();"
+            style="display:none; padding:8px 16px; background:#10b981; color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:bold;">인증
+            완료</button>
+        </div>
       </div>
     </div>
   </div>
@@ -607,7 +613,7 @@
       saveUserDataToFirestore,
       getUserDataFromFirestore,
       resolveApprovalStatus
-    } from './js/firebase-config.js';
+    } from './js/firebase-config.js?v=20261112c';
 
     let isSignUp = false;
     let currentUser = null;

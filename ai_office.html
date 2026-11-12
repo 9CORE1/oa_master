@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="css/ai-office.css">
   <link rel="icon" href="images/OA_master_LOGO.png" type="image/png">
   <script src="js/data.js"></script>
-  <script src="js/admin.js"></script>
+  <script src="js/admin.js?v=20261112d"></script>
 </head>
 
 <body class="theme-written">
@@ -323,10 +323,10 @@
     </div>
   </footer>
 
-  <script src="js/main.js"></script>
-  <script src="js/ai-office.js"></script>
+  <script src="js/main.js?v=20261112c"></script>
+  <script src="js/ai-office.js?v=20261112c"></script>
   <script type="module">
-    import { onAuthChange } from './js/firebase-config.js';
+    import { onAuthChange } from './js/firebase-config.js?v=20261112c';
     onAuthChange((user) => {
       if (window.renderHeaderUserNav) {
         window.renderHeaderUserNav(user);
