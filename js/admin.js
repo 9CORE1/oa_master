@@ -504,10 +504,10 @@ document.addEventListener('click', (e) => {
  */
 function getMemberApprovalBadgeHtml(approvalStatus) {
   if (approvalStatus === 'pending') {
-    return `<button type="button" onclick="if(window.openApprovalWaitingModal){window.openApprovalWaitingModal();}else{window.location.href='index.html?auth=pending';} return false;" title="클릭하여 승인 대기 화면 확인" style="border:none; cursor:pointer; font-size:11px; font-weight:700; color:#b45309; background:rgba(245,158,11,0.16); padding:3px 9px; border-radius:10px; white-space:nowrap;">승인대기</button>`;
+    return `<button type="button" onclick="if(window.showToast){window.showToast('⏳ 관리자 승인 대기 중입니다. 승인 완료 시 [승인회원] 배지로 전환됩니다.', 'info');} return false;" title="관리자 승인 대기 중 (승인 완료 시 승인회원으로 전환)" style="border:none; cursor:pointer; font-size:11px; font-weight:700; color:#b45309; background:rgba(245,158,11,0.16); padding:3px 9px; border-radius:10px; white-space:nowrap;">승인대기</button>`;
   }
   if (approvalStatus === 'rejected') {
-    return `<button type="button" onclick="if(window.openApprovalWaitingModal){window.openApprovalWaitingModal();}else{window.location.href='index.html?auth=pending';} return false;" title="클릭하여 승인 상태 확인" style="border:none; cursor:pointer; font-size:11px; font-weight:700; color:#b91c1c; background:rgba(239,68,68,0.12); padding:3px 9px; border-radius:10px; white-space:nowrap;">승인보류</button>`;
+    return `<button type="button" onclick="if(window.showToast){window.showToast('⛔ 관리자 승인 보류 상태입니다. 관리자에게 문의해 주세요.', 'error');} return false;" title="관리자 승인 보류 상태" style="border:none; cursor:pointer; font-size:11px; font-weight:700; color:#b91c1c; background:rgba(239,68,68,0.12); padding:3px 9px; border-radius:10px; white-space:nowrap;">승인보류</button>`;
   }
   return `<span style="font-size:11px; font-weight:700; color:#15803d; background:rgba(34,197,94,0.14); padding:3px 9px; border-radius:10px; white-space:nowrap; display:inline-flex; align-items:center; gap:4px;"><i class="fas fa-check-circle"></i> 승인회원</span>`;
 }

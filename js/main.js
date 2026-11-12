@@ -236,18 +236,14 @@ function notifyAuthReady(user) {
 function requireMemberLogin(message = '🔒 회원가입 및 로그인 후 이용하실 수 있습니다.') {
   if (isMemberLoggedInSession()) {
     const status = getMemberApprovalStatus();
-    if (typeof window.openApprovalWaitingModal === 'function') {
-      window.openApprovalWaitingModal(null, status);
-      return;
-    }
     const diag = window.__oaAuthDiag || null;
     const diagSuffix = (diag && diag.fsReadError)
       ? `\n\n[진단 정보] 서버 상태 조회 오류(${diag.fsReadErrorCode || 'unknown'})`
       : (diag && diag.email ? `\n(계정: ${diag.email}, 현재 상태: ${status})` : '');
     if (status === 'rejected') {
-      alert(`⛔ 현재 계정은 관리자 승인 보류 상태입니다.\n이용 관련 사항은 관리자에게 문의해 주세요.${diagSuffix}`);
+      alert(`⛔ 현재 계정은 관리자 승인 보류 상태입니다.\n상단 배지(승인보류) 및 이용 관련 사항은 관리자에게 문의해 주세요.${diagSuffix}`);
     } else {
-      alert(`⏳ 회원가입 및 로그인은 완료되었으나 현재 관리자 승인 대기 중입니다.\n관리자 승인 완료 후 바로 세부 콘텐츠를 이용하실 수 있습니다.${diagSuffix}`);
+      alert(`⏳ 관리자 승인 대기 중인 계정입니다.\n페이지 상단 배지가 [승인회원]으로 변경되면 세부 페이지를 이용하실 수 있습니다.${diagSuffix}`);
     }
     return;
   }

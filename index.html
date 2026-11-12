@@ -14,7 +14,7 @@
   <!-- EmailJS SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
   <script src="js/data.js"></script>
-  <script src="js/admin.js?v=20261112d"></script>
+  <script src="js/admin.js?v=20261112e"></script>
 </head>
 
 <body class="theme-written">
@@ -914,13 +914,29 @@
       lastKnownMemberApprovalStatus = approvalStatus;
       sessionStorage.removeItem('oaWaitingModalDismissed');
 
-      if (isNewSignup) {
-        openSignupCelebrationModal(userObj, approvalStatus);
+      const celebrationModal = document.getElementById('signupCelebrationModal');
+      const waitingModal = document.getElementById('approvalWaitingModal');
+      if (celebrationModal) celebrationModal.style.display = 'none';
+      if (waitingModal) waitingModal.style.display = 'none';
+
+      if (isNewSignup && approvalStatus !== 'approved') {
+        if (typeof window.showToast === 'function') {
+          window.showToast('🎉 회원가입이 완료되었습니다! 상단 배지(승인대기 → 승인회원)로 승인 여부를 확인해 주세요.', 'info');
+        }
+        return;
+      }
+
+      if (approvalStatus === 'rejected') {
+        if (typeof window.showToast === 'function') {
+          window.showToast('⛔ 현재 계정은 관리자 승인 보류 상태입니다. 상단 [승인보류] 배지를 확인해 주세요.', 'error');
+        }
         return;
       }
 
       if (approvalStatus !== 'approved') {
-        openApprovalWaitingModal(userObj, approvalStatus);
+        if (typeof window.showToast === 'function') {
+          window.showToast('⏳ 로그인되었습니다. 상단 배지가 [승인회원]으로 표시되면 세부 페이지를 이용하실 수 있습니다.', 'info');
+        }
         return;
       }
 
@@ -1301,18 +1317,22 @@
           );
         lastKnownMemberApprovalStatus = currentApprovalStatus;
 
-        if (currentApprovalStatus === 'approved' && alreadyCompletedApprovalModal) {
-          if (approvedAutoEnterTimer) {
-            clearTimeout(approvedAutoEnterTimer);
-            approvedAutoEnterTimer = null;
+        if (approvedAutoEnterTimer) {
+          clearTimeout(approvedAutoEnterTimer);
+          approvedAutoEnterTimer = null;
+        }
+        if (celebrationModal) celebrationModal.style.display = 'none';
+        if (waitingModal) waitingModal.style.display = 'none';
+
+        if (transitionedToApproved) {
+          markApprovalNoticeCompleted(user);
+          if (typeof window.showToast === 'function') {
+            window.showToast('🎉 관리자 승인이 완료되어 상단 배지가 [승인회원]으로 전환되었습니다!', 'success');
           }
-          if (celebrationModal) celebrationModal.style.display = 'none';
-          if (waitingModal) waitingModal.style.display = 'none';
-        } else if (transitionedToApproved) {
-          handleRealtimeApprovalUnlocked(user);
-        } else if (!isHandlingManualAuthFlow && !isAdminSession && currentApprovalStatus !== 'approved') {
-          if (sessionStorage.getItem('oaWaitingModalDismissed') !== 'true') {
-            openApprovalWaitingModal(user, currentApprovalStatus);
+          const nextUrl = sessionStorage.getItem('oaPendingRedirectUrl');
+          if (nextUrl) {
+            sessionStorage.removeItem('oaPendingRedirectUrl');
+            window.location.href = nextUrl;
           }
         }
       } else {
@@ -1571,8 +1591,11 @@
             e.preventDefault();
             e.stopPropagation();
             sessionStorage.setItem('oaPendingRedirectUrl', href);
-            sessionStorage.removeItem('oaWaitingModalDismissed');
-            openApprovalWaitingModal(currentUser, approvalStatus);
+            if (approvalStatus === 'rejected') {
+              alert('⛔ 현재 계정은 관리자 승인 보류 상태입니다.\n상단 배지(승인보류) 및 이용 관련 사항은 관리자에게 문의해 주세요.');
+            } else {
+              alert('⏳ 관리자 승인 대기 중인 계정입니다.\n페이지 상단 배지가 [승인회원]으로 변경되면 세부 페이지를 이용하실 수 있습니다.');
+            }
           } else if (!isAdminSession && approvalStatus === 'approved') {
             markApprovalNoticeCompleted(currentUser, {
               visitedDetail: true,
