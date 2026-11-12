@@ -318,6 +318,7 @@
       <div class="footer-bottom">
         <p>&copy; 2026 OA MASTER. All Rights Reserved. Designed for Excellence.</p>
         <div class="footer-bottom-links">
+          <a href="#" onclick="copyContactEmail(); return false;" title="클릭 시 문의 메일 주소(jjung9935@naver.com) 복사"><i class="fas fa-envelope"></i> 문의하기</a>
           <a href="#" onclick="toggleAdminMode(); return false;"><i class="fas fa-user-shield"></i> 관리자 로그인</a>
         </div>
       </div>
@@ -508,6 +509,91 @@
     </div>
   </div>
 
+  <!-- 🎉 회원가입 축하 팝업 모달 -->
+  <div id="signupCelebrationModal" class="auth-modal-backdrop"
+    style="display:none; position:fixed; inset:0; background:rgba(15,23,42,0.62); z-index:10020; align-items:center; justify-content:center; backdrop-filter:blur(4px); padding:16px;">
+    <div
+      style="background:#fff; padding:34px 28px 28px; border-radius:16px; width:100%; max-width:420px; position:relative; box-shadow:0 24px 50px rgba(15,23,42,0.28); text-align:center;">
+      <div
+        style="width:68px; height:68px; border-radius:50%; background:linear-gradient(135deg, #0e4987 0%, #2563eb 100%); color:#fff; display:flex; align-items:center; justify-content:center; font-size:30px; margin:0 auto 18px; box-shadow:0 10px 24px rgba(37,99,235,0.28);">
+        <i class="fas fa-award"></i>
+      </div>
+      <h3 style="margin:0 0 10px; color:#0f172a; font-size:22px; font-weight:800;">🎉 회원가입을 축하합니다!</h3>
+      <p id="celebrationWelcomeText"
+        style="margin:0 0 14px; color:#334155; font-size:15px; font-weight:600; line-height:1.6;">
+        OA MASTER 회원이 되신 것을 진심으로 환영합니다.
+      </p>
+      <div
+        style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:12px 14px; margin-bottom:22px; font-size:13px; color:#475569; line-height:1.55;">
+        관리자 확인 및 승인 절차가 완료되면<br>
+        <strong>모든 세부 학습 자료와 과정을 즉시 이용</strong>하실 수 있습니다.
+      </div>
+      <button type="button" id="confirmCelebrationBtn"
+        style="width:100%; padding:12px 16px; background:var(--theme-written, #0e4987); color:#fff; border:none; border-radius:10px; font-size:15px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:8px;">
+        <i class="fas fa-arrow-right"></i> <span id="confirmCelebrationBtnLabel">확인 (승인 대기 화면으로 이동)</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ⏳ 관리자 승인 대기 / 실시간 승인 완료 창 -->
+  <div id="approvalWaitingModal" class="auth-modal-backdrop"
+    style="display:none; position:fixed; inset:0; background:rgba(15,23,42,0.64); z-index:10010; align-items:center; justify-content:center; backdrop-filter:blur(4px); padding:16px;">
+    <div
+      style="background:#fff; padding:32px 26px 26px; border-radius:16px; width:100%; max-width:450px; position:relative; box-shadow:0 24px 54px rgba(15,23,42,0.3); text-align:center;">
+      <div id="waitingStatusIconWrap"
+        style="width:70px; height:70px; border-radius:50%; background:rgba(245,158,11,0.14); color:#d97706; display:flex; align-items:center; justify-content:center; font-size:30px; margin:0 auto 16px;">
+        <i id="waitingStatusIcon" class="fas fa-user-clock"></i>
+      </div>
+      <div id="waitingLivePill"
+        style="display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:700; color:#b45309; background:rgba(245,158,11,0.14); border:1px solid rgba(245,158,11,0.35); padding:4px 12px; border-radius:20px; margin-bottom:12px;">
+        <span style="width:8px; height:8px; border-radius:50%; background:#f59e0b; display:inline-block;"></span>
+        실시간 승인 상태 확인 중
+      </div>
+      <h3 id="waitingModalTitle" style="margin:0 0 8px; color:#0f172a; font-size:21px; font-weight:800;">관리자 승인 대기 중입니다
+      </h3>
+      <p id="waitingModalDesc" style="margin:0 0 18px; color:#475569; font-size:14px; line-height:1.6;">
+        회원가입 및 로그인이 정상 처리되었습니다.<br>
+        <strong>이 화면을 열어두시면 관리자가 승인하는 즉시 바로 웹페이지를 이용하실 수 있습니다.</strong>
+      </p>
+
+      <div
+        style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:12px 14px; margin-bottom:20px; text-align:left; font-size:13px;">
+        <div style="display:flex; justify-content:space-between; gap:8px; margin-bottom:6px;">
+          <span style="color:#64748b; font-weight:600;">가입 회원명</span>
+          <strong id="waitingMemberName" style="color:#0f172a;">회원</strong>
+        </div>
+        <div style="display:flex; justify-content:space-between; gap:8px;">
+          <span style="color:#64748b; font-weight:600;">이메일 계정</span>
+          <span id="waitingMemberEmail" style="color:#334155; font-weight:600;">-</span>
+        </div>
+      </div>
+
+      <div id="waitingPendingActions" style="display:flex; flex-direction:column; gap:9px;">
+        <button type="button" id="waitingOpenMyPageBtn"
+          style="width:100%; padding:11px 14px; background:var(--theme-written, #0e4987); color:#fff; border:none; border-radius:10px; font-size:14px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:7px;">
+          <i class="fas fa-school"></i> 내 학교명 / 소속명 입력하기 (마이페이지)
+        </button>
+        <div style="display:flex; gap:8px;">
+          <button type="button" id="waitingDismissBtn"
+            style="flex:1; padding:10px 12px; background:#f1f5f9; color:#334155; border:1px solid #e2e8f0; border-radius:10px; font-size:13px; font-weight:700; cursor:pointer;">
+            메인 개요만 보기
+          </button>
+          <button type="button" id="waitingLogoutBtn"
+            style="flex:1; padding:10px 12px; background:#fee2e2; color:#b91c1c; border:1px solid #fecaca; border-radius:10px; font-size:13px; font-weight:700; cursor:pointer;">
+            <i class="fas fa-sign-out-alt"></i> 로그아웃
+          </button>
+        </div>
+      </div>
+
+      <div id="waitingApprovedActions" style="display:none; flex-direction:column; gap:10px;">
+        <button type="button" id="enterSiteApprovedBtn"
+          style="width:100%; padding:12px 16px; background:#16a34a; color:#fff; border:none; border-radius:10px; font-size:15px; font-weight:800; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:8px;">
+          <i class="fas fa-unlock-alt"></i> 바로 웹페이지 이용하기
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- 🔹 Firebase 연동 및 이벤트 스크립트 -->
   <script type="module">
     import {
@@ -525,19 +611,226 @@
     let isSignUp = false;
     let currentUser = null;
     let selectedPhotoDataUrl = null;
+    let isHandlingManualAuthFlow = false;
+    let lastKnownMemberApprovalStatus = localStorage.getItem('userApprovalStatus') || null;
+    let approvedAutoEnterTimer = null;
 
     // ⚡ 전역 팝업 모달 상호 배제 닫기 헬퍼 함수 (모달 중첩 겹침 완전 방지)
     const closeAllModals = () => {
       const authModal = document.getElementById('authModal');
       const myPageModal = document.getElementById('myPageModal');
       const adminAuthModal = document.getElementById('adminAuthModal');
+      const celebrationModal = document.getElementById('signupCelebrationModal');
+      const waitingModal = document.getElementById('approvalWaitingModal');
 
       if (authModal) authModal.style.display = 'none';
       if (myPageModal) myPageModal.style.display = 'none';
       if (adminAuthModal) adminAuthModal.style.display = 'none';
+      if (celebrationModal) celebrationModal.style.display = 'none';
+      if (waitingModal) waitingModal.style.display = 'none';
     };
 
     window.closeAllModals = closeAllModals;
+
+    /**
+     * 승인 완료 후 대기창에서 바로 웹페이지(또는 직전 요청 페이지)로 진입합니다.
+     */
+    const enterWebsiteAfterApproval = () => {
+      if (approvedAutoEnterTimer) {
+        clearTimeout(approvedAutoEnterTimer);
+        approvedAutoEnterTimer = null;
+      }
+      sessionStorage.removeItem('oaWaitingModalDismissed');
+      const waitingModal = document.getElementById('approvalWaitingModal');
+      if (waitingModal) waitingModal.style.display = 'none';
+      const celebrationModal = document.getElementById('signupCelebrationModal');
+      if (celebrationModal) celebrationModal.style.display = 'none';
+
+      const nextUrl = sessionStorage.getItem('oaPendingRedirectUrl');
+      if (nextUrl) {
+        sessionStorage.removeItem('oaPendingRedirectUrl');
+        window.location.href = nextUrl;
+      }
+    };
+
+    /**
+     * 관리자 승인 대기 / 보류 / 실시간 승인 완료 상태 모달을 열어 상태를 표시합니다.
+     * @param {object|null} [targetUser] - 현재 로그인 사용자 객체
+     * @param {string} [forcedStatus] - 강제 상태 문자열 ('pending' | 'rejected' | 'approved')
+     */
+    const openApprovalWaitingModal = (targetUser = null, forcedStatus = null) => {
+      const userObj = targetUser || currentUser || {
+        displayName: localStorage.getItem('userDisplayName') || '회원',
+        email: localStorage.getItem('userEmail') || ''
+      };
+      if (!userObj || (!userObj.email && localStorage.getItem('isLoggedIn') !== 'true')) return;
+
+      const isAdminSession = (typeof isAdmin === 'function' && isAdmin()) || (localStorage.getItem('isAdminActive') === 'true');
+      if (isAdminSession) return;
+
+      const status = forcedStatus || localStorage.getItem('userApprovalStatus') || 'pending';
+      const waitingModal = document.getElementById('approvalWaitingModal');
+      if (!waitingModal) return;
+
+      const celebrationModal = document.getElementById('signupCelebrationModal');
+      if (celebrationModal) celebrationModal.style.display = 'none';
+      const authModal = document.getElementById('authModal');
+      if (authModal) authModal.style.display = 'none';
+      const myPageModal = document.getElementById('myPageModal');
+      if (myPageModal) myPageModal.style.display = 'none';
+
+      const nameEl = document.getElementById('waitingMemberName');
+      const emailEl = document.getElementById('waitingMemberEmail');
+      const iconWrap = document.getElementById('waitingStatusIconWrap');
+      const iconEl = document.getElementById('waitingStatusIcon');
+      const livePill = document.getElementById('waitingLivePill');
+      const titleEl = document.getElementById('waitingModalTitle');
+      const descEl = document.getElementById('waitingModalDesc');
+      const pendingActions = document.getElementById('waitingPendingActions');
+      const approvedActions = document.getElementById('waitingApprovedActions');
+
+      const memberName = userObj.displayName || (userObj.email ? userObj.email.split('@')[0] : '회원');
+      if (nameEl) nameEl.textContent = `${memberName} 님`;
+      if (emailEl) emailEl.textContent = userObj.email || localStorage.getItem('userEmail') || '-';
+
+      if (status === 'approved') {
+        if (iconWrap) {
+          iconWrap.style.background = 'rgba(34,197,94,0.14)';
+          iconWrap.style.color = '#16a34a';
+        }
+        if (iconEl) iconEl.className = 'fas fa-check-circle';
+        if (livePill) {
+          livePill.style.color = '#15803d';
+          livePill.style.background = 'rgba(34,197,94,0.14)';
+          livePill.style.borderColor = 'rgba(34,197,94,0.35)';
+          livePill.innerHTML = '<span style="width:8px; height:8px; border-radius:50%; background:#22c55e; display:inline-block;"></span> 관리자 승인 완료';
+        }
+        if (titleEl) titleEl.textContent = '🎉 관리자 승인이 완료되었습니다!';
+        if (descEl) {
+          const hasRedirect = Boolean(sessionStorage.getItem('oaPendingRedirectUrl'));
+          descEl.innerHTML = hasRedirect
+            ? '잠시 후 요청하신 페이지로 바로 이동합니다.<br><strong>이제 모든 세부 학습 자료와 과정을 이용하실 수 있습니다!</strong>'
+            : '승인 대기 상태에서 바로 웹페이지 접근이 활성화되었습니다.<br><strong>지금 바로 모든 세부 학습 자료와 과정을 이용하실 수 있습니다!</strong>';
+        }
+        if (pendingActions) pendingActions.style.display = 'none';
+        if (approvedActions) approvedActions.style.display = 'flex';
+      } else if (status === 'rejected') {
+        if (iconWrap) {
+          iconWrap.style.background = 'rgba(239,68,68,0.14)';
+          iconWrap.style.color = '#dc2626';
+        }
+        if (iconEl) iconEl.className = 'fas fa-user-slash';
+        if (livePill) {
+          livePill.style.color = '#b91c1c';
+          livePill.style.background = 'rgba(239,68,68,0.12)';
+          livePill.style.borderColor = 'rgba(239,68,68,0.35)';
+          livePill.innerHTML = '<span style="width:8px; height:8px; border-radius:50%; background:#ef4444; display:inline-block;"></span> 승인 보류 상태';
+        }
+        if (titleEl) titleEl.textContent = '관리자 승인 보류 상태입니다';
+        if (descEl) {
+          descEl.innerHTML = '현재 계정은 관리자 승인 보류 상태입니다.<br>이용 관련 문의 사항은 관리자에게 연락해 주세요.';
+        }
+        if (pendingActions) pendingActions.style.display = 'flex';
+        if (approvedActions) approvedActions.style.display = 'none';
+      } else {
+        if (iconWrap) {
+          iconWrap.style.background = 'rgba(245,158,11,0.14)';
+          iconWrap.style.color = '#d97706';
+        }
+        if (iconEl) iconEl.className = 'fas fa-user-clock';
+        if (livePill) {
+          livePill.style.color = '#b45309';
+          livePill.style.background = 'rgba(245,158,11,0.14)';
+          livePill.style.borderColor = 'rgba(245,158,11,0.35)';
+          livePill.innerHTML = '<span style="width:8px; height:8px; border-radius:50%; background:#f59e0b; display:inline-block;"></span> 실시간 승인 상태 확인 중';
+        }
+        if (titleEl) titleEl.textContent = '관리자 승인 대기 중입니다';
+        if (descEl) {
+          descEl.innerHTML = '회원가입 및 로그인이 정상 처리되었습니다.<br><strong>이 화면을 열어두시면 관리자가 승인하는 즉시 바로 웹페이지를 이용하실 수 있습니다.</strong>';
+        }
+        if (pendingActions) pendingActions.style.display = 'flex';
+        if (approvedActions) approvedActions.style.display = 'none';
+      }
+
+      waitingModal.style.display = 'flex';
+    };
+    window.openApprovalWaitingModal = openApprovalWaitingModal;
+
+    /**
+     * 회원가입 / 첫 로그인 축하 팝업 모달을 표시합니다.
+     * @param {object} userObj - 가입 사용자 객체
+     * @param {string} approvalStatus - 현재 승인 상태
+     */
+    const openSignupCelebrationModal = (userObj, approvalStatus) => {
+      closeAllModals();
+      const modal = document.getElementById('signupCelebrationModal');
+      if (!modal) {
+        if (approvalStatus !== 'approved') openApprovalWaitingModal(userObj, approvalStatus);
+        return;
+      }
+
+      const welcomeText = document.getElementById('celebrationWelcomeText');
+      const btnLabel = document.getElementById('confirmCelebrationBtnLabel');
+      const memberName = (userObj && (userObj.displayName || (userObj.email ? userObj.email.split('@')[0] : ''))) || '회원';
+
+      if (welcomeText) {
+        welcomeText.textContent = `${memberName} 님, OA MASTER의 회원이 되신 것을 진심으로 환영합니다!`;
+      }
+      if (btnLabel) {
+        btnLabel.textContent = approvalStatus === 'approved'
+          ? '확인 (바로 웹페이지 이용하기)'
+          : '확인 (승인 대기 화면으로 이동)';
+      }
+
+      modal.dataset.pendingAfterConfirm = approvalStatus === 'approved' ? 'false' : 'true';
+      modal.style.display = 'flex';
+    };
+
+    /**
+     * 승인 대기창 또는 축하 팝업이 열려 있는 동안 관리자가 승인했을 때 즉시 웹페이지 접근 상태로 전환합니다.
+     * @param {object} userObj - 승인된 사용자 객체
+     */
+    const handleRealtimeApprovalUnlocked = (userObj) => {
+      const celebrationModal = document.getElementById('signupCelebrationModal');
+      if (celebrationModal && celebrationModal.style.display === 'flex') {
+        celebrationModal.style.display = 'none';
+      }
+      openApprovalWaitingModal(userObj, 'approved');
+      if (approvedAutoEnterTimer) clearTimeout(approvedAutoEnterTimer);
+      approvedAutoEnterTimer = setTimeout(() => {
+        enterWebsiteAfterApproval();
+      }, 1500);
+    };
+
+    /**
+     * 회원가입 / 로그인 완료 직후의 축하 팝업 및 승인 대기창 흐름을 실행합니다.
+     * @param {object} userObj - 로그인한 Firebase 사용자 객체
+     * @param {string} approvalStatus - 'approved' | 'pending' | 'rejected'
+     * @param {object} [options] - { isNewSignup: boolean }
+     */
+    const handlePostAuthFlow = (userObj, approvalStatus, options = {}) => {
+      const { isNewSignup = false } = options;
+      lastKnownMemberApprovalStatus = approvalStatus;
+      sessionStorage.removeItem('oaWaitingModalDismissed');
+
+      if (isNewSignup) {
+        openSignupCelebrationModal(userObj, approvalStatus);
+        return;
+      }
+
+      if (approvalStatus !== 'approved') {
+        openApprovalWaitingModal(userObj, approvalStatus);
+        return;
+      }
+
+      const nextUrl = sessionStorage.getItem('oaPendingRedirectUrl');
+      if (nextUrl) {
+        sessionStorage.removeItem('oaPendingRedirectUrl');
+        window.location.href = nextUrl;
+      } else if (typeof window.showToast === 'function') {
+        window.showToast('🎉 로그인되었습니다!', 'success');
+      }
+    };
 
     // ⚡ 마이페이지 오픈 전용 헬퍼 함수 (클릭 즉시 0초 모달 오픈 후 비동기 데이터 로드)
     const openMyPageModal = async () => {
@@ -772,9 +1065,9 @@
           const photoUrl = (user && user.photoURL) || localStorage.getItem('userPhotoURL') || null;
           const approvalStatus = localStorage.getItem('userApprovalStatus') || 'approved';
           const approvalBadge = approvalStatus === 'pending'
-            ? `<span style="font-size:11px; font-weight:700; color:#b45309; background:rgba(245,158,11,0.16); padding:2px 8px; border-radius:10px; white-space:nowrap;">승인대기</span>`
+            ? `<button type="button" onclick="if(window.openApprovalWaitingModal){window.openApprovalWaitingModal();} return false;" title="클릭하여 승인 대기 화면 확인" style="border:none; cursor:pointer; font-size:11px; font-weight:700; color:#b45309; background:rgba(245,158,11,0.16); padding:3px 9px; border-radius:10px; white-space:nowrap;">승인대기</button>`
             : (approvalStatus === 'rejected'
-              ? `<span style="font-size:11px; font-weight:700; color:#b91c1c; background:rgba(239,68,68,0.12); padding:2px 8px; border-radius:10px; white-space:nowrap;">승인보류</span>`
+              ? `<button type="button" onclick="if(window.openApprovalWaitingModal){window.openApprovalWaitingModal();} return false;" title="클릭하여 승인 상태 확인" style="border:none; cursor:pointer; font-size:11px; font-weight:700; color:#b91c1c; background:rgba(239,68,68,0.12); padding:3px 9px; border-radius:10px; white-space:nowrap;">승인보류</button>`
               : '');
           const avatarIcon = photoUrl
             ? `<img src="${photoUrl}" style="width:24px; height:24px; border-radius:50%; object-fit:cover; flex-shrink:0;">`
@@ -861,6 +1154,40 @@
       if (user) {
         const modal = document.getElementById('authModal');
         if (modal) modal.style.display = 'none';
+
+        const isAdminSession = (typeof isAdmin === 'function' && isAdmin()) || (localStorage.getItem('isAdminActive') === 'true');
+        const currentApprovalStatus = localStorage.getItem('userApprovalStatus') || 'pending';
+        const celebrationModal = document.getElementById('signupCelebrationModal');
+        const waitingModal = document.getElementById('approvalWaitingModal');
+        const isWaitingModalVisible = Boolean(
+          (celebrationModal && celebrationModal.style.display === 'flex') ||
+          (waitingModal && waitingModal.style.display === 'flex')
+        );
+        const transitionedToApproved = !isAdminSession && currentApprovalStatus === 'approved' && (
+          (lastKnownMemberApprovalStatus && lastKnownMemberApprovalStatus !== 'approved') ||
+          isWaitingModalVisible
+        );
+        lastKnownMemberApprovalStatus = currentApprovalStatus;
+
+        if (transitionedToApproved) {
+          handleRealtimeApprovalUnlocked(user);
+        } else if (!isHandlingManualAuthFlow && !isAdminSession && currentApprovalStatus !== 'approved') {
+          if (sessionStorage.getItem('oaWaitingModalDismissed') !== 'true') {
+            openApprovalWaitingModal(user, currentApprovalStatus);
+          }
+        }
+      } else {
+        lastKnownMemberApprovalStatus = null;
+        if (approvedAutoEnterTimer) {
+          clearTimeout(approvedAutoEnterTimer);
+          approvedAutoEnterTimer = null;
+        }
+        const celebrationModal = document.getElementById('signupCelebrationModal');
+        const waitingModal = document.getElementById('approvalWaitingModal');
+        if (celebrationModal) celebrationModal.style.display = 'none';
+        if (waitingModal) waitingModal.style.display = 'none';
+        sessionStorage.removeItem('oaWaitingModalDismissed');
+        sessionStorage.removeItem('oaPendingRedirectUrl');
       }
     });
 
@@ -1101,14 +1428,68 @@
           } else if (!isAdminSession && approvalStatus !== 'approved') {
             e.preventDefault();
             e.stopPropagation();
-            if (typeof window.requireMemberLogin === 'function') {
-              window.requireMemberLogin();
-            } else {
-              alert('⏳ 관리자 승인 대기 중인 계정입니다. 관리자 승인 후 이용하실 수 있습니다.');
-            }
+            sessionStorage.setItem('oaPendingRedirectUrl', href);
+            sessionStorage.removeItem('oaWaitingModalDismissed');
+            openApprovalWaitingModal(currentUser, approvalStatus);
           }
         }
       }, true);
+
+      // 축하 팝업 & 승인 대기창 버튼 이벤트 연결
+      const confirmCelebrationBtn = document.getElementById('confirmCelebrationBtn');
+      if (confirmCelebrationBtn) {
+        confirmCelebrationBtn.onclick = () => {
+          const modal = document.getElementById('signupCelebrationModal');
+          const shouldOpenWaiting = modal && modal.dataset.pendingAfterConfirm === 'true';
+          if (modal) modal.style.display = 'none';
+          const currentStatus = localStorage.getItem('userApprovalStatus') || 'pending';
+          if (shouldOpenWaiting && currentStatus !== 'approved') {
+            openApprovalWaitingModal(currentUser, currentStatus);
+          } else {
+            enterWebsiteAfterApproval();
+          }
+        };
+      }
+
+      const waitingOpenMyPageBtn = document.getElementById('waitingOpenMyPageBtn');
+      if (waitingOpenMyPageBtn) {
+        waitingOpenMyPageBtn.onclick = () => {
+          openMyPageModal();
+        };
+      }
+
+      const waitingDismissBtn = document.getElementById('waitingDismissBtn');
+      if (waitingDismissBtn) {
+        waitingDismissBtn.onclick = () => {
+          sessionStorage.setItem('oaWaitingModalDismissed', 'true');
+          const waitingModal = document.getElementById('approvalWaitingModal');
+          if (waitingModal) waitingModal.style.display = 'none';
+          if (typeof window.showToast === 'function') {
+            window.showToast('상단의 [승인대기] 배지를 누르면 언제든 승인 대기창을 다시 열 수 있습니다.', 'info');
+          }
+        };
+      }
+
+      const waitingLogoutBtn = document.getElementById('waitingLogoutBtn');
+      if (waitingLogoutBtn) {
+        waitingLogoutBtn.onclick = () => {
+          if (window.handleGlobalLogout) {
+            window.handleGlobalLogout();
+          } else {
+            logout().then(() => {
+              closeAllModals();
+              renderHeaderUserNav(null);
+            });
+          }
+        };
+      }
+
+      const enterSiteApprovedBtn = document.getElementById('enterSiteApprovedBtn');
+      if (enterSiteApprovedBtn) {
+        enterSiteApprovedBtn.onclick = () => {
+          enterWebsiteAfterApproval();
+        };
+      }
 
       // 모달 닫기
       if (closeBtn) closeBtn.onclick = () => authModal.style.display = 'none';
@@ -1142,6 +1523,7 @@
 
           if (googleBtn.disabled) return;
           googleBtn.disabled = true;
+          isHandlingManualAuthFlow = true;
           const originalContent = googleBtn.innerHTML;
           googleBtn.innerHTML = '<i class="fas fa-spinner fa-spin" style="color:#ea4335;"></i> Google 연결 중...';
 
@@ -1153,11 +1535,7 @@
                 renderHeaderUserNav(res.user);
                 const targetModal = document.getElementById('authModal');
                 if (targetModal) targetModal.style.display = 'none';
-                if (approvalStatus === 'approved') {
-                  alert(`🎉 ${res.user.displayName || res.user.email}님 환영합니다!`);
-                } else {
-                  alert(`🎉 ${res.user.displayName || res.user.email}님 환영합니다!\n\n⏳ 현재 관리자 승인 대기 상태입니다.\n관리자 승인 완료 후 즉시 모든 세부 학습 콘텐츠를 이용하실 수 있습니다.`);
-                }
+                handlePostAuthFlow(res.user, approvalStatus, { isNewSignup: Boolean(res.isNewUser) });
               }
             } else {
               if (!res.isCancelled && res.error && !res.error.includes('auth/cancelled-popup-request') && !res.error.includes('popup-closed-by-user')) {
@@ -1167,6 +1545,7 @@
           } catch (err) {
             console.error('Google 로그인 처리 오류:', err);
           } finally {
+            isHandlingManualAuthFlow = false;
             googleBtn.disabled = false;
             googleBtn.innerHTML = originalContent;
           }
@@ -1196,6 +1575,7 @@
           return;
         }
 
+        isHandlingManualAuthFlow = true;
         try {
           const res = isSignUp
             ? await signUpWithEmail(email, password)
@@ -1211,17 +1591,15 @@
             renderHeaderUserNav(res.user);
             const targetModal = document.getElementById('authModal');
             if (targetModal) targetModal.style.display = 'none';
-            if (approvalStatus === 'approved') {
-              alert(isSignUp ? '회원가입이 성공적으로 완료되었습니다!' : '로그인 성공!');
-            } else {
-              alert((isSignUp ? '🎉 회원가입이 완료되었습니다!' : '로그인되었습니다.') + '\n\n⏳ 현재 관리자 승인 대기 상태입니다.\n관리자 승인 완료 후 즉시 모든 세부 콘텐츠를 이용하실 수 있습니다.');
-            }
+            handlePostAuthFlow(res.user, approvalStatus, { isNewSignup: Boolean(isSignUp) });
           } else {
             alert('오류: ' + res.error);
           }
         } catch (err) {
           console.error('로그인/회원가입 처리 중 오류 발생:', err);
           alert('처리 중 오류가 발생했습니다: ' + (err.message || err));
+        } finally {
+          isHandlingManualAuthFlow = false;
         }
       };
 
@@ -1244,8 +1622,10 @@
         }
         window.history.replaceState({}, '', window.location.pathname);
       } else if (authParams.get('auth') === 'pending') {
-        if (typeof window.showToast === 'function') {
-          window.showToast('⏳ 관리자 승인 완료 후 세부 페이지를 이용하실 수 있습니다.', 'warning');
+        sessionStorage.removeItem('oaWaitingModalDismissed');
+        const pendingStatus = localStorage.getItem('userApprovalStatus') || 'pending';
+        if (localStorage.getItem('isLoggedIn') === 'true' && pendingStatus !== 'approved') {
+          openApprovalWaitingModal(currentUser, pendingStatus);
         }
         window.history.replaceState({}, '', window.location.pathname);
       } else if (authParams.get('auth') === 'required') {

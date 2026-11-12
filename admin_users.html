@@ -285,7 +285,7 @@
 
       if (!isAdminUser) {
         alert('🔒 로그인 및 관리자(Host/Manager) 권한이 필요한 페이지입니다.');
-        window.location.replace('index.html?auth=required');
+        window.location.replace('index.html?auth=quired');
       }
     })();
   </script>
@@ -385,9 +385,16 @@
           <h2><i class="fas fa-users-cog" style="color:var(--theme-primary);"></i> 회원 관리 모듈</h2>
           <p>Cloud Firestore에 가입된 서비스 회원 정보 조회, 검색, 필터링 및 관리자 특이사항 메모 기능입니다.</p>
         </div>
-        <button id="refreshUsersBtn" class="btn btn-secondary" onclick="loadMembersData(true)">
-          <i class="fas fa-sync-alt"></i> 새로고침
-        </button>
+        <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+          <span id="realtimeSyncBadge"
+            style="display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:700; color:#15803d; background:rgba(34,197,94,0.12); border:1px solid rgba(34,197,94,0.3); padding:6px 12px; border-radius:20px;">
+            <span style="width:8px; height:8px; border-radius:50%; background:#22c55e; display:inline-block;"></span>
+            실시간 대기 감지 중
+          </span>
+          <button id="refreshUsersBtn" class="btn btn-secondary" onclick="loadMembersData(true)">
+            <i class="fas fa-sync-alt"></i> 새로고침
+          </button>
+        </div>
       </div>
 
       <!-- KPI Summary Cards -->
@@ -490,8 +497,7 @@
           </div>
           <div class="bulk-action-buttons">
             <div class="bulk-school-group">
-              <input type="text" id="bulkSchoolNameInput" class="bulk-school-input"
-                placeholder="학교명 / 소속명 일괄 입력..."
+              <input type="text" id="bulkSchoolNameInput" class="bulk-school-input" placeholder="학교명 / 소속명 일괄 입력..."
                 onkeydown="if(event.key==='Enter'){ event.preventDefault(); bulkUpdateSchoolName(); }">
               <button type="button" id="bulkSchoolApplyBtn" class="btn-bulk btn-bulk-school"
                 onclick="bulkUpdateSchoolName()" disabled>
@@ -628,14 +634,36 @@
         (email === 'teacha99@gmail.com' || role === 'Host' || role === 'Manager');
 
       if (!user && !is_admin) {
+        if (typeof window.stopRealtimeMembersSubscription === 'function') {
+          window.stopRealtimeMembersSubscription();
+        }
         window.location.replace('index.html');
       } else if (!is_admin) {
+        if (typeof window.stopRealtimeMembersSubscription === 'function') {
+          window.stopRealtimeMembersSubscription();
+        }
         alert('🔒 관리자(Host/Manager) 권한이 있는 계정만 접근할 수 있습니다.');
         window.location.replace('index.html');
       } else {
         document.body.style.display = 'flex';
         if (window.renderHeaderUserNav) window.renderHeaderUserNav(user);
-        if (typeof loadMembersData === 'function') loadMembersData();
+        if (user) {
+          if (typeof window.startRealtimeMembersSubscription === 'function') {
+            window.startRealtimeMembersSubscription();
+          } else if (typeof loadMembersData === 'function') {
+            loadMembersData();
+          }
+        } else {
+          if (typeof window.stopRealtimeMembersSubscription === 'function') {
+            window.stopRealtimeMembersSubscription();
+          }
+          if (typeof window.updateRealtimeSyncBadge === 'function') {
+            window.updateRealtimeSyncBadge(false, 'Firebase 관리자 로그인 필요');
+          }
+          if (typeof window.showToast === 'function') {
+            window.showToast('회원 목록 조회를 위해 상단 로그인 버튼으로 관리자 계정(teacha99@gmail.com)에 Firebase 로그인해 주세요.', 'warning');
+          }
+        }
       }
     });
   </script>
@@ -705,16 +733,153 @@
       }
 
       document.body.style.display = 'flex';
-      loadMembersData();
 
       window.addEventListener('adminStateChanged', () => {
         if (!window.isAdmin || !window.isAdmin()) {
+          stopRealtimeMembersSubscription();
           window.location.href = 'index.html';
         } else {
-          loadMembersData();
+          startRealtimeMembersSubscription();
         }
       });
+
+      window.addEventListener('beforeunload', () => {
+        stopRealtimeMembersSubscription();
+      });
     });
+
+    let unsubscribeUsersRealtime = null;
+    let hasInitialUsersSnapshot = false;
+    let knownPendingUids = new Set();
+
+    /**
+     * 상단 실시간 연동 상태 배지를 갱신합니다.
+     * @param {boolean} active - 실시간 구독 활성화 여부
+     * @param {string} [label] - 표시 문구
+     */
+    function updateRealtimeSyncBadge(active, label) {
+      const badge = document.getElementById('realtimeSyncBadge');
+      if (!badge) return;
+      if (active) {
+        badge.style.color = '#15803d';
+        badge.style.background = 'rgba(34,197,94,0.12)';
+        badge.style.borderColor = 'rgba(34,197,94,0.3)';
+        badge.innerHTML = `<span style="width:8px; height:8px; border-radius:50%; background:#22c55e; display:inline-block;"></span> ${escapeHtml(label || '실시간 대기 감지 중')}`;
+      } else {
+        badge.style.color = '#b45309';
+        badge.style.background = 'rgba(245,158,11,0.14)';
+        badge.style.borderColor = 'rgba(245,158,11,0.35)';
+        badge.innerHTML = `<span style="width:8px; height:8px; border-radius:50%; background:#f59e0b; display:inline-block;"></span> ${escapeHtml(label || '실시간 연결 대기')}`;
+      }
+    }
+    window.updateRealtimeSyncBadge = updateRealtimeSyncBadge;
+
+    /**
+     * Firestore에서 수신한 회원 목록 스냅샷을 정렬·동기화하고 화면(KPI/테이블)을 갱신합니다.
+     * @param {Array<Object>} users - Firestore 회원 객체 배열
+     * @param {Object} [options] - 알림 및 동작 옵션
+     */
+    function applyUsersSnapshot(users, options = {}) {
+      const { showNotification = false, notifyNewPending = false } = options;
+      rawUsersList = Array.isArray(users) ? users.slice() : [];
+
+      // 승인 상태 필드가 없는 기존 가입 회원은 자동으로 'approved' 상태 부여 및 Firestore 반영
+      const legacySyncTasks = [];
+      const currentPendingUids = new Set();
+      const newlyArrivedPendingNames = [];
+
+      rawUsersList.forEach(u => {
+        if (!u.approvalStatus) {
+          const resolved = getUserApprovalStatus(u);
+          u.approvalStatus = resolved;
+          const payload = { approvalStatus: resolved };
+          if (resolved === 'approved') {
+            payload.approvedAt = u.approvedAt || new Date().toISOString();
+          }
+          legacySyncTasks.push(window.FirebaseApp.saveUserDataToFirestore(u.id, payload));
+        }
+
+        if (getUserApprovalStatus(u) === 'pending') {
+          currentPendingUids.add(u.id);
+          if (hasInitialUsersSnapshot && !knownPendingUids.has(u.id)) {
+            const memberName = u.displayName || u.name || (u.email ? u.email.split('@')[0] : '신규 회원');
+            newlyArrivedPendingNames.push(memberName);
+          }
+        }
+      });
+
+      hasInitialUsersSnapshot = true;
+      knownPendingUids = currentPendingUids;
+
+      if (legacySyncTasks.length > 0) {
+        Promise.allSettled(legacySyncTasks).catch(() => { });
+      }
+
+      // 승인 대기 회원을 우선 정렬하고 이후 최신 가입순 정렬
+      rawUsersList.sort((a, b) => {
+        const aPending = getUserApprovalStatus(a) === 'pending' ? 0 : 1;
+        const bPending = getUserApprovalStatus(b) === 'pending' ? 0 : 1;
+        if (aPending !== bPending) return aPending - bPending;
+        const aTime = Date.parse(a.createdAt || a.updatedAt || 0) || 0;
+        const bTime = Date.parse(b.createdAt || b.updatedAt || 0) || 0;
+        return bTime - aTime;
+      });
+
+      updateKPICards();
+      renderUsersTable();
+
+      if (notifyNewPending && newlyArrivedPendingNames.length > 0) {
+        const toastFunc = window.showToast || (typeof showToast === 'function' ? showToast : null);
+        if (toastFunc) {
+          toastFunc(`🔔 새로운 승인 대기 회원(${newlyArrivedPendingNames.join(', ')})이 실시간 등록되었습니다!`, 'info');
+        }
+      } else if (showNotification) {
+        const toastFunc = window.showToast || (typeof showToast === 'function' ? showToast : null);
+        if (toastFunc) {
+          toastFunc('🎉 최신 회원 목록 데이터가 새로고침되었습니다.', 'success');
+        }
+      }
+    }
+
+    /**
+     * Firestore users 컬렉션 실시간 구독을 시작합니다.
+     */
+    function startRealtimeMembersSubscription() {
+      if (unsubscribeUsersRealtime) return;
+      if (!window.FirebaseApp || typeof window.FirebaseApp.subscribeAllUsersFromFirestore !== 'function') {
+        setTimeout(startRealtimeMembersSubscription, 300);
+        return;
+      }
+
+      updateRealtimeSyncBadge(true, '실시간 대기 감지 중');
+      unsubscribeUsersRealtime = window.FirebaseApp.subscribeAllUsersFromFirestore(
+        (users) => {
+          updateRealtimeSyncBadge(true, '실시간 대기 감지 중');
+          applyUsersSnapshot(users, { notifyNewPending: true });
+        },
+        (errMsg) => {
+          updateRealtimeSyncBadge(false, '실시간 구독 오류');
+          const toastFunc = window.showToast || (typeof showToast === 'function' ? showToast : null);
+          if (toastFunc) {
+            toastFunc('회원 목록을 불러오는 중 오류가 발생했습니다: ' + errMsg, 'error');
+          }
+        }
+      );
+    }
+    window.startRealtimeMembersSubscription = startRealtimeMembersSubscription;
+
+    /**
+     * Firestore users 컬렉션 실시간 구독을 해제합니다.
+     */
+    function stopRealtimeMembersSubscription() {
+      if (typeof unsubscribeUsersRealtime === 'function') {
+        unsubscribeUsersRealtime();
+      }
+      unsubscribeUsersRealtime = null;
+      hasInitialUsersSnapshot = false;
+      knownPendingUids = new Set();
+    }
+    window.stopRealtimeMembersSubscription = stopRealtimeMembersSubscription;
 
     async function loadMembersData(showNotification = false) {
       const btn = document.getElementById('refreshUsersBtn');
@@ -732,51 +897,16 @@
 
         const res = await window.FirebaseApp.getAllUsersFromFirestore();
         if (res.success) {
-          rawUsersList = res.users || [];
-
-          // 승인 상태 필드가 없는 기존 가입 회원은 자동으로 'approved' 상태 부여 및 Firestore 반영
-          const legacySyncTasks = [];
-          rawUsersList.forEach(u => {
-            if (!u.approvalStatus) {
-              const resolved = getUserApprovalStatus(u);
-              u.approvalStatus = resolved;
-              const payload = { approvalStatus: resolved };
-              if (resolved === 'approved') {
-                payload.approvedAt = u.approvedAt || new Date().toISOString();
-              }
-              legacySyncTasks.push(window.FirebaseApp.saveUserDataToFirestore(u.id, payload));
-            }
-          });
-          if (legacySyncTasks.length > 0) {
-            Promise.allSettled(legacySyncTasks).catch(() => { });
-          }
-
-          // 승인 대기 회원을 우선 정렬하고 이후 최신 가입순 정렬
-          rawUsersList.sort((a, b) => {
-            const aPending = getUserApprovalStatus(a) === 'pending' ? 0 : 1;
-            const bPending = getUserApprovalStatus(b) === 'pending' ? 0 : 1;
-            if (aPending !== bPending) return aPending - bPending;
-            const aTime = Date.parse(a.createdAt || a.updatedAt || 0) || 0;
-            const bTime = Date.parse(b.createdAt || b.updatedAt || 0) || 0;
-            return bTime - aTime;
-          });
-
-          if (showNotification) {
-            const toastFunc = window.showToast || (typeof showToast === 'function' ? showToast : null);
-            if (toastFunc) {
-              toastFunc('🎉 최신 회원 목록 데이터가 새로고침되었습니다.', 'success');
-            }
-          }
+          applyUsersSnapshot(res.users || [], { showNotification, notifyNewPending: false });
         } else {
           rawUsersList = [];
+          updateKPICards();
+          renderUsersTable();
           const toastFunc = window.showToast || (typeof showToast === 'function' ? showToast : null);
           if (toastFunc) {
             toastFunc('회원 목록을 불러오는 중 오류가 발생했습니다: ' + res.error, 'error');
           }
         }
-
-        updateKPICards();
-        renderUsersTable();
       } catch (err) {
         console.error('loadMembersData error:', err);
       } finally {

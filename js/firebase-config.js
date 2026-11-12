@@ -10,6 +10,7 @@ import {
     signInWithRedirect,
     signInWithCredential,
     getRedirectResult,
+    getAdditionalUserInfo,
     signOut,
     onAuthStateChanged,
     updateProfile
@@ -81,9 +82,14 @@ export async function signInWithEmail(email, password) {
 export async function signInWithGoogle() {
     try {
         const result = await signInWithPopup(auth, googleProvider);
-        // Google 로그인 성공 시 사용자 정보 반환
+        // Google 로그인 성공 시 사용자 정보 및 신규 가입 여부 반환
         const user = result.user;
-        return { success: true, user };
+        const additionalInfo = getAdditionalUserInfo(result);
+        return {
+            success: true,
+            user,
+            isNewUser: Boolean(additionalInfo && additionalInfo.isNewUser)
+        };
     } catch (error) {
         console.warn("Google 로그인 처리 상태:", error.code, error.message);
 
@@ -130,8 +136,8 @@ export async function signInWithGoogleToken(idToken) {
     }
 }
 
-// 관리자 승인 제도 적용 기준 시각 (이 시각 이전 가입 회원은 모두 자동 승인 상태)
-export const APPROVAL_CUTOFF_TIME = Date.parse('2026-11-12T05:25:00.000Z');
+// 관리자 승인 제도 적용 기준 시각 (2026-11-12 15:05 KST 이전 가입 회원은 모두 기존 회원으로 자동 승인 유지)
+export const APPROVAL_CUTOFF_TIME = Date.parse('2026-11-12T06:05:00.000Z');
 let unsubscribeUserSnapshot = null;
 
 /**
@@ -239,11 +245,20 @@ export function onAuthChange(callback) {
             const providerId = (user.providerData && user.providerData.length > 0) ? user.providerData[0].providerId : 'password';
             const syncPayload = {
                 email: user.email || '',
-                displayName: user.displayName || (user.email ? user.email.split('@')[0] : '회원'),
-                photoURL: user.photoURL || '',
                 provider: providerId,
                 role: role
             };
+            if (user.displayName || !fsData || !fsData.displayName) {
+                syncPayload.displayName = user.displayName || (fsData && fsData.displayName) || (user.email ? user.email.split('@')[0] : '회원');
+            }
+            if (user.photoURL) {
+                syncPayload.photoURL = user.photoURL;
+            }
+            if (!fsData || !fsData.createdAt) {
+                syncPayload.createdAt = (user.metadata && user.metadata.creationTime)
+                    ? new Date(user.metadata.creationTime).toISOString()
+                    : new Date().toISOString();
+            }
             if (!fsData || !fsData.approvalStatus) {
                 syncPayload.approvalStatus = approvalStatus;
                 if (approvalStatus === 'approved' && (!fsData || !fsData.approvedAt)) {
@@ -393,6 +408,38 @@ export async function getAllUsersFromFirestore() {
 }
 
 /**
+ * Firestore users 컬렉션의 변경 사항을 실시간(onSnapshot)으로 구독합니다.
+ * @param {Function} onUpdate - 회원 배열을 전달받는 콜백 함수
+ * @param {Function} [onError] - 오류 메시지를 전달받는 콜백 함수
+ * @returns {Function} 실시간 구독 해제(unsubscribe) 함수
+ */
+export function subscribeAllUsersFromFirestore(onUpdate, onError) {
+    try {
+        const usersRef = collection(db, "users");
+        return onSnapshot(usersRef, (querySnapshot) => {
+            const users = [];
+            querySnapshot.forEach((docSnap) => {
+                users.push({ id: docSnap.id, ...docSnap.data() });
+            });
+            if (typeof onUpdate === 'function') {
+                onUpdate(users);
+            }
+        }, (error) => {
+            console.error("Firestore 실시간 회원 목록 구독 오류:", error);
+            if (typeof onError === 'function') {
+                onError(error.message || '실시간 구독 오류');
+            }
+        });
+    } catch (error) {
+        console.error("Firestore 실시간 구독 초기화 실패:", error);
+        if (typeof onError === 'function') {
+            onError(error.message || '실시간 구독 초기화 실패');
+        }
+        return () => { };
+    }
+}
+
+/**
  * Firestore users 컬렉션에서 특정 회원 문서를 삭제합니다.
  * @param {string} uid - 삭제할 회원의 UID
  * @returns {Promise<{success: boolean, error?: string}>} 삭제 결과
@@ -472,6 +519,7 @@ window.FirebaseApp = {
     saveUserDataToFirestore,
     getUserDataFromFirestore,
     getAllUsersFromFirestore,
+    subscribeAllUsersFromFirestore,
     deleteUserFromFirestore,
     resolveApprovalStatus,
     APPROVAL_CUTOFF_TIME
