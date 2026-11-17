@@ -339,11 +339,11 @@ function initProtectedDetailLinks() {
       } else {
         recordMemberDetailAccessHistory(null, href);
         // GitHub Pages HTML 캐시(최대 10분)로 구버전 세부 페이지가 열리는 것을 방지
-        if (target.tagName === 'A' && target.getAttribute('href') && !href.includes('v=20261112g')) {
+        if (target.tagName === 'A' && target.getAttribute('href') && !href.includes('v=20261117a')) {
           const rawHref = target.getAttribute('href');
           const [basePart, hashPart] = rawHref.split('#');
           const sep = basePart.includes('?') ? '&' : '?';
-          target.setAttribute('href', `${basePart}${sep}v=20261112g${hashPart ? '#' + hashPart : ''}`);
+          target.setAttribute('href', `${basePart}${sep}v=20261117a${hashPart ? '#' + hashPart : ''}`);
         }
       }
     }
