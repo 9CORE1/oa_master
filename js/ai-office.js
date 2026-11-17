@@ -62,7 +62,8 @@ const CURRICULUM_DAYS = [
     dayNum: 2,
     badgeClass: 'day3',
     detailHref: 'ai_office_day2.html',
-    label: 'PPT & Slides × AI 콜라보',
+    label: 'PPT & Slides × AI 콜라보 (준비중)',
+    disabled: true,
     sessions: [
       {
         period: '1교시 (50분)',
@@ -115,7 +116,8 @@ const CURRICULUM_DAYS = [
     dayNum: 3,
     badgeClass: 'day2',
     detailHref: 'ai_office_day3.html',
-    label: 'Docs & Word × AI 콜라보',
+    label: 'Docs & Word × AI 콜라보 (준비중)',
+    disabled: true,
     sessions: [
       {
         period: '1교시 (50분)',
@@ -171,31 +173,73 @@ const CURRICULUM_DAYS = [
 const PROMPT_ITEMS = [
   {
     category: 'day1',
-    tag: '엑셀·시트 수식 질문',
-    title: '셀 위치·결과·조건 3단 함수 질문',
-    text: '엑셀(또는 구글 시트) B2:B30에는 점수, C2:C30에는 출석일수가 있어. 점수가 80점 이상이면서 출석일수가 15일 이상인 학생 수만 세고 싶은데, 어떤 함수를 쓰면 돼? 바로 복사해 붙일 수 있는 수식과 초보자용 단계별 설명을 같이 적어줘.',
-    tip: '오류가 나면 입력한 수식과 오류 이름(#N/A, #VALUE!)을 함께 붙여 물어보세요.'
+    tag: '1교시: 수식 질문',
+    title: '셀 위치·결과·조건 3단 함수 생성',
+    text: `[역할]: 엑셀 및 구글 시트 전문가
+[상황]: 엑셀 성적표를 만들고 있어. 2행부터 31행까지 데이터가 있어.
+- C열은 출석일수(15일 만점), D열은 중간고사(100점 만점), E열은 기말고사(100점 만점)야.
+[요청]:
+1. F2 셀에 들어갈 총점 계산 수식을 작성해줘. (반영비율: 중간 40% + 기말 40% + 출석 20점 만점 환산: C2/15*20)
+2. G2 셀에 들어갈 등급 수식을 작성해줘. (F2 총점 기준 90점 이상 "A", 80점 이상 "B", 70점 이상 "C", 그 외 "F")
+3. H2 셀에 들어갈 상태 판정 수식을 작성해줘. (출석 C2가 10회 미만이거나 총점 F2가 60점 미만이면 "면담대상", 아니면 "정상")
+4. 초보자가 수식을 아래로 드래그할 때 주의할 점도 1줄로 알려줘.`,
+    tip: '내 시트의 열 위치와 구하려는 목표를 구체적으로 알려줄수록 정확한 수식이 나옵니다.'
   },
   {
     category: 'day1',
-    tag: '수식 오류 해결',
-    title: '스프레드시트 수식 오류(#N/A · #VALUE!) 10초 진단',
-    text: '내 엑셀/시트 수식은 [=VLOOKUP(A2, 기준표!$A$2:$C$20, 3, 0)]인데 #N/A 오류가 나. 데이터 형식 불일치나 절대참조($) 누락 가능성을 포함해 가장 흔한 원인 2가지와 수정된 수식을 초보자 눈높이로 알려줘.',
+    tag: '1교시: 에러 해결',
+    title: '수식 오류(#N/A · #VALUE! · #REF!) 10초 자가진단',
+    text: `내 엑셀/시트 수식은 [=XLOOKUP(A2, 학생명부!$A$2:$A$50, 학생명부!$B$2:$B$50)]인데 #N/A 오류가 발생해.
+A열 학번 데이터의 형식 불일치(숫자 vs 텍스트)나 보이지 않는 공백 가능성을 포함해 가장 흔한 원인 2가지와, 오류를 방지하는 IFERROR 감싸기 수정 수식을 알려줘.`,
     tip: '수식을 지우지 말고 [입력한 수식 + 오류 코드 + 셀 구조]를 함께 물어보세요.'
   },
   {
     category: 'day1',
-    tag: '자격증 오답노트 DB',
-    title: '컴활 오답노트 표 양식 생성',
-    text: '컴퓨터활용능력 자격증 공부를 위한 오답노트 표 양식을 만들어줘. 열은 [날짜, 과목/파트, 틀린 문제 요약, 내가 고른 오답, 핵심 개념, 복습 완료 여부]로 구성해서 구글 시트나 엑셀에 바로 붙여넣을 수 있게 표로 출력해줘.',
-    tip: 'Google Sheets 삽입 > 체크박스와 COUNTIF를 연결하면 복습 진도율이 자동 계산됩니다.'
+    tag: '2교시: 데이터 정제',
+    title: '카톡·메모장 비정형 텍스트 ➔ 정형 DB 표 변환',
+    text: `아래 텍스트는 동아리 단톡방의 수입/지출 메모야.
+이 내용을 엑셀/구글 시트에 복사해서 바로 붙여넣을 수 있도록 [구분(수입/지출)], [날짜(YYYY-MM-DD)], [항목], [금액(숫자만)], [비고] 열로 구성된 깔끔한 마크다운 테이블(표)로 변환해줘.
+- 날짜 연도는 2026년으로 통일해줘.
+- 금액 열은 쉼표나 '원' 글자 없이 순수 숫자만 넣어줘 (예: 20000).
+- 입금자나 세부 특이사항은 [비고] 열에 넣어줘.
+
+[텍스트 데이터]:
+3/2 김민준 회비 입금 20,000원
+3/3 OT 장소 대관료 지출 85,000원 (영수증 처리: 이서연)
+3/5 박도윤 회비 입금 20000원 (지각비 2000원 포함해서 22,000원 입금됨)
+3/7 다과 구매 (다이소) 14,300원
+3/8 최유진 회비 20,000 납부완료`,
+    tip: '표로 변환된 결과를 복사한 뒤 시트에서 Ctrl+V를 누르면 열과 행에 맞춰 바로 붙여넣어집니다.'
   },
   {
     category: 'day1',
-    tag: '설문 데이터 분석',
-    title: '설문 결과 3줄 요약 & 그래프 추천',
-    text: '첨부한 Google Forms/Sheets 설문조사 데이터를 분석해줘. 어려운 통계 용어는 빼고 초보자도 바로 이해할 수 있게 ① 가장 눈에 띄는 결과 특징 3가지, ② 보고서와 발표 자료에 넣기 좋은 그래프 종류 2가지, ③ 그래프를 만들 때 어떤 열과 어떤 열을 묶어서 그리면 좋을지 표로 정리해줘.',
-    tip: '업로드 전 이름·학번·연락처 등 개인정보와 회사 대외비 열은 반드시 삭제하세요.'
+    tag: '3교시: 설문 분석',
+    title: 'Google Forms 설문 핵심 요약 & 학술 리포트 문장',
+    text: `[역할]: 대학 소논문 및 연구 보고서 전문 데이터 분석가
+[데이터]: 대학생 100명을 대상으로 조사한 '생성형 AI 학업 활용 실태' 설문 데이터 요약본이야.
+- 응답자 분포: 저학년(1~2학년) 40%, 고학년(3~4학년) 60%
+- 활용 빈도: 주 5회 이상(38%), 주 3~4회(32%), 주 1~2회(20%), 미사용(10%)
+- 주요 목적: 과제 자료 조사(45%), 보고서 초안(25%), 코딩/수식 보조(18%), 번역(12%)
+- 주관식 애로사항 주요 키워드: '할루시네이션/거짓정보(42%)', '프롬프트 작성 어려움(31%)', 'AI 표절 윤리 기준 모호(27%)'
+
+[요청 과업]:
+1. 위 데이터에서 발견할 수 있는 '주요 특징 3가지'를 학술적 어조로 브리핑해줘.
+2. 학년(저학년 vs 고학년)에 따른 사용 목적 차이에 대한 합리적 가설 2가지를 제시해줘.
+3. 소논문/과제 리포트의 [결론 및 제언] 파트에 그대로 넣을 수 있는 정돈된 학술 보고서 문단(줄글 형태, 약 400자 내외)을 작성해줘.`,
+    tip: '업로드 전 이름·학번·연락처 등 개인정보(PII) 열은 반드시 삭제하세요.'
+  },
+  {
+    category: 'day1',
+    tag: '4교시: 차트 시각화',
+    title: '보고서용 최적 차트 추천 & 직관적인 헤드라인 3선',
+    text: `엑셀 차트를 만들어 과제 보고서에 넣으려고 해.
+- 데이터: 2023년부터 2026년까지 대학생들이 가장 선호하는 취업 준비 방식 추이 (인턴십, 자격증, 공모전, 어학성적)
+- 주요 추세: 어학성적 중요도 응답은 감소하는 반면, 실무 인턴십 경험 선호도가 25%에서 58%로 급증함.
+
+[요청]:
+1. 이 데이터를 가장 효과적으로 전달할 수 있는 최적의 차트 유형을 고르고 이유를 설명해줘.
+2. 단순히 '취업 준비 방식 추이'라고 쓰지 않고, 데이터의 핵심 메시지가 한눈에 드러나는 설득력 있는 차트 제목 3가지를 추천해줘.`,
+    tip: '차트 제목에 단순 항목명 대신 "핵심 발견점(인사이트)"을 적으면 보고서 점수가 2배 올라갑니다.'
   },
   {
     category: 'day2',
@@ -281,13 +325,30 @@ function renderCurriculum(filterDay = 'all') {
     ? CURRICULUM_DAYS
     : CURRICULUM_DAYS.filter((d) => d.day === filterDay);
 
-  container.innerHTML = targetDays.map((dayObj) => `
+  const courseConfig = typeof window.getCourseAccessConfig === 'function'
+    ? window.getCourseAccessConfig()
+    : { day1: true, day2: false, day3: false };
+  const isAdminUser = typeof window.isAdmin === 'function' && window.isAdmin();
+
+  container.innerHTML = targetDays.map((dayObj) => {
+    const isDayOpen = dayObj.day === 'day1' || Boolean(courseConfig[dayObj.day] || isAdminUser);
+    const displayLabel = isDayOpen ? dayObj.label.replace(' (준비중)', '') : dayObj.label;
+    // 공개 설정 시에는 부가 표시 없이 깨끗하게 노출, 비공개 상태에서 관리자 열람 시에만 관리자전용 배지 표시
+    const adminBadge = (isAdminUser && dayObj.day !== 'day1' && !courseConfig[dayObj.day])
+      ? `<span style="font-size:11px; font-weight:700; background:#dbeafe; color:#1e40af; padding:2px 8px; border-radius:10px; margin-left:6px;"><i class="fas fa-lock"></i> 관리자전용</span>`
+      : '';
+
+    return `
     <div style="margin-bottom: 26px;">
       <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:12px;">
-        <h3 style="font-size: 18px; color: var(--neutral-900); margin: 0;">${dayObj.label}</h3>
+        <h3 style="font-size: 18px; color: var(--neutral-900); margin: 0; display:flex; align-items:center;">
+          ${displayLabel} ${adminBadge}
+        </h3>
         ${!isDedicatedDayPage && dayObj.detailHref
-      ? `<a href="${dayObj.detailHref}" class="day-detail-link">세부 실습 페이지 <i class="fas fa-arrow-right"></i></a>`
-      : ''}
+        ? (!isDayOpen
+          ? `<span style="font-size: 12.5px; background: #f1f5f9; color: #64748b; padding: 4px 12px; border-radius: 6px; font-weight: 700; border: 1px solid #e2e8f0;"><i class="fas fa-lock"></i> 과정 준비중</span>`
+          : `<a href="${dayObj.detailHref}" class="day-detail-link">세부 실습 페이지 <i class="fas fa-arrow-right"></i></a>`)
+        : ''}
       </div>
       <div class="day-grid">
         ${dayObj.sessions.map((s) => `
@@ -308,7 +369,8 @@ function renderCurriculum(filterDay = 'all') {
         `).join('')}
       </div>
     </div>
-  `).join('');
+  `;
+  }).join('');
 }
 
 /**
@@ -438,10 +500,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.querySelectorAll('.day-tab').forEach((tab) => {
     tab.addEventListener('click', () => {
+      const targetDay = tab.getAttribute('data-day') || 'all';
+      const courseConfig = typeof window.getCourseAccessConfig === 'function'
+        ? window.getCourseAccessConfig()
+        : { day1: true, day2: false, day3: false };
+      const isAdminUser = typeof window.isAdmin === 'function' && window.isAdmin();
+
+      // 만약 준비중인 탭(비공개 & 비관리자)인 경우 알림 후 리턴
+      if (targetDay !== 'all' && targetDay !== 'day1' && !courseConfig[targetDay] && !isAdminUser) {
+        const courseName = targetDay === 'day2' ? 'PPT & Slides' : 'Docs & Word';
+        if (window.showToast) window.showToast(`${courseName} 과정은 현재 준비 중입니다.`);
+        else alert(`${courseName} 과정은 현재 준비 중입니다.`);
+        return;
+      }
+
       if (!guardTabClick('🔒 회원가입 및 로그인 후 일차별 세부 커리큘럼 필터를 이용하실 수 있습니다.')) return;
       document.querySelectorAll('.day-tab').forEach((t) => t.classList.remove('active'));
       tab.classList.add('active');
-      activeAiDay = tab.getAttribute('data-day') || 'all';
+      activeAiDay = targetDay;
       renderCurriculum(activeAiDay);
     });
   });
@@ -459,6 +535,13 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('oaAuthReady', () => {
     renderCurriculum(activeAiDay);
     renderPrompts(activePromptCat);
+  });
+
+  window.addEventListener('courseAccessChanged', () => {
+    renderCurriculum(activeAiDay);
+    if (typeof window.updateAdminCourseAccess === 'function') {
+      window.updateAdminCourseAccess();
+    }
   });
 });
 

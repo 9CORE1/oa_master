@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="css/ai-office.css">
   <link rel="icon" href="images/OA_master_LOGO.png" type="image/png">
   <script src="js/data.js"></script>
-  <script src="js/admin.js?v=20261117a"></script>
+  <script src="js/admin.js?v=20261117_fix2"></script>
 </head>
 
 <body class="theme-written">
@@ -52,9 +52,9 @@
             <a href="ai_office.html" class="dropdown-link"><i class="fas fa-th-large"></i> 콜라보 통합 허브</a>
             <div class="dropdown-divider"></div>
             <div class="dropdown-group-title">콜라보 실무 과정</div>
-            <a href="ai_office_day1.html" class="dropdown-link"><i class="fas fa-table"></i> Excel & Sheets × AI</a>
-            <a href="ai_office_day2.html" class="dropdown-link"><i class="fas fa-desktop"></i> PPT/Slides × AI</a>
-            <a href="ai_office_day3.html" class="dropdown-link"><i class="fas fa-file-word"></i> Docs/Word × AI</a>
+            <a href="ai_office_day1.html" class="dropdown-link"><i class="fas fa-table"></i> Excel &amp; Sheets × AI</a>
+            <a href="#" data-course="day2" onclick="alert('PPT &amp; Slides 과정은 현재 준비 중입니다.'); return false;" class="dropdown-link disabled" title="현재 준비 중인 과정입니다"><i class="fas fa-desktop"></i> PPT/Slides × AI <span class="badge-prep">준비중</span></a>
+            <a href="#" data-course="day3" onclick="alert('Docs &amp; Word 과정은 현재 준비 중입니다.'); return false;" class="dropdown-link disabled" title="현재 준비 중인 과정입니다"><i class="fas fa-file-word"></i> Docs/Word × AI <span class="badge-prep">준비중</span></a>
             <div class="dropdown-divider"></div>
             <a href="AI리터러시진단안내_참고자료.pdf" target="_blank" class="dropdown-link"><i class="fas fa-chart-pie"></i> AI 리터러시 진단 PDF</a>
           </div>
@@ -96,9 +96,9 @@
 
       <div class="mobile-nav-group-title">AI × OA 콜라보</div>
       <a href="ai_office.html" class="mobile-nav-link active"><i class="fas fa-magic"></i> AI × OA 콜라보 전체 허브</a>
-      <a href="ai_office_day1.html" class="mobile-nav-link"><i class="fas fa-table"></i> Excel & Sheets × AI</a>
-      <a href="ai_office_day2.html" class="mobile-nav-link"><i class="fas fa-desktop"></i> PPT/Slides × AI</a>
-      <a href="ai_office_day3.html" class="mobile-nav-link"><i class="fas fa-file-word"></i> Docs/Word × AI</a>
+      <a href="ai_office_day1.html" class="mobile-nav-link"><i class="fas fa-table"></i> Excel &amp; Sheets × AI</a>
+      <a href="#" data-course="day2" onclick="alert('PPT &amp; Slides 과정은 현재 준비 중입니다.'); return false;" class="mobile-nav-link disabled" title="현재 준비 중인 과정입니다"><i class="fas fa-desktop"></i> PPT/Slides × AI <span class="badge-prep">준비중</span></a>
+      <a href="#" data-course="day3" onclick="alert('Docs &amp; Word 과정은 현재 준비 중입니다.'); return false;" class="mobile-nav-link disabled" title="현재 준비 중인 과정입니다"><i class="fas fa-file-word"></i> Docs/Word × AI <span class="badge-prep">준비중</span></a>
 
       <div class="mobile-nav-group-title">추천 사이트</div>
       <a href="recommendations.html" class="mobile-nav-link"><i class="fas fa-external-link-alt"></i> 추천 사이트</a>
@@ -112,9 +112,9 @@
       <div class="ai-hero-inner">
         <div class="day-switcher" aria-label="AI × OA 콜라보 과정 바로가기">
           <a href="ai_office.html" class="active"><i class="fas fa-th-large"></i> 전체 허브</a>
-          <a href="ai_office_day1.html"><i class="fas fa-table"></i> Excel & Sheets × AI</a>
-          <a href="ai_office_day2.html"><i class="fas fa-desktop"></i> PPT & Slides × AI</a>
-          <a href="ai_office_day3.html"><i class="fas fa-file-word"></i> Docs & Word × AI</a>
+          <a href="ai_office_day1.html"><i class="fas fa-table"></i> Excel &amp; Sheets × AI</a>
+          <a href="#" data-course="day2" onclick="alert('PPT &amp; Slides 과정은 현재 준비 중입니다.'); return false;" class="disabled" title="현재 준비 중인 과정입니다"><i class="fas fa-desktop"></i> PPT &amp; Slides × AI <span class="badge-prep">준비중</span></a>
+          <a href="#" data-course="day3" onclick="alert('Docs &amp; Word 과정은 현재 준비 중입니다.'); return false;" class="disabled" title="현재 준비 중인 과정입니다"><i class="fas fa-file-word"></i> Docs &amp; Word × AI <span class="badge-prep">준비중</span></a>
         </div>
         <div class="ai-hero-badge">
           <i class="fas fa-graduation-cap"></i> AI × OA 콜라보 특강 | 실무 맞춤형 AI 활용 가이드
@@ -202,11 +202,25 @@
         </div>
       </div>
 
+      <!-- 과정 공개 설정 컨트롤 배너 (관리자 및 교육운영 토글) -->
+      <div id="courseAccessControlBanner" style="margin-bottom:16px; background:#ffffff; border:1px solid #e2e8f0; border-radius:12px; padding:12px 18px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; box-shadow:0 1px 3px rgba(0,0,0,0.04);">
+        <div style="display:flex; align-items:center; flex-wrap:wrap; gap:10px;">
+          <span style="font-size:13.5px; font-weight:800; color:#0f172a; display:inline-flex; align-items:center; gap:6px;">
+            <i class="fas fa-toggle-on" style="color:#10b981; font-size:16px;"></i> 과정 일반 수강생 공개 현황:
+          </span>
+          <span id="bannerDay1Status" style="font-size:12px; font-weight:700; background:#dcfce7; color:#15803d; padding:3px 9px; border-radius:12px;">1일차(Sheets) 공개</span>
+          <span id="bannerDay2Status" style="font-size:12px; font-weight:700; background:#f1f5f9; color:#64748b; padding:3px 9px; border-radius:12px;">2일차(PPT) 준비중</span>
+          <span id="bannerDay3Status" style="font-size:12px; font-weight:700; background:#f1f5f9; color:#64748b; padding:3px 9px; border-radius:12px;">3일차(Word) 준비중</span>
+        </div>
+        <button type="button" onclick="if(window.openCourseVisibilityModal){window.openCourseVisibilityModal();} return false;" style="background:#10b981; color:#fff; border:none; padding:8px 18px; border-radius:8px; font-size:13px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:6px; box-shadow:0 2px 6px rgba(16,185,129,0.35); transition:background 0.2s;">
+          <i class="fas fa-sliders-h"></i> 과정 공개 설정 및 토글 스위치 열기
+        </button>
+      </div>
+
       <div class="day-tabs" role="tablist" aria-label="과정별 커리큘럼 선택">
-        <button type="button" class="day-tab active" data-day="all">전체 (12교시)</button>
-        <button type="button" class="day-tab" data-day="day1">Excel &amp; Sheets</button>
-        <button type="button" class="day-tab" data-day="day2">Slides &amp; PPT</button>
-        <button type="button" class="day-tab" data-day="day3">Docs &amp; Word</button>
+        <button type="button" class="day-tab active" data-day="day1">Excel &amp; Sheets (개설)</button>
+        <button type="button" class="day-tab" data-day="day2" style="opacity:0.6;"><i class="fas fa-lock"></i> Slides &amp; PPT (준비중)</button>
+        <button type="button" class="day-tab" data-day="day3" style="opacity:0.6;"><i class="fas fa-lock"></i> Docs &amp; Word (준비중)</button>
       </div>
 
       <div id="curriculumContainer"></div>
@@ -298,9 +312,9 @@
             <h4>AI × OA 콜라보</h4>
             <ul>
               <li><a href="ai_office.html">콜라보 통합 허브</a></li>
-              <li><a href="ai_office_day1.html">Excel & Sheets × AI</a></li>
-              <li><a href="ai_office_day2.html">PPT/Slides × AI</a></li>
-              <li><a href="ai_office_day3.html">Docs/Word × AI</a></li>
+              <li><a href="ai_office_day1.html">Excel &amp; Sheets × AI</a></li>
+              <li><a href="#" data-course="day2" onclick="alert('PPT &amp; Slides 과정은 현재 준비 중입니다.'); return false;" style="opacity:0.45; cursor:not-allowed;">PPT/Slides × AI <span class="badge-prep" style="font-size:11px; color:var(--neutral-400);">(준비중)</span></a></li>
+              <li><a href="#" data-course="day3" onclick="alert('Docs &amp; Word 과정은 현재 준비 중입니다.'); return false;" style="opacity:0.45; cursor:not-allowed;">Docs/Word × AI <span class="badge-prep" style="font-size:11px; color:var(--neutral-400);">(준비중)</span></a></li>
             </ul>
           </div>
           <div class="footer-links-col">
@@ -324,7 +338,7 @@
   </footer>
 
   <script src="js/main.js?v=20261117a"></script>
-  <script src="js/ai-office.js?v=20261117a"></script>
+  <script src="js/ai-office.js?v=20261117_fix2"></script>
   <script type="module">
     import { onAuthChange } from './js/firebase-config.js?v=20261117a';
     onAuthChange((user) => {

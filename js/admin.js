@@ -436,6 +436,8 @@ function updateAdminUI() {
       container.innerHTML = `
         ${contactLinkHtml}
         <span style="color:var(--neutral-700);">|</span>
+        <a href="#" onclick="if(window.openCourseVisibilityModal){window.openCourseVisibilityModal();} return false;" style="color:#10b981; font-weight:700;"><i class="fas fa-sliders-h"></i> 과정 공개 설정</a>
+        <span style="color:var(--neutral-700);">|</span>
         <a href="admin_users.html"><i class="fas fa-users-cog"></i> 회원 관리</a>
         <span style="color:var(--neutral-700);">|</span>
         <a href="#" onclick="if(window.handleGlobalLogout){window.handleGlobalLogout();}else{toggleAdminMode();} return false;"><i class="fas fa-sign-out-alt"></i> 관리자 로그아웃</a>
@@ -447,7 +449,434 @@ function updateAdminUI() {
       `;
     }
   });
+
+  // 관리자 모드에 따른 비활성화 과정(PPT, Word) 동적 제어 실행
+  updateAdminCourseAccess();
 }
+
+/**
+ * 과정 공개 설정 객체를 로컬스토리지에서 조회합니다.
+ * @returns {{day1: boolean, day2: boolean, day3: boolean}} 각 일차별 일반 사용자 공개 여부
+ */
+function getCourseAccessConfig() {
+  const defaults = { day1: true, day2: false, day3: false };
+  try {
+    const saved = localStorage.getItem('course_access_config');
+    if (saved) {
+      return Object.assign(defaults, JSON.parse(saved));
+    }
+  } catch (e) {
+    console.error('getCourseAccessConfig parse error:', e);
+  }
+  return defaults;
+}
+
+/**
+ * 과정 공개 설정을 로컬스토리지에 저장하고 전체 UI를 갱신합니다.
+ * @param {Object} newConfig - 저장할 설정 객체
+ */
+function saveCourseAccessConfig(newConfig) {
+  try {
+    localStorage.setItem('course_access_config', JSON.stringify(newConfig));
+    if (window.DB && typeof window.DB.saveCourseAccessConfig === 'function') {
+      window.DB.saveCourseAccessConfig(newConfig);
+    }
+  } catch (e) {
+    console.error('saveCourseAccessConfig error:', e);
+  }
+  updateAdminCourseAccess();
+  window.dispatchEvent(new CustomEvent('courseAccessChanged', { detail: newConfig }));
+  if (typeof window.renderCurriculum === 'function') {
+    window.renderCurriculum(window.activeAiDay || 'all');
+  }
+}
+
+/**
+ * 과정 일반 공개 설정 모달을 엽니다.
+ */
+function openCourseVisibilityModal() {
+  let modal = document.getElementById('courseVisibilityModal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'courseVisibilityModal';
+    modal.style.cssText = 'position:fixed !important; top:0 !important; left:0 !important; width:100vw !important; height:100vh !important; background:rgba(15,23,42,0.78) !important; backdrop-filter:blur(8px) !important; -webkit-backdrop-filter:blur(8px) !important; z-index:999999 !important; display:flex !important; align-items:center !important; justify-content:center !important; padding:16px !important; opacity:1 !important; visibility:visible !important;';
+    modal.onclick = function (e) {
+      if (e.target === modal) closeCourseVisibilityModal();
+    };
+    document.body.appendChild(modal);
+  } else {
+    modal.style.setProperty('display', 'flex', 'important');
+    modal.style.setProperty('opacity', '1', 'important');
+    modal.style.setProperty('visibility', 'visible', 'important');
+  }
+
+  const config = getCourseAccessConfig();
+
+  modal.innerHTML = `
+    <div style="background:#ffffff; color:#1e293b; width:100%; max-width:520px; border-radius:18px; box-shadow:0 25px 50px -12px rgba(0,0,0,0.35); overflow:hidden; font-family:inherit; animation:fadeInModal 0.25s ease;">
+      <!-- 헤더 -->
+      <div style="background:linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color:#ffffff; padding:20px 24px; display:flex; justify-content:space-between; align-items:center;">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div style="width:38px; height:38px; border-radius:10px; background:rgba(16,185,129,0.2); display:flex; align-items:center; justify-content:center; color:#10b981; font-size:18px;">
+            <i class="fas fa-sliders-h"></i>
+          </div>
+          <div>
+            <h3 style="margin:0; font-size:18px; font-weight:800; color:#fff;">교육과정 일반 공개 관리</h3>
+            <p style="margin:2px 0 0; font-size:12px; color:#94a3b8;">일반 수강생(비로그인 포함)에게 공개할 과정을 설정합니다.</p>
+          </div>
+        </div>
+        <button onclick="closeCourseVisibilityModal()" style="background:none; border:none; color:#94a3b8; font-size:24px; cursor:pointer; line-height:1; padding:4px;" title="닫기">&times;</button>
+      </div>
+
+      <!-- 본문 -->
+      <div style="padding:22px 24px; display:flex; flex-direction:column; gap:14px; background:#f8fafc;">
+        <!-- Day 1 (고정 공개) -->
+        <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:12px; padding:14px 18px; display:flex; align-items:center; justify-content:space-between; box-shadow:0 1px 3px rgba(0,0,0,0.03);">
+          <div style="display:flex; align-items:center; gap:14px;">
+            <div style="width:42px; height:42px; border-radius:10px; background:#ecfdf5; color:#10b981; display:flex; align-items:center; justify-content:center; font-size:20px;">
+              <i class="fas fa-file-excel"></i>
+            </div>
+            <div>
+              <div style="font-weight:700; font-size:15px; color:#0f172a;">1일차 : Excel &amp; Sheets × AI</div>
+              <div style="font-size:12px; color:#64748b;">엑셀 기초 수식 &amp; 구글 시트 AI 확장 실습</div>
+            </div>
+          </div>
+          <span style="font-size:12px; font-weight:700; background:#dcfce7; color:#15803d; padding:4px 10px; border-radius:20px;">
+            <i class="fas fa-check-circle"></i> 상시 공개
+          </span>
+        </div>
+
+        <!-- Day 2 (PPT & Slides) -->
+        <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:12px; padding:14px 18px; display:flex; align-items:center; justify-content:space-between; box-shadow:0 1px 3px rgba(0,0,0,0.03); flex-wrap:wrap; gap:12px;">
+          <div style="display:flex; align-items:center; gap:14px;">
+            <div style="width:42px; height:42px; border-radius:10px; background:#fff7ed; color:#f97316; display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0;">
+              <i class="fas fa-file-powerpoint"></i>
+            </div>
+            <div>
+              <div style="display:flex; align-items:center; gap:6px;">
+                <span style="font-weight:700; font-size:15px; color:#0f172a;">2일차 : PPT &amp; Slides × AI</span>
+                <span id="badgeDay2Status" style="font-size:11px; font-weight:700; padding:2px 8px; border-radius:12px; ${config.day2 ? 'background:#dcfce7; color:#15803d;' : 'background:#f1f5f9; color:#64748b;'}">
+                  ${config.day2 ? '일반공개 (ON)' : '준비중 / 비공개 (OFF)'}
+                </span>
+              </div>
+              <div style="font-size:12px; color:#64748b;">슬라이드 기획 &amp; AI 발표자료 제작 실습</div>
+            </div>
+          </div>
+          <!-- 직관적인 ON / OFF 스위치 버튼 그룹 -->
+          <div style="display:inline-flex; align-items:center; background:#f1f5f9; padding:3px; border-radius:10px; border:1px solid #e2e8f0; gap:3px;">
+            <button type="button" onclick="handleCourseVisibilityToggle('day2', true)" style="padding:6px 14px; border-radius:7px; font-size:12px; font-weight:700; cursor:pointer; border:none; transition:all .2s; ${config.day2 ? 'background:#10b981; color:#fff; box-shadow:0 1px 3px rgba(16,185,129,0.3);' : 'background:transparent; color:#64748b;'}">
+              <i class="fas fa-check"></i> 공개 (ON)
+            </button>
+            <button type="button" onclick="handleCourseVisibilityToggle('day2', false)" style="padding:6px 14px; border-radius:7px; font-size:12px; font-weight:700; cursor:pointer; border:none; transition:all .2s; ${!config.day2 ? 'background:#64748b; color:#fff; box-shadow:0 1px 3px rgba(100,116,139,0.3);' : 'background:transparent; color:#64748b;'}">
+              <i class="fas fa-lock"></i> 비공개 (OFF)
+            </button>
+          </div>
+        </div>
+
+        <!-- Day 3 (Word & Docs) -->
+        <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:12px; padding:14px 18px; display:flex; align-items:center; justify-content:space-between; box-shadow:0 1px 3px rgba(0,0,0,0.03); flex-wrap:wrap; gap:12px;">
+          <div style="display:flex; align-items:center; gap:14px;">
+            <div style="width:42px; height:42px; border-radius:10px; background:#eff6ff; color:#3b82f6; display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0;">
+              <i class="fas fa-file-word"></i>
+            </div>
+            <div>
+              <div style="display:flex; align-items:center; gap:6px;">
+                <span style="font-weight:700; font-size:15px; color:#0f172a;">3일차 : Word &amp; Docs × AI</span>
+                <span id="badgeDay3Status" style="font-size:11px; font-weight:700; padding:2px 8px; border-radius:12px; ${config.day3 ? 'background:#dcfce7; color:#15803d;' : 'background:#f1f5f9; color:#64748b;'}">
+                  ${config.day3 ? '일반공개 (ON)' : '준비중 / 비공개 (OFF)'}
+                </span>
+              </div>
+              <div style="font-size:12px; color:#64748b;">공문서·보고서 작성 &amp; AI 문서화 실습</div>
+            </div>
+          </div>
+          <!-- 직관적인 ON / OFF 스위치 버튼 그룹 -->
+          <div style="display:inline-flex; align-items:center; background:#f1f5f9; padding:3px; border-radius:10px; border:1px solid #e2e8f0; gap:3px;">
+            <button type="button" onclick="handleCourseVisibilityToggle('day3', true)" style="padding:6px 14px; border-radius:7px; font-size:12px; font-weight:700; cursor:pointer; border:none; transition:all .2s; ${config.day3 ? 'background:#10b981; color:#fff; box-shadow:0 1px 3px rgba(16,185,129,0.3);' : 'background:transparent; color:#64748b;'}">
+              <i class="fas fa-check"></i> 공개 (ON)
+            </button>
+            <button type="button" onclick="handleCourseVisibilityToggle('day3', false)" style="padding:6px 14px; border-radius:7px; font-size:12px; font-weight:700; cursor:pointer; border:none; transition:all .2s; ${!config.day3 ? 'background:#64748b; color:#fff; box-shadow:0 1px 3px rgba(100,116,139,0.3);' : 'background:transparent; color:#64748b;'}">
+              <i class="fas fa-lock"></i> 비공개 (OFF)
+            </button>
+          </div>
+        </div>
+
+        <!-- 안내 설명 -->
+        <div style="font-size:12px; color:#475569; line-height:1.55; background:#e0f2fe; border:1px solid #bae6fd; border-radius:10px; padding:11px 14px; display:flex; gap:9px;">
+          <i class="fas fa-info-circle" style="color:#0284c7; margin-top:2px; font-size:14px;"></i>
+          <span>토글 스위치를 켜면(초록색) 즉시 <strong>일반 수강생(비로그인 상태)에게도 해당 과정이 전면 활성화</strong>되어 실습 페이지 및 탭을 자유롭게 열람할 수 있습니다. 끄면 일반인에게는 '준비중'으로 표시됩니다.</span>
+        </div>
+      </div>
+
+      <!-- 푸터 -->
+      <div style="padding:16px 24px; background:#ffffff; border-top:1px solid #e2e8f0; display:flex; justify-content:space-between; align-items:center;">
+        <span style="font-size:12px; color:#94a3b8;"><i class="fas fa-check"></i> 변경 사항은 즉시 브라우저에 저장됩니다.</span>
+        <button onclick="closeCourseVisibilityModal()" style="padding:9px 20px; background:#0f172a; color:#ffffff; border:none; border-radius:8px; font-weight:700; cursor:pointer; font-size:13px; transition:background .2s; box-shadow:0 2px 8px rgba(15,23,42,0.2);">
+          설정 완료 (닫기)
+        </button>
+      </div>
+    </div>
+  `;
+  modal.style.display = 'flex';
+}
+
+/**
+ * 과정 공개 설정 모달을 닫습니다.
+ */
+function closeCourseVisibilityModal() {
+  const modal = document.getElementById('courseVisibilityModal');
+  if (modal) {
+    modal.style.setProperty('display', 'none', 'important');
+    modal.style.setProperty('opacity', '0', 'important');
+    modal.style.setProperty('visibility', 'hidden', 'important');
+  }
+}
+
+/**
+ * 토글 스위치 변경 시 설정을 저장하고 UI를 갱신합니다.
+ */
+function handleCourseVisibilityToggle(courseKey, isChecked) {
+  const config = getCourseAccessConfig();
+  config[courseKey] = isChecked;
+  saveCourseAccessConfig(config);
+
+  const badge = document.getElementById(courseKey === 'day2' ? 'badgeDay2Status' : 'badgeDay3Status');
+  const toggleInput = document.getElementById(courseKey === 'day2' ? 'toggleDay2Visibility' : 'toggleDay3Visibility');
+  if (badge) {
+    badge.textContent = isChecked ? '일반 공개 중' : '준비중(비공개)';
+    badge.style.background = isChecked ? '#dcfce7' : '#f1f5f9';
+    badge.style.color = isChecked ? '#15803d' : '#64748b';
+  }
+  if (toggleInput && toggleInput.nextElementSibling) {
+    const slider = toggleInput.nextElementSibling;
+    slider.style.backgroundColor = isChecked ? '#10b981' : '#cbd5e1';
+    const knob = slider.firstElementChild;
+    if (knob) knob.style.left = isChecked ? '26px' : '4px';
+  }
+
+  const courseTitle = courseKey === 'day2' ? 'PPT & Slides' : 'Word & Docs';
+  const statusMsg = isChecked ? '일반 사용자에게 전면 활성화(공개)되었습니다.' : '일반 사용자에게 비공개(준비중)로 설정되었습니다.';
+  if (window.showToast) {
+    window.showToast(`${courseTitle} 과정이 ${statusMsg}`, isChecked ? 'success' : 'info');
+  }
+
+  // 모달 버튼 상태 즉시 재렌더링
+  openCourseVisibilityModal();
+}
+
+window.getCourseAccessConfig = getCourseAccessConfig;
+window.saveCourseAccessConfig = saveCourseAccessConfig;
+window.openCourseVisibilityModal = openCourseVisibilityModal;
+window.closeCourseVisibilityModal = closeCourseVisibilityModal;
+window.handleCourseVisibilityToggle = handleCourseVisibilityToggle;
+
+/**
+ * 관리자 로그인 여부 및 일반 공개 설정에 따라 비활성화된 과정(PPT/Slides, Docs/Word)을 동적으로 제어합니다.
+ */
+function updateAdminCourseAccess() {
+  const is_admin = isAdmin();
+  const config = getCourseAccessConfig();
+  const isDay2Open = Boolean(config.day2 || is_admin);
+  const isDay3Open = Boolean(config.day3 || is_admin);
+
+  const day2Elements = document.querySelectorAll('[data-course="day2"]');
+  const day3Elements = document.querySelectorAll('[data-course="day3"]');
+
+  day2Elements.forEach((el) => {
+    const badge = el.querySelector('.badge-prep');
+    if (isDay2Open) {
+      el.classList.remove('disabled');
+      el.style.opacity = '1';
+      el.style.cursor = 'pointer';
+      el.removeAttribute('onclick');
+      if (el.tagName.toLowerCase() === 'a') {
+        el.href = 'ai_office_day2.html';
+      }
+
+      if (config.day2) {
+        // 과정을 공개 설정하면 '일반 공개' 표시 없이 일반 정규 과정처럼 아무 표시도 안 나도록 숨김
+        el.title = 'PPT & Slides × AI 과정 학습하기';
+        if (badge) {
+          badge.style.display = 'none';
+        }
+      } else if (is_admin) {
+        // 비공개 상태이나 관리자가 확인 중인 경우
+        el.title = 'PPT & Slides × AI (관리자 전용 열람 - 일반 비공개)';
+        if (badge) {
+          badge.style.display = 'inline-block';
+          badge.textContent = '관리자';
+          badge.style.background = '#dbeafe';
+          badge.style.color = '#1e40af';
+        }
+      } else {
+        el.title = 'PPT & Slides × AI 과정 학습하기';
+        if (badge) {
+          badge.style.display = 'none';
+        }
+      }
+    } else {
+      el.classList.add('disabled');
+      el.style.opacity = '0.5';
+      el.style.cursor = 'not-allowed';
+      if (el.tagName.toLowerCase() === 'a') {
+        el.href = '#';
+        el.onclick = function (e) {
+          if (e && e.preventDefault) e.preventDefault();
+          if (window.showToast) window.showToast('PPT & Slides 과정은 현재 준비 중입니다.');
+          else alert('PPT & Slides 과정은 현재 준비 중입니다.');
+          return false;
+        };
+      }
+      el.title = '현재 준비 중인 과정입니다';
+      if (badge) {
+        badge.style.display = 'inline-block';
+        badge.textContent = '준비중';
+        badge.style.background = '';
+        badge.style.color = '';
+      }
+    }
+  });
+
+  day3Elements.forEach((el) => {
+    const badge = el.querySelector('.badge-prep');
+    if (isDay3Open) {
+      el.classList.remove('disabled');
+      el.style.opacity = '1';
+      el.style.cursor = 'pointer';
+      el.removeAttribute('onclick');
+      if (el.tagName.toLowerCase() === 'a') {
+        el.href = 'ai_office_day3.html';
+      }
+
+      if (config.day3) {
+        // 과정을 공개 설정하면 '일반 공개' 표시 없이 일반 정규 과정처럼 아무 표시도 안 나도록 숨김
+        el.title = 'Docs & Word × AI 과정 학습하기';
+        if (badge) {
+          badge.style.display = 'none';
+        }
+      } else if (is_admin) {
+        // 비공개 상태이나 관리자가 확인 중인 경우
+        el.title = 'Docs & Word × AI (관리자 전용 열람 - 일반 비공개)';
+        if (badge) {
+          badge.style.display = 'inline-block';
+          badge.textContent = '관리자';
+          badge.style.background = '#dbeafe';
+          badge.style.color = '#1e40af';
+        }
+      } else {
+        el.title = 'Docs & Word × AI 과정 학습하기';
+        if (badge) {
+          badge.style.display = 'none';
+        }
+      }
+    } else {
+      el.classList.add('disabled');
+      el.style.opacity = '0.5';
+      el.style.cursor = 'not-allowed';
+      if (el.tagName.toLowerCase() === 'a') {
+        el.href = '#';
+        el.onclick = function (e) {
+          if (e && e.preventDefault) e.preventDefault();
+          if (window.showToast) window.showToast('Docs & Word 과정은 현재 준비 중입니다.');
+          else alert('Docs & Word 과정은 현재 준비 중입니다.');
+          return false;
+        };
+      }
+      el.title = '현재 준비 중인 과정입니다';
+      if (badge) {
+        badge.style.display = 'inline-block';
+        badge.textContent = '준비중';
+        badge.style.background = '';
+        badge.style.color = '';
+      }
+    }
+  });
+
+  // ai_office.html 쇼케이스 탭 버튼 동적 활성화
+  const day2Tab = document.querySelector('.day-tab[data-day="day2"]');
+  const day3Tab = document.querySelector('.day-tab[data-day="day3"]');
+  if (day2Tab) {
+    if (isDay2Open) {
+      day2Tab.style.opacity = '1';
+      day2Tab.style.cursor = 'pointer';
+      // 공개 설정 시에는 부가 표시 없이 깔끔하게 노출, 비공개 상태에서 관리자 열람 시에만 (관리자) 표시
+      const statusSuffix = (!config.day2 && is_admin)
+        ? ' <span style="font-size:10px; color:#6366f1; font-weight:700;">(관리자)</span>'
+        : '';
+      day2Tab.innerHTML = `<i class="fas fa-desktop"></i> Slides &amp; PPT${statusSuffix}`;
+    } else {
+      day2Tab.style.opacity = '0.6';
+      day2Tab.style.cursor = 'not-allowed';
+      day2Tab.innerHTML = '<i class="fas fa-lock"></i> Slides &amp; PPT (준비중)';
+    }
+  }
+  if (day3Tab) {
+    if (isDay3Open) {
+      day3Tab.style.opacity = '1';
+      day3Tab.style.cursor = 'pointer';
+      // 공개 설정 시에는 부가 표시 없이 깔끔하게 노출, 비공개 상태에서 관리자 열람 시에만 (관리자) 표시
+      const statusSuffix = (!config.day3 && is_admin)
+        ? ' <span style="font-size:10px; color:#6366f1; font-weight:700;">(관리자)</span>'
+        : '';
+      day3Tab.innerHTML = `<i class="fas fa-file-word"></i> Docs &amp; Word${statusSuffix}`;
+    } else {
+      day3Tab.style.opacity = '0.6';
+      day3Tab.style.cursor = 'not-allowed';
+      day3Tab.innerHTML = '<i class="fas fa-lock"></i> Docs &amp; Word (준비중)';
+    }
+  }
+
+  // ai_office.html 과정 일반 수강생 공개 현황 배너 뱃지 실시간 갱신
+  const bannerDay2 = document.getElementById('bannerDay2Status');
+  const bannerDay3 = document.getElementById('bannerDay3Status');
+  if (bannerDay2) {
+    if (config.day2) {
+      bannerDay2.textContent = '2일차(PPT) 일반공개 (ON)';
+      bannerDay2.style.background = '#dcfce7';
+      bannerDay2.style.color = '#15803d';
+    } else {
+      bannerDay2.textContent = is_admin ? '2일차(PPT) 관리자열람 (일반OFF)' : '2일차(PPT) 준비중 (OFF)';
+      bannerDay2.style.background = is_admin ? '#dbeafe' : '#f1f5f9';
+      bannerDay2.style.color = is_admin ? '#1e40af' : '#64748b';
+    }
+  }
+  if (bannerDay3) {
+    if (config.day3) {
+      bannerDay3.textContent = '3일차(Word) 일반공개 (ON)';
+      bannerDay3.style.background = '#dcfce7';
+      bannerDay3.style.color = '#15803d';
+    } else {
+      bannerDay3.textContent = is_admin ? '3일차(Word) 관리자열람 (일반OFF)' : '3일차(Word) 준비중 (OFF)';
+      bannerDay3.style.background = is_admin ? '#dbeafe' : '#f1f5f9';
+      bannerDay3.style.color = is_admin ? '#1e40af' : '#64748b';
+    }
+  }
+}
+
+window.updateAdminCourseAccess = updateAdminCourseAccess;
+
+/**
+ * 비공개 과정(Day 2, Day 3) 실습 페이지 직접 접근 시 권한을 검사하여 리다이렉트합니다.
+ */
+function checkCoursePageAccess() {
+  const path = (window.location.pathname || '').toLowerCase();
+  const config = getCourseAccessConfig();
+  const is_admin = isAdmin();
+
+  let targetDay = null;
+  if (path.includes('ai_office_day2.html') || document.body?.dataset?.aiDay === 'day2') {
+    targetDay = 'day2';
+  } else if (path.includes('ai_office_day3.html') || document.body?.dataset?.aiDay === 'day3') {
+    targetDay = 'day3';
+  }
+
+  // 관리자도 아니고 일반 공개도 되어있지 않은 경우
+  if (targetDay && !config[targetDay] && !is_admin) {
+    const courseTitle = targetDay === 'day2' ? 'PPT & Slides' : 'Word & Docs';
+    alert(`📢 ${courseTitle} 과정은 현재 개설 준비 중입니다.\n1일차(Excel & Sheets) 과정으로 이동합니다.`);
+    window.location.replace('ai_office_day1.html');
+  }
+}
+window.checkCoursePageAccess = checkCoursePageAccess;
 
 // Global User Logout Handler
 async function handleGlobalLogout() {
@@ -523,7 +952,7 @@ function renderHeaderUserNavUniversal(user) {
 
   if (is_admin) {
     userNav.innerHTML = `
-      <div style="display:inline-flex; align-items:center; gap:8px; background:rgba(234,88,12,0.08); padding:4px 10px 4px 12px; border-radius:24px; border:1px solid rgba(234,88,12,0.3);">
+      <div style="display:inline-flex; align-items:center; gap:8px; background:rgba(234,88,12,0.08); padding:4px 10px 4px 12px; border-radius:24px; border:1px solid rgba(234,88,12,0.3); flex-wrap:wrap;">
         <span style="font-size:13px; font-weight:bold; color:#c2410c; display:inline-flex; align-items:center; gap:5px;">
           <i class="fas fa-user-shield" style="color:#ea580c;"></i> 관리자모드
         </span>
@@ -1373,8 +1802,10 @@ window.submitQuickAddForm = submitQuickAddForm;
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => {
     if (typeof updateAdminUI === 'function') updateAdminUI();
+    if (typeof checkCoursePageAccess === 'function') checkCoursePageAccess();
   });
 } else {
   if (typeof updateAdminUI === 'function') updateAdminUI();
+  if (typeof checkCoursePageAccess === 'function') checkCoursePageAccess();
 }
 
