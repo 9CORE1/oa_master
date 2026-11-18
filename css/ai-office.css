@@ -1296,6 +1296,8 @@
   width: 260px;
   max-height: calc(100vh - 110px);
   overflow-y: auto;
+  scrollbar-width: none; /* Firefox 스크롤바 숨김 */
+  -ms-overflow-style: none; /* IE, Edge 스크롤바 숨김 */
   background: #ffffff;
   border: 1px solid #e2e8f0;
   border-radius: var(--radius-lg);
@@ -1309,6 +1311,13 @@
   transform: translateY(10px) scale(0.96);
   transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
   pointer-events: none;
+}
+
+/* Chrome, Safari, Whale, Edge 등 WebKit 브라우저 스크롤막대 숨김 */
+.quick-nav-panel::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
 }
 
 .quick-nav-wrapper.active .quick-nav-panel {
