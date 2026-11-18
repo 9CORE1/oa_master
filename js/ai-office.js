@@ -1,7 +1,7 @@
 // AI 오피스 연계 페이지 인터랙션 모듈
 
 /**
- * 교시별 커리큘럼 데이터 (교시별 50분 구성)
+ * 교시별 커리큘럼 데이터
  */
 const CURRICULUM_DAYS = [
   {
@@ -12,48 +12,28 @@ const CURRICULUM_DAYS = [
     label: 'Excel & Sheets × AI 콜라보',
     sessions: [
       {
-        period: '1교시 (50분)',
-        tools: 'MS Excel · Google Sheets · ChatGPT',
-        title: '함수를 외우지 않는 AI 질문 3단 공식 & 에러 해결',
-        points: [
-          '사전 세팅 15분 여유 배정 + 필수 기초 함수 5종(SUM·AVERAGE·IF·COUNTIF·VLOOKUP)',
-          '셀 위치 + 원하는 결과 + 조건 예시 3단 공식 및 #N/A · #VALUE! 10초 해결'
-        ],
-        linkLabel: 'OA MASTER 실기 자료실 (성적처리 · 셀 참조 예제)',
-        linkHref: 'practical_archive.html'
+        period: '1교시',
+        tools: 'Excel · Sheets · ChatGPT',
+        title: '외우지 않는 AI 질문 공식 & 에러 해결',
+        summary: 'AI 질문법으로 필수 함수 생성 및 #N/A·#VALUE! 오류 해결'
       },
       {
-        period: '2교시 (50분)',
+        period: '2교시',
         tools: 'Google Sheets · MS Excel',
-        title: '지저분한 표 1분 청소 & Sheets 클라우드 오답노트 DB',
-        points: [
-          '중복 항목 제거, 찾기/바꾸기(Ctrl+H), 빠른 채우기(Ctrl+E) 및 =AI() 미지원 대안',
-          'Google Sheets 체크박스·진도율 자동계산과 컴활 CBT 오답노트 클라우드 공유'
-        ],
-        linkLabel: '추천 사이트 CBT 기출문제 연계',
-        linkHref: 'recommendations.html'
+        title: '지저분한 표 정제 & 실무 회비·태스크 DB',
+        summary: '복붙 줄글 텍스트 표 변환 및 체크박스 진도율 자동 계산'
       },
       {
-        period: '3교시 (50분)',
-        tools: 'Google Forms · Google Sheets · ChatGPT',
-        title: 'Google Forms 설문 수집 & Sheets 실시간 연동 분석',
-        points: [
-          'Google Forms 설문 응답을 Sheets로 자동 누적하고 .xlsx 상호 연동',
-          '이름·연락처·학번 등 개인정보 삭제 후 ChatGPT로 설문 데이터 핵심 3줄 분석'
-        ],
-        linkLabel: '추천 사이트 (설문·기출 참고 링크)',
-        linkHref: 'recommendations.html'
+        period: '3교시',
+        tools: 'Forms · Sheets · ChatGPT',
+        title: '구글 폼 설문 연동 & ChatGPT 분석',
+        summary: '설문 응답 시트 자동 연동 및 개인정보 삭제 후 AI 3줄 분석'
       },
       {
-        period: '4교시 (50분)',
+        period: '4교시',
         tools: 'Google Sheets · MS Excel',
-        title: '보고서용 그래프 3종 · 기초 피벗 · 1페이지 PDF 인쇄',
-        points: [
-          '막대/원형/꺾은선 그래프 3종과 행·값 2칸 기초 피벗 테이블',
-          '가로 방향 + 한 페이지에 모든 열 맞추기 PDF 인쇄 & Sheets-Excel 호환 팁'
-        ],
-        linkLabel: 'OA MASTER 실기 영상강의 (차트·피벗)',
-        linkHref: 'practical_lectures.html'
+        title: '보고서 차트 3종 · 기초 피벗 · 1Page 인쇄',
+        summary: '피벗 십자 공식과 추천 차트 적용으로 가로 1페이지 PDF 마감'
       }
     ]
   },
@@ -66,48 +46,28 @@ const CURRICULUM_DAYS = [
     disabled: true,
     sessions: [
       {
-        period: '1교시 (50분)',
+        period: '1교시',
         tools: 'Gemini · ChatGPT',
-        title: '망하지 않는 PPT 2원칙 & 10장 스토리보드 압축',
-        points: [
-          '1슬라이드 1메시지 · 키워드 3줄 원칙으로 데이터·보고서 문단 10초 압축',
-          '10분 발표 기준 표지~결론/Q&A 8~10장 장별 구성표 확정'
-        ],
-        linkLabel: '실전 프롬프트 라이브러리 바로가기',
-        linkHref: '#promptLibrary'
+        title: '망하지 않는 PPT 2원칙 & 스토리보드',
+        summary: '1슬라이드 1메시지 3줄 압축 및 10분 발표 슬라이드 구성 확정'
       },
       {
-        period: '2교시 (50분)',
-        tools: 'Gemini Canvas → Slides → PPT',
-        title: '슬라이드 골격 자동 생성 & .pptx 깨진 글꼴 3초 통일',
-        points: [
-          'Gemini Canvas → Google Slides 내보내기 (무료 크레딧 걱정 없는 기본 경로)',
-          '.pptx 변환 후 PowerPoint 글꼴 바꾸기 + 맑은 고딕·2색 팔레트 통일'
-        ],
-        linkLabel: '실기 자료실 추가 연습하기',
-        linkHref: 'practical_archive.html'
+        period: '2교시',
+        tools: 'Canvas → Slides → PPT',
+        title: 'Canvas 슬라이드 & 글꼴 3초 통일',
+        summary: 'AI 슬라이드 골격 생성 후 .pptx 글꼴 및 컬러 일괄 통일'
       },
       {
-        period: '3교시 (50분)',
-        tools: 'MS PowerPoint · Gemini · ChatGPT',
-        title: 'PowerPoint 디자이너 1초 꾸미기 & AI 표지 이미지 · 차트',
-        points: [
-          '글자 삽입 금지 조건을 넣은 AI 표지 일러스트 생성 & 디자이너 1클릭 배치',
-          '표지 · 설문 그래프 슬라이드 · 3줄 결론 핵심 3장 완성'
-        ],
-        linkLabel: '실기 영상강의 보기',
-        linkHref: 'practical_lectures.html'
+        period: '3교시',
+        tools: 'PowerPoint · Gemini · ChatGPT',
+        title: 'PowerPoint 디자이너 & AI 표지 이미지',
+        summary: '글자 없는 AI 표지 일러스트 생성 및 디자이너 원클릭 시각화'
       },
       {
-        period: '4교시 (50분)',
+        period: '4교시',
         tools: 'PowerPoint · ChatGPT · Gemini',
-        title: '발표자 노트 대본 & 예상 질문 3선 (발표·면접 Q&A)',
-        points: [
-          '1분 300~350자 기준 발표자 노트 구어체 대본 + [클릭]/[1초 멈춤] 마킹',
-          '교수님·심사위원·면접관 예상 질문 3선 & 결론 먼저 30초 Q&A, 포트폴리오 저장'
-        ],
-        linkLabel: '추천 사이트 (자격·실무 참고)',
-        linkHref: 'recommendations.html'
+        title: '발표자 노트 대본 & 예상 질문 3선 Q&A',
+        summary: '1분 발표 구어체 대본 완성 및 심사위원 예상 질문 3선 대비'
       }
     ]
   },
@@ -120,48 +80,28 @@ const CURRICULUM_DAYS = [
     disabled: true,
     sessions: [
       {
-        period: '1교시 (50분)',
-        tools: 'NotebookLM · Gemini Deep Research',
-        title: 'PDF 벼락치기 퀴즈 & Deep Research 자료 조사',
-        points: [
-          '강의안·컴활 요약집 PDF 업로드 → Studio 학습 가이드 · 플래시카드 · 퀴즈',
-          'Deep Research 대기(3~5분) 중 2교시 목차 프롬프트 병행 작성 & Docs 내보내기'
-        ],
-        linkLabel: 'OA MASTER 필기 자료실 (컴활 요약 PDF)',
-        linkHref: 'written_archive.html'
+        period: '1교시',
+        tools: 'NotebookLM · Deep Research',
+        title: 'NotebookLM PDF 요약 퀴즈 & 자료 조사',
+        summary: 'PDF 업로드로 핵심 요약·퀴즈 생성 및 Deep Research 심층 조사'
       },
       {
-        period: '2교시 (50분)',
+        period: '2교시',
         tools: 'Google Docs · Gemini · ChatGPT',
-        title: '빈 화면 탈출! 5단 목차 설계 & 내 생각 섞인 초안 쓰기',
-        points: [
-          '서론-본론(3)-결론 5단 목차 설계도 5분 완성',
-          '내 메모(주장) + 설문 수치 데이터 + AI 문장 다듬기로 설득력 있는 문단 생성'
-        ],
-        linkLabel: 'OA MASTER 필기 영상강의 복습하기',
-        linkHref: 'written_lectures.html'
+        title: '빈 화면 탈출! 5단 목차 설계 & 초안 쓰기',
+        summary: '서론-본론-결론 5단 목차 5분 완성 및 설문 데이터 결합 초안'
       },
       {
-        period: '3교시 (50분)',
+        period: '3교시',
         tools: 'Google Docs · MS Word',
-        title: '보고서 문체 · 비즈니스 메일 응용 · 표절 방지 · 참고문헌',
-        points: [
-          '구어체→서술형 문체 교정 + 교수님 문의/대외활동/직장 보고 메일 톤 변환 응용',
-          '복붙 금지·원문 클릭 검증·활용 표기 3원칙 및 참고문헌/인용 자동 정리'
-        ],
-        linkLabel: '컴활 필기 자료실 (문서·요약 연계)',
-        linkHref: 'written_archive.html'
+        title: '보고서 문체 교정 · 메일 작성 · 출처 표기',
+        summary: '구어체를 객관적 학술 문체로 교정하고 참고문헌 출처 자동 정리'
       },
       {
-        period: '4교시 (50분)',
+        period: '4교시',
         tools: 'Google Docs → MS Word',
-        title: '제목 스타일 1초 자동 목차 · 1분 회의록 & PDF 마감',
-        points: [
-          '제목 1·2 스타일 + Docs 실시간 협업(권한·제안·@멘션) + 1분 회의록 액션아이템',
-          '.docx 내려받아 MS Word에서 폰트/표 점검 후 최종 PDF 제출본 완성'
-        ],
-        linkLabel: 'AI 리터러시 진단 참고자료 PDF',
-        linkHref: 'AI리터러시진단안내_참고자료.pdf'
+        title: '제목 스타일 1초 자동 목차 & PDF 마감',
+        summary: '스타일 지정으로 자동 목차 생성 후 MS Word 최종 PDF 저장'
       }
     ]
   }
@@ -357,14 +297,8 @@ function renderCurriculum(filterDay = 'all') {
               <span class="session-badge ${dayObj.badgeClass}">${s.period}</span>
               <span class="session-tools">${s.tools}</span>
             </div>
-            <h3>${s.title}</h3>
-            <ul class="session-list">
-              ${s.points.map((pt) => `<li>• ${pt}</li>`).join('')}
-            </ul>
-            <div class="session-link-bar">
-              <span>연계 자료</span>
-              <a href="${s.linkHref}">${s.linkLabel} <i class="fas fa-arrow-right"></i></a>
-            </div>
+            <h3 title="${s.title}">${s.title}</h3>
+            <p class="session-summary" title="${s.summary}">${s.summary}</p>
           </article>
         `).join('')}
       </div>
@@ -543,5 +477,112 @@ document.addEventListener('DOMContentLoaded', () => {
       window.updateAdminCourseAccess();
     }
   });
+
+  // 우측 하단 플로팅 퀵메뉴 초기화
+  initQuickNav();
 });
+
+/**
+ * 우측 하단 고정 AI × OA 퀵메뉴 네비게이션을 생성 및 초기화합니다.
+ */
+function initQuickNav() {
+  if (document.getElementById('quickNavWrapper')) return;
+
+  const quickNav = document.createElement('div');
+  quickNav.id = 'quickNavWrapper';
+  quickNav.className = 'quick-nav-wrapper';
+  quickNav.innerHTML = `
+    <div class="quick-nav-panel" id="quickNavPanel" aria-label="AI × OA 필수 서비스 바로가기">
+      <div class="quick-nav-panel-head">
+        <span class="quick-nav-panel-title"><i class="fas fa-external-link-alt"></i> 서비스 바로가기</span>
+        <span class="quick-nav-panel-badge">새 탭 열기</span>
+      </div>
+      <a href="https://gemini.google.com/" target="_blank" rel="noopener noreferrer" class="quick-nav-link" title="Gemini 서비스 바로가기">
+        <div class="quick-nav-link-left">
+          <span class="quick-nav-icon gemini"><i class="fas fa-sparkles"></i></span>
+          <div class="quick-nav-info">
+            <span class="quick-nav-name">Gemini</span>
+            <span class="quick-nav-sub">Google AI · 자료조사·초안</span>
+          </div>
+        </div>
+        <i class="fas fa-arrow-up-right-from-square quick-nav-external"></i>
+      </a>
+      <a href="https://workspace.google.com/" target="_blank" rel="noopener noreferrer" class="quick-nav-link" title="Google Workspace 서비스 바로가기">
+        <div class="quick-nav-link-left">
+          <span class="quick-nav-icon workspace"><i class="fab fa-google-drive"></i></span>
+          <div class="quick-nav-info">
+            <span class="quick-nav-name">Google Workspace</span>
+            <span class="quick-nav-sub">Forms · Sheets · Docs · Slides</span>
+          </div>
+        </div>
+        <i class="fas fa-arrow-up-right-from-square quick-nav-external"></i>
+      </a>
+      <a href="https://notebooklm.google/" target="_blank" rel="noopener noreferrer" class="quick-nav-link" title="NotebookLM 서비스 바로가기">
+        <div class="quick-nav-link-left">
+          <span class="quick-nav-icon notebook"><i class="fas fa-book-open"></i></span>
+          <div class="quick-nav-info">
+            <span class="quick-nav-name">NotebookLM</span>
+            <span class="quick-nav-sub">PDF 요약 · 플래시카드 · 퀴즈</span>
+          </div>
+        </div>
+        <i class="fas fa-arrow-up-right-from-square quick-nav-external"></i>
+      </a>
+      <a href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer" class="quick-nav-link" title="ChatGPT 서비스 바로가기">
+        <div class="quick-nav-link-left">
+          <span class="quick-nav-icon chatgpt"><i class="fas fa-comments"></i></span>
+          <div class="quick-nav-info">
+            <span class="quick-nav-name">ChatGPT</span>
+            <span class="quick-nav-sub">OpenAI · 수식오류·설문분석</span>
+          </div>
+        </div>
+        <i class="fas fa-arrow-up-right-from-square quick-nav-external"></i>
+      </a>
+      <a href="https://www.microsoft365.com/" target="_blank" rel="noopener noreferrer" class="quick-nav-link" title="MS Office 365 서비스 바로가기">
+        <div class="quick-nav-link-left">
+          <span class="quick-nav-icon ms365"><i class="fab fa-microsoft"></i></span>
+          <div class="quick-nav-info">
+            <span class="quick-nav-name">MS Office 365</span>
+            <span class="quick-nav-sub">Excel · Word · PowerPoint</span>
+          </div>
+        </div>
+        <i class="fas fa-arrow-up-right-from-square quick-nav-external"></i>
+      </a>
+    </div>
+    <button type="button" class="quick-nav-trigger" id="quickNavTrigger" aria-label="AI·OA 퀵메뉴 열기/닫기" aria-expanded="false">
+      <i class="fas fa-layer-group trigger-icon"></i>
+      <span>AI · OA 퀵메뉴</span>
+      <i class="fas fa-chevron-up toggle-arrow"></i>
+    </button>
+  `;
+
+  document.body.appendChild(quickNav);
+
+  const trigger = document.getElementById('quickNavTrigger');
+
+  const toggleQuickNav = (forceState) => {
+    const isCurrentlyActive = quickNav.classList.contains('active');
+    const willBeActive = typeof forceState === 'boolean' ? forceState : !isCurrentlyActive;
+    quickNav.classList.toggle('active', willBeActive);
+    trigger.setAttribute('aria-expanded', String(willBeActive));
+  };
+
+  trigger.addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleQuickNav();
+  });
+
+  // 바깥 영역 클릭 시 닫기
+  document.addEventListener('click', (e) => {
+    if (!quickNav.contains(e.target)) {
+      toggleQuickNav(false);
+    }
+  });
+
+  // ESC 키 누를 때 닫기
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && quickNav.classList.contains('active')) {
+      toggleQuickNav(false);
+    }
+  });
+}
 
