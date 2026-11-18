@@ -567,6 +567,16 @@ function initQuickNav() {
         </div>
         <i class="fas fa-arrow-up-right-from-square quick-nav-external"></i>
       </a>
+      <a href="https://workspace.google.com/experiments/?ref=blog.chatdaeri.com&hl=en" target="_blank" rel="noopener noreferrer" class="quick-nav-link" title="구글 워크스페이스 Labs 바로가기">
+        <div class="quick-nav-link-left">
+          <span class="quick-nav-icon sheets-ai"><i class="fas fa-flask"></i></span>
+          <div class="quick-nav-info">
+            <span class="quick-nav-name">구글 워크스페이스 Labs</span>
+            <span class="quick-nav-sub">Workspace Experiments 실험실</span>
+          </div>
+        </div>
+        <i class="fas fa-arrow-up-right-from-square quick-nav-external"></i>
+      </a>
     </div>
     <button type="button" class="quick-nav-trigger" id="quickNavTrigger" aria-label="AI·OA 퀵메뉴 열기/닫기" aria-expanded="false">
       <i class="fas fa-layer-group trigger-icon"></i>

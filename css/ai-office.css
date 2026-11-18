@@ -1414,6 +1414,11 @@
   color: #db2777;
 }
 
+.quick-nav-icon.sheets-ai {
+  background: #e6f4ea;
+  color: #0f9d58;
+}
+
 .quick-nav-info {
   display: flex;
   flex-direction: column;
