@@ -547,6 +547,26 @@ function initQuickNav() {
         </div>
         <i class="fas fa-arrow-up-right-from-square quick-nav-external"></i>
       </a>
+      <a href="https://claude.com/ko/claude-for-microsoft-365" target="_blank" rel="noopener noreferrer" class="quick-nav-link" title="Claude for Microsoft 365 서비스 바로가기">
+        <div class="quick-nav-link-left">
+          <span class="quick-nav-icon claude"><i class="fas fa-brain"></i></span>
+          <div class="quick-nav-info">
+            <span class="quick-nav-name">Claude for MS 365</span>
+            <span class="quick-nav-sub">Anthropic AI · 오피스 통합</span>
+          </div>
+        </div>
+        <i class="fas fa-arrow-up-right-from-square quick-nav-external"></i>
+      </a>
+      <a href="https://9core1.github.io/AI_literacy/" target="_blank" rel="noopener noreferrer" class="quick-nav-link" title="AI 리터러시 진단 서비스 바로가기">
+        <div class="quick-nav-link-left">
+          <span class="quick-nav-icon literacy"><i class="fas fa-chart-pie"></i></span>
+          <div class="quick-nav-info">
+            <span class="quick-nav-name">AI 리터러시 진단</span>
+            <span class="quick-nav-sub">대학생 5대 역량 진단 검사</span>
+          </div>
+        </div>
+        <i class="fas fa-arrow-up-right-from-square quick-nav-external"></i>
+      </a>
     </div>
     <button type="button" class="quick-nav-trigger" id="quickNavTrigger" aria-label="AI·OA 퀵메뉴 열기/닫기" aria-expanded="false">
       <i class="fas fa-layer-group trigger-icon"></i>

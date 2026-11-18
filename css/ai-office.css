@@ -1293,7 +1293,9 @@
   position: absolute;
   right: 0;
   bottom: calc(100% + 12px);
-  width: 250px;
+  width: 260px;
+  max-height: calc(100vh - 110px);
+  overflow-y: auto;
   background: #ffffff;
   border: 1px solid #e2e8f0;
   border-radius: var(--radius-lg);
@@ -1400,6 +1402,16 @@
 .quick-nav-icon.ms365 {
   background: #eff6ff;
   color: #0078d4;
+}
+
+.quick-nav-icon.claude {
+  background: #fff7ed;
+  color: #ea580c;
+}
+
+.quick-nav-icon.literacy {
+  background: #fdf2f8;
+  color: #db2777;
 }
 
 .quick-nav-info {
