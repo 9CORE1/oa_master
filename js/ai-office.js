@@ -12,28 +12,16 @@ const CURRICULUM_DAYS = [
     label: 'Excel & Sheets × AI 콜라보',
     sessions: [
       {
-        period: '1교시',
+        period: 'Case Study 01',
         tools: 'Excel · Sheets · ChatGPT',
         title: '외우지 않는 AI 질문 공식 & 에러 해결',
         summary: 'AI 질문법으로 필수 함수 생성 및 #N/A·#VALUE! 오류 해결'
       },
       {
-        period: '2교시',
-        tools: 'Google Sheets · MS Excel',
-        title: '지저분한 표 정제 & 실무 회비·태스크 DB',
-        summary: '복붙 줄글 텍스트 표 변환 및 체크박스 진도율 자동 계산'
-      },
-      {
-        period: '3교시',
+        period: 'Case Study 02',
         tools: 'Forms · Sheets · ChatGPT',
         title: '구글 폼 설문 연동 & ChatGPT 분석',
         summary: '설문 응답 시트 자동 연동 및 개인정보 삭제 후 AI 3줄 분석'
-      },
-      {
-        period: '4교시',
-        tools: 'Google Sheets · MS Excel',
-        title: '보고서 차트 3종 · 기초 피벗 · 1Page 인쇄',
-        summary: '피벗 십자 공식과 추천 차트 적용으로 가로 1페이지 PDF 마감'
       }
     ]
   },
@@ -42,32 +30,20 @@ const CURRICULUM_DAYS = [
     dayNum: 2,
     badgeClass: 'day3',
     detailHref: 'ai_office_day2.html',
-    label: 'PPT & Slides × AI 콜라보 (준비중)',
-    disabled: true,
+    label: 'PPT & Slides × AI 콜라보',
+    disabled: false,
     sessions: [
       {
-        period: '1교시',
-        tools: 'Gemini · ChatGPT',
-        title: '망하지 않는 PPT 2원칙 & 스토리보드',
-        summary: '1슬라이드 1메시지 3줄 압축 및 10분 발표 슬라이드 구성 확정'
+        period: 'Case Study 01',
+        tools: 'Google NotebookLM · Gemini 1.5 Pro',
+        title: 'Google NotebookLM 완벽 사용 및 대학생 학업·발표 가이드',
+        summary: '소스 접지 팩트체크 리서치, 슬라이드 7장 기획안 & 30초 구술 스크립트 도출'
       },
       {
-        period: '2교시',
-        tools: 'Canvas → Slides → PPT',
-        title: 'Canvas 슬라이드 & 글꼴 3초 통일',
-        summary: 'AI 슬라이드 골격 생성 후 .pptx 글꼴 및 컬러 일괄 통일'
-      },
-      {
-        period: '3교시',
-        tools: 'PowerPoint · Gemini · ChatGPT',
-        title: 'PowerPoint 디자이너 & AI 표지 이미지',
-        summary: '글자 없는 AI 표지 일러스트 생성 및 디자이너 원클릭 시각화'
-      },
-      {
-        period: '4교시',
-        tools: 'PowerPoint · ChatGPT · Gemini',
-        title: '발표자 노트 대본 & 예상 질문 3선 Q&A',
-        summary: '1분 발표 구어체 대본 완성 및 심사위원 예상 질문 3선 대비'
+        period: 'Case Study 02',
+        tools: 'Custom Skill Builder · Gamma · Canva',
+        title: '스마트한 기획·행정 & 슬라이드 맞춤형 AI 스킬 제작 및 활용',
+        summary: 'PPT 생성 스킬 5단계 업데이트, 행사 분 단위 큐시트 & 5컷 카드뉴스 자동화'
       }
     ]
   },
@@ -499,7 +475,7 @@ function initQuickNav() {
       </div>
       <a href="https://gemini.google.com/" target="_blank" rel="noopener noreferrer" class="quick-nav-link" title="Gemini 바로가기">
         <div class="quick-nav-link-left">
-          <span class="quick-nav-icon gemini"><i class="fas fa-sparkles"></i></span>
+          <span class="quick-nav-icon gemini"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="display:block;"><path d="M12 0C12 6.627 6.627 12 0 12C6.627 12 12 17.373 12 24C12 17.373 17.373 12 24 12C17.373 12 12 6.627 12 0Z"/></svg></span>
           <div class="quick-nav-info">
             <span class="quick-nav-name">Gemini</span>
             <span class="quick-nav-sub">Google 대화형 AI</span>
@@ -557,22 +533,22 @@ function initQuickNav() {
         </div>
         <i class="fas fa-arrow-up-right-from-square quick-nav-external"></i>
       </a>
-      <a href="https://9core1.github.io/AI_literacy/" target="_blank" rel="noopener noreferrer" class="quick-nav-link" title="AI 리터러시 진단 바로가기">
-        <div class="quick-nav-link-left">
-          <span class="quick-nav-icon literacy"><i class="fas fa-chart-pie"></i></span>
-          <div class="quick-nav-info">
-            <span class="quick-nav-name">AI 리터러시 진단</span>
-            <span class="quick-nav-sub">대학생 5대 역량 진단</span>
-          </div>
-        </div>
-        <i class="fas fa-arrow-up-right-from-square quick-nav-external"></i>
-      </a>
       <a href="https://workspace.google.com/experiments/?ref=blog.chatdaeri.com&hl=en" target="_blank" rel="noopener noreferrer" class="quick-nav-link" title="구글 워크스페이스 Labs 바로가기">
         <div class="quick-nav-link-left">
           <span class="quick-nav-icon sheets-ai"><i class="fas fa-flask"></i></span>
           <div class="quick-nav-info">
             <span class="quick-nav-name">구글 워크스페이스 Labs</span>
             <span class="quick-nav-sub">시트 AI() 신기능 실험실</span>
+          </div>
+        </div>
+        <i class="fas fa-arrow-up-right-from-square quick-nav-external"></i>
+      </a>
+      <a href="https://9core1.github.io/AI_literacy/" target="_blank" rel="noopener noreferrer" class="quick-nav-link" title="AI 리터러시 진단 바로가기">
+        <div class="quick-nav-link-left">
+          <span class="quick-nav-icon literacy"><i class="fas fa-chart-pie"></i></span>
+          <div class="quick-nav-info">
+            <span class="quick-nav-name">AI 리터러시 진단</span>
+            <span class="quick-nav-sub">대학생 5대 역량 진단</span>
           </div>
         </div>
         <i class="fas fa-arrow-up-right-from-square quick-nav-external"></i>
@@ -615,4 +591,82 @@ function initQuickNav() {
     }
   });
 }
+
+/**
+ * 인포그래픽 이미지 라이트박스(크게 보기 모달)를 열고 이미지를 표시합니다.
+ * @param {string} src - 원본 이미지 경로
+ * @param {string} title - 이미지 제목 또는 설명
+ */
+function openImageModal(src, title) {
+  let modal = document.getElementById('imageZoomModal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'imageZoomModal';
+    modal.className = 'image-zoom-modal';
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-label', title || '이미지 확대보기');
+    modal.innerHTML = `
+      <div class="image-zoom-header">
+        <div class="image-zoom-title" id="imageZoomTitle"></div>
+        <button type="button" class="image-zoom-close" id="imageZoomClose" aria-label="닫기">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="image-zoom-content" id="imageZoomContainer">
+        <img id="imageZoomImg" src="" alt="">
+      </div>
+    `;
+    document.body.appendChild(modal);
+
+    // 모달 배경 및 닫기 버튼 클릭 시 닫기
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal || e.target.id === 'imageZoomContainer') {
+        closeImageModal();
+      }
+    });
+
+    const closeBtn = document.getElementById('imageZoomClose');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', closeImageModal);
+    }
+
+    // ESC 키로 닫기
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.classList.contains('active')) {
+        closeImageModal();
+      }
+    });
+  }
+
+  const imgEl = document.getElementById('imageZoomImg');
+  const titleEl = document.getElementById('imageZoomTitle');
+  if (imgEl) {
+    imgEl.src = src;
+    imgEl.alt = title || '확대 이미지';
+  }
+  if (titleEl) {
+    titleEl.innerHTML = `<i class="fas fa-image"></i> ${title || '인포그래픽 확대보기'}`;
+  }
+
+  // 표시 애니메이션
+  requestAnimationFrame(() => {
+    modal.classList.add('active');
+  });
+}
+
+/**
+ * 이미지 라이트박스 모달을 닫습니다.
+ */
+function closeImageModal() {
+  const modal = document.getElementById('imageZoomModal');
+  if (modal) {
+    modal.classList.remove('active');
+  }
+}
+
+// 전역 바인딩
+window.openImageModal = openImageModal;
+window.closeImageModal = closeImageModal;
+
 

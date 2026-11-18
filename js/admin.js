@@ -459,7 +459,7 @@ function updateAdminUI() {
  * @returns {{day1: boolean, day2: boolean, day3: boolean}} 각 일차별 일반 사용자 공개 여부
  */
 function getCourseAccessConfig() {
-  const defaults = { day1: true, day2: false, day3: false };
+  const defaults = { day1: true, day2: true, day3: false };
   try {
     const saved = localStorage.getItem('course_access_config');
     if (saved) {
