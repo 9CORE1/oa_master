@@ -497,72 +497,72 @@ function initQuickNav() {
         <span class="quick-nav-panel-title"><i class="fas fa-external-link-alt"></i> 서비스 바로가기</span>
         <span class="quick-nav-panel-badge">새 탭 열기</span>
       </div>
-      <a href="https://gemini.google.com/" target="_blank" rel="noopener noreferrer" class="quick-nav-link" title="Gemini 서비스 바로가기">
+      <a href="https://gemini.google.com/" target="_blank" rel="noopener noreferrer" class="quick-nav-link" title="Gemini 바로가기">
         <div class="quick-nav-link-left">
           <span class="quick-nav-icon gemini"><i class="fas fa-sparkles"></i></span>
           <div class="quick-nav-info">
             <span class="quick-nav-name">Gemini</span>
-            <span class="quick-nav-sub">Google AI · 자료조사·초안</span>
+            <span class="quick-nav-sub">Google 대화형 AI</span>
           </div>
         </div>
         <i class="fas fa-arrow-up-right-from-square quick-nav-external"></i>
       </a>
-      <a href="https://workspace.google.com/" target="_blank" rel="noopener noreferrer" class="quick-nav-link" title="Google Workspace 서비스 바로가기">
+      <a href="https://workspace.google.com/" target="_blank" rel="noopener noreferrer" class="quick-nav-link" title="Google Workspace 바로가기">
         <div class="quick-nav-link-left">
           <span class="quick-nav-icon workspace"><i class="fab fa-google-drive"></i></span>
           <div class="quick-nav-info">
             <span class="quick-nav-name">Google Workspace</span>
-            <span class="quick-nav-sub">Forms · Sheets · Docs · Slides</span>
+            <span class="quick-nav-sub">문서 · 시트 · 드라이브</span>
           </div>
         </div>
         <i class="fas fa-arrow-up-right-from-square quick-nav-external"></i>
       </a>
-      <a href="https://notebooklm.google/" target="_blank" rel="noopener noreferrer" class="quick-nav-link" title="NotebookLM 서비스 바로가기">
+      <a href="https://notebooklm.google/" target="_blank" rel="noopener noreferrer" class="quick-nav-link" title="NotebookLM 바로가기">
         <div class="quick-nav-link-left">
           <span class="quick-nav-icon notebook"><i class="fas fa-book-open"></i></span>
           <div class="quick-nav-info">
             <span class="quick-nav-name">NotebookLM</span>
-            <span class="quick-nav-sub">PDF 요약 · 플래시카드 · 퀴즈</span>
+            <span class="quick-nav-sub">문서 분석 · 연구 노트</span>
           </div>
         </div>
         <i class="fas fa-arrow-up-right-from-square quick-nav-external"></i>
       </a>
-      <a href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer" class="quick-nav-link" title="ChatGPT 서비스 바로가기">
+      <a href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer" class="quick-nav-link" title="ChatGPT 바로가기">
         <div class="quick-nav-link-left">
           <span class="quick-nav-icon chatgpt"><i class="fas fa-comments"></i></span>
           <div class="quick-nav-info">
             <span class="quick-nav-name">ChatGPT</span>
-            <span class="quick-nav-sub">OpenAI · 수식오류·설문분석</span>
+            <span class="quick-nav-sub">OpenAI 실무 AI 보조</span>
           </div>
         </div>
         <i class="fas fa-arrow-up-right-from-square quick-nav-external"></i>
       </a>
-      <a href="https://www.microsoft365.com/" target="_blank" rel="noopener noreferrer" class="quick-nav-link" title="MS Office 365 서비스 바로가기">
+      <a href="https://www.microsoft365.com/" target="_blank" rel="noopener noreferrer" class="quick-nav-link" title="MS Office 365 바로가기">
         <div class="quick-nav-link-left">
           <span class="quick-nav-icon ms365"><i class="fab fa-microsoft"></i></span>
           <div class="quick-nav-info">
             <span class="quick-nav-name">MS Office 365</span>
-            <span class="quick-nav-sub">Excel · Word · PowerPoint</span>
+            <span class="quick-nav-sub">Excel · PPT · Word</span>
           </div>
         </div>
         <i class="fas fa-arrow-up-right-from-square quick-nav-external"></i>
       </a>
-      <a href="https://claude.com/ko/claude-for-microsoft-365" target="_blank" rel="noopener noreferrer" class="quick-nav-link" title="Claude for Microsoft 365 서비스 바로가기">
+      <a href="https://claude.com/ko/claude-for-microsoft-365" target="_blank" rel="noopener noreferrer" class="quick-nav-link" title="Claude for Microsoft 365 바로가기">
         <div class="quick-nav-link-left">
           <span class="quick-nav-icon claude"><i class="fas fa-brain"></i></span>
           <div class="quick-nav-info">
             <span class="quick-nav-name">Claude for MS 365</span>
-            <span class="quick-nav-sub">Anthropic AI · 오피스 통합</span>
+            <span class="quick-nav-sub">오피스 연동 AI 에이전트</span>
           </div>
         </div>
         <i class="fas fa-arrow-up-right-from-square quick-nav-external"></i>
       </a>
-      <a href="https://9core1.github.io/AI_literacy/" target="_blank" rel="noopener noreferrer" class="quick-nav-link" title="AI 리터러시 진단 서비스 바로가기">
+      <a href="https://9core1.github.io/AI_literacy/" target="_blank" rel="noopener noreferrer" class="quick-nav-link" title="AI 리터러시 진단 바로가기">
         <div class="quick-nav-link-left">
           <span class="quick-nav-icon literacy"><i class="fas fa-chart-pie"></i></span>
           <div class="quick-nav-info">
             <span class="quick-nav-name">AI 리터러시 진단</span>
-            <span class="quick-nav-sub">대학생 5대 역량 진단 검사</span>
+            <span class="quick-nav-sub">대학생 5대 역량 진단</span>
           </div>
         </div>
         <i class="fas fa-arrow-up-right-from-square quick-nav-external"></i>
@@ -572,7 +572,7 @@ function initQuickNav() {
           <span class="quick-nav-icon sheets-ai"><i class="fas fa-flask"></i></span>
           <div class="quick-nav-info">
             <span class="quick-nav-name">구글 워크스페이스 Labs</span>
-            <span class="quick-nav-sub">Workspace Experiments 실험실</span>
+            <span class="quick-nav-sub">시트 AI() 신기능 실험실</span>
           </div>
         </div>
         <i class="fas fa-arrow-up-right-from-square quick-nav-external"></i>
