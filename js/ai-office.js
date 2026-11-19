@@ -57,15 +57,15 @@ const CURRICULUM_DAYS = [
     sessions: [
       {
         period: 'Case Study 01',
-        tools: 'NotebookLM · Deep Research · Google Docs',
-        title: '전공·자격증 벼락치기 리서치 & 논리적 보고서 목차·초안 완성',
-        summary: 'PDF 교재·논문 3분 핵심 요약·퀴즈 생성 및 서론-본론-결론 5단 목차와 설문 데이터 결합 초안 도출'
+        tools: 'Antigravity CLI · MarkItDown · GitHub',
+        title: '오픈소스 에이전트 환경 구축 & 팩트 기반 보고서 초안',
+        summary: '자연어 CLI 조작, GitHub 공개 스킬 검토 및 MarkItDown 변환 자료 기반 무환각 보고서 초안 완성'
       },
       {
         period: 'Case Study 02',
-        tools: 'Google Docs · MS Word · AI 문체 교정',
-        title: '학술 문체 교정 & 자동 목차·참고문헌 완벽 제출 서식 마감',
-        summary: '표절·환각 방지 문맥 첨삭, 교수님/비즈니스 메일 변환 및 1초 자동 목차 스타일 지정 후 최종 PDF 저장'
+        tools: 'humanizer-ko · korean-prose · MS Word',
+        title: '3대 한국어 스킬 교정 & Word 스킬 제작 + Docs 번역',
+        summary: '상투어·번역투·맞춤법 3단계 교정, 샘플 Word 분석 기반 스킬 패키지 직접 제작 및 Docs 영문 PDF 번역'
       }
     ]
   }
@@ -242,6 +242,33 @@ function renderCurriculum(filterDay = 'all') {
       ? `<span style="font-size:11px; font-weight:700; background:#dbeafe; color:#1e40af; padding:2px 8px; border-radius:10px; margin-left:6px;"><i class="fas fa-lock"></i> 관리자전용</span>`
       : '';
 
+    const day3Mode = (typeof window.getDay3CurriculumMode === 'function')
+      ? window.getDay3CurriculumMode()
+      : (localStorage.getItem('day3_curriculum_mode') || 'gemini');
+
+    let currentSessions = dayObj.sessions;
+    let currentDetailHref = dayObj.detailHref;
+
+    if (dayObj.day === 'day3') {
+      currentDetailHref = day3Mode === 'cli' ? 'ai_office_day3_cli.html' : 'ai_office_day3_gemini.html';
+      if (day3Mode === 'gemini') {
+        currentSessions = [
+          {
+            period: 'Case Study 01',
+            tools: 'Google Gemini · Search Grounding',
+            title: 'Google Gemini 팩트체크 & 실시간 검색 기반 보고서 초안',
+            summary: '문서작성 전용 Gems 맞춤 지침 수립, HWP 자료 텍스트 가공 및 Google Search 연동 무환각 보고서 초안 완성'
+          },
+          {
+            period: 'Case Study 02',
+            tools: 'Google Docs · 3단계 다듬기 · MS Word',
+            title: '3단계 문장 다듬기(퇴고) & Word(.docx) 다운로드 + 영문 보고서 번역',
+            summary: '상투어 배제 ➔ 학술 \'다\'체 통일 ➔ 맞춤법 검수 후, 구글 문서 원클릭 내보내기로 국문 Word(.docx) 완성 및 Google Docs 연동 글로벌 영문 보고서 번역'
+          }
+        ];
+      }
+    }
+
     return `
     <div style="margin-bottom: 26px;">
       <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:12px;">
@@ -249,14 +276,14 @@ function renderCurriculum(filterDay = 'all') {
           ${dayObj.day === 'day1' ? '<i class="fas fa-table" style="color:var(--theme-practical);"></i>' : (dayObj.day === 'day2' ? '<i class="fas fa-desktop" style="color:#2563eb;"></i>' : '<i class="fas fa-file-word" style="color:#4f46e5;"></i>')}
           ${displayLabel} ${adminBadge}
         </h3>
-        ${!isDedicatedDayPage && dayObj.detailHref
+        ${!isDedicatedDayPage && currentDetailHref
         ? (!isDayOpen
           ? `<span style="font-size: 12.5px; background: #f1f5f9; color: #64748b; padding: 4px 12px; border-radius: 6px; font-weight: 700; border: 1px solid #e2e8f0;"><i class="fas fa-lock"></i> 과정 준비중</span>`
-          : `<a href="${dayObj.detailHref}" class="day-detail-link">세부 실습 페이지 <i class="fas fa-arrow-right"></i></a>`)
+          : `<a href="${currentDetailHref}" class="day-detail-link">세부 실습 페이지 <i class="fas fa-arrow-right"></i></a>`)
         : ''}
       </div>
-      <div class="${dayObj.sessions.length === 2 ? 'day-grid day-grid-2col' : 'day-grid'}">
-        ${dayObj.sessions.map((s) => `
+      <div class="${currentSessions.length === 2 ? 'day-grid day-grid-2col' : 'day-grid'}">
+        ${currentSessions.map((s) => `
           <article class="session-card">
             <div class="session-top">
               <span class="session-badge ${dayObj.badgeClass}">${s.period}</span>

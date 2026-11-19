@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ko">
 
 <head>
@@ -12,7 +12,19 @@
   <link rel="stylesheet" href="css/ai-office.css?v=20261119_v7">
   <link rel="icon" href="images/OA_master_LOGO.png" type="image/png">
   <script src="js/data.js"></script>
-  <script src="js/admin.js?v=20261117_fix2"></script>
+  <script src="js/admin.js?v=20261119_v12"></script>
+
+  <style>
+    /* 과정 공개 설정 및 커리큘럼 본문 너비 확장 (관리자 설정 최적화) */
+    #curriculum.ai-section {
+      max-width: 1360px;
+    }
+
+    #courseAccessControlBanner {
+      padding: 16px 22px !important;
+      border-radius: 14px !important;
+    }
+  </style>
 </head>
 
 <body class="theme-written">
@@ -53,10 +65,15 @@
             <div class="dropdown-divider"></div>
             <div class="dropdown-group-title">콜라보 실무 과정</div>
             <a href="ai_office_day1.html" class="dropdown-link"><i class="fas fa-table"></i> Excel &amp; Sheets × AI</a>
-            <a href="#" data-course="day2" onclick="alert('PPT &amp; Slides 과정은 현재 준비 중입니다.'); return false;" class="dropdown-link disabled" title="현재 준비 중인 과정입니다"><i class="fas fa-desktop"></i> PPT/Slides × AI <span class="badge-prep">준비중</span></a>
-            <a href="#" data-course="day3" onclick="alert('Docs &amp; Word 과정은 현재 준비 중입니다.'); return false;" class="dropdown-link disabled" title="현재 준비 중인 과정입니다"><i class="fas fa-file-word"></i> Docs/Word × AI <span class="badge-prep">준비중</span></a>
+            <a href="#" data-course="day2" onclick="alert('PPT &amp; Slides 과정은 현재 준비 중입니다.'); return false;"
+              class="dropdown-link disabled" title="현재 준비 중인 과정입니다"><i class="fas fa-desktop"></i> PPT/Slides × AI <span
+                class="badge-prep">준비중</span></a>
+            <a href="#" data-course="day3" onclick="alert('Docs &amp; Word 과정은 현재 준비 중입니다.'); return false;"
+              class="dropdown-link disabled" title="현재 준비 중인 과정입니다"><i class="fas fa-file-word"></i> Docs/Word × AI
+              <span class="badge-prep">준비중</span></a>
             <div class="dropdown-divider"></div>
-            <a href="AI리터러시진단안내_참고자료.pdf" target="_blank" class="dropdown-link"><i class="fas fa-chart-pie"></i> AI 리터러시 진단 PDF</a>
+            <a href="AI리터러시진단안내_참고자료.pdf" target="_blank" class="dropdown-link"><i class="fas fa-chart-pie"></i> AI 리터러시
+              진단 PDF</a>
           </div>
         </div>
         <div class="nav-item">
@@ -97,8 +114,12 @@
       <div class="mobile-nav-group-title">AI × OA 콜라보</div>
       <a href="ai_office.html" class="mobile-nav-link active"><i class="fas fa-magic"></i> AI × OA 콜라보 전체 허브</a>
       <a href="ai_office_day1.html" class="mobile-nav-link"><i class="fas fa-table"></i> Excel &amp; Sheets × AI</a>
-      <a href="#" data-course="day2" onclick="alert('PPT &amp; Slides 과정은 현재 준비 중입니다.'); return false;" class="mobile-nav-link disabled" title="현재 준비 중인 과정입니다"><i class="fas fa-desktop"></i> PPT/Slides × AI <span class="badge-prep">준비중</span></a>
-      <a href="#" data-course="day3" onclick="alert('Docs &amp; Word 과정은 현재 준비 중입니다.'); return false;" class="mobile-nav-link disabled" title="현재 준비 중인 과정입니다"><i class="fas fa-file-word"></i> Docs/Word × AI <span class="badge-prep">준비중</span></a>
+      <a href="#" data-course="day2" onclick="alert('PPT &amp; Slides 과정은 현재 준비 중입니다.'); return false;"
+        class="mobile-nav-link disabled" title="현재 준비 중인 과정입니다"><i class="fas fa-desktop"></i> PPT/Slides × AI <span
+          class="badge-prep">준비중</span></a>
+      <a href="#" data-course="day3" onclick="alert('Docs &amp; Word 과정은 현재 준비 중입니다.'); return false;"
+        class="mobile-nav-link disabled" title="현재 준비 중인 과정입니다"><i class="fas fa-file-word"></i> Docs/Word × AI <span
+          class="badge-prep">준비중</span></a>
 
       <div class="mobile-nav-group-title">추천 사이트</div>
       <a href="recommendations.html" class="mobile-nav-link"><i class="fas fa-external-link-alt"></i> 추천 사이트</a>
@@ -113,8 +134,12 @@
         <div class="day-switcher" aria-label="AI × OA 콜라보 과정 바로가기">
           <a href="ai_office.html" class="active"><i class="fas fa-th-large"></i> 전체 허브</a>
           <a href="ai_office_day1.html"><i class="fas fa-table"></i> Excel &amp; Sheets × AI</a>
-          <a href="#" data-course="day2" onclick="alert('PPT &amp; Slides 과정은 현재 준비 중입니다.'); return false;" class="disabled" title="현재 준비 중인 과정입니다"><i class="fas fa-desktop"></i> PPT &amp; Slides × AI <span class="badge-prep">준비중</span></a>
-          <a href="#" data-course="day3" onclick="alert('Docs &amp; Word 과정은 현재 준비 중입니다.'); return false;" class="disabled" title="현재 준비 중인 과정입니다"><i class="fas fa-file-word"></i> Docs &amp; Word × AI <span class="badge-prep">준비중</span></a>
+          <a href="#" data-course="day2" onclick="alert('PPT &amp; Slides 과정은 현재 준비 중입니다.'); return false;"
+            class="disabled" title="현재 준비 중인 과정입니다"><i class="fas fa-desktop"></i> PPT &amp; Slides × AI <span
+              class="badge-prep">준비중</span></a>
+          <a href="#" data-course="day3" onclick="alert('Docs &amp; Word 과정은 현재 준비 중입니다.'); return false;"
+            class="disabled" title="현재 준비 중인 과정입니다"><i class="fas fa-file-word"></i> Docs &amp; Word × AI <span
+              class="badge-prep">준비중</span></a>
         </div>
         <div class="ai-hero-badge">
           <i class="fas fa-graduation-cap"></i> OA MASTER × AI 실무 가이드 | 입문~기초 실전 커리큘럼
@@ -170,9 +195,12 @@
             <i class="fas fa-bolt" style="color:#0f766e;"></i> 한 줄 역할: 초안 만들기 · 자료 모으기 · 팀플 실시간 동시 협업
           </div>
           <ul class="collab-duo-list">
-            <li><i class="fas fa-check-circle"></i> <span><strong>설문조사 제작 및 자동 취합:</strong> Google Forms로 설문을 배포하고 Sheets로 응답을 실시간 자동 누적</span></li>
-            <li><i class="fas fa-check-circle"></i> <span><strong>조별과제 동시 편집:</strong> 링크 하나로 팀원들과 동시 작성하여 '최종_진짜최종.xlsx' 혼선 원천 방지</span></li>
-            <li><i class="fas fa-check-circle"></i> <span><strong>Gemini와의 다이렉트 연동:</strong> AI 자료조사 및 Canvas 초안을 클릭 한 번으로 Docs/Slides로 바로 내보내기</span></li>
+            <li><i class="fas fa-check-circle"></i> <span><strong>설문조사 제작 및 자동 취합:</strong> Google Forms로 설문을 배포하고
+                Sheets로 응답을 실시간 자동 누적</span></li>
+            <li><i class="fas fa-check-circle"></i> <span><strong>조별과제 동시 편집:</strong> 링크 하나로 팀원들과 동시 작성하여
+                '최종_진짜최종.xlsx' 혼선 원천 방지</span></li>
+            <li><i class="fas fa-check-circle"></i> <span><strong>Gemini와의 다이렉트 연동:</strong> AI 자료조사 및 Canvas 초안을 클릭 한
+                번으로 Docs/Slides로 바로 내보내기</span></li>
           </ul>
         </article>
 
@@ -189,16 +217,20 @@
             <i class="fas fa-trophy" style="color:#1d4ed8;"></i> 한 줄 역할: 컴활 자격증 실기 대비 · 최종 서식 및 디자인 마감
           </div>
           <ul class="collab-duo-list">
-            <li><i class="fas fa-check-circle"></i> <span><strong>컴활 자격증 표준 실습:</strong> 대한상공회의소 검정 기준인 정품 MS Excel 환경에서 실제 기출 함수와 피벗 연습</span></li>
-            <li><i class="fas fa-check-circle"></i> <span><strong>정교한 제출 서식 마감:</strong> 학교 과제 및 교수님 제출용 여백, 자동 목차, 각주, 참고문헌의 완벽한 레이아웃 보장</span></li>
-            <li><i class="fas fa-check-circle"></i> <span><strong>PowerPoint '디자이너' 기능:</strong> AI 텍스트 초안만 넣으면 클릭 1초 만에 깔끔한 시각 레이아웃 자동 변환</span></li>
+            <li><i class="fas fa-check-circle"></i> <span><strong>컴활 자격증 표준 실습:</strong> 대한상공회의소 검정 기준인 정품 MS Excel 환경에서
+                실제 기출 함수와 피벗 연습</span></li>
+            <li><i class="fas fa-check-circle"></i> <span><strong>정교한 제출 서식 마감:</strong> 학교 과제 및 교수님 제출용 여백, 자동 목차, 각주,
+                참고문헌의 완벽한 레이아웃 보장</span></li>
+            <li><i class="fas fa-check-circle"></i> <span><strong>PowerPoint '디자이너' 기능:</strong> AI 텍스트 초안만 넣으면 클릭 1초 만에
+                깔끔한 시각 레이아웃 자동 변환</span></li>
           </ul>
         </article>
       </div>
 
       <!-- 핵심 변환 공식 배너 -->
       <div class="collab-convert-banner">
-        <span class="collab-convert-label"><i class="fas fa-exchange-alt" style="color:var(--theme-written);"></i> 핵심 변환 공식:</span>
+        <span class="collab-convert-label"><i class="fas fa-exchange-alt" style="color:var(--theme-written);"></i> 핵심 변환
+          공식:</span>
         <div class="collab-convert-steps">
           <span class="collab-step-pill step-google">초안·협업 (Google Workspace)</span>
           <span class="collab-step-arrow"><i class="fas fa-arrow-right"></i></span>
@@ -211,13 +243,16 @@
 
     <!-- Section 2: 4대 무료 AI & 학생 프로모션 도구 -->
     <section class="ai-section">
-      <div class="ai-sec-head" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px;">
+      <div class="ai-sec-head"
+        style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px;">
         <div>
           <h2>2. 대학생 무료 프로모션 · 4대 핵심 AI 도구 세팅</h2>
           <p>유료 결제 없이 학교 웹메일 계정과 무료 플랜을 최적으로 조합해 비용 부담과 사용량 한도를 모두 해결합니다.</p>
         </div>
-        <a href="https://gemini.google/students/?utm_source=student&amp;utm_medium=social&amp;utm_campaign=microsite_campus_kangwon-chuncheon-ambassador" target="_blank" rel="noopener noreferrer" class="btn-promo-link">
-          <i class="fas fa-graduation-cap"></i> Gemini 대학생 1년 무료 프로모션 신청 <i class="fas fa-external-link-alt" style="font-size:11px;"></i>
+        <a href="https://gemini.google/students/?utm_source=student&amp;utm_medium=social&amp;utm_campaign=microsite_campus_kangwon-chuncheon-ambassador"
+          target="_blank" rel="noopener noreferrer" class="btn-promo-link">
+          <i class="fas fa-graduation-cap"></i> Gemini 대학생 1년 무료 프로모션 신청 <i class="fas fa-external-link-alt"
+            style="font-size:11px;"></i>
         </a>
       </div>
 
@@ -227,7 +262,8 @@
           <h3>Gemini</h3>
           <ul>
             <li>학교 이메일/재학생 인증으로 상위 요금제 1년간 무료 활용</li>
-            <li><strong>주요 기능:</strong> 긴 PDF 분석, Deep Research(심층 자료조사 → Docs 내보내기), Canvas(문서·슬라이드 초안), 표지 일러스트 생성</li>
+            <li><strong>주요 기능:</strong> 긴 PDF 분석, Deep Research(심층 자료조사 → Docs 내보내기), Canvas(문서·슬라이드 초안), 표지 일러스트 생성
+            </li>
             <li><strong>주의:</strong> 무료 기간 종료 전 캘린더 해지 알림 등록 필수 / 내장 AI 미지원 시 웹 Gemini에서 복사·내보내기로 100% 동일 실습</li>
           </ul>
           <a href="https://gemini.google.com/" target="_blank" rel="noopener noreferrer" class="tool-btn">
@@ -244,7 +280,8 @@
             <li>정확한 원문 출처 번호([1], [2]) 제공 / 학술 검색 보조는 Perplexity 무료 플랜 병행 가능</li>
           </ul>
           <a href="https://notebooklm.google/" target="_blank" rel="noopener noreferrer" class="tool-btn">
-            <i class="fas fa-book-open"></i> NotebookLM 바로가기 <i class="fas fa-external-link-alt" style="font-size:11px;"></i>
+            <i class="fas fa-book-open"></i> NotebookLM 바로가기 <i class="fas fa-external-link-alt"
+              style="font-size:11px;"></i>
           </a>
         </article>
 
@@ -253,11 +290,13 @@
           <h3>MS Office 365</h3>
           <ul>
             <li>대학 메일 인증으로 정품 Office 웹(A1) 무료, 학교 라이선스 계약에 따라 PC 설치판(A3+) 무료 이용</li>
-            <li><strong>Copilot 구분:</strong> 웹 기반 Copilot Chat은 무료 이용 가능 / 프로그램 내장 Copilot은 유료 계약 별도이므로 무료 기본 기능 + 웹 AI 조합으로 실습</li>
+            <li><strong>Copilot 구분:</strong> 웹 기반 Copilot Chat은 무료 이용 가능 / 프로그램 내장 Copilot은 유료 계약 별도이므로 무료 기본 기능 + 웹 AI
+              조합으로 실습</li>
             <li>컴활 자격증 실기 표준 환경 및 학교 제출용 공문서 서식 마감 담당</li>
           </ul>
           <a href="https://www.microsoft365.com/" target="_blank" rel="noopener noreferrer" class="tool-btn">
-            <i class="fab fa-microsoft"></i> MS 365 바로가기 <i class="fas fa-external-link-alt" style="font-size:11px;"></i>
+            <i class="fab fa-microsoft"></i> MS 365 바로가기 <i class="fas fa-external-link-alt"
+              style="font-size:11px;"></i>
           </a>
         </article>
 
@@ -270,14 +309,16 @@
             <li><strong>한도 관리 팁:</strong> PDF 공부·자료조사는 NotebookLM/Gemini, 데이터 분석·질의응답 연습은 ChatGPT로 역할 분담</li>
           </ul>
           <a href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer" class="tool-btn">
-            <i class="fas fa-comments"></i> ChatGPT 바로가기 <i class="fas fa-external-link-alt" style="font-size:11px;"></i>
+            <i class="fas fa-comments"></i> ChatGPT 바로가기 <i class="fas fa-external-link-alt"
+              style="font-size:11px;"></i>
           </a>
         </article>
       </div>
 
       <!-- 4대 무료 도구 황금 조합 요약 바 -->
       <div class="tool-combo-bar">
-        <span class="tool-combo-title"><i class="fas fa-layer-group" style="color:var(--theme-written);"></i> 4대 무료 도구 황금 조합:</span>
+        <span class="tool-combo-title"><i class="fas fa-layer-group" style="color:var(--theme-written);"></i> 4대 무료 도구
+          황금 조합:</span>
         <div class="tool-combo-items">
           <span class="tool-combo-badge">공부·퀴즈 (NotebookLM)</span>
           <span class="tool-combo-plus"><i class="fas fa-plus"></i></span>
@@ -301,7 +342,8 @@
 
       <!-- AI 생태계 및 도구 비교 인포그래픽 2종 (1행 배치 & 클릭 시 확대) -->
       <div class="ai-infographic-grid">
-        <figure class="ai-infographic-card" onclick="openImageModal('images/notion_한국_AI_생태계_한눈에_보기.png', '한국 AI 생태계 한눈에 보기')" title="클릭하여 원본 크게 보기">
+        <figure class="ai-infographic-card"
+          onclick="openImageModal('images/notion_한국_AI_생태계_한눈에_보기.png', '한국 AI 생태계 한눈에 보기')" title="클릭하여 원본 크게 보기">
           <div class="ai-infographic-thumb-wrap">
             <img src="images/notion_한국_AI_생태계_한눈에_보기.png" alt="한국 AI 생태계 한눈에 보기" loading="lazy">
             <div class="ai-infographic-overlay">
@@ -314,7 +356,8 @@
           </figcaption>
         </figure>
 
-        <figure class="ai-infographic-card" onclick="openImageModal('images/notion_LLM_3종_비교_인포그래픽.png', 'LLM 3종 비교 인포그래픽')" title="클릭하여 원본 크게 보기">
+        <figure class="ai-infographic-card"
+          onclick="openImageModal('images/notion_LLM_3종_비교_인포그래픽.png', 'LLM 3종 비교 인포그래픽')" title="클릭하여 원본 크게 보기">
           <div class="ai-infographic-thumb-wrap">
             <img src="images/notion_LLM_3종_비교_인포그래픽.png" alt="LLM 3종 비교 인포그래픽" loading="lazy">
             <div class="ai-infographic-overlay">
@@ -340,13 +383,15 @@
 
       <!-- 4+2 표준 공식 배너 바 (기존 사이트 일관 스타일) -->
       <div class="collab-convert-banner" style="margin-bottom: 24px;">
-        <span class="collab-convert-label"><i class="fas fa-magic" style="color:var(--theme-written);"></i> 프롬프트 4+2 표준 공식:</span>
+        <span class="collab-convert-label"><i class="fas fa-magic" style="color:var(--theme-written);"></i> 프롬프트 4+2 표준
+          공식:</span>
         <div class="collab-convert-steps">
           <span class="collab-step-pill step-google">기본 4대 뼈대 (역·배·지·형)</span>
           <span class="collab-step-arrow"><i class="fas fa-plus" style="font-size:11px;"></i></span>
           <span class="collab-step-pill step-ms">정밀 보강 2대 요소 (조건·샘플)</span>
           <span class="collab-step-arrow"><i class="fas fa-arrow-right" style="font-size:11px;"></i></span>
-          <span class="collab-step-pill" style="background:#dcfce7; color:#15803d; border-color:#86efac; font-weight:700;">대학 과제·실무 즉시 활용</span>
+          <span class="collab-step-pill"
+            style="background:#dcfce7; color:#15803d; border-color:#86efac; font-weight:700;">대학 과제·실무 즉시 활용</span>
         </div>
       </div>
 
@@ -357,10 +402,13 @@
             <i class="fas fa-cubes" style="color:var(--theme-written);"></i> 1. 「프롬프트 공식 4+2」 프레임워크
           </div>
           <div style="display:inline-flex; align-items:center; gap:8px;">
-            <a href="https://huggingface.co/spaces/Xenova/the-tokenizer-playground" target="_blank" rel="noopener noreferrer" class="token-link-btn" title="Hugging Face Tokenizer Playground로 이동하여 토큰 분할 원리 직접 체험하기">
+            <a href="https://huggingface.co/spaces/Xenova/the-tokenizer-playground" target="_blank"
+              rel="noopener noreferrer" class="token-link-btn"
+              title="Hugging Face Tokenizer Playground로 이동하여 토큰 분할 원리 직접 체험하기">
               <i class="fas fa-external-link-alt" style="font-size:10px;"></i> 토큰 이해하기
             </a>
-            <a href="https://chatgpt.com/share/6af2a51a-ad40-83e8-9df4-207f34865f29" target="_blank" rel="noopener noreferrer" class="token-link-btn role-btn" title="ChatGPT 맞춤형 역할 추천 프롬프트 세션으로 이동하기">
+            <a href="https://chatgpt.com/share/6af2a51a-ad40-83e8-9df4-207f34865f29" target="_blank"
+              rel="noopener noreferrer" class="token-link-btn role-btn" title="ChatGPT 맞춤형 역할 추천 프롬프트 세션으로 이동하기">
               <i class="fas fa-user-tag" style="font-size:10px;"></i> 역할 추천받기
             </a>
             <span class="tool-pill" style="background:#eff6ff; color:var(--theme-written);">표준 프레임워크</span>
@@ -371,9 +419,11 @@
         </p>
 
         <!-- 1-1. 🧱 핵심 4대 요소 (뼈대 : 역·배·지·형) -->
-        <h4 style="font-size: 15px; font-weight: 800; color: var(--neutral-900); margin: 18px 0 10px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+        <h4
+          style="font-size: 15px; font-weight: 800; color: var(--neutral-900); margin: 18px 0 10px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
           <span>🧱 핵심 4대 요소 (뼈대 : 역·배·지·형)</span>
-          <small style="font-size: 12px; font-weight: normal; color: var(--neutral-500);">AI에게 명확한 방향성과 구조를 제공하기 위해 반드시 포함해야 하는 4가지 기본 요소</small>
+          <small style="font-size: 12px; font-weight: normal; color: var(--neutral-500);">AI에게 명확한 방향성과 구조를 제공하기 위해 반드시
+            포함해야 하는 4가지 기본 요소</small>
         </h4>
         <div class="prompt-table-wrap">
           <table class="prompt-table">
@@ -433,9 +483,11 @@
         </div>
 
         <!-- 1-2. 🎯 추가하면 좋은 2대 요소 (보강재 : 조·샘) -->
-        <h4 style="font-size: 15px; font-weight: 800; color: var(--neutral-900); margin: 24px 0 10px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+        <h4
+          style="font-size: 15px; font-weight: 800; color: var(--neutral-900); margin: 24px 0 10px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
           <span>🎯 추가하면 좋은 2대 요소 (보강재 : 조·샘)</span>
-          <small style="font-size: 12px; font-weight: normal; color: var(--neutral-500);">답변의 오차(환각 현상)를 줄이고 의도에 100% 부합하는 결과를 완성하는 핵심 보강재</small>
+          <small style="font-size: 12px; font-weight: normal; color: var(--neutral-500);">답변의 오차(환각 현상)를 줄이고 의도에 100%
+            부합하는 결과를 완성하는 핵심 보강재</small>
         </h4>
         <div class="prompt-table-wrap">
           <table class="prompt-table">
@@ -486,7 +538,8 @@
               “대학생 과제에서 ChatGPT 쓰는 법 알려줘.”
             </div>
             <div class="prompt-compare-body">
-              <strong style="color: #b91c1c;">결과 한계:</strong> 인터넷에 흔히 있는 뻔하고 두루뭉술한 내용만 나열되며, 과제에 바로 적용하기 어려운 원론적인 조언에 그칩니다.
+              <strong style="color: #b91c1c;">결과 한계:</strong> 인터넷에 흔히 있는 뻔하고 두루뭉술한 내용만 나열되며, 과제에 바로 적용하기 어려운 원론적인 조언에
+              그칩니다.
             </div>
           </div>
 
@@ -496,9 +549,11 @@
             <div class="prompt-compare-prompt">
               <span class="prompt-tag-inline">[역할]</span> 너는 대학생 학업 역량 개발 전문 튜터야.<br>
               <span class="prompt-tag-inline">[배경]</span> 이번 학기 전공 리포트를 처음 작성하는 공학계열 1학년 학생들을 위한 학습 가이드를 준비하고 있어.<br>
-              <span class="prompt-tag-inline">[지시]</span> 리포트 작성 과정(주제 선정, 자료 조사, 초안 작성)에서 ChatGPT를 효율적이고 윤리적으로 활용하는 실전 팁을 안내해 줘.<br>
+              <span class="prompt-tag-inline">[지시]</span> 리포트 작성 과정(주제 선정, 자료 조사, 초안 작성)에서 ChatGPT를 효율적이고 윤리적으로 활용하는 실전
+              팁을 안내해 줘.<br>
               <span class="prompt-tag-inline">[형식]</span> 단계별로 구분하여 표(Table) 형태로 정리해 줘.<br>
-              <span class="prompt-tag-inline">[조건]</span> 단순 복사·붙여넣기는 표절임을 강조하고, 각 단계마다 팩트체크 및 출처 표기 주의사항을 1개씩 반드시 포함할 것.<br>
+              <span class="prompt-tag-inline">[조건]</span> 단순 복사·붙여넣기는 표절임을 강조하고, 각 단계마다 팩트체크 및 출처 표기 주의사항을 1개씩 반드시 포함할
+              것.<br>
               <span class="prompt-tag-inline">[샘플]</span> [단계] | [AI 활용법] | [주의사항(윤리)] 형태의 컬럼으로 구성해 줘.
             </div>
             <div class="prompt-compare-body">
@@ -522,16 +577,19 @@
 
         <!-- 5대 유의사항 인터랙티브 상단 탭 카드 그리드 -->
         <div class="prompt-safety-tab-grid" role="tablist" aria-label="5대 핵심 유의사항 선택">
-          <div class="safety-tab-card active" id="safetyTab1" onclick="selectSafetyTab(1)" role="tab" aria-selected="true" tabindex="0">
+          <div class="safety-tab-card active" id="safetyTab1" onclick="selectSafetyTab(1)" role="tab"
+            aria-selected="true" tabindex="0">
             <div class="safety-tab-top">
               <span class="safety-tab-num">01</span>
               <span class="safety-tab-pill">환각 검증</span>
             </div>
             <div class="safety-tab-title">1. 팩트체크</div>
             <div class="safety-tab-sub">논문·통계 원문 교차 검증</div>
-            <div class="safety-tab-indicator"><i class="fas fa-check-circle" style="color:var(--theme-practical);"></i> 선택됨</div>
+            <div class="safety-tab-indicator"><i class="fas fa-check-circle" style="color:var(--theme-practical);"></i>
+              선택됨</div>
           </div>
-          <div class="safety-tab-card" id="safetyTab2" onclick="selectSafetyTab(2)" role="tab" aria-selected="false" tabindex="0">
+          <div class="safety-tab-card" id="safetyTab2" onclick="selectSafetyTab(2)" role="tab" aria-selected="false"
+            tabindex="0">
             <div class="safety-tab-top">
               <span class="safety-tab-num">02</span>
               <span class="safety-tab-pill">개인정보보호</span>
@@ -540,7 +598,8 @@
             <div class="safety-tab-sub">개인정보·비공개 자료 입력 금지</div>
             <div class="safety-tab-indicator"><i class="fas fa-arrow-down"></i> 클릭하여 확인</div>
           </div>
-          <div class="safety-tab-card" id="safetyTab3" onclick="selectSafetyTab(3)" role="tab" aria-selected="false" tabindex="0">
+          <div class="safety-tab-card" id="safetyTab3" onclick="selectSafetyTab(3)" role="tab" aria-selected="false"
+            tabindex="0">
             <div class="safety-tab-top">
               <span class="safety-tab-num">03</span>
               <span class="safety-tab-pill">표절·인용</span>
@@ -549,7 +608,8 @@
             <div class="safety-tab-sub">단순 복붙 금지 &amp; 출처 명시</div>
             <div class="safety-tab-indicator"><i class="fas fa-arrow-down"></i> 클릭하여 확인</div>
           </div>
-          <div class="safety-tab-card" id="safetyTab4" onclick="selectSafetyTab(4)" role="tab" aria-selected="false" tabindex="0">
+          <div class="safety-tab-card" id="safetyTab4" onclick="selectSafetyTab(4)" role="tab" aria-selected="false"
+            tabindex="0">
             <div class="safety-tab-top">
               <span class="safety-tab-num">04</span>
               <span class="safety-tab-pill">비판적 수용</span>
@@ -558,7 +618,8 @@
             <div class="safety-tab-sub">편견·고정관념 비판적 필터링</div>
             <div class="safety-tab-indicator"><i class="fas fa-arrow-down"></i> 클릭하여 확인</div>
           </div>
-          <div class="safety-tab-card" id="safetyTab5" onclick="selectSafetyTab(5)" role="tab" aria-selected="false" tabindex="0">
+          <div class="safety-tab-card" id="safetyTab5" onclick="selectSafetyTab(5)" role="tab" aria-selected="false"
+            tabindex="0">
             <div class="safety-tab-top">
               <span class="safety-tab-num">05</span>
               <span class="safety-tab-pill">외주화 금지</span>
@@ -579,15 +640,19 @@
                 <h4 class="safety-panel-title">환각 현상(Hallucination)에 대한 비판적 팩트체크</h4>
                 <span class="tool-pill" style="background:#eff6ff; color:var(--theme-written);">핵심 수칙 01</span>
               </div>
-              <span class="safety-panel-status"><i class="fas fa-check-circle" style="color:var(--theme-practical);"></i> 상세 수칙 안내</span>
+              <span class="safety-panel-status"><i class="fas fa-check-circle"
+                  style="color:var(--theme-practical);"></i> 상세 수칙 안내</span>
             </div>
             <div class="safety-box-risk">
-              <strong><i class="fas fa-exclamation-triangle"></i> 위험 요인:</strong> LLM은 '사실(Fact)'을 검색하는 백과사전이 아니라 다음에 올 가장 그럴듯한 단어를 확률적으로 예측하는 엔진입니다. 따라서 존재하지 않는 가짜 논문, 지어낸 통계 수치, 왜곡된 법 조항을 매우 논리정연하게 답변하는 환각(Hallucination)이 상시 발생합니다.
+              <strong><i class="fas fa-exclamation-triangle"></i> 위험 요인:</strong> LLM은 '사실(Fact)'을 검색하는 백과사전이 아니라 다음에 올
+              가장 그럴듯한 단어를 확률적으로 예측하는 엔진입니다. 따라서 존재하지 않는 가짜 논문, 지어낸 통계 수치, 왜곡된 법 조항을 매우 논리정연하게 답변하는 환각(Hallucination)이 상시
+              발생합니다.
             </div>
             <div class="safety-box-action">
               <strong><i class="fas fa-check-circle"></i> 실천 수칙:</strong>
               <ul>
-                <li>AI가 인용한 논문 제목, 저자, 출판 연도, 학술 통계는 반드시 RISS, Google Scholar, 국회도서관, 통계청 공식 포털 등에서 원문을 직접 교차 검증(Cross-check)해야 합니다.</li>
+                <li>AI가 인용한 논문 제목, 저자, 출판 연도, 학술 통계는 반드시 RISS, Google Scholar, 국회도서관, 통계청 공식 포털 등에서 원문을 직접 교차
+                  검증(Cross-check)해야 합니다.</li>
                 <li>출처가 확실하지 않은 정보는 리포트나 발표 자료에 절대 그대로 반영하지 않습니다.</li>
               </ul>
             </div>
@@ -601,10 +666,12 @@
                 <h4 class="safety-panel-title">개인정보 및 기밀 데이터 입력 금지 (보안·프라이버시)</h4>
                 <span class="tool-pill" style="background:#eff6ff; color:var(--theme-written);">핵심 수칙 02</span>
               </div>
-              <span class="safety-panel-status"><i class="fas fa-check-circle" style="color:var(--theme-practical);"></i> 상세 수칙 안내</span>
+              <span class="safety-panel-status"><i class="fas fa-check-circle"
+                  style="color:var(--theme-practical);"></i> 상세 수칙 안내</span>
             </div>
             <div class="safety-box-risk">
-              <strong><i class="fas fa-exclamation-triangle"></i> 위험 요인:</strong> 무료 버전이나 기본 설정의 LLM에 사용자가 입력한 프롬프트 내용은 해당 AI 모델의 재학습(Training) 데이터로 활용될 수 있습니다. 내가 입력한 비밀 내용이 타인의 답변에 노출될 수 있습니다.
+              <strong><i class="fas fa-exclamation-triangle"></i> 위험 요인:</strong> 무료 버전이나 기본 설정의 LLM에 사용자가 입력한 프롬프트 내용은
+              해당 AI 모델의 재학습(Training) 데이터로 활용될 수 있습니다. 내가 입력한 비밀 내용이 타인의 답변에 노출될 수 있습니다.
             </div>
             <div class="safety-box-action">
               <strong><i class="fas fa-check-circle"></i> 실천 수칙:</strong>
@@ -624,16 +691,20 @@
                 <h4 class="safety-panel-title">학술 윤리 준수 및 출처 명시 (표절 예방)</h4>
                 <span class="tool-pill" style="background:#eff6ff; color:var(--theme-written);">핵심 수칙 03</span>
               </div>
-              <span class="safety-panel-status"><i class="fas fa-check-circle" style="color:var(--theme-practical);"></i> 상세 수칙 안내</span>
+              <span class="safety-panel-status"><i class="fas fa-check-circle"
+                  style="color:var(--theme-practical);"></i> 상세 수칙 안내</span>
             </div>
             <div class="safety-box-risk">
-              <strong><i class="fas fa-exclamation-triangle"></i> 위험 요인:</strong> AI가 생성한 문장을 그대로 복사·붙여넣기(Copy &amp; Paste)하여 제출하는 행위는 대학 학칙상 ‘대필 및 부정행위(표절)’에 해당하며, 학점 취소나 징계 처분을 받을 수 있습니다.
+              <strong><i class="fas fa-exclamation-triangle"></i> 위험 요인:</strong> AI가 생성한 문장을 그대로 복사·붙여넣기(Copy &amp;
+              Paste)하여 제출하는 행위는 대학 학칙상 ‘대필 및 부정행위(표절)’에 해당하며, 학점 취소나 징계 처분을 받을 수 있습니다.
             </div>
             <div class="safety-box-action">
               <strong><i class="fas fa-check-circle"></i> 실천 수칙:</strong>
               <ul>
-                <li><strong>도구로만 활용:</strong> AI에게 최종 글을 쓰게 하지 말고, ‘아이디어 브레인스토밍, 개요 설계, 문법 첨삭, 데이터 요약’ 등 연구 보조 도구로 한정하여 사용합니다.</li>
-                <li><strong>AI 활용 사실 및 출처 명시:</strong> 과목별 담당 교수님의 AI 사용 허용 가이드라인을 먼저 확인하고, 과제 제출 시 서문이나 각주에 사용한 도구와 프롬프트 목적을 정직하게 밝힙니다.</li>
+                <li><strong>도구로만 활용:</strong> AI에게 최종 글을 쓰게 하지 말고, ‘아이디어 브레인스토밍, 개요 설계, 문법 첨삭, 데이터 요약’ 등 연구 보조 도구로 한정하여
+                  사용합니다.</li>
+                <li><strong>AI 활용 사실 및 출처 명시:</strong> 과목별 담당 교수님의 AI 사용 허용 가이드라인을 먼저 확인하고, 과제 제출 시 서문이나 각주에 사용한 도구와
+                  프롬프트 목적을 정직하게 밝힙니다.</li>
                 <li><em>예시 표기: “본 리포트의 문헌 요약 및 오탈자 교정 과정에서 ChatGPT-4o를 보조 도구로 활용하였습니다.”</em></li>
               </ul>
             </div>
@@ -647,10 +718,12 @@
                 <h4 class="safety-panel-title">데이터 편향성(Bias)과 윤리적 한계 인지</h4>
                 <span class="tool-pill" style="background:#eff6ff; color:var(--theme-written);">핵심 수칙 04</span>
               </div>
-              <span class="safety-panel-status"><i class="fas fa-check-circle" style="color:var(--theme-practical);"></i> 상세 수칙 안내</span>
+              <span class="safety-panel-status"><i class="fas fa-check-circle"
+                  style="color:var(--theme-practical);"></i> 상세 수칙 안내</span>
             </div>
             <div class="safety-box-risk">
-              <strong><i class="fas fa-exclamation-triangle"></i> 위험 요인:</strong> AI는 인터넷상의 방대한 텍스트를 학습했기 때문에, 웹상에 존재하는 성별·인종·국가·문화적 편견과 고정관념이 답변에 은연중에 투영될 수 있습니다.
+              <strong><i class="fas fa-exclamation-triangle"></i> 위험 요인:</strong> AI는 인터넷상의 방대한 텍스트를 학습했기 때문에, 웹상에 존재하는
+              성별·인종·국가·문화적 편견과 고정관념이 답변에 은연중에 투영될 수 있습니다.
             </div>
             <div class="safety-box-action">
               <strong><i class="fas fa-check-circle"></i> 실천 수칙:</strong>
@@ -669,15 +742,18 @@
                 <h4 class="safety-panel-title">생각의 외주화(Thinking Delegation) 경계</h4>
                 <span class="tool-pill" style="background:#eff6ff; color:var(--theme-written);">핵심 수칙 05</span>
               </div>
-              <span class="safety-panel-status"><i class="fas fa-check-circle" style="color:var(--theme-practical);"></i> 상세 수칙 안내</span>
+              <span class="safety-panel-status"><i class="fas fa-check-circle"
+                  style="color:var(--theme-practical);"></i> 상세 수칙 안내</span>
             </div>
             <div class="safety-box-risk">
-              <strong><i class="fas fa-exclamation-triangle"></i> 위험 요인:</strong> 문제 정의, 논리 구성, 비판적 분석 등 스스로 고민해야 할 사고 과정 전체를 AI에게 맡겨버리면, 대학 교육의 본질인 자기주도적 문제 해결 능력과 문해력(Literacy)이 퇴화됩니다.
+              <strong><i class="fas fa-exclamation-triangle"></i> 위험 요인:</strong> 문제 정의, 논리 구성, 비판적 분석 등 스스로 고민해야 할 사고
+              과정 전체를 AI에게 맡겨버리면, 대학 교육의 본질인 자기주도적 문제 해결 능력과 문해력(Literacy)이 퇴화됩니다.
             </div>
             <div class="safety-box-action">
               <strong><i class="fas fa-check-circle"></i> 실천 수칙:</strong>
               <ul>
-                <li><strong>인간 우선 원칙 (Human-in-the-Loop):</strong> 항상 나의 생각과 가설이 먼저이고, AI는 그 생각을 검증하고 다듬어주는 ‘토론 파트너(스파링 상대)’로 활용해야 합니다.</li>
+                <li><strong>인간 우선 원칙 (Human-in-the-Loop):</strong> 항상 나의 생각과 가설이 먼저이고, AI는 그 생각을 검증하고 다듬어주는 ‘토론 파트너(스파링
+                  상대)’로 활용해야 합니다.</li>
                 <li>AI가 제안한 답변을 스스로 읽고 이해하지 못한 상태에서는 절대 타인에게 전달하거나 과제물로 제출하지 않습니다.</li>
               </ul>
             </div>
@@ -728,24 +804,40 @@
       </div>
 
       <!-- 과정 공개 설정 컨트롤 배너 (관리자 및 교육운영 토글) -->
-      <div id="courseAccessControlBanner" style="margin-bottom:16px; background:#ffffff; border:1px solid #e2e8f0; border-radius:12px; padding:12px 18px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; box-shadow:0 1px 3px rgba(0,0,0,0.04);">
+      <div id="courseAccessControlBanner"
+        style="margin-bottom:16px; background:#ffffff; border:1px solid #e2e8f0; border-radius:12px; padding:12px 18px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; box-shadow:0 1px 3px rgba(0,0,0,0.04);">
         <div style="display:flex; align-items:center; flex-wrap:wrap; gap:10px;">
-          <span style="font-size:13.5px; font-weight:800; color:#0f172a; display:inline-flex; align-items:center; gap:6px;">
+          <span
+            style="font-size:13.5px; font-weight:800; color:#0f172a; display:inline-flex; align-items:center; gap:6px;">
             <i class="fas fa-toggle-on" style="color:#10b981; font-size:16px;"></i> 과정 일반 수강생 공개 현황:
           </span>
-          <span id="bannerDay1Status" style="font-size:12px; font-weight:700; background:#dcfce7; color:#15803d; padding:3px 9px; border-radius:12px;">1일차(Sheets) 공개</span>
-          <span id="bannerDay2Status" style="font-size:12px; font-weight:700; background:#f1f5f9; color:#64748b; padding:3px 9px; border-radius:12px;">2일차(PPT) 준비중</span>
-          <span id="bannerDay3Status" style="font-size:12px; font-weight:700; background:#f1f5f9; color:#64748b; padding:3px 9px; border-radius:12px;">3일차(Word) 준비중</span>
+          <span id="bannerDay1Status"
+            style="font-size:12px; font-weight:700; background:#dcfce7; color:#15803d; padding:3px 9px; border-radius:12px;">1일차(Sheets)
+            공개</span>
+          <span id="bannerDay2Status"
+            style="font-size:12px; font-weight:700; background:#f1f5f9; color:#64748b; padding:3px 9px; border-radius:12px;">2일차(PPT)
+            준비중</span>
+          <span id="bannerDay3Status"
+            style="font-size:12px; font-weight:700; background:#f1f5f9; color:#64748b; padding:3px 9px; border-radius:12px;">3일차(Word)
+            준비중</span>
+          <span id="bannerDay3ModeStatus"
+            style="font-size:12px; font-weight:700; background:#eff6ff; color:#1d4ed8; padding:3px 9px; border-radius:12px; border:1px solid #bfdbfe;">3일차
+            모드: Gemini &amp; Docs</span>
         </div>
-        <button type="button" onclick="if(window.openCourseVisibilityModal){window.openCourseVisibilityModal();} return false;" style="background:#10b981; color:#fff; border:none; padding:8px 18px; border-radius:8px; font-size:13px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:6px; box-shadow:0 2px 6px rgba(16,185,129,0.35); transition:background 0.2s;">
+        <button type="button"
+          onclick="if(window.openCourseVisibilityModal){window.openCourseVisibilityModal();} return false;"
+          style="background:#10b981; color:#fff; border:none; padding:8px 18px; border-radius:8px; font-size:13px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:6px; box-shadow:0 2px 6px rgba(16,185,129,0.35); transition:background 0.2s;">
           <i class="fas fa-sliders-h"></i> 과정 공개 설정 및 토글 스위치 열기
         </button>
       </div>
 
       <div class="day-tabs" role="tablist" aria-label="과정별 커리큘럼 선택">
-        <button type="button" class="day-tab active" data-day="day1"><i class="fas fa-table"></i> Excel &amp; Sheets</button>
-        <button type="button" class="day-tab" data-day="day2" style="opacity:0.6;"><i class="fas fa-desktop"></i> PPT &amp; Slides (준비중)</button>
-        <button type="button" class="day-tab" data-day="day3" style="opacity:0.6;"><i class="fas fa-file-word"></i> Docs &amp; Word (준비중)</button>
+        <button type="button" class="day-tab active" data-day="day1"><i class="fas fa-table"></i> Excel &amp;
+          Sheets</button>
+        <button type="button" class="day-tab" data-day="day2" style="opacity:0.6;"><i class="fas fa-desktop"></i> PPT
+          &amp; Slides (준비중)</button>
+        <button type="button" class="day-tab" data-day="day3" style="opacity:0.6;"><i class="fas fa-file-word"></i> Docs
+          &amp; Word (준비중)</button>
       </div>
 
       <div id="curriculumContainer"></div>
@@ -756,7 +848,8 @@
       <div class="literacy-box">
         <div>
           <span class="card-badge card-badge-written" style="margin-bottom: 10px;">사전·사후 역량 점검 연계</span>
-          <h2 style="font-size: 22px; color: var(--neutral-900); margin-bottom: 8px;">6. 대학생 AI 리터러시 진단 &amp; 맞춤형 실천 가이드</h2>
+          <h2 style="font-size: 22px; color: var(--neutral-900); margin-bottom: 8px;">6. 대학생 AI 리터러시 진단 &amp; 맞춤형 실천 가이드
+          </h2>
           <p style="font-size: 14px; color: var(--neutral-700); line-height: 1.65;">
             총 30문항(7점 리커트 척도, 100점 표준 환산) 진단을 통해 5대 핵심 역량 중 본인의 강점과 보완 영역을 먼저 파악한 뒤,
             부족한 역량을 본 AI × OA 콜라보 실습에 연계해 보세요.
@@ -820,8 +913,12 @@
             <ul>
               <li><a href="ai_office.html">콜라보 통합 허브</a></li>
               <li><a href="ai_office_day1.html">Excel &amp; Sheets × AI</a></li>
-              <li><a href="#" data-course="day2" onclick="alert('PPT &amp; Slides 과정은 현재 준비 중입니다.'); return false;" style="opacity:0.45; cursor:not-allowed;">PPT/Slides × AI <span class="badge-prep" style="font-size:11px; color:var(--neutral-400);">(준비중)</span></a></li>
-              <li><a href="#" data-course="day3" onclick="alert('Docs &amp; Word 과정은 현재 준비 중입니다.'); return false;" style="opacity:0.45; cursor:not-allowed;">Docs/Word × AI <span class="badge-prep" style="font-size:11px; color:var(--neutral-400);">(준비중)</span></a></li>
+              <li><a href="#" data-course="day2" onclick="alert('PPT &amp; Slides 과정은 현재 준비 중입니다.'); return false;"
+                  style="opacity:0.45; cursor:not-allowed;">PPT/Slides × AI <span class="badge-prep"
+                    style="font-size:11px; color:var(--neutral-400);">(준비중)</span></a></li>
+              <li><a href="#" data-course="day3" onclick="alert('Docs &amp; Word 과정은 현재 준비 중입니다.'); return false;"
+                  style="opacity:0.45; cursor:not-allowed;">Docs/Word × AI <span class="badge-prep"
+                    style="font-size:11px; color:var(--neutral-400);">(준비중)</span></a></li>
             </ul>
           </div>
           <div class="footer-links-col">
@@ -837,7 +934,8 @@
       <div class="footer-bottom">
         <p>&copy; 2026 OA MASTER. All Rights Reserved. Designed for Excellence.</p>
         <div class="footer-bottom-links">
-          <a href="#" onclick="copyContactEmail(); return false;" title="클릭 시 문의 메일 주소(jjung9935@naver.com) 복사"><i class="fas fa-envelope"></i> 문의하기</a>
+          <a href="#" onclick="copyContactEmail(); return false;" title="클릭 시 문의 메일 주소(jjung9935@naver.com) 복사"><i
+              class="fas fa-envelope"></i> 문의하기</a>
           <a href="index.html"><i class="fas fa-home"></i> 메인으로</a>
         </div>
       </div>
@@ -845,7 +943,7 @@
   </footer>
 
   <script src="js/main.js?v=20261117a"></script>
-  <script src="js/ai-office.js?v=20261119_v7"></script>
+  <script src="js/ai-office.js?v=20261119_v10"></script>
   <script type="module">
     import { onAuthChange } from './js/firebase-config.js?v=20261117a';
     onAuthChange((user) => {

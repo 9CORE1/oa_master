@@ -455,6 +455,32 @@ function updateAdminUI() {
 }
 
 /**
+ * 3일차(Docs & Word) 커리큘럼 모드를 조회합니다.
+ * @returns {'gemini' | 'cli'} 커리큘럼 모드 (기본값: 'gemini')
+ */
+function getDay3CurriculumMode() {
+  return localStorage.getItem('day3_curriculum_mode') || 'gemini';
+}
+
+/**
+ * 3일차 커리큘럼 모드를 변경하고 UI를 갱신합니다.
+ * @param {'gemini' | 'cli'} mode
+ */
+function handleDay3ModeSelect(mode) {
+  localStorage.setItem('day3_curriculum_mode', mode);
+  if (window.showToast) {
+    window.showToast(`3일차 과정이 [${mode === 'cli' ? 'Antigravity CLI' : 'Google Gemini & Docs'}] 모드로 설정되었습니다.`, 'success');
+  }
+  openCourseVisibilityModal();
+  updateAdminCourseAccess();
+  if (typeof window.renderCurriculum === 'function') {
+    window.renderCurriculum(window.activeAiDay || 'all');
+  }
+}
+window.getDay3CurriculumMode = getDay3CurriculumMode;
+window.handleDay3ModeSelect = handleDay3ModeSelect;
+
+/**
  * 과정 공개 설정 객체를 로컬스토리지에서 조회합니다.
  * @returns {{day1: boolean, day2: boolean, day3: boolean}} 각 일차별 일반 사용자 공개 여부
  */
@@ -499,7 +525,7 @@ function openCourseVisibilityModal() {
   if (!modal) {
     modal = document.createElement('div');
     modal.id = 'courseVisibilityModal';
-    modal.style.cssText = 'position:fixed !important; top:0 !important; left:0 !important; width:100vw !important; height:100vh !important; background:rgba(15,23,42,0.78) !important; backdrop-filter:blur(8px) !important; -webkit-backdrop-filter:blur(8px) !important; z-index:999999 !important; display:flex !important; align-items:center !important; justify-content:center !important; padding:16px !important; opacity:1 !important; visibility:visible !important;';
+    modal.style.cssText = 'position:fixed !important; top:0 !important; left:0 !important; width:100vw !important; height:100vh !important; background:rgba(15,23,42,0.78) !important; backdrop-filter:blur(8px) !important; -webkit-backdrop-filter:blur(8px) !important; z-index:999999 !important; display:flex !important; align-items:center !important; justify-content:center !important; padding:20px 16px !important; box-sizing:border-box !important; overflow-y:auto !important; opacity:1 !important; visibility:visible !important;';
     modal.onclick = function (e) {
       if (e.target === modal) closeCourseVisibilityModal();
     };
@@ -511,25 +537,26 @@ function openCourseVisibilityModal() {
   }
 
   const config = getCourseAccessConfig();
+  const day3Mode = getDay3CurriculumMode();
 
   modal.innerHTML = `
-    <div style="background:#ffffff; color:#1e293b; width:100%; max-width:520px; border-radius:18px; box-shadow:0 25px 50px -12px rgba(0,0,0,0.35); overflow:hidden; font-family:inherit; animation:fadeInModal 0.25s ease;">
-      <!-- 헤더 -->
-      <div style="background:linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color:#ffffff; padding:20px 24px; display:flex; justify-content:space-between; align-items:center;">
-        <div style="display:flex; align-items:center; gap:12px;">
-          <div style="width:38px; height:38px; border-radius:10px; background:rgba(16,185,129,0.2); display:flex; align-items:center; justify-content:center; color:#10b981; font-size:18px;">
+    <div style="background:#ffffff; color:#1e293b; width:100%; max-width:840px; max-height:calc(100vh - 40px); display:flex; flex-direction:column; border-radius:18px; box-shadow:0 25px 50px -12px rgba(0,0,0,0.35); overflow:hidden; font-family:inherit; animation:fadeInModal 0.25s ease;">
+      <!-- 헤더 (상단 고정) -->
+      <div style="flex-shrink:0; background:linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color:#ffffff; padding:18px 26px; display:flex; justify-content:space-between; align-items:center;">
+        <div style="display:flex; align-items:center; gap:14px;">
+          <div style="width:40px; height:40px; border-radius:12px; background:rgba(16,185,129,0.2); display:flex; align-items:center; justify-content:center; color:#10b981; font-size:20px;">
             <i class="fas fa-sliders-h"></i>
           </div>
           <div>
             <h3 style="margin:0; font-size:18px; font-weight:800; color:#fff;">교육과정 일반 공개 관리</h3>
-            <p style="margin:2px 0 0; font-size:12px; color:#94a3b8;">일반 수강생(비로그인 포함)에게 공개할 과정을 설정합니다.</p>
+            <p style="margin:2px 0 0; font-size:12.5px; color:#94a3b8;">일반 수강생(비로그인 포함)에게 공개할 콜라보 과정을 설정하고 3일차 버전을 지정합니다.</p>
           </div>
         </div>
-        <button onclick="closeCourseVisibilityModal()" style="background:none; border:none; color:#94a3b8; font-size:24px; cursor:pointer; line-height:1; padding:4px;" title="닫기">&times;</button>
+        <button onclick="closeCourseVisibilityModal()" style="background:none; border:none; color:#94a3b8; font-size:26px; cursor:pointer; line-height:1; padding:4px;" title="닫기">&times;</button>
       </div>
 
-      <!-- 본문 -->
-      <div style="padding:22px 24px; display:flex; flex-direction:column; gap:14px; background:#f8fafc;">
+      <!-- 본문 (내부 부드러운 스크롤 지원) -->
+      <div style="flex:1 1 auto; overflow-y:auto; padding:20px 26px; display:flex; flex-direction:column; gap:14px; background:#f8fafc;">
         <!-- Day 1 (고정 공개) -->
         <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:12px; padding:14px 18px; display:flex; align-items:center; justify-content:space-between; box-shadow:0 1px 3px rgba(0,0,0,0.03);">
           <div style="display:flex; align-items:center; gap:14px;">
@@ -538,10 +565,10 @@ function openCourseVisibilityModal() {
             </div>
             <div>
               <div style="font-weight:700; font-size:15px; color:#0f172a;">1일차 : Excel &amp; Sheets × AI</div>
-              <div style="font-size:12px; color:#64748b;">엑셀 기초 수식 &amp; 구글 시트 AI 확장 실습</div>
+              <div style="font-size:12px; color:#64748b; margin-top:2px;">엑셀 기초 수식 &amp; 구글 시트 AI 확장 실습</div>
             </div>
           </div>
-          <span style="font-size:12px; font-weight:700; background:#dcfce7; color:#15803d; padding:4px 10px; border-radius:20px;">
+          <span style="font-size:12px; font-weight:700; background:#dcfce7; color:#15803d; padding:4px 12px; border-radius:20px;">
             <i class="fas fa-check-circle"></i> 상시 공개
           </span>
         </div>
@@ -549,25 +576,25 @@ function openCourseVisibilityModal() {
         <!-- Day 2 (PPT & Slides) -->
         <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:12px; padding:14px 18px; display:flex; align-items:center; justify-content:space-between; box-shadow:0 1px 3px rgba(0,0,0,0.03); flex-wrap:wrap; gap:12px;">
           <div style="display:flex; align-items:center; gap:14px;">
-            <div style="width:42px; height:42px; border-radius:10px; background:#fff7ed; color:#f97316; display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0;">
+            <div style="width:42px; height:42px; border-radius:10px; background:#fff7ed; color:#f97316; display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0;">
               <i class="fas fa-file-powerpoint"></i>
             </div>
             <div>
-              <div style="display:flex; align-items:center; gap:6px;">
+              <div style="display:flex; align-items:center; gap:8px;">
                 <span style="font-weight:700; font-size:15px; color:#0f172a;">2일차 : PPT &amp; Slides × AI</span>
                 <span id="badgeDay2Status" style="font-size:11px; font-weight:700; padding:2px 8px; border-radius:12px; ${config.day2 ? 'background:#dcfce7; color:#15803d;' : 'background:#f1f5f9; color:#64748b;'}">
                   ${config.day2 ? '일반공개 (ON)' : '준비중 / 비공개 (OFF)'}
                 </span>
               </div>
-              <div style="font-size:12px; color:#64748b;">슬라이드 기획 &amp; AI 발표자료 제작 실습</div>
+              <div style="font-size:12px; color:#64748b; margin-top:2px;">슬라이드 기획 &amp; AI 발표자료 제작 실습</div>
             </div>
           </div>
           <!-- 직관적인 ON / OFF 스위치 버튼 그룹 -->
           <div style="display:inline-flex; align-items:center; background:#f1f5f9; padding:3px; border-radius:10px; border:1px solid #e2e8f0; gap:3px;">
-            <button type="button" onclick="handleCourseVisibilityToggle('day2', true)" style="padding:6px 14px; border-radius:7px; font-size:12px; font-weight:700; cursor:pointer; border:none; transition:all .2s; ${config.day2 ? 'background:#10b981; color:#fff; box-shadow:0 1px 3px rgba(16,185,129,0.3);' : 'background:transparent; color:#64748b;'}">
+            <button type="button" onclick="handleCourseVisibilityToggle('day2', true)" style="padding:6px 15px; border-radius:7px; font-size:12px; font-weight:700; cursor:pointer; border:none; transition:all .2s; ${config.day2 ? 'background:#10b981; color:#fff; box-shadow:0 1px 3px rgba(16,185,129,0.3);' : 'background:transparent; color:#64748b;'}">
               <i class="fas fa-check"></i> 공개 (ON)
             </button>
-            <button type="button" onclick="handleCourseVisibilityToggle('day2', false)" style="padding:6px 14px; border-radius:7px; font-size:12px; font-weight:700; cursor:pointer; border:none; transition:all .2s; ${!config.day2 ? 'background:#64748b; color:#fff; box-shadow:0 1px 3px rgba(100,116,139,0.3);' : 'background:transparent; color:#64748b;'}">
+            <button type="button" onclick="handleCourseVisibilityToggle('day2', false)" style="padding:6px 15px; border-radius:7px; font-size:12px; font-weight:700; cursor:pointer; border:none; transition:all .2s; ${!config.day2 ? 'background:#64748b; color:#fff; box-shadow:0 1px 3px rgba(100,116,139,0.3);' : 'background:transparent; color:#64748b;'}">
               <i class="fas fa-lock"></i> 비공개 (OFF)
             </button>
           </div>
@@ -576,41 +603,83 @@ function openCourseVisibilityModal() {
         <!-- Day 3 (Word & Docs) -->
         <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:12px; padding:14px 18px; display:flex; align-items:center; justify-content:space-between; box-shadow:0 1px 3px rgba(0,0,0,0.03); flex-wrap:wrap; gap:12px;">
           <div style="display:flex; align-items:center; gap:14px;">
-            <div style="width:42px; height:42px; border-radius:10px; background:#eff6ff; color:#3b82f6; display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0;">
+            <div style="width:42px; height:42px; border-radius:10px; background:#eff6ff; color:#3b82f6; display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0;">
               <i class="fas fa-file-word"></i>
             </div>
             <div>
-              <div style="display:flex; align-items:center; gap:6px;">
+              <div style="display:flex; align-items:center; gap:8px;">
                 <span style="font-weight:700; font-size:15px; color:#0f172a;">3일차 : Word &amp; Docs × AI</span>
                 <span id="badgeDay3Status" style="font-size:11px; font-weight:700; padding:2px 8px; border-radius:12px; ${config.day3 ? 'background:#dcfce7; color:#15803d;' : 'background:#f1f5f9; color:#64748b;'}">
                   ${config.day3 ? '일반공개 (ON)' : '준비중 / 비공개 (OFF)'}
                 </span>
               </div>
-              <div style="font-size:12px; color:#64748b;">공문서·보고서 작성 &amp; AI 문서화 실습</div>
+              <div style="font-size:12px; color:#64748b; margin-top:2px;">공문서·보고서 작성 &amp; AI 문서화 실습</div>
             </div>
           </div>
           <!-- 직관적인 ON / OFF 스위치 버튼 그룹 -->
           <div style="display:inline-flex; align-items:center; background:#f1f5f9; padding:3px; border-radius:10px; border:1px solid #e2e8f0; gap:3px;">
-            <button type="button" onclick="handleCourseVisibilityToggle('day3', true)" style="padding:6px 14px; border-radius:7px; font-size:12px; font-weight:700; cursor:pointer; border:none; transition:all .2s; ${config.day3 ? 'background:#10b981; color:#fff; box-shadow:0 1px 3px rgba(16,185,129,0.3);' : 'background:transparent; color:#64748b;'}">
+            <button type="button" onclick="handleCourseVisibilityToggle('day3', true)" style="padding:6px 15px; border-radius:7px; font-size:12px; font-weight:700; cursor:pointer; border:none; transition:all .2s; ${config.day3 ? 'background:#10b981; color:#fff; box-shadow:0 1px 3px rgba(16,185,129,0.3);' : 'background:transparent; color:#64748b;'}">
               <i class="fas fa-check"></i> 공개 (ON)
             </button>
-            <button type="button" onclick="handleCourseVisibilityToggle('day3', false)" style="padding:6px 14px; border-radius:7px; font-size:12px; font-weight:700; cursor:pointer; border:none; transition:all .2s; ${!config.day3 ? 'background:#64748b; color:#fff; box-shadow:0 1px 3px rgba(100,116,139,0.3);' : 'background:transparent; color:#64748b;'}">
+            <button type="button" onclick="handleCourseVisibilityToggle('day3', false)" style="padding:6px 15px; border-radius:7px; font-size:12px; font-weight:700; cursor:pointer; border:none; transition:all .2s; ${!config.day3 ? 'background:#64748b; color:#fff; box-shadow:0 1px 3px rgba(100,116,139,0.3);' : 'background:transparent; color:#64748b;'}">
               <i class="fas fa-lock"></i> 비공개 (OFF)
             </button>
           </div>
         </div>
 
+        <!-- Day 3 상세 커리큘럼 버전 선택 (Gemini vs CLI) -->
+        <div style="background:#ffffff; border:1px solid #bfdbfe; border-radius:12px; padding:15px 18px; box-shadow:0 1px 3px rgba(37,99,235,0.06); display:flex; flex-direction:column; gap:10px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="background:#eff6ff; color:#1d4ed8; padding:3px 8px; border-radius:6px; font-size:12px; font-weight:800; border:1px solid #bfdbfe;">
+                <i class="fas fa-layer-group"></i> 3일차 상세 버전 선택
+              </span>
+              <span style="font-size:12px; color:#475569; font-weight:600;">수강생에게 제공할 강의 상세 페이지 버전을 선택합니다.</span>
+            </div>
+            <span id="badgeDay3ModeDisplay" style="font-size:11px; font-weight:700; color:#1e40af; background:#dbeafe; padding:3px 10px; border-radius:12px;">
+              ${day3Mode === 'cli' ? '현재: Antigravity CLI 모드' : '현재: Gemini & Docs 모드 (기본값)'}
+            </span>
+          </div>
+
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:10px;">
+            <!-- Gemini 모드 버튼 -->
+            <button type="button" onclick="handleDay3ModeSelect('gemini')" style="padding:12px 15px; border-radius:10px; border:2px solid ${day3Mode === 'gemini' ? '#2563eb' : '#e2e8f0'}; background:${day3Mode === 'gemini' ? '#eff6ff' : '#ffffff'}; cursor:pointer; text-align:left; transition:all .2s; box-shadow:${day3Mode === 'gemini' ? '0 2px 8px rgba(37,99,235,0.15)' : 'none'};">
+              <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:4px;">
+                <strong style="font-size:13.5px; color:${day3Mode === 'gemini' ? '#1d4ed8' : '#1e293b'};"><i class="fab fa-google"></i> Gemini &amp; Docs 모드</strong>
+                <span style="font-size:10px; font-weight:800; background:#dcfce7; color:#15803d; padding:2px 6px; border-radius:4px;">기본값</span>
+              </div>
+              <p style="margin:0; font-size:11.5px; color:#64748b; line-height:1.45;">설치 없는 100% 웹 실습: 실시간 검색 ➔ 3단계 문장 다듬기(퇴고) ➔ Docs ➔ Word(.docx) 다운로드</p>
+            </button>
+
+            <!-- Antigravity CLI 모드 버튼 -->
+            <button type="button" onclick="handleDay3ModeSelect('cli')" style="padding:12px 15px; border-radius:10px; border:2px solid ${day3Mode === 'cli' ? '#4f46e5' : '#e2e8f0'}; background:${day3Mode === 'cli' ? '#eef2ff' : '#ffffff'}; cursor:pointer; text-align:left; transition:all .2s; box-shadow:${day3Mode === 'cli' ? '0 2px 8px rgba(79,70,229,0.15)' : 'none'};">
+              <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:4px;">
+                <strong style="font-size:13.5px; color:${day3Mode === 'cli' ? '#4338ca' : '#1e293b'};"><i class="fas fa-terminal"></i> Antigravity CLI 모드</strong>
+                <span style="font-size:10px; font-weight:800; background:#f1f5f9; color:#475569; padding:2px 6px; border-radius:4px;">개발자형</span>
+              </div>
+              <p style="margin:0; font-size:11.5px; color:#64748b; line-height:1.45;">터미널 CLI 환경: MarkItDown 변환, 오픈소스 스킬 설치 및 Word 스킬 직접 제작</p>
+            </button>
+          </div>
+
+          <!-- 선택된 상세 페이지 즉시 이동 버튼 -->
+          <div style="display:flex; justify-content:flex-end; align-items:center; padding-top:2px;">
+            <a href="${day3Mode === 'cli' ? 'ai_office_day3_cli.html' : 'ai_office_day3.html'}" style="font-size:12px; font-weight:700; color:#2563eb; text-decoration:none; display:inline-flex; align-items:center; gap:5px; background:#eff6ff; padding:4px 10px; border-radius:6px; border:1px solid #bfdbfe;">
+              <i class="fas fa-external-link-alt"></i> 선택한 3일차 강의 페이지 확인하기 (${day3Mode === 'cli' ? 'Antigravity CLI' : 'Gemini & Docs'}) <i class="fas fa-chevron-right" style="font-size:10px;"></i>
+            </a>
+          </div>
+        </div>
+
         <!-- 안내 설명 -->
         <div style="font-size:12px; color:#475569; line-height:1.55; background:#e0f2fe; border:1px solid #bae6fd; border-radius:10px; padding:11px 14px; display:flex; gap:9px;">
-          <i class="fas fa-info-circle" style="color:#0284c7; margin-top:2px; font-size:14px;"></i>
+          <i class="fas fa-info-circle" style="color:#0284c7; margin-top:2px; font-size:14px; flex-shrink:0;"></i>
           <span>토글 스위치를 켜면(초록색) 즉시 <strong>일반 수강생(비로그인 상태)에게도 해당 과정이 전면 활성화</strong>되어 실습 페이지 및 탭을 자유롭게 열람할 수 있습니다. 끄면 일반인에게는 '준비중'으로 표시됩니다.</span>
         </div>
       </div>
 
-      <!-- 푸터 -->
-      <div style="padding:16px 24px; background:#ffffff; border-top:1px solid #e2e8f0; display:flex; justify-content:space-between; align-items:center;">
+      <!-- 푸터 (하단 고정) -->
+      <div style="flex-shrink:0; padding:14px 26px; background:#ffffff; border-top:1px solid #e2e8f0; display:flex; justify-content:space-between; align-items:center;">
         <span style="font-size:12px; color:#94a3b8;"><i class="fas fa-check"></i> 변경 사항은 즉시 브라우저에 저장됩니다.</span>
-        <button onclick="closeCourseVisibilityModal()" style="padding:9px 20px; background:#0f172a; color:#ffffff; border:none; border-radius:8px; font-weight:700; cursor:pointer; font-size:13px; transition:background .2s; box-shadow:0 2px 8px rgba(15,23,42,0.2);">
+        <button onclick="closeCourseVisibilityModal()" style="padding:9px 22px; background:#0f172a; color:#ffffff; border:none; border-radius:8px; font-weight:700; cursor:pointer; font-size:13px; transition:background .2s; box-shadow:0 2px 8px rgba(15,23,42,0.2);">
           설정 완료 (닫기)
         </button>
       </div>
@@ -744,7 +813,8 @@ function updateAdminCourseAccess() {
       el.style.cursor = 'pointer';
       el.removeAttribute('onclick');
       if (el.tagName.toLowerCase() === 'a') {
-        el.href = 'ai_office_day3.html';
+        const day3Mode = (typeof getDay3CurriculumMode === 'function') ? getDay3CurriculumMode() : 'gemini';
+        el.href = day3Mode === 'cli' ? 'ai_office_day3_cli.html' : 'ai_office_day3_gemini.html';
       }
 
       if (config.day3) {
@@ -854,6 +924,15 @@ function updateAdminCourseAccess() {
       bannerDay3.style.color = is_admin ? '#1e40af' : '#64748b';
     }
   }
+
+  const bannerDay3Mode = document.getElementById('bannerDay3ModeStatus');
+  if (bannerDay3Mode) {
+    const day3Mode = (typeof getDay3CurriculumMode === 'function') ? getDay3CurriculumMode() : 'gemini';
+    bannerDay3Mode.textContent = day3Mode === 'cli' ? '3일차 실습: Antigravity CLI 모드' : '3일차 실습: Gemini & Docs 모드 (기본)';
+    bannerDay3Mode.style.background = day3Mode === 'cli' ? '#eef2ff' : '#eff6ff';
+    bannerDay3Mode.style.color = day3Mode === 'cli' ? '#4338ca' : '#1e40af';
+    bannerDay3Mode.style.borderColor = day3Mode === 'cli' ? '#c7d2fe' : '#bfdbfe';
+  }
 }
 
 window.updateAdminCourseAccess = updateAdminCourseAccess;
@@ -869,7 +948,7 @@ function checkCoursePageAccess() {
   let targetDay = null;
   if (path.includes('ai_office_day2.html') || document.body?.dataset?.aiDay === 'day2') {
     targetDay = 'day2';
-  } else if (path.includes('ai_office_day3.html') || document.body?.dataset?.aiDay === 'day3') {
+  } else if (path.includes('ai_office_day3') || document.body?.dataset?.aiDay === 'day3') {
     targetDay = 'day3';
   }
 
