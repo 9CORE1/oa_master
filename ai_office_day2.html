@@ -350,6 +350,80 @@
       font-size: 10px;
     }
 
+    .embedded-prompt-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-left: auto;
+    }
+
+    .embedded-prompt-head > .embedded-prompt-tag {
+      margin-left: auto;
+    }
+
+    .btn-action-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 10px;
+      border-radius: var(--radius-full);
+      font-size: 11.5px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      line-height: 1.4;
+      cursor: pointer;
+    }
+    .btn-action-pill i {
+      font-size: 10px;
+    }
+    .btn-action-pill:hover {
+      transform: translateY(-1px);
+      color: #ffffff;
+    }
+    .btn-action-pill.notebooklm {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid #bfdbfe;
+    }
+    .btn-action-pill.notebooklm:hover {
+      background: #2563eb;
+      border-color: #2563eb;
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+    }
+    .btn-action-pill.pdf {
+      background: #fef2f2;
+      color: #dc2626;
+      border: 1px solid #fecaca;
+    }
+    .btn-action-pill.pdf:hover {
+      background: #dc2626;
+      border-color: #dc2626;
+      box-shadow: 0 2px 8px rgba(220, 38, 38, 0.25);
+    }
+    .btn-action-pill.youtube {
+      background: #fff1f2;
+      color: #e11d48;
+      border: 1px solid #fecdd3;
+    }
+    .btn-action-pill.youtube:hover {
+      background: #e11d48;
+      border-color: #e11d48;
+      box-shadow: 0 2px 8px rgba(225, 29, 72, 0.25);
+    }
+    .btn-action-pill.chatgpt {
+      background: #ecfdf5;
+      color: #059669;
+      border: 1px solid #a7f3d0;
+    }
+    .btn-action-pill.chatgpt:hover {
+      background: #059669;
+      border-color: #059669;
+      box-shadow: 0 2px 8px rgba(5, 150, 105, 0.25);
+    }
+
     .embedded-prompt-text {
       background: #ffffff;
       border: 1px solid #cbd5e1;
@@ -1789,7 +1863,15 @@
             <div class="embedded-prompt-box" style="margin-top: 0;">
               <div class="embedded-prompt-head">
                 <span class="embedded-prompt-title"><i class="fas fa-file-alt"></i> [시나리오 1] 50페이지 전공 논문/원서 초고속 분석</span>
-                <span class="embedded-prompt-tag">논문 분석</span>
+                <div class="embedded-prompt-actions">
+                  <a href="https://drive.google.com/file/d/1vjk2UgkbSKK0Nv06JdgXKH5Li2DJxZ5T/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn-action-pill pdf" title="논문 PDF 다운로드 (새 창)">
+                    <i class="fas fa-file-pdf"></i> 논문 PDF 다운로드
+                  </a>
+                  <a href="https://notebook.google.com/notebook/31ba3653-f539-4cc5-bed1-3cb3f5b5b945" target="_blank" rel="noopener noreferrer" class="btn-action-pill notebooklm" title="notebookLM 대화보기 (새 창)">
+                    <i class="fas fa-external-link-alt"></i> notebookLM 대화보기
+                  </a>
+                  <span class="embedded-prompt-tag">논문 분석</span>
+                </div>
               </div>
               <div class="embedded-prompt-text">[역할]: 학술 논문 분석 전문 연구 튜터
 [지시]: 업로드된 논문 소스를 바탕으로 아래 핵심 내용을 명확하게 정리해줘:
@@ -1806,7 +1888,15 @@
             <div class="embedded-prompt-box" style="margin-top: 0;">
               <div class="embedded-prompt-head">
                 <span class="embedded-prompt-title"><i class="fas fa-pencil-alt"></i> [시나리오 2] 기말 족보 &amp; 모의 퀴즈 만들기</span>
-                <span class="embedded-prompt-tag">시험 대비</span>
+                <div class="embedded-prompt-actions">
+                  <a href="https://drive.google.com/file/d/1sSu2vZm1iaa8FjYUpcbL0bZMxee_CAkc/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn-action-pill pdf" title="시험대비 PDF 다운로드 (새 창)">
+                    <i class="fas fa-file-pdf"></i> 시험대비 PDF 다운로드
+                  </a>
+                  <a href="https://notebook.google.com/notebook/f285e9ed-6005-4e06-963d-8da4dc468794" target="_blank" rel="noopener noreferrer" class="btn-action-pill notebooklm" title="notebookLM 대화보기 (새 창)">
+                    <i class="fas fa-external-link-alt"></i> notebookLM 대화보기
+                  </a>
+                  <span class="embedded-prompt-tag">시험 대비</span>
+                </div>
               </div>
               <div class="embedded-prompt-text">[역할]: 대학 전공 시험 출제 위원이자 학습 코치
 [지시]: 이번 학기 업로드된 교수님의 교안(PPT)과 필기 노트 전체를 분석해서:
@@ -1838,7 +1928,15 @@
             <div class="embedded-prompt-box" style="margin-top: 0;">
               <div class="embedded-prompt-head">
                 <span class="embedded-prompt-title"><i class="fas fa-video"></i> [시나리오 4] 해외 석학 유튜브 세미나 요약</span>
-                <span class="embedded-prompt-tag">영상 요약</span>
+                <div class="embedded-prompt-actions">
+                  <a href="https://youtu.be/yzaNYdL4C2w?si=fIBsxsPTqxrLqFQa" target="_blank" rel="noopener noreferrer" class="btn-action-pill youtube" title="영상 특강 보기 (새 창)">
+                    <i class="fab fa-youtube"></i> 영상 특강 보기
+                  </a>
+                  <a href="https://notebook.google.com/notebook/fa1c19c1-6e3a-44e6-93eb-15cce1771c0e" target="_blank" rel="noopener noreferrer" class="btn-action-pill notebooklm" title="notebookLM 대화보기 (새 창)">
+                    <i class="fas fa-external-link-alt"></i> notebookLM 대화보기
+                  </a>
+                  <span class="embedded-prompt-tag">영상 요약</span>
+                </div>
               </div>
               <div class="embedded-prompt-text">[역할]: 학술 콘퍼런스 전문 서머라이저
 [지시]: 추가된 유튜브 영상 소스의 전체 자막을 분석해서:
@@ -1867,7 +1965,10 @@
               <div class="embedded-prompt-title">
                 <i class="fas fa-terminal" style="color: #2563eb;"></i> [프롬프트 1] 팀플 발표용 7장 슬라이드 기획안 &amp; 구술 스크립트 도출
               </div>
-              <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+              <div class="embedded-prompt-actions">
+                <a href="https://notebook.google.com/notebook/31ba3653-f539-4cc5-bed1-3cb3f5b5b945" target="_blank" rel="noopener noreferrer" class="btn-action-pill notebooklm" title="notebookLM 대화보기 (새 창)">
+                  <i class="fas fa-external-link-alt"></i> notebookLM 대화보기
+                </a>
                 <a href="https://notebooklm-slide-gallery.shirakippt.chatgpt.site/" target="_blank" rel="noopener noreferrer" class="btn-notebooklm-style" title="NotebookLM 슬라이드 갤러리 새 창 열기">
                   <i class="fas fa-external-link-alt"></i> notebookLM 스타일
                 </a>
@@ -1902,7 +2003,12 @@
             <div class="embedded-prompt-box" style="margin-top: 0;">
               <div class="embedded-prompt-head">
                 <span class="embedded-prompt-title"><i class="fas fa-chart-pie"></i> [프롬프트 2] 인포그래픽 기획 데이터 추출</span>
-                <span class="embedded-prompt-tag">시각화</span>
+                <div class="embedded-prompt-actions">
+                  <a href="https://notebook.google.com/notebook/fa1c19c1-6e3a-44e6-93eb-15cce1771c0e" target="_blank" rel="noopener noreferrer" class="btn-action-pill notebooklm" title="notebookLM 대화보기 (새 창)">
+                    <i class="fas fa-external-link-alt"></i> notebookLM 대화보기
+                  </a>
+                  <span class="embedded-prompt-tag">시각화</span>
+                </div>
               </div>
               <div class="embedded-prompt-text">[목표]: 업로드된 자료를 인포그래픽으로 제작할 수 있도록 "시각화 기획 데이터"를 추출해줘.
 
@@ -1924,7 +2030,12 @@
             <div class="embedded-prompt-box" style="margin-top: 0;">
               <div class="embedded-prompt-head">
                 <span class="embedded-prompt-title"><i class="fas fa-podcast"></i> [프롬프트 3] 오디오 오버뷰 맞춤설정 (Customize)</span>
-                <span class="embedded-prompt-tag">팟캐스트</span>
+                <div class="embedded-prompt-actions">
+                  <a href="https://notebook.google.com/notebook/fa1c19c1-6e3a-44e6-93eb-15cce1771c0e" target="_blank" rel="noopener noreferrer" class="btn-action-pill notebooklm" title="notebookLM 대화보기 (새 창)">
+                    <i class="fas fa-external-link-alt"></i> notebookLM 대화보기
+                  </a>
+                  <span class="embedded-prompt-tag">팟캐스트</span>
+                </div>
               </div>
               <div class="embedded-prompt-text">이번 발표 슬라이드의 핵심 주제는 [예: 생성형 AI 도입에 따른 윤리적 딜레마와 대학 교육의 변화]입니다.
 지루한 학술 용어 나열보다는, 대학생들이 과제와 일상에서 겪을 수 있는 구체적인 사례를 중심으로 남녀 호스트가 열띤 토론을 벌여주세요.
@@ -2356,9 +2467,14 @@ Font: 제목용 프리텐다드 Bold / 본문용 프리텐다드 Regular</pre>
 
         <!-- 대학생 실전 프로젝트 추천 프롬프트 3선 & 마스터 템플릿 -->
         <div style="margin-top: 20px; padding-top: 16px; border-top: 1px dashed var(--neutral-300);">
-          <h4 style="font-size: 15px; font-weight: 800; color: var(--neutral-900); margin-bottom: 6px;">
-            <i class="fas fa-terminal" style="color: #2563eb;"></i> 대학생 실전 프로젝트 추천 프롬프트 3선 &amp; 마스터 템플릿
-          </h4>
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 6px;">
+            <h4 style="font-size: 15px; font-weight: 800; color: var(--neutral-900); margin: 0; display: flex; align-items: center; gap: 6px;">
+              <i class="fas fa-terminal" style="color: #2563eb;"></i> 대학생 실전 프로젝트 추천 프롬프트 3선 &amp; 마스터 템플릿
+            </h4>
+            <a href="https://chatgpt.com/share/6ae41ee5-3958-83ee-95c9-51ed94d4a6c0" target="_blank" rel="noopener noreferrer" class="btn-action-pill chatgpt" title="ChatGPT 대화보기 (새 창)">
+              <i class="fas fa-comments"></i> 채팅창 대화보기
+            </a>
+          </div>
           <p style="font-size: 13px; color: #64748b; margin: 0 0 14px;">
             동아리 신입 모집, 학술제 및 공모전 발표 홍보에 바로 복사하여 활용할 수 있는 프롬프트 템플릿입니다.
           </p>
