@@ -792,8 +792,12 @@ function updateAdminCourseAccess() {
   });
 
   // ai_office.html 쇼케이스 탭 버튼 동적 활성화
+  const day1Tab = document.querySelector('.day-tab[data-day="day1"]');
   const day2Tab = document.querySelector('.day-tab[data-day="day2"]');
   const day3Tab = document.querySelector('.day-tab[data-day="day3"]');
+  if (day1Tab) {
+    day1Tab.innerHTML = '<i class="fas fa-table"></i> Excel &amp; Sheets';
+  }
   if (day2Tab) {
     if (isDay2Open) {
       day2Tab.style.opacity = '1';
@@ -802,11 +806,11 @@ function updateAdminCourseAccess() {
       const statusSuffix = (!config.day2 && is_admin)
         ? ' <span style="font-size:10px; color:#6366f1; font-weight:700;">(관리자)</span>'
         : '';
-      day2Tab.innerHTML = `<i class="fas fa-desktop"></i> Slides &amp; PPT${statusSuffix}`;
+      day2Tab.innerHTML = `<i class="fas fa-desktop"></i> PPT &amp; Slides${statusSuffix}`;
     } else {
       day2Tab.style.opacity = '0.6';
       day2Tab.style.cursor = 'not-allowed';
-      day2Tab.innerHTML = '<i class="fas fa-lock"></i> Slides &amp; PPT (준비중)';
+      day2Tab.innerHTML = '<i class="fas fa-desktop"></i> PPT &amp; Slides (준비중)';
     }
   }
   if (day3Tab) {
@@ -821,7 +825,7 @@ function updateAdminCourseAccess() {
     } else {
       day3Tab.style.opacity = '0.6';
       day3Tab.style.cursor = 'not-allowed';
-      day3Tab.innerHTML = '<i class="fas fa-lock"></i> Docs &amp; Word (준비중)';
+      day3Tab.innerHTML = '<i class="fas fa-file-word"></i> Docs &amp; Word (준비중)';
     }
   }
 

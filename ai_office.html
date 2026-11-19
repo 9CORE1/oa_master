@@ -9,7 +9,7 @@
     content="대학생의 학교생활과 예비직장인 실무 소양을 위한 AI × OA 콜라보(MS Office 365 + Google Workspace) 실무 완성 과정 및 OA MASTER 컴활 연계 허브입니다.">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/ai-office.css">
+  <link rel="stylesheet" href="css/ai-office.css?v=20261119_v7">
   <link rel="icon" href="images/OA_master_LOGO.png" type="image/png">
   <script src="js/data.js"></script>
   <script src="js/admin.js?v=20261117_fix2"></script>
@@ -133,6 +133,9 @@
         <div class="ai-hero-actions">
           <a href="#collabDuo" class="btn-hero-light">
             <i class="fas fa-layer-group"></i> 도구 조합 원칙 보기
+          </a>
+          <a href="#promptGuide" class="btn-hero-light">
+            <i class="fas fa-lightbulb"></i> 프롬프트 4+2 공식 보기
           </a>
           <a href="#curriculum" class="btn-hero-outline">
             <i class="fas fa-calendar-alt"></i> 커리큘럼 바로가기
@@ -326,11 +329,397 @@
       </div>
     </section>
 
-    <!-- Section 4: 인터랙티브 커리큘럼 -->
+    <!-- Section 4: 프롬프트 공식 4+2 & LLM 안전 활용 가이드 -->
+    <section class="ai-section" id="promptGuide">
+      <div class="ai-sec-head">
+        <div>
+          <h2>4. 프롬프트 공식 4+2 &amp; LLM 안전 활용 가이드</h2>
+          <p>생성형 AI로부터 신뢰성 높은 고품질의 답변을 이끌어내는 「4+2 표준 프레임워크」와 학술 윤리 및 정보보안을 지키는 5대 핵심 안전 수칙을 제공합니다.</p>
+        </div>
+      </div>
+
+      <!-- 4+2 표준 공식 배너 바 (기존 사이트 일관 스타일) -->
+      <div class="collab-convert-banner" style="margin-bottom: 24px;">
+        <span class="collab-convert-label"><i class="fas fa-magic" style="color:var(--theme-written);"></i> 프롬프트 4+2 표준 공식:</span>
+        <div class="collab-convert-steps">
+          <span class="collab-step-pill step-google">기본 4대 뼈대 (역·배·지·형)</span>
+          <span class="collab-step-arrow"><i class="fas fa-plus" style="font-size:11px;"></i></span>
+          <span class="collab-step-pill step-ms">정밀 보강 2대 요소 (조건·샘플)</span>
+          <span class="collab-step-arrow"><i class="fas fa-arrow-right" style="font-size:11px;"></i></span>
+          <span class="collab-step-pill" style="background:#dcfce7; color:#15803d; border-color:#86efac; font-weight:700;">대학 과제·실무 즉시 활용</span>
+        </div>
+      </div>
+
+      <!-- 1. 「프롬프트 공식 4+2」 프레임워크 -->
+      <div class="prompt-sub-block">
+        <div class="prompt-sub-head">
+          <div class="prompt-sub-title">
+            <i class="fas fa-cubes" style="color:var(--theme-written);"></i> 1. 「프롬프트 공식 4+2」 프레임워크
+          </div>
+          <div style="display:inline-flex; align-items:center; gap:8px;">
+            <a href="https://huggingface.co/spaces/Xenova/the-tokenizer-playground" target="_blank" rel="noopener noreferrer" class="token-link-btn" title="Hugging Face Tokenizer Playground로 이동하여 토큰 분할 원리 직접 체험하기">
+              <i class="fas fa-external-link-alt" style="font-size:10px;"></i> 토큰 이해하기
+            </a>
+            <span class="tool-pill" style="background:#eff6ff; color:var(--theme-written);">표준 프레임워크</span>
+          </div>
+        </div>
+        <p class="prompt-sub-desc">
+          기본 답변의 뼈대를 이루는 핵심 4대 요소와, 환각을 줄이고 정밀도를 극대화하는 보강 2대 요소로 구성된 대학생·실무 표준 질문 공식입니다.
+        </p>
+
+        <!-- 1-1. 🧱 핵심 4대 요소 (뼈대 : 역·배·지·형) -->
+        <h4 style="font-size: 15px; font-weight: 800; color: var(--neutral-900); margin: 18px 0 10px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+          <span>🧱 핵심 4대 요소 (뼈대 : 역·배·지·형)</span>
+          <small style="font-size: 12px; font-weight: normal; color: var(--neutral-500);">AI에게 명확한 방향성과 구조를 제공하기 위해 반드시 포함해야 하는 4가지 기본 요소</small>
+        </h4>
+        <div class="prompt-table-wrap">
+          <table class="prompt-table">
+            <thead>
+              <tr>
+                <th class="col-seq">순서</th>
+                <th class="col-elem">핵심 요소</th>
+                <th class="col-eng">영문 매칭</th>
+                <th class="col-role">정의 및 역할</th>
+                <th>작성 팁 &amp; 예시 문구</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="col-seq"><span class="badge-elem">1</span></td>
+                <td class="col-elem"><strong>역할 (Role)</strong></td>
+                <td class="col-eng">Persona</td>
+                <td>AI에게 부여할 전문적 정체성과 시각 설정</td>
+                <td>
+                  • “너는 10년 차 대학 교육과정 설계 전문가야.”<br>
+                  • “데이터 분석 멘토의 관점에서 답변해 줘.”
+                </td>
+              </tr>
+              <tr>
+                <td class="col-seq"><span class="badge-elem">2</span></td>
+                <td class="col-elem"><strong>배경 (Context)</strong></td>
+                <td class="col-eng">Situation</td>
+                <td>질문을 하게 된 상황, 맥락, 대상 청중 제시</td>
+                <td>
+                  • “경영학과 3학년 학부생들을 대상으로 팀 프로젝트 발표를 준비 중이야.”<br>
+                  • “비전공자 신입생이 처음 듣는 교양 강의야.”
+                </td>
+              </tr>
+              <tr>
+                <td class="col-seq"><span class="badge-elem">3</span></td>
+                <td class="col-elem"><strong>지시 (Task)</strong></td>
+                <td class="col-eng">Instruction</td>
+                <td>AI가 실제로 수행해야 할 핵심 작업 및 요구사항</td>
+                <td>
+                  • “대학생에게 요구되는 핵심 AI 역량 3가지를 도출하고 비교해 줘.”<br>
+                  • “주어진 보고서 초안의 논리적 허점을 찾아내 줘.”
+                </td>
+              </tr>
+              <tr>
+                <td class="col-seq"><span class="badge-elem">4</span></td>
+                <td class="col-elem"><strong>형식 (Format)</strong></td>
+                <td class="col-eng">Layout</td>
+                <td>답변이 출력되어야 하는 시각적 구조 및 문서 형태</td>
+                <td>
+                  • “표(Table) 형태로 정리해 줘.”<br>
+                  • “개조식(Bullet point) 3단계로 요약해 줘.”<br>
+                  • “발표 대본(구어체) 형식으로 작성해 줘.”
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 1-2. 🎯 추가하면 좋은 2대 요소 (보강재 : 조·샘) -->
+        <h4 style="font-size: 15px; font-weight: 800; color: var(--neutral-900); margin: 24px 0 10px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+          <span>🎯 추가하면 좋은 2대 요소 (보강재 : 조·샘)</span>
+          <small style="font-size: 12px; font-weight: normal; color: var(--neutral-500);">답변의 오차(환각 현상)를 줄이고 의도에 100% 부합하는 결과를 완성하는 핵심 보강재</small>
+        </h4>
+        <div class="prompt-table-wrap">
+          <table class="prompt-table">
+            <thead>
+              <tr>
+                <th class="col-seq">순서</th>
+                <th class="col-elem">추가 요소</th>
+                <th class="col-eng">영문 매칭</th>
+                <th class="col-role">정의 및 역할</th>
+                <th>작성 팁 &amp; 예시 문구</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="col-seq"><span class="badge-elem extra">5</span></td>
+                <td class="col-elem"><strong>조건 (Constraint)</strong></td>
+                <td class="col-eng">Rules</td>
+                <td>반드시 지켜야 할 규칙, 분량, 톤앤매너, 금지사항</td>
+                <td>
+                  • “추상적인 수식어는 배제하고 구체적인 수치나 사례를 제시할 것.”<br>
+                  • “공식 학술 출처가 불확실한 정보는 답변에 포함하지 말 것.”<br>
+                  • “공백 포함 800자 이내로 제한할 것.”
+                </td>
+              </tr>
+              <tr>
+                <td class="col-seq"><span class="badge-elem extra">6</span></td>
+                <td class="col-elem"><strong>샘플 (Example)</strong></td>
+                <td class="col-eng">Few-shot</td>
+                <td>원하는 답변의 모범 예시(구조, 어조, 템플릿) 직접 제공</td>
+                <td>
+                  • “다음 예시의 형식과 어조를 그대로 준수할 것: <code>[역량명]: (한 줄 정의) ➔ [실천사례]: (구체적 행동)</code>”<br>
+                  • “기존에 작성된 공문/리포트의 톤을 참고해서 작성해 줘.”
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 1-3. 💡 실전 비교 (Before vs After) -->
+        <h4 style="font-size: 15px; font-weight: 800; color: var(--neutral-900); margin: 24px 0 10px;">
+          💡 실전 비교 (Before vs After)
+        </h4>
+        <div class="prompt-compare-grid">
+          <!-- Before Card -->
+          <div class="prompt-compare-card before">
+            <span class="prompt-compare-badge"><i class="fas fa-times-circle"></i> 단순 지시형 (일반적인 프롬프트)</span>
+            <div class="prompt-compare-prompt">
+              “대학생 과제에서 ChatGPT 쓰는 법 알려줘.”
+            </div>
+            <div class="prompt-compare-body">
+              <strong style="color: #b91c1c;">결과 한계:</strong> 인터넷에 흔히 있는 뻔하고 두루뭉술한 내용만 나열되며, 과제에 바로 적용하기 어려운 원론적인 조언에 그칩니다.
+            </div>
+          </div>
+
+          <!-- After Card -->
+          <div class="prompt-compare-card after">
+            <span class="prompt-compare-badge"><i class="fas fa-check-circle"></i> 4+2 공식 결합형 (고품질 프롬프트)</span>
+            <div class="prompt-compare-prompt">
+              <span class="prompt-tag-inline">[역할]</span> 너는 대학생 학업 역량 개발 전문 튜터야.<br>
+              <span class="prompt-tag-inline">[배경]</span> 이번 학기 전공 리포트를 처음 작성하는 공학계열 1학년 학생들을 위한 학습 가이드를 준비하고 있어.<br>
+              <span class="prompt-tag-inline">[지시]</span> 리포트 작성 과정(주제 선정, 자료 조사, 초안 작성)에서 ChatGPT를 효율적이고 윤리적으로 활용하는 실전 팁을 안내해 줘.<br>
+              <span class="prompt-tag-inline">[형식]</span> 단계별로 구분하여 표(Table) 형태로 정리해 줘.<br>
+              <span class="prompt-tag-inline">[조건]</span> 단순 복사·붙여넣기는 표절임을 강조하고, 각 단계마다 팩트체크 및 출처 표기 주의사항을 1개씩 반드시 포함할 것.<br>
+              <span class="prompt-tag-inline">[샘플]</span> [단계] | [AI 활용법] | [주의사항(윤리)] 형태의 컬럼으로 구성해 줘.
+            </div>
+            <div class="prompt-compare-body">
+              <strong style="color: #0f766e;">결과 장점:</strong> 질문 의도와 맥락이 완벽히 전달되어 즉시 복사해 쓸 수 있는 정교한 표 형태의 맞춤 가이드가 도출됩니다.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. LLM 서비스 이용 5대 핵심 유의사항 (클릭 시 세부 내용 확인 탭 인터랙션) -->
+      <div class="prompt-sub-block">
+        <div class="prompt-sub-head">
+          <div class="prompt-sub-title">
+            <i class="fas fa-shield-alt" style="color:var(--theme-written);"></i> 2. LLM 서비스 이용 5대 핵심 유의사항
+          </div>
+          <span class="tool-pill" style="background:#fff1f2; color:#be123c;">안전·윤리 가이드 (클릭하여 세부 수칙 확인)</span>
+        </div>
+        <p class="prompt-sub-desc">
+          AI를 활용할 때 반드시 경계해야 할 5가지 핵심 수칙입니다. <strong>아래 카드를 클릭하면 상세한 위험 요인과 실천 수칙을 확인</strong>하실 수 있습니다.
+        </p>
+
+        <!-- 5대 유의사항 인터랙티브 상단 탭 카드 그리드 -->
+        <div class="prompt-safety-tab-grid" role="tablist" aria-label="5대 핵심 유의사항 선택">
+          <div class="safety-tab-card active" id="safetyTab1" onclick="selectSafetyTab(1)" role="tab" aria-selected="true" tabindex="0">
+            <div class="safety-tab-top">
+              <span class="safety-tab-num">01</span>
+              <span class="safety-tab-pill">환각 검증</span>
+            </div>
+            <div class="safety-tab-title">1. 팩트체크</div>
+            <div class="safety-tab-sub">논문·통계 원문 교차 검증</div>
+            <div class="safety-tab-indicator"><i class="fas fa-check-circle" style="color:var(--theme-practical);"></i> 선택됨</div>
+          </div>
+          <div class="safety-tab-card" id="safetyTab2" onclick="selectSafetyTab(2)" role="tab" aria-selected="false" tabindex="0">
+            <div class="safety-tab-top">
+              <span class="safety-tab-num">02</span>
+              <span class="safety-tab-pill">개인정보보호</span>
+            </div>
+            <div class="safety-tab-title">2. 정보보안</div>
+            <div class="safety-tab-sub">개인정보·비공개 자료 입력 금지</div>
+            <div class="safety-tab-indicator"><i class="fas fa-arrow-down"></i> 클릭하여 확인</div>
+          </div>
+          <div class="safety-tab-card" id="safetyTab3" onclick="selectSafetyTab(3)" role="tab" aria-selected="false" tabindex="0">
+            <div class="safety-tab-top">
+              <span class="safety-tab-num">03</span>
+              <span class="safety-tab-pill">표절·인용</span>
+            </div>
+            <div class="safety-tab-title">3. 학술 윤리</div>
+            <div class="safety-tab-sub">단순 복붙 금지 &amp; 출처 명시</div>
+            <div class="safety-tab-indicator"><i class="fas fa-arrow-down"></i> 클릭하여 확인</div>
+          </div>
+          <div class="safety-tab-card" id="safetyTab4" onclick="selectSafetyTab(4)" role="tab" aria-selected="false" tabindex="0">
+            <div class="safety-tab-top">
+              <span class="safety-tab-num">04</span>
+              <span class="safety-tab-pill">비판적 수용</span>
+            </div>
+            <div class="safety-tab-title">4. 편향 경계</div>
+            <div class="safety-tab-sub">편견·고정관념 비판적 필터링</div>
+            <div class="safety-tab-indicator"><i class="fas fa-arrow-down"></i> 클릭하여 확인</div>
+          </div>
+          <div class="safety-tab-card" id="safetyTab5" onclick="selectSafetyTab(5)" role="tab" aria-selected="false" tabindex="0">
+            <div class="safety-tab-top">
+              <span class="safety-tab-num">05</span>
+              <span class="safety-tab-pill">외주화 금지</span>
+            </div>
+            <div class="safety-tab-title">5. 사고 주도</div>
+            <div class="safety-tab-sub">인간 중심의 문제 해결 주도</div>
+            <div class="safety-tab-indicator"><i class="fas fa-arrow-down"></i> 클릭하여 확인</div>
+          </div>
+        </div>
+
+        <!-- 5대 유의사항 하단 단일 상세 표시 패널 (카드를 클릭하면 해당 세부 내용이 이 영역에 표시됨) -->
+        <div class="safety-detail-panel" id="safetyDetailPanel">
+          <!-- 1번 상세 내용 (기본 active 표시) -->
+          <div class="safety-panel-content active" id="safetyPanel1">
+            <div class="safety-panel-header">
+              <div class="safety-panel-badge-group">
+                <span class="safety-num-pill">1</span>
+                <h4 class="safety-panel-title">환각 현상(Hallucination)에 대한 비판적 팩트체크</h4>
+                <span class="tool-pill" style="background:#eff6ff; color:var(--theme-written);">핵심 수칙 01</span>
+              </div>
+              <span class="safety-panel-status"><i class="fas fa-check-circle" style="color:var(--theme-practical);"></i> 상세 수칙 안내</span>
+            </div>
+            <div class="safety-box-risk">
+              <strong><i class="fas fa-exclamation-triangle"></i> 위험 요인:</strong> LLM은 '사실(Fact)'을 검색하는 백과사전이 아니라 다음에 올 가장 그럴듯한 단어를 확률적으로 예측하는 엔진입니다. 따라서 존재하지 않는 가짜 논문, 지어낸 통계 수치, 왜곡된 법 조항을 매우 논리정연하게 답변하는 환각(Hallucination)이 상시 발생합니다.
+            </div>
+            <div class="safety-box-action">
+              <strong><i class="fas fa-check-circle"></i> 실천 수칙:</strong>
+              <ul>
+                <li>AI가 인용한 논문 제목, 저자, 출판 연도, 학술 통계는 반드시 RISS, Google Scholar, 국회도서관, 통계청 공식 포털 등에서 원문을 직접 교차 검증(Cross-check)해야 합니다.</li>
+                <li>출처가 확실하지 않은 정보는 리포트나 발표 자료에 절대 그대로 반영하지 않습니다.</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- 2번 상세 내용 -->
+          <div class="safety-panel-content" id="safetyPanel2">
+            <div class="safety-panel-header">
+              <div class="safety-panel-badge-group">
+                <span class="safety-num-pill">2</span>
+                <h4 class="safety-panel-title">개인정보 및 기밀 데이터 입력 금지 (보안·프라이버시)</h4>
+                <span class="tool-pill" style="background:#eff6ff; color:var(--theme-written);">핵심 수칙 02</span>
+              </div>
+              <span class="safety-panel-status"><i class="fas fa-check-circle" style="color:var(--theme-practical);"></i> 상세 수칙 안내</span>
+            </div>
+            <div class="safety-box-risk">
+              <strong><i class="fas fa-exclamation-triangle"></i> 위험 요인:</strong> 무료 버전이나 기본 설정의 LLM에 사용자가 입력한 프롬프트 내용은 해당 AI 모델의 재학습(Training) 데이터로 활용될 수 있습니다. 내가 입력한 비밀 내용이 타인의 답변에 노출될 수 있습니다.
+            </div>
+            <div class="safety-box-action">
+              <strong><i class="fas fa-check-circle"></i> 실천 수칙:</strong>
+              <ul>
+                <li><strong>절대 입력 금지 항목:</strong> 본인 및 타인의 주민등록번호, 학번, 연락처, 비밀번호, 금융 계좌 정보</li>
+                <li><strong>대외비 문서 입력 금지:</strong> 산학협력 프로젝트 비공개 데이터, 연구실 미발표 논문 초안, 인턴십 기업의 내부 기밀 문서, 학내 비공개 공문서</li>
+                <li>서비스 설정에서 <strong>‘모델 학습에 내 데이터 사용 안 함(Data Opt-Out)’</strong> 설정을 켜두는 습관을 권장합니다.</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- 3번 상세 내용 -->
+          <div class="safety-panel-content" id="safetyPanel3">
+            <div class="safety-panel-header">
+              <div class="safety-panel-badge-group">
+                <span class="safety-num-pill">3</span>
+                <h4 class="safety-panel-title">학술 윤리 준수 및 출처 명시 (표절 예방)</h4>
+                <span class="tool-pill" style="background:#eff6ff; color:var(--theme-written);">핵심 수칙 03</span>
+              </div>
+              <span class="safety-panel-status"><i class="fas fa-check-circle" style="color:var(--theme-practical);"></i> 상세 수칙 안내</span>
+            </div>
+            <div class="safety-box-risk">
+              <strong><i class="fas fa-exclamation-triangle"></i> 위험 요인:</strong> AI가 생성한 문장을 그대로 복사·붙여넣기(Copy &amp; Paste)하여 제출하는 행위는 대학 학칙상 ‘대필 및 부정행위(표절)’에 해당하며, 학점 취소나 징계 처분을 받을 수 있습니다.
+            </div>
+            <div class="safety-box-action">
+              <strong><i class="fas fa-check-circle"></i> 실천 수칙:</strong>
+              <ul>
+                <li><strong>도구로만 활용:</strong> AI에게 최종 글을 쓰게 하지 말고, ‘아이디어 브레인스토밍, 개요 설계, 문법 첨삭, 데이터 요약’ 등 연구 보조 도구로 한정하여 사용합니다.</li>
+                <li><strong>AI 활용 사실 및 출처 명시:</strong> 과목별 담당 교수님의 AI 사용 허용 가이드라인을 먼저 확인하고, 과제 제출 시 서문이나 각주에 사용한 도구와 프롬프트 목적을 정직하게 밝힙니다.</li>
+                <li><em>예시 표기: “본 리포트의 문헌 요약 및 오탈자 교정 과정에서 ChatGPT-4o를 보조 도구로 활용하였습니다.”</em></li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- 4번 상세 내용 -->
+          <div class="safety-panel-content" id="safetyPanel4">
+            <div class="safety-panel-header">
+              <div class="safety-panel-badge-group">
+                <span class="safety-num-pill">4</span>
+                <h4 class="safety-panel-title">데이터 편향성(Bias)과 윤리적 한계 인지</h4>
+                <span class="tool-pill" style="background:#eff6ff; color:var(--theme-written);">핵심 수칙 04</span>
+              </div>
+              <span class="safety-panel-status"><i class="fas fa-check-circle" style="color:var(--theme-practical);"></i> 상세 수칙 안내</span>
+            </div>
+            <div class="safety-box-risk">
+              <strong><i class="fas fa-exclamation-triangle"></i> 위험 요인:</strong> AI는 인터넷상의 방대한 텍스트를 학습했기 때문에, 웹상에 존재하는 성별·인종·국가·문화적 편견과 고정관념이 답변에 은연중에 투영될 수 있습니다.
+            </div>
+            <div class="safety-box-action">
+              <strong><i class="fas fa-check-circle"></i> 실천 수칙:</strong>
+              <ul>
+                <li>AI의 답변을 무비판적으로 절대적인 정답으로 받아들이지 않고, 특정 집단이나 관점에 치우치지 않았는지 다양한 시각에서 검토해야 합니다.</li>
+                <li>사회적, 윤리적, 법적 가치 판단이 필요한 쟁점에서는 AI의 의견을 참고만 하되, 최종적인 가치 판단과 책임은 오직 인간(사용자)에게 있음을 명심해야 합니다.</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- 5번 상세 내용 -->
+          <div class="safety-panel-content" id="safetyPanel5">
+            <div class="safety-panel-header">
+              <div class="safety-panel-badge-group">
+                <span class="safety-num-pill">5</span>
+                <h4 class="safety-panel-title">생각의 외주화(Thinking Delegation) 경계</h4>
+                <span class="tool-pill" style="background:#eff6ff; color:var(--theme-written);">핵심 수칙 05</span>
+              </div>
+              <span class="safety-panel-status"><i class="fas fa-check-circle" style="color:var(--theme-practical);"></i> 상세 수칙 안내</span>
+            </div>
+            <div class="safety-box-risk">
+              <strong><i class="fas fa-exclamation-triangle"></i> 위험 요인:</strong> 문제 정의, 논리 구성, 비판적 분석 등 스스로 고민해야 할 사고 과정 전체를 AI에게 맡겨버리면, 대학 교육의 본질인 자기주도적 문제 해결 능력과 문해력(Literacy)이 퇴화됩니다.
+            </div>
+            <div class="safety-box-action">
+              <strong><i class="fas fa-check-circle"></i> 실천 수칙:</strong>
+              <ul>
+                <li><strong>인간 우선 원칙 (Human-in-the-Loop):</strong> 항상 나의 생각과 가설이 먼저이고, AI는 그 생각을 검증하고 다듬어주는 ‘토론 파트너(스파링 상대)’로 활용해야 합니다.</li>
+                <li>AI가 제안한 답변을 스스로 읽고 이해하지 못한 상태에서는 절대 타인에게 전달하거나 과제물로 제출하지 않습니다.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- 과제 제출 전 3초 자가 점검 체크리스트 (PPT & Slides 10초 자가 체크리스트 스타일 일치) -->
+        <div class="ppt-checklist-container">
+          <div class="ppt-checklist-header">
+            <div class="ppt-checklist-title">
+              <i class="fas fa-clipboard-check" style="color: #2563eb;"></i>
+              <strong>과제 제출 직전! 3초 자가 점검 체크리스트 (4대 수칙)</strong>
+            </div>
+            <span class="ppt-checklist-badge"><i class="fas fa-shield-alt"></i> 과제 제출 전 최종 점검</span>
+          </div>
+          <p class="ppt-checklist-desc">
+            리포트 및 결과물을 제출하기 직전, AI 활용의 윤리성과 팩트를 최종 확인하는 4대 핵심 체크포인트입니다.
+          </p>
+          <ul class="ppt-checklist-ul">
+            <li onclick="togglePromptCheck(this)" title="클릭하여 확인 완료 토글">
+              <i class="far fa-check-square"></i>
+              <span><strong>내용 소화 및 문해력</strong>: 내가 직접 읽고 이해하여 내 언어로 소화한 내용인가?</span>
+            </li>
+            <li onclick="togglePromptCheck(this)" title="클릭하여 확인 완료 토글">
+              <i class="far fa-check-square"></i>
+              <span><strong>출처 및 팩트체크</strong>: 제시된 통계와 논문 출처가 실제 공식 데이터베이스에 존재하는가?</span>
+            </li>
+            <li onclick="togglePromptCheck(this)" title="클릭하여 확인 완료 토글">
+              <i class="far fa-check-square"></i>
+              <span><strong>개인정보·보안 준수</strong>: 타인의 개인정보나 학교/기업의 비공개 데이터가 포함되지 않았는가?</span>
+            </li>
+            <li onclick="togglePromptCheck(this)" title="클릭하여 확인 완료 토글">
+              <i class="far fa-check-square"></i>
+              <span><strong>학술 윤리 및 공시</strong>: 교수님의 AI 사용 지침을 확인하고, 필요한 경우 AI 활용 사실을 명시했는가?</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5: 인터랙티브 커리큘럼 -->
     <section class="ai-section" id="curriculum">
       <div class="ai-sec-head">
         <div>
-          <h2>4. AI × OA 콜라보 커리큘럼</h2>
+          <h2>5. AI × OA 콜라보 커리큘럼</h2>
           <p>Excel &amp; Sheets 데이터 분석 → PPT &amp; Slides 핵심 발표 슬라이드 → Docs &amp; Word 정식 보고서로 이어지는 실무 중심 커리큘럼입니다.</p>
         </div>
       </div>
@@ -351,20 +740,20 @@
       </div>
 
       <div class="day-tabs" role="tablist" aria-label="과정별 커리큘럼 선택">
-        <button type="button" class="day-tab active" data-day="day1">Excel &amp; Sheets (개설)</button>
-        <button type="button" class="day-tab" data-day="day2" style="opacity:0.6;"><i class="fas fa-lock"></i> Slides &amp; PPT (준비중)</button>
-        <button type="button" class="day-tab" data-day="day3" style="opacity:0.6;"><i class="fas fa-lock"></i> Docs &amp; Word (준비중)</button>
+        <button type="button" class="day-tab active" data-day="day1"><i class="fas fa-table"></i> Excel &amp; Sheets</button>
+        <button type="button" class="day-tab" data-day="day2" style="opacity:0.6;"><i class="fas fa-desktop"></i> PPT &amp; Slides (준비중)</button>
+        <button type="button" class="day-tab" data-day="day3" style="opacity:0.6;"><i class="fas fa-file-word"></i> Docs &amp; Word (준비중)</button>
       </div>
 
       <div id="curriculumContainer"></div>
     </section>
 
-    <!-- Section 4: 대학생 AI 리터러시 진단 연계 -->
-    <section class="ai-section last">
+    <!-- Section 6: 대학생 AI 리터러시 진단 연계 -->
+    <section class="ai-section last" id="literacy">
       <div class="literacy-box">
         <div>
           <span class="card-badge card-badge-written" style="margin-bottom: 10px;">사전·사후 역량 점검 연계</span>
-          <h2 style="font-size: 22px; color: var(--neutral-900); margin-bottom: 8px;">대학생 AI 리터러시 진단 & 맞춤형 실천 가이드</h2>
+          <h2 style="font-size: 22px; color: var(--neutral-900); margin-bottom: 8px;">6. 대학생 AI 리터러시 진단 &amp; 맞춤형 실천 가이드</h2>
           <p style="font-size: 14px; color: var(--neutral-700); line-height: 1.65;">
             총 30문항(7점 리커트 척도, 100점 표준 환산) 진단을 통해 5대 핵심 역량 중 본인의 강점과 보완 영역을 먼저 파악한 뒤,
             부족한 역량을 본 AI × OA 콜라보 실습에 연계해 보세요.
@@ -453,7 +842,7 @@
   </footer>
 
   <script src="js/main.js?v=20261117a"></script>
-  <script src="js/ai-office.js?v=20261117_fix2"></script>
+  <script src="js/ai-office.js?v=20261119_v7"></script>
   <script type="module">
     import { onAuthChange } from './js/firebase-config.js?v=20261117a';
     onAuthChange((user) => {

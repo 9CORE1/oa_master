@@ -56,28 +56,16 @@ const CURRICULUM_DAYS = [
     disabled: true,
     sessions: [
       {
-        period: '1교시',
-        tools: 'NotebookLM · Deep Research',
-        title: 'NotebookLM PDF 요약 퀴즈 & 자료 조사',
-        summary: 'PDF 업로드로 핵심 요약·퀴즈 생성 및 Deep Research 심층 조사'
+        period: 'Case Study 01',
+        tools: 'NotebookLM · Deep Research · Google Docs',
+        title: '전공·자격증 벼락치기 리서치 & 논리적 보고서 목차·초안 완성',
+        summary: 'PDF 교재·논문 3분 핵심 요약·퀴즈 생성 및 서론-본론-결론 5단 목차와 설문 데이터 결합 초안 도출'
       },
       {
-        period: '2교시',
-        tools: 'Google Docs · Gemini · ChatGPT',
-        title: '빈 화면 탈출! 5단 목차 설계 & 초안 쓰기',
-        summary: '서론-본론-결론 5단 목차 5분 완성 및 설문 데이터 결합 초안'
-      },
-      {
-        period: '3교시',
-        tools: 'Google Docs · MS Word',
-        title: '보고서 문체 교정 · 메일 작성 · 출처 표기',
-        summary: '구어체를 객관적 학술 문체로 교정하고 참고문헌 출처 자동 정리'
-      },
-      {
-        period: '4교시',
-        tools: 'Google Docs → MS Word',
-        title: '제목 스타일 1초 자동 목차 & PDF 마감',
-        summary: '스타일 지정으로 자동 목차 생성 후 MS Word 최종 PDF 저장'
+        period: 'Case Study 02',
+        tools: 'Google Docs · MS Word · AI 문체 교정',
+        title: '학술 문체 교정 & 자동 목차·참고문헌 완벽 제출 서식 마감',
+        summary: '표절·환각 방지 문맥 첨삭, 교수님/비즈니스 메일 변환 및 1초 자동 목차 스타일 지정 후 최종 PDF 저장'
       }
     ]
   }
@@ -257,7 +245,8 @@ function renderCurriculum(filterDay = 'all') {
     return `
     <div style="margin-bottom: 26px;">
       <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:12px;">
-        <h3 style="font-size: 18px; color: var(--neutral-900); margin: 0; display:flex; align-items:center;">
+        <h3 style="font-size: 18px; color: var(--neutral-900); margin: 0; display:flex; align-items:center; gap:8px;">
+          ${dayObj.day === 'day1' ? '<i class="fas fa-table" style="color:var(--theme-practical);"></i>' : (dayObj.day === 'day2' ? '<i class="fas fa-desktop" style="color:#2563eb;"></i>' : '<i class="fas fa-file-word" style="color:#4f46e5;"></i>')}
           ${displayLabel} ${adminBadge}
         </h3>
         ${!isDedicatedDayPage && dayObj.detailHref
@@ -266,7 +255,7 @@ function renderCurriculum(filterDay = 'all') {
           : `<a href="${dayObj.detailHref}" class="day-detail-link">세부 실습 페이지 <i class="fas fa-arrow-right"></i></a>`)
         : ''}
       </div>
-      <div class="day-grid">
+      <div class="${dayObj.sessions.length === 2 ? 'day-grid day-grid-2col' : 'day-grid'}">
         ${dayObj.sessions.map((s) => `
           <article class="session-card">
             <div class="session-top">
@@ -668,5 +657,112 @@ function closeImageModal() {
 // 전역 바인딩
 window.openImageModal = openImageModal;
 window.closeImageModal = closeImageModal;
+
+/**
+ * 프롬프트 템플릿 원클릭 복사 함수
+ * @param {HTMLButtonElement} btn 
+ */
+async function copyPromptText(btn) {
+  const box = btn.closest('.prompt-template-card') || btn.closest('.prompt-box');
+  if (!box) return;
+  const textEl = box.querySelector('.prompt-code-content');
+  if (!textEl) return;
+  const text = textEl.innerText.trim();
+
+  const originalHtml = btn.innerHTML;
+  const showCopied = () => {
+    btn.innerHTML = '<i class="fas fa-check" style="color:#ffffff;"></i> 복사 완료!';
+    btn.style.background = '#10b981';
+    setTimeout(() => {
+      btn.innerHTML = originalHtml;
+      btn.style.background = '';
+    }, 2000);
+  };
+
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      await navigator.clipboard.writeText(text);
+      showCopied();
+    } else {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.left = '-9999px';
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      showCopied();
+    }
+  } catch (err) {
+    console.error('클립보드 복사 실패:', err);
+    alert('프롬프트 복사에 실패했습니다. 직접 복사해주세요.');
+  }
+}
+
+/**
+ * 3초 자가 점검 체크리스트 인터랙티브 토글 함수
+ * @param {HTMLElement} el 
+ */
+function togglePromptCheck(el) {
+  const icon = el.querySelector('i');
+  const isChecked = el.classList.toggle('checked');
+  if (isChecked) {
+    if (icon) {
+      icon.className = 'fas fa-check-square';
+    }
+  } else {
+    if (icon) {
+      icon.className = 'far fa-check-square';
+    }
+  }
+}
+
+/**
+ * 5대 안전 유의사항 단일 상세 패널 탭 선택 함수
+ * @param {number} idx 1~5 탭 인덱스
+ */
+function selectSafetyTab(idx) {
+  // 1. 모든 탭 카드 active 해제 후 해당 탭에 active 부여
+  const tabs = document.querySelectorAll('.safety-tab-card');
+  tabs.forEach((tab, i) => {
+    const isCurrent = (i + 1 === idx);
+    tab.classList.toggle('active', isCurrent);
+    tab.setAttribute('aria-selected', isCurrent ? 'true' : 'false');
+    const indicator = tab.querySelector('.safety-tab-indicator');
+    if (indicator) {
+      indicator.innerHTML = isCurrent 
+        ? '<i class="fas fa-check-circle" style="color:var(--theme-practical);"></i> 선택됨' 
+        : '<i class="fas fa-arrow-down"></i> 클릭하여 확인';
+    }
+  });
+
+  // 2. 모든 상세 패널 숨기고 해당 패널만 표시 (페이드 전환)
+  const panels = document.querySelectorAll('.safety-panel-content');
+  panels.forEach((panel, i) => {
+    panel.classList.toggle('active', (i + 1 === idx));
+  });
+
+  // 3. 모바일 환경에서 상세 패널로 부드럽게 스크롤
+  if (window.innerWidth < 768) {
+    const detailPanel = document.getElementById('safetyDetailPanel');
+    if (detailPanel) {
+      setTimeout(() => {
+        detailPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 50);
+    }
+  }
+}
+
+// 하위 호환
+function toggleSafetyAccordion(idx) {
+  selectSafetyTab(idx);
+}
+
+window.copyPromptText = copyPromptText;
+window.togglePromptCheck = togglePromptCheck;
+window.selectSafetyTab = selectSafetyTab;
+window.toggleSafetyAccordion = toggleSafetyAccordion;
+
 
 

@@ -372,6 +372,9 @@
 }
 
 .day-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
   padding: 9px 18px;
   border-radius: var(--radius-full);
   border: 1px solid var(--neutral-300);
@@ -422,6 +425,45 @@
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 14px;
+}
+
+/* 2개 Case Study 전용 2열 와이드 그리드 레이아웃 */
+.day-grid-2col {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 18px;
+}
+
+.day-grid-2col .session-card {
+  padding: 22px 20px;
+  min-height: 175px;
+  border-top: 4px solid var(--theme-written);
+}
+
+.day-grid-2col .session-card:first-child {
+  border-top-color: var(--theme-written);
+}
+
+.day-grid-2col .session-card:last-child {
+  border-top-color: var(--theme-practical);
+}
+
+.day-grid-2col .session-card h3 {
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1.5;
+  margin-top: 2px;
+}
+
+.day-grid-2col .session-summary {
+  font-size: 13.5px;
+  padding: 12px 14px;
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .day-grid-2col {
+    grid-template-columns: 1fr !important;
+  }
 }
 
 .session-card {
@@ -1683,4 +1725,655 @@
   object-fit: contain;
   display: block;
 }
+
+/* ==========================================================================
+   프롬프트 공식 4+2 & LLM 안전 활용 가이드 전용 스타일 (기존 사이트 일관 디자인)
+   ========================================================================== */
+
+.prompt-sub-block {
+  margin-bottom: 34px;
+}
+
+.prompt-sub-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--neutral-200);
+}
+
+.token-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #2563eb;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(37, 99, 235, 0.08);
+}
+
+.token-link-btn:hover {
+  background: #2563eb;
+  color: #ffffff;
+  border-color: #2563eb;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);
+  transform: translateY(-1px);
+}
+
+.prompt-sub-title {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--neutral-900);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.prompt-sub-desc {
+  font-size: 13.5px;
+  color: var(--neutral-600);
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+/* 4+2 프레임워크 테이블 (기존 테마 스타일) */
+.prompt-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 22px;
+}
+
+.prompt-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 13.5px;
+  min-width: 680px;
+}
+
+.prompt-table th {
+  background: #f8fafc;
+  color: var(--neutral-800);
+  font-weight: 700;
+  padding: 12px 14px;
+  border-bottom: 2px solid var(--neutral-200);
+  white-space: nowrap;
+}
+
+.prompt-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--neutral-200);
+  color: var(--neutral-700);
+  line-height: 1.55;
+  vertical-align: top;
+}
+
+.prompt-table tr:last-child td {
+  border-bottom: none;
+}
+
+.prompt-table tr:hover td {
+  background: #fcfcfd;
+}
+
+.prompt-table .col-seq {
+  width: 55px;
+  text-align: center;
+  font-weight: 800;
+}
+
+.prompt-table .col-elem {
+  width: 135px;
+  font-weight: 800;
+  color: var(--neutral-900);
+}
+
+.prompt-table .col-eng {
+  width: 90px;
+  font-weight: 600;
+  color: var(--neutral-500);
+  font-size: 12px;
+}
+
+.prompt-table .col-role {
+  width: 220px;
+}
+
+.prompt-table .badge-elem {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11.5px;
+  font-weight: 700;
+  background: #eff6ff;
+  color: var(--theme-written);
+}
+
+.prompt-table .badge-elem.extra {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+/* Before vs After 비교 카드 (기존 compare-card 언어 적용) */
+.prompt-compare-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 18px;
+  margin-top: 14px;
+}
+
+.prompt-compare-card {
+  border-radius: var(--radius-md);
+  padding: 22px;
+  border: 1px solid var(--border-color);
+  background: #ffffff;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.prompt-compare-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.prompt-compare-card.before {
+  border-top: 4px solid #ef4444;
+}
+
+.prompt-compare-card.after {
+  border-top: 4px solid var(--theme-practical);
+}
+
+.prompt-compare-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  font-size: 11.5px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.prompt-compare-card.before .prompt-compare-badge {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.prompt-compare-card.after .prompt-compare-badge {
+  background: #ccfbf1;
+  color: #0f766e;
+}
+
+.prompt-compare-body {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--neutral-700);
+}
+
+.prompt-compare-prompt {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  margin: 10px 0;
+  font-size: 13px;
+  line-height: 1.65;
+  color: #1e293b;
+}
+
+.prompt-tag-inline {
+  display: inline-block;
+  background: #e2e8f0;
+  color: #334155;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 11.5px;
+  margin-right: 4px;
+}
+
+.prompt-compare-card.after .prompt-tag-inline {
+  background: #ccfbf1;
+  color: #0f766e;
+}
+
+/* 실전 프롬프트 템플릿 카드 (라이트 오피스 테마 통일) */
+.prompt-template-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.prompt-template-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-top: 4px solid var(--theme-written);
+  border-radius: var(--radius-md);
+  padding: 20px 22px;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.prompt-template-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.prompt-template-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.prompt-template-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.prompt-template-pill {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  background: #eff6ff;
+  color: var(--theme-written);
+}
+
+.prompt-template-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--neutral-900);
+}
+
+.btn-copy-prompt {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-copy-prompt:hover {
+  background: #1d4ed8;
+  color: #ffffff;
+}
+
+.prompt-code-wrap {
+  position: relative;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  margin-top: 6px;
+}
+
+.prompt-code-content {
+  color: #1e293b;
+  font-family: inherit;
+  font-size: 13.5px;
+  line-height: 1.65;
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin: 0;
+}
+
+/* 5대 유의사항 인터랙티브 상단 탭 카드 그리드 */
+.prompt-safety-tab-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 900px) {
+  .prompt-safety-tab-grid {
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  }
+}
+
+.safety-tab-card {
+  background: var(--bg-card);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 14px 12px;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  user-select: none;
+}
+
+.safety-tab-card:hover {
+  border-color: #93c5fd;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.safety-tab-card.active {
+  border-color: var(--theme-written);
+  background: #f0f7ff;
+  box-shadow: 0 4px 14px rgba(14, 73, 135, 0.12);
+  transform: translateY(-3px);
+}
+
+.safety-tab-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.safety-tab-num {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+  border-radius: 50%;
+  background: #e2e8f0;
+  color: #475569;
+  font-size: 11px;
+  font-weight: 800;
+  transition: all 0.2s ease;
+}
+
+.safety-tab-card.active .safety-tab-num {
+  background: var(--theme-written);
+  color: #ffffff;
+}
+
+.safety-tab-pill {
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: var(--radius-full);
+  background: #f1f5f9;
+  color: #64748b;
+  transition: all 0.2s ease;
+}
+
+.safety-tab-card.active .safety-tab-pill {
+  background: #dbeafe;
+  color: var(--theme-written);
+}
+
+.safety-tab-title {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--neutral-900);
+  margin-bottom: 4px;
+}
+
+.safety-tab-sub {
+  font-size: 11.5px;
+  color: var(--neutral-600);
+  line-height: 1.35;
+  margin-bottom: 8px;
+}
+
+.safety-tab-indicator {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--neutral-400);
+  padding-top: 6px;
+  border-top: 1px dashed var(--neutral-200);
+  transition: all 0.2s ease;
+}
+
+.safety-tab-card.active .safety-tab-indicator {
+  color: var(--theme-written);
+  border-top-color: #bfdbfe;
+}
+
+/* 5대 유의사항 하단 단일 상세 패널 */
+.safety-detail-panel {
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  border-top: 4px solid var(--theme-written);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  padding: 22px 24px;
+  margin-bottom: 28px;
+  position: relative;
+  min-height: 200px;
+}
+
+.safety-panel-content {
+  display: none;
+}
+
+.safety-panel-content.active {
+  display: block;
+  animation: safetyPanelFade 0.25s ease-out;
+}
+
+@keyframes safetyPanelFade {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.safety-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--neutral-200);
+}
+
+.safety-panel-badge-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.safety-num-pill {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--theme-written);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.safety-panel-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--neutral-900);
+  margin: 0;
+}
+
+.safety-panel-status {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--neutral-600);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.safety-box-risk {
+  background: #fef2f2;
+  border-left: 4px solid #ef4444;
+  padding: 12px 14px;
+  border-radius: 4px;
+  font-size: 13.5px;
+  color: #991b1b;
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+
+.safety-box-action {
+  background: #f0fdf4;
+  border-left: 4px solid #10b981;
+  padding: 12px 14px;
+  border-radius: 4px;
+  font-size: 13.5px;
+  color: #166534;
+  line-height: 1.6;
+}
+
+.safety-box-action ul {
+  margin: 6px 0 0 18px;
+  padding: 0;
+}
+
+.safety-box-action li {
+  margin-bottom: 5px;
+}
+
+.safety-box-action li:last-child {
+  margin-bottom: 0;
+}
+
+/* 과제 제출 전 3초 자가 점검 체크리스트 (PPT&Slides 10초 자가 체크리스트 스타일 일치) */
+.ppt-checklist-container {
+  margin-top: 18px;
+  background: #ffffff;
+  border: 1px solid var(--neutral-200);
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03);
+}
+
+.ppt-checklist-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.ppt-checklist-title {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--neutral-900);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ppt-checklist-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  font-size: 11.5px;
+  font-weight: 700;
+}
+
+.ppt-checklist-desc {
+  font-size: 13px;
+  color: var(--neutral-600);
+  margin: 0 0 14px;
+  line-height: 1.5;
+}
+
+.ppt-checklist-ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border-top: 1px solid #f1f5f9;
+}
+
+.ppt-checklist-ul li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: #334155;
+  padding: 5px 6px;
+  border-bottom: 1px solid #f1f5f9;
+  transition: background 0.15s ease;
+  cursor: pointer;
+  user-select: none;
+}
+
+.ppt-checklist-ul li:last-child {
+  border-bottom: none;
+}
+
+.ppt-checklist-ul li:hover {
+  background: #f8fafc;
+}
+
+.ppt-checklist-ul li.checked {
+  background: #f0fdf4;
+}
+
+.ppt-checklist-ul li.checked span {
+  color: #15803d;
+  text-decoration: line-through;
+}
+
+.ppt-checklist-ul li i {
+  color: #2563eb;
+  font-size: 15px;
+  margin-top: 3px;
+  flex-shrink: 0;
+  transition: color 0.15s ease;
+}
+
+.ppt-checklist-ul li.checked i {
+  color: #10b981;
+}
+
+.ppt-checklist-ul li strong {
+  color: #0f172a;
+  font-weight: 700;
+}
+
+
+
 
