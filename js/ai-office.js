@@ -502,6 +502,16 @@ function initQuickNav() {
         </div>
         <i class="fas fa-arrow-up-right-from-square quick-nav-external"></i>
       </a>
+      <a href="https://claude.ai/" target="_blank" rel="noopener noreferrer" class="quick-nav-link" title="Claude.ai 바로가기">
+        <div class="quick-nav-link-left">
+          <span class="quick-nav-icon claude"><i class="fas fa-brain"></i></span>
+          <div class="quick-nav-info">
+            <span class="quick-nav-name">Claude.ai</span>
+            <span class="quick-nav-sub">Anthropic 대화형 AI</span>
+          </div>
+        </div>
+        <i class="fas fa-arrow-up-right-from-square quick-nav-external"></i>
+      </a>
       <a href="https://www.microsoft365.com/" target="_blank" rel="noopener noreferrer" class="quick-nav-link" title="MS Office 365 바로가기">
         <div class="quick-nav-link-left">
           <span class="quick-nav-icon ms365"><i class="fab fa-microsoft"></i></span>
