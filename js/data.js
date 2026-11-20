@@ -597,6 +597,16 @@ const DEFAULT_RECOMMEND_SITES = [
     "id": "re-1785201321272",
     "date": "2026-07-28",
     "author": "관리자"
+  },
+  {
+    "title": "경기도평생학습포털",
+    "siteUrl": "https://www.gseek.kr/",
+    "description": "온라인학습, 직무필수교육, 외국어 학습을 할 수 있습니다.",
+    "category": "인터넷 강의",
+    "tag": "지식, GSEEK",
+    "id": "re-1795151296617",
+    "date": "2026-11-20",
+    "author": "관리자"
   }
 ];
 
