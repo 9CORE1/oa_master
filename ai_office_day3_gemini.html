@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="css/ai-office.css?v=20261119_v10">
   <link rel="icon" href="images/OA_master_LOGO.png" type="image/png">
   <script src="js/data.js"></script>
-  <script src="js/admin.js?v=20261120_v3"></script>
+  <script src="js/admin.js?v=20261120_v5"></script>
 
   <style>
     /* 기본 색상 변수 */
@@ -1960,7 +1960,7 @@
   </script>
 
   <script type="module">
-    import { onAuthChange } from './js/firebase-config.js?v=20261120_v3';
+    import { onAuthChange } from './js/firebase-config.js?v=20261120_v5';
     onAuthChange((user, authMeta = null) => {
       const is_admin = (typeof isAdmin === 'function' && isAdmin()) || (localStorage.getItem('isAdminActive') === 'true');
       if (is_admin && window.updateAdminCourseAccess) {

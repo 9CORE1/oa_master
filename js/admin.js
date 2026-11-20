@@ -4,9 +4,18 @@
 function isAdmin() {
   const userEmail = (localStorage.getItem('userEmail') || '').toLowerCase().trim();
   const userRole = localStorage.getItem('userRole');
-  const adminEmails = ['teacha99@gmail.com', '20246128deu@gmail.com'];
-  if (adminEmails.includes(userEmail) || userRole === 'Host' || userRole === 'Manager') {
+  const isMasterAdmin = (userEmail === 'teacha99@gmail.com' || userRole === 'Host' || userRole === 'Manager');
+  if (isMasterAdmin) {
     return true;
+  }
+  // ⚡ 세션 오염 방지: 일반 회원으로 로그인된 상태라면, 과거 브라우저에 남아있던 관리자 플래그(isAdminActive)를 강제 무효화 및 삭제
+  if (localStorage.getItem('isLoggedIn') === 'true' && userEmail && !isMasterAdmin) {
+    if (localStorage.getItem('isAdminActive') === 'true' || localStorage.getItem('adminManualAuth') === 'true') {
+      localStorage.removeItem('isAdminActive');
+      localStorage.removeItem('adminManualAuth');
+      localStorage.removeItem('adminEmail');
+    }
+    return false;
   }
   return localStorage.getItem('isAdminActive') === 'true';
 }
@@ -1033,25 +1042,35 @@ async function handleGlobalLogout() {
       await window.FirebaseApp.logout();
     } else if (typeof window.logout === 'function') {
       await window.logout();
-    } else {
-      localStorage.removeItem('isLoggedIn');
-      localStorage.removeItem('userEmail');
-      localStorage.removeItem('userDisplayName');
-      localStorage.removeItem('userPhotoURL');
-      localStorage.removeItem('userUid');
     }
   } catch (err) {
     console.error('Logout error:', err);
   } finally {
-    localStorage.removeItem('isAdminActive');
-    localStorage.removeItem('adminManualAuth');
-    localStorage.removeItem('adminEmail');
+    // ⚡ 로그인 시 생성된 모든 로컬 세션 및 관리자 이력 데이터 완전 삭제
+    const authKeys = [
+      'isLoggedIn',
+      'userEmail',
+      'userDisplayName',
+      'userPhotoURL',
+      'userUid',
+      'userRole',
+      'userApprovalStatus',
+      'isAdminActive',
+      'adminManualAuth',
+      'adminEmail'
+    ];
+    authKeys.forEach(key => localStorage.removeItem(key));
+    sessionStorage.removeItem('admin_auth_code');
     window.currentUser = null;
+
     const myPageModal = document.getElementById('myPageModal');
     if (myPageModal) myPageModal.style.display = 'none';
 
     if (typeof window.renderHeaderUserNav === 'function') {
       window.renderHeaderUserNav(null);
+    }
+    if (typeof updateAdminUI === 'function') {
+      updateAdminUI();
     }
     alert('로그아웃 되었습니다.');
 

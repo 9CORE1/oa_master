@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="css/ai-office.css">
   <link rel="icon" href="images/OA_master_LOGO.png" type="image/png">
   <script src="js/data.js"></script>
-  <script src="js/admin.js?v=20261120_v3"></script>
+  <script src="js/admin.js?v=20261120_v5"></script>
   <style>
     /* Day 3 강의 상세페이지 전용 프리미엄 확장 스타일 (Day 1, Day 2와 100% 동일한 스타일 시스템) */
     .day3-stat-banner {
@@ -2189,7 +2189,7 @@ report_final.md를 입력하고, 제공된 Word 샘플에서 추출한
   </script>
 
   <script type="module">
-    import { onAuthChange } from './js/firebase-config.js?v=20261120_v3';
+    import { onAuthChange } from './js/firebase-config.js?v=20261120_v5';
     onAuthChange((user, authMeta = null) => {
       const is_admin = (typeof isAdmin === 'function' && isAdmin()) || (localStorage.getItem('isAdminActive') === 'true');
       const diag = (authMeta && authMeta.diag) || window.__oaAuthDiag || null;

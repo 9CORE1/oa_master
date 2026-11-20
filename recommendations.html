@@ -377,7 +377,7 @@
   <!-- Scripts -->
   <script src="js/data.js"></script>
   <script src="js/main.js?v=20261117a"></script>
-  <script src="js/admin.js?v=20261120_v3"></script>
+  <script src="js/admin.js?v=20261120_v5"></script>
 
   <!-- Page Specific Script -->
   <script>
@@ -606,7 +606,7 @@
 
   <!-- 로그인 사용자 헤더 상태 표시 -->
   <script type="module">
-    import { onAuthChange } from './js/firebase-config.js?v=20261120_v3';
+    import { onAuthChange } from './js/firebase-config.js?v=20261120_v5';
     onAuthChange((user) => {
       if (window.renderHeaderUserNav) {
         window.renderHeaderUserNav(user);

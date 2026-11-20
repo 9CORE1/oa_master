@@ -152,8 +152,7 @@ export function resolveApprovalStatus(user, existingData = null) {
     const email = ((user && user.email) || (existingData && existingData.email) || '').toLowerCase().trim();
     const role = (existingData && existingData.role) || 'User';
 
-    const ADMIN_EMAILS = ['teacha99@gmail.com', '20246128deu@gmail.com'];
-    if (ADMIN_EMAILS.includes(email) || role === 'Host' || role === 'Manager') {
+    if (email === 'teacha99@gmail.com' || role === 'Host' || role === 'Manager') {
         return 'approved';
     }
 
@@ -254,15 +253,18 @@ export function onAuthChange(callback) {
                 if (cachedRole) role = cachedRole;
             }
 
-            const ADMIN_EMAILS = ['teacha99@gmail.com', '20246128deu@gmail.com'];
-            if (ADMIN_EMAILS.includes(email)) {
+            if (email === 'teacha99@gmail.com') {
                 role = 'Host';
             }
 
-            if (role === 'Host' || role === 'Manager' || localStorage.getItem('adminManualAuth') === 'true') {
+            const isMasterAdmin = (role === 'Host' || role === 'Manager' || email === 'teacha99@gmail.com');
+            if (isMasterAdmin) {
                 localStorage.setItem('isAdminActive', 'true');
             } else {
+                // ⚡ 일반 회원으로 로그인 시, 이전 브라우저에 남아있던 관리자 모드 세션 플래그 완전 초기화
                 localStorage.removeItem('isAdminActive');
+                localStorage.removeItem('adminManualAuth');
+                localStorage.removeItem('adminEmail');
             }
 
             let approvalStatus = resolveApprovalStatus(user, { ...(fsData || {}), role });
@@ -371,10 +373,13 @@ export function onAuthChange(callback) {
 
                     localStorage.setItem('userRole', role);
                     localStorage.setItem('userApprovalStatus', approvalStatus);
-                    if (role === 'Host' || role === 'Manager' || localStorage.getItem('adminManualAuth') === 'true') {
+                    const isMasterAdminLive = (role === 'Host' || role === 'Manager' || email === 'teacha99@gmail.com');
+                    if (isMasterAdminLive) {
                         localStorage.setItem('isAdminActive', 'true');
                     } else {
                         localStorage.removeItem('isAdminActive');
+                        localStorage.removeItem('adminManualAuth');
+                        localStorage.removeItem('adminEmail');
                     }
 
                     if (window.__oaAuthDiag) {
@@ -405,10 +410,9 @@ export function onAuthChange(callback) {
             localStorage.removeItem('userUid');
             localStorage.removeItem('userRole');
             localStorage.removeItem('userApprovalStatus');
-            // 이메일 인증(EmailJS)으로 별도 로그인한 관리자 세션은 유지
-            if (localStorage.getItem('adminManualAuth') !== 'true') {
-                localStorage.removeItem('isAdminActive');
-            }
+            localStorage.removeItem('isAdminActive');
+            localStorage.removeItem('adminManualAuth');
+            localStorage.removeItem('adminEmail');
         }
         callback(user, null);
     });

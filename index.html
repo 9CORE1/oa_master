@@ -14,7 +14,7 @@
   <!-- EmailJS SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
   <script src="js/data.js"></script>
-  <script src="js/admin.js?v=20261120_v3"></script>
+  <script src="js/admin.js?v=20261120_v5"></script>
 </head>
 
 <body class="theme-written">
@@ -605,7 +605,7 @@
       saveUserDataToFirestore,
       getUserDataFromFirestore,
       resolveApprovalStatus
-    } from './js/firebase-config.js?v=20261120_v3';
+    } from './js/firebase-config.js?v=20261120_v5';
 
     let isSignUp = false;
     let currentUser = null;
@@ -744,7 +744,7 @@
       };
       if (!userObj || (!userObj.email && localStorage.getItem('isLoggedIn') !== 'true')) return;
 
-      const isAdminSession = (typeof isAdmin === 'function' && isAdmin()) || (localStorage.getItem('isAdminActive') === 'true');
+      const isAdminSession = (typeof isAdmin === 'function') ? isAdmin() : false;
       if (isAdminSession) return;
 
       const status = forcedStatus || localStorage.getItem('userApprovalStatus') || 'pending';
@@ -1156,7 +1156,7 @@
       const userNav = document.getElementById('userNavArea');
       if (!userNav) return;
 
-      const is_admin = (typeof isAdmin === 'function' && isAdmin()) || (localStorage.getItem('isAdminActive') === 'true');
+      const is_admin = (typeof isAdmin === 'function') ? isAdmin() : false;
 
       if (is_admin) {
         userNav.innerHTML = `
@@ -1288,7 +1288,7 @@
         const modal = document.getElementById('authModal');
         if (modal) modal.style.display = 'none';
 
-        const isAdminSession = (typeof isAdmin === 'function' && isAdmin()) || (localStorage.getItem('isAdminActive') === 'true');
+        const isAdminSession = (typeof isAdmin === 'function') ? isAdmin() : false;
         const diag = (authMeta && authMeta.diag) || window.__oaAuthDiag || null;
         const currentApprovalStatus = (authMeta && authMeta.approvalStatus) ||
           (diag && (diag.approvalStatus || diag.fsApprovalStatus)) ||
@@ -1565,8 +1565,7 @@
 
         const href = link.getAttribute('href') || link.getAttribute('onclick') || '';
         if (protectedServiceLinks.some(page => href.includes(page))) {
-          const isAdminSession = (typeof isAdmin === 'function' && isAdmin()) ||
-            (localStorage.getItem('isAdminActive') === 'true');
+          const isAdminSession = (typeof isAdmin === 'function') ? isAdmin() : false;
           const isUserLoggedIn = (currentUser !== null) ||
             (localStorage.getItem('isLoggedIn') === 'true');
           const diag = window.__oaAuthDiag || null;
@@ -1783,7 +1782,7 @@
       // 비로그인/승인대기 리다이렉트, 마이페이지, 관리자 로그인 요청 처리
       const authParams = new URLSearchParams(window.location.search);
       if (authParams.get('admin') === 'login') {
-        const isAlreadyAdmin = (typeof isAdmin === 'function' && isAdmin()) || (localStorage.getItem('isAdminActive') === 'true');
+        const isAlreadyAdmin = (typeof isAdmin === 'function') ? isAdmin() : false;
         if (!isAlreadyAdmin && typeof window.openAdminAuthModalDirectly === 'function') {
           window.openAdminAuthModalDirectly();
         }
