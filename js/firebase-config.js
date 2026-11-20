@@ -593,6 +593,59 @@ function formatFirebaseAuthError(error) {
     return `[오류 코드: ${code || '알수없음'}]\n${(error && error.message) || '로그인 처리 중 오류가 발생했습니다.'}\n(접속 호스트: ${currentHost})`;
 }
 
+// [Firestore 5] 과정 공개 설정 저장 (클라우드 실시간 동기화)
+export async function saveCourseAccessConfigToFirestore(config) {
+    try {
+        const configRef = doc(db, "system_settings", "course_access");
+        await setDoc(configRef, {
+            ...config,
+            updatedAt: new Date().toISOString()
+        }, { merge: true });
+        return { success: true };
+    } catch (error) {
+        console.warn("Firestore course_access 저장 경고 (users 백업 시도):", error);
+        try {
+            // 보안 규칙 대비: users 컬렉션 내부의 _system_course_access 문서로 백업 저장
+            const backupRef = doc(db, "users", "_system_course_access");
+            await setDoc(backupRef, {
+                ...config,
+                updatedAt: new Date().toISOString()
+            }, { merge: true });
+            return { success: true };
+        } catch (e2) {
+            console.error("Firestore course_access 저장 실패:", e2);
+            return { success: false, error: e2.message };
+        }
+    }
+}
+
+// [Firestore 6] 과정 공개 설정 실시간 구독 (모든 기기 실시간 동기화)
+export function subscribeCourseAccessConfig(callback) {
+    try {
+        const configRef = doc(db, "system_settings", "course_access");
+        return onSnapshot(configRef, (snap) => {
+            if (snap.exists()) {
+                callback(snap.data());
+            }
+        }, async (err) => {
+            console.warn("system_settings 구독 실패, users 백업 구독 시도:", err);
+            try {
+                const backupRef = doc(db, "users", "_system_course_access");
+                onSnapshot(backupRef, (snap2) => {
+                    if (snap2.exists()) {
+                        callback(snap2.data());
+                    }
+                });
+            } catch (e2) {
+                console.warn("Firestore course_access 백업 구독 실패:", e2);
+            }
+        });
+    } catch (error) {
+        console.warn("subscribeCourseAccessConfig 오류:", error);
+        return null;
+    }
+}
+
 // ----------------------------------------------------
 // Global Window Binding for Easy Access
 // ----------------------------------------------------
@@ -613,6 +666,8 @@ window.FirebaseApp = {
     getAllUsersFromFirestore,
     subscribeAllUsersFromFirestore,
     deleteUserFromFirestore,
+    saveCourseAccessConfigToFirestore,
+    subscribeCourseAccessConfig,
     resolveApprovalStatus,
     APPROVAL_CUTOFF_TIME
 };

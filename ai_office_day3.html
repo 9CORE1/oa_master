@@ -1965,7 +1965,7 @@
   </script>
 
   <script type="module">
-    import { onAuthChange } from './js/firebase-config.js?v=20261117a';
+    import { onAuthChange } from './js/firebase-config.js?v=20261120_v2';
     onAuthChange((user, authMeta = null) => {
       const is_admin = (typeof isAdmin === 'function' && isAdmin()) || (localStorage.getItem('isAdminActive') === 'true');
       if (is_admin && window.updateAdminCourseAccess) {

@@ -485,7 +485,8 @@ window.handleDay3ModeSelect = handleDay3ModeSelect;
  * @returns {{day1: boolean, day2: boolean, day3: boolean}} 각 일차별 일반 사용자 공개 여부
  */
 function getCourseAccessConfig() {
-  const defaults = { day1: true, day2: true, day3: true };
+  // ⚡ 안전 기본값: 공식 오픈된 1일차만 기본 공개, 2일차/3일차는 기본 비공개(false)
+  const defaults = { day1: true, day2: false, day3: false };
   try {
     const saved = localStorage.getItem('course_access_config');
     if (saved) {
@@ -498,7 +499,7 @@ function getCourseAccessConfig() {
 }
 
 /**
- * 과정 공개 설정을 로컬스토리지에 저장하고 전체 UI를 갱신합니다.
+ * 과정 공개 설정을 로컬스토리지 및 Firebase 클라우드 DB에 저장하고 전체 UI를 갱신합니다.
  * @param {Object} newConfig - 저장할 설정 객체
  */
 function saveCourseAccessConfig(newConfig) {
@@ -506,6 +507,11 @@ function saveCourseAccessConfig(newConfig) {
     localStorage.setItem('course_access_config', JSON.stringify(newConfig));
     if (window.DB && typeof window.DB.saveCourseAccessConfig === 'function') {
       window.DB.saveCourseAccessConfig(newConfig);
+    }
+    // ⚡ Firebase 클라우드 실시간 동기화 (모든 기기 즉시 반영)
+    if (window.FirebaseApp && typeof window.FirebaseApp.saveCourseAccessConfigToFirestore === 'function') {
+      const day3Mode = (typeof getDay3CurriculumMode === 'function') ? getDay3CurriculumMode() : 'gemini';
+      window.FirebaseApp.saveCourseAccessConfigToFirestore({ ...newConfig, day3Mode });
     }
   } catch (e) {
     console.error('saveCourseAccessConfig error:', e);
@@ -515,6 +521,38 @@ function saveCourseAccessConfig(newConfig) {
   if (typeof window.renderCurriculum === 'function') {
     window.renderCurriculum(window.activeAiDay || 'all');
   }
+}
+
+/**
+ * Firebase Firestore에서 과정 공개 설정을 실시간 구독하여 모든 기기에 즉시 반영합니다.
+ */
+let isCourseAccessSubscribed = false;
+function initCourseAccessCloudSync() {
+  if (isCourseAccessSubscribed) return;
+  if (!window.FirebaseApp || typeof window.FirebaseApp.subscribeCourseAccessConfig !== 'function') {
+    setTimeout(initCourseAccessCloudSync, 400);
+    return;
+  }
+  isCourseAccessSubscribed = true;
+  window.FirebaseApp.subscribeCourseAccessConfig((remoteConfig) => {
+    if (remoteConfig) {
+      const cleanConfig = {
+        day1: remoteConfig.day1 !== false,
+        day2: Boolean(remoteConfig.day2),
+        day3: Boolean(remoteConfig.day3)
+      };
+      localStorage.setItem('course_access_config', JSON.stringify(cleanConfig));
+      if (remoteConfig.day3Mode) {
+        localStorage.setItem('day3_curriculum_mode', remoteConfig.day3Mode);
+      }
+      if (typeof updateAdminCourseAccess === 'function') updateAdminCourseAccess();
+      if (typeof checkCoursePageAccess === 'function') checkCoursePageAccess();
+      window.dispatchEvent(new CustomEvent('courseAccessChanged', { detail: cleanConfig }));
+      if (typeof window.renderCurriculum === 'function') {
+        window.renderCurriculum(window.activeAiDay || 'all');
+      }
+    }
+  });
 }
 
 /**
@@ -1911,6 +1949,9 @@ function initUniversalAuthUI() {
   }
   if (typeof checkCoursePageAccess === 'function') {
     checkCoursePageAccess();
+  }
+  if (typeof initCourseAccessCloudSync === 'function') {
+    initCourseAccessCloudSync();
   }
 }
 

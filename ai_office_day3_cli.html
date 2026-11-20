@@ -2189,7 +2189,7 @@ report_final.md를 입력하고, 제공된 Word 샘플에서 추출한
   </script>
 
   <script type="module">
-    import { onAuthChange } from './js/firebase-config.js?v=20261117a';
+    import { onAuthChange } from './js/firebase-config.js?v=20261120_v2';
     onAuthChange((user, authMeta = null) => {
       const is_admin = (typeof isAdmin === 'function' && isAdmin()) || (localStorage.getItem('isAdminActive') === 'true');
       const diag = (authMeta && authMeta.diag) || window.__oaAuthDiag || null;
