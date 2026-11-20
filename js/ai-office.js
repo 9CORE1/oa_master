@@ -569,6 +569,16 @@ function initQuickNav() {
         </div>
         <i class="fas fa-arrow-up-right-from-square quick-nav-external"></i>
       </a>
+      <a href="https://github.com/" target="_blank" rel="noopener noreferrer" class="quick-nav-link" title="GitHub 바로가기">
+        <div class="quick-nav-link-left">
+          <span class="quick-nav-icon github"><i class="fab fa-github"></i></span>
+          <div class="quick-nav-info">
+            <span class="quick-nav-name">GitHub</span>
+            <span class="quick-nav-sub">코드 저장소 및 개발 플랫폼</span>
+          </div>
+        </div>
+        <i class="fas fa-arrow-up-right-from-square quick-nav-external"></i>
+      </a>
       <a href="https://www.notion.com/ko" target="_blank" rel="noopener noreferrer" class="quick-nav-link" title="Notion 바로가기">
         <div class="quick-nav-link-left">
           <span class="quick-nav-icon notion"><i class="fas fa-book-open"></i></span>
