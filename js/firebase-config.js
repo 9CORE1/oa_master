@@ -152,7 +152,8 @@ export function resolveApprovalStatus(user, existingData = null) {
     const email = ((user && user.email) || (existingData && existingData.email) || '').toLowerCase().trim();
     const role = (existingData && existingData.role) || 'User';
 
-    if (email === 'teacha99@gmail.com' || role === 'Host' || role === 'Manager') {
+    const ADMIN_EMAILS = ['teacha99@gmail.com', '20246128deu@gmail.com'];
+    if (ADMIN_EMAILS.includes(email) || role === 'Host' || role === 'Manager') {
         return 'approved';
     }
 
@@ -253,7 +254,8 @@ export function onAuthChange(callback) {
                 if (cachedRole) role = cachedRole;
             }
 
-            if (email === 'teacha99@gmail.com') {
+            const ADMIN_EMAILS = ['teacha99@gmail.com', '20246128deu@gmail.com'];
+            if (ADMIN_EMAILS.includes(email)) {
                 role = 'Host';
             }
 

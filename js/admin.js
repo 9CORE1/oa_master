@@ -4,7 +4,8 @@
 function isAdmin() {
   const userEmail = (localStorage.getItem('userEmail') || '').toLowerCase().trim();
   const userRole = localStorage.getItem('userRole');
-  if (userEmail === 'teacha99@gmail.com' || userRole === 'Host' || userRole === 'Manager') {
+  const adminEmails = ['teacha99@gmail.com', '20246128deu@gmail.com'];
+  if (adminEmails.includes(userEmail) || userRole === 'Host' || userRole === 'Manager') {
     return true;
   }
   return localStorage.getItem('isAdminActive') === 'true';
@@ -785,11 +786,13 @@ function updateAdminCourseAccess() {
   const isDay2Open = Boolean(config.day2 || is_admin);
   const isDay3Open = Boolean(config.day3 || is_admin);
 
-  const day2Elements = document.querySelectorAll('[data-course="day2"]');
-  const day3Elements = document.querySelectorAll('[data-course="day3"]');
+  // Day 2 (PPT & Slides) 대상 요소: data-course 속성뿐만 아니라 모든 day2 링크 포괄 탐지
+  const day2Elements = document.querySelectorAll('[data-course="day2"], a[href*="ai_office_day2.html"]');
+  // Day 3 (Docs & Word) 대상 요소: data-course 속성뿐만 아니라 모든 day3 링크 포괄 탐지
+  const day3Elements = document.querySelectorAll('[data-course="day3"], a[href*="ai_office_day3.html"], a[href*="ai_office_day3_cli.html"], a[href*="ai_office_day3_gemini.html"]');
 
   day2Elements.forEach((el) => {
-    const badge = el.querySelector('.badge-prep');
+    let badge = el.querySelector('.badge-prep');
     if (isDay2Open) {
       el.classList.remove('disabled');
       el.style.opacity = '1';
@@ -800,7 +803,7 @@ function updateAdminCourseAccess() {
       }
 
       if (config.day2) {
-        // 과정을 공개 설정하면 '일반 공개' 표시 없이 일반 정규 과정처럼 아무 표시도 안 나도록 숨김
+        // 과정을 공개 설정하면 깔끔하게 정규 링크로 노출
         el.title = 'PPT & Slides × AI 과정 학습하기';
         if (badge) {
           badge.style.display = 'none';
@@ -808,43 +811,55 @@ function updateAdminCourseAccess() {
       } else if (is_admin) {
         // 비공개 상태이나 관리자가 확인 중인 경우
         el.title = 'PPT & Slides × AI (관리자 전용 열람 - 일반 비공개)';
-        if (badge) {
-          badge.style.display = 'inline-block';
-          badge.textContent = '관리자';
-          badge.style.background = '#dbeafe';
-          badge.style.color = '#1e40af';
+        if (!badge) {
+          badge = document.createElement('span');
+          badge.className = 'badge-prep';
+          el.appendChild(badge);
         }
-      } else {
-        el.title = 'PPT & Slides × AI 과정 학습하기';
-        if (badge) {
-          badge.style.display = 'none';
-        }
+        badge.style.display = 'inline-block';
+        badge.textContent = '관리자';
+        badge.style.fontSize = '10.5px';
+        badge.style.padding = '1px 6px';
+        badge.style.borderRadius = '4px';
+        badge.style.marginLeft = '6px';
+        badge.style.fontWeight = '700';
+        badge.style.background = '#dbeafe';
+        badge.style.color = '#1e40af';
       }
     } else {
+      // 일반 사용자에게 비공개 상태: 확실하게 비활성화 및 준비중 뱃지 부착
       el.classList.add('disabled');
       el.style.opacity = '0.5';
       el.style.cursor = 'not-allowed';
       if (el.tagName.toLowerCase() === 'a') {
-        el.href = '#';
+        el.href = 'javascript:void(0);';
         el.onclick = function (e) {
           if (e && e.preventDefault) e.preventDefault();
           if (window.showToast) window.showToast('PPT & Slides 과정은 현재 준비 중입니다.');
-          else alert('PPT & Slides 과정은 현재 준비 중입니다.');
+          else alert('📢 PPT & Slides 과정은 현재 개설 준비 중입니다.');
           return false;
         };
       }
       el.title = '현재 준비 중인 과정입니다';
-      if (badge) {
-        badge.style.display = 'inline-block';
-        badge.textContent = '준비중';
-        badge.style.background = '';
-        badge.style.color = '';
+      if (!badge) {
+        badge = document.createElement('span');
+        badge.className = 'badge-prep';
+        el.appendChild(badge);
       }
+      badge.style.display = 'inline-block';
+      badge.textContent = '준비중';
+      badge.style.fontSize = '10.5px';
+      badge.style.padding = '1px 6px';
+      badge.style.borderRadius = '4px';
+      badge.style.marginLeft = '6px';
+      badge.style.fontWeight = '700';
+      badge.style.background = '#f1f5f9';
+      badge.style.color = '#64748b';
     }
   });
 
   day3Elements.forEach((el) => {
-    const badge = el.querySelector('.badge-prep');
+    let badge = el.querySelector('.badge-prep');
     if (isDay3Open) {
       el.classList.remove('disabled');
       el.style.opacity = '1';
@@ -856,7 +871,7 @@ function updateAdminCourseAccess() {
       }
 
       if (config.day3) {
-        // 과정을 공개 설정하면 '일반 공개' 표시 없이 일반 정규 과정처럼 아무 표시도 안 나도록 숨김
+        // 과정을 공개 설정하면 깔끔하게 정규 링크로 노출
         el.title = 'Docs & Word × AI 과정 학습하기';
         if (badge) {
           badge.style.display = 'none';
@@ -864,38 +879,50 @@ function updateAdminCourseAccess() {
       } else if (is_admin) {
         // 비공개 상태이나 관리자가 확인 중인 경우
         el.title = 'Docs & Word × AI (관리자 전용 열람 - 일반 비공개)';
-        if (badge) {
-          badge.style.display = 'inline-block';
-          badge.textContent = '관리자';
-          badge.style.background = '#dbeafe';
-          badge.style.color = '#1e40af';
+        if (!badge) {
+          badge = document.createElement('span');
+          badge.className = 'badge-prep';
+          el.appendChild(badge);
         }
-      } else {
-        el.title = 'Docs & Word × AI 과정 학습하기';
-        if (badge) {
-          badge.style.display = 'none';
-        }
+        badge.style.display = 'inline-block';
+        badge.textContent = '관리자';
+        badge.style.fontSize = '10.5px';
+        badge.style.padding = '1px 6px';
+        badge.style.borderRadius = '4px';
+        badge.style.marginLeft = '6px';
+        badge.style.fontWeight = '700';
+        badge.style.background = '#dbeafe';
+        badge.style.color = '#1e40af';
       }
     } else {
+      // 일반 사용자에게 비공개 상태: 확실하게 비활성화 및 준비중 뱃지 부착
       el.classList.add('disabled');
       el.style.opacity = '0.5';
       el.style.cursor = 'not-allowed';
       if (el.tagName.toLowerCase() === 'a') {
-        el.href = '#';
+        el.href = 'javascript:void(0);';
         el.onclick = function (e) {
           if (e && e.preventDefault) e.preventDefault();
           if (window.showToast) window.showToast('Docs & Word 과정은 현재 준비 중입니다.');
-          else alert('Docs & Word 과정은 현재 준비 중입니다.');
+          else alert('📢 Docs & Word 과정은 현재 개설 준비 중입니다.');
           return false;
         };
       }
       el.title = '현재 준비 중인 과정입니다';
-      if (badge) {
-        badge.style.display = 'inline-block';
-        badge.textContent = '준비중';
-        badge.style.background = '';
-        badge.style.color = '';
+      if (!badge) {
+        badge = document.createElement('span');
+        badge.className = 'badge-prep';
+        el.appendChild(badge);
       }
+      badge.style.display = 'inline-block';
+      badge.textContent = '준비중';
+      badge.style.fontSize = '10.5px';
+      badge.style.padding = '1px 6px';
+      badge.style.borderRadius = '4px';
+      badge.style.marginLeft = '6px';
+      badge.style.fontWeight = '700';
+      badge.style.background = '#f1f5f9';
+      badge.style.color = '#64748b';
     }
   });
 
@@ -918,7 +945,7 @@ function updateAdminCourseAccess() {
     } else {
       day2Tab.style.opacity = '0.6';
       day2Tab.style.cursor = 'not-allowed';
-      day2Tab.innerHTML = '<i class="fas fa-desktop"></i> PPT &amp; Slides (준비중)';
+      day2Tab.innerHTML = '<i class="fas fa-desktop"></i> PPT &amp; Slides <span style="font-size:10px; color:#64748b; font-weight:700;">(준비중)</span>';
     }
   }
   if (day3Tab) {
@@ -933,7 +960,7 @@ function updateAdminCourseAccess() {
     } else {
       day3Tab.style.opacity = '0.6';
       day3Tab.style.cursor = 'not-allowed';
-      day3Tab.innerHTML = '<i class="fas fa-file-word"></i> Docs &amp; Word (준비중)';
+      day3Tab.innerHTML = '<i class="fas fa-file-word"></i> Docs &amp; Word <span style="font-size:10px; color:#64748b; font-weight:700;">(준비중)</span>';
     }
   }
 

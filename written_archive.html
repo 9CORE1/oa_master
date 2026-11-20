@@ -284,7 +284,7 @@
   <!-- Scripts -->
   <script src="js/data.js"></script>
   <script src="js/main.js?v=20261117a"></script>
-  <script src="js/admin.js?v=20261120_v2"></script>
+  <script src="js/admin.js?v=20261120_v3"></script>
 
   <!-- Page Specific Script -->
   <script>
@@ -753,7 +753,7 @@
 
   <!-- 🔒 Auth Guard & 로그인 사용자 상태 표시 -->
   <script type="module">
-    import { onAuthChange, logout } from './js/firebase-config.js?v=20261120_v2';
+    import { onAuthChange, logout } from './js/firebase-config.js?v=20261120_v3';
     onAuthChange((user, authMeta = null) => {
       const is_admin = (typeof isAdmin === 'function' && isAdmin()) || (localStorage.getItem('isAdminActive') === 'true');
       const diag = (authMeta && authMeta.diag) || window.__oaAuthDiag || null;
