@@ -14,7 +14,7 @@
     content="프로그램 설치 없는 100% 웹 기반 AI 문서 작성 워크플로우: Google Gemini 실시간 검색 팩트체크, 3단계 한국어 문장 다듬기(퇴고), Google Docs ➔ 정규 MS Word(.docx) 다운로드 및 영문 PDF 번역 완벽 가이드">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/ai-office.css?v=20261120_v2">
+  <link rel="stylesheet" href="css/ai-office.css?v=20261120_v3">
   <link rel="icon" href="images/OA_master_LOGO.png" type="image/png">
   <script src="js/data.js"></script>
   <script src="js/admin.js?v=20261120_v5"></script>
@@ -834,6 +834,36 @@
       border-color: #3b82f6;
       transform: translateY(-2px);
       box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1);
+    }
+
+    /* 토스트 알림 팝업 */
+    .toast-popup {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 12px 20px;
+      border-radius: 8px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+      font-size: 13.5px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 99999;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(12px);
+      transition: all 0.25s ease;
+      pointer-events: none;
+    }
+
+    .toast-popup.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+      pointer-events: auto;
     }
   </style>
 </head>
