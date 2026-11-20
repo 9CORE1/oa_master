@@ -569,6 +569,16 @@ function initQuickNav() {
         </div>
         <i class="fas fa-arrow-up-right-from-square quick-nav-external"></i>
       </a>
+      <a href="https://www.notion.com/ko" target="_blank" rel="noopener noreferrer" class="quick-nav-link" title="Notion 바로가기">
+        <div class="quick-nav-link-left">
+          <span class="quick-nav-icon notion"><i class="fas fa-book-open"></i></span>
+          <div class="quick-nav-info">
+            <span class="quick-nav-name">Notion</span>
+            <span class="quick-nav-sub">올인원 워크스페이스</span>
+          </div>
+        </div>
+        <i class="fas fa-arrow-up-right-from-square quick-nav-external"></i>
+      </a>
       <a href="https://9core1.github.io/AI_literacy/" target="_blank" rel="noopener noreferrer" class="quick-nav-link" title="AI 리터러시 진단 바로가기">
         <div class="quick-nav-link-left">
           <span class="quick-nav-icon literacy"><i class="fas fa-chart-pie"></i></span>
