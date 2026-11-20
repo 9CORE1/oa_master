@@ -1472,6 +1472,11 @@
   border: 1px solid #e2e8f0;
 }
 
+.quick-nav-icon.riss {
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
 .quick-nav-icon.literacy {
   background: #fdf2f8;
   color: #db2777;

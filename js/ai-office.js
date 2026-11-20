@@ -589,12 +589,12 @@ function initQuickNav() {
         </div>
         <i class="fas fa-arrow-up-right-from-square quick-nav-external"></i>
       </a>
-      <a href="https://9core1.github.io/AI_literacy/" target="_blank" rel="noopener noreferrer" class="quick-nav-link" title="AI 리터러시 진단 바로가기">
+      <a href="https://www.riss.kr/index.do" target="_blank" rel="noopener noreferrer" class="quick-nav-link" title="학술연구정보서비스 (RISS) 바로가기">
         <div class="quick-nav-link-left">
-          <span class="quick-nav-icon literacy"><i class="fas fa-chart-pie"></i></span>
+          <span class="quick-nav-icon riss"><i class="fas fa-graduation-cap"></i></span>
           <div class="quick-nav-info">
-            <span class="quick-nav-name">AI 리터러시 진단</span>
-            <span class="quick-nav-sub">대학생 5대 역량 진단</span>
+            <span class="quick-nav-name">학술연구정보서비스</span>
+            <span class="quick-nav-sub">RISS 학술 논문 · 연구자료</span>
           </div>
         </div>
         <i class="fas fa-arrow-up-right-from-square quick-nav-external"></i>
