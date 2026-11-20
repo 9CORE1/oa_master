@@ -1031,7 +1031,27 @@ function renderHeaderUserNavUniversal(user) {
   if (!userNav) return;
 
   const is_admin = isAdmin();
-  const activeUser = user || window.currentUser || null;
+
+  // ⚡ 0초 세션 복원 (Instant Session Hydration):
+  // 1순위: 명시적으로 전달된 Firebase user 객체
+  // 2순위: window.currentUser 전역 객체
+  // 3순위: localStorage 세션 (isLoggedIn === 'true')
+  let activeUser = null;
+  if (user) {
+    activeUser = user;
+    window.currentUser = user;
+  } else if (window.currentUser) {
+    activeUser = window.currentUser;
+  } else if (localStorage.getItem('isLoggedIn') === 'true') {
+    const cachedEmail = (localStorage.getItem('userEmail') || '').trim();
+    const cachedName = localStorage.getItem('userDisplayName') || (cachedEmail ? cachedEmail.split('@')[0] : '회원');
+    const cachedPhoto = localStorage.getItem('userPhotoURL') || null;
+    activeUser = {
+      displayName: cachedName,
+      email: cachedEmail,
+      photoURL: cachedPhoto
+    };
+  }
 
   if (is_admin) {
     userNav.innerHTML = `
@@ -1881,14 +1901,27 @@ window.handleQuickAddTypeChange = handleQuickAddTypeChange;
 window.handleQuickAddFileSelected = handleQuickAddFileSelected;
 window.submitQuickAddForm = submitQuickAddForm;
 
-// Auto-initialize Admin UI on page load
+// Auto-initialize Universal Header User Nav and Admin UI
+function initUniversalAuthUI() {
+  if (typeof renderHeaderUserNavUniversal === 'function') {
+    renderHeaderUserNavUniversal();
+  }
+  if (typeof updateAdminUI === 'function') {
+    updateAdminUI();
+  }
+  if (typeof checkCoursePageAccess === 'function') {
+    checkCoursePageAccess();
+  }
+}
+
+// ⚡ DOM 파싱 즉시 userNavArea가 있으면 0초 만에 세션 복원 및 렌더링 (화면 깜빡임 원천 방지)
+if (document.getElementById('userNavArea')) {
+  initUniversalAuthUI();
+}
+
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => {
-    if (typeof updateAdminUI === 'function') updateAdminUI();
-    if (typeof checkCoursePageAccess === 'function') checkCoursePageAccess();
-  });
+  document.addEventListener('DOMContentLoaded', initUniversalAuthUI);
 } else {
-  if (typeof updateAdminUI === 'function') updateAdminUI();
-  if (typeof checkCoursePageAccess === 'function') checkCoursePageAccess();
+  initUniversalAuthUI();
 }
 
